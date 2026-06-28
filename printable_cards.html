@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MythCards Printable Prototype Cards</title>
+  <style>
+    :root {
+      --ink: #171717;
+      --muted: #5f6368;
+      --line: #1f2933;
+      --paper: #fffdf8;
+      --russian: #b91c1c;
+      --russian-soft: #f5dddd;
+      --atlantean: #0369a1;
+      --atlantean-soft: #dff3fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #e9ecef;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      padding: 0.35in;
+      background: white;
+    }
+
+    h1 {
+      margin: 0 0 0.12in;
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .note {
+      margin: 0 0 0.2in;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 2.45in);
+      gap: 0.12in;
+      align-items: start;
+    }
+
+    .card {
+      width: 2.45in;
+      height: 3.45in;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    .card.russian {
+      border-color: var(--russian);
+    }
+
+    .card.atlantean {
+      border-color: var(--atlantean);
+    }
+
+    .header {
+      padding: 7px 8px 6px;
+      color: white;
+    }
+
+    .russian .header {
+      background: var(--russian);
+    }
+
+    .atlantean .header {
+      background: var(--atlantean);
+    }
+
+    .name {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.05;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 3px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      opacity: 0.95;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stat {
+      padding: 5px 2px;
+      border-right: 1px solid var(--line);
+      text-align: center;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .stat:last-child {
+      border-right: none;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 1px;
+      font-size: 16px;
+    }
+
+    .body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 5px;
+      padding: 7px 8px;
+    }
+
+    .ability {
+      min-height: 0;
+      padding: 5px;
+      border: 1px solid #c7ccd1;
+      border-radius: 5px;
+      background: #ffffff;
+      font-size: 9.3px;
+      line-height: 1.2;
+    }
+
+    .russian .ability.level {
+      background: var(--russian-soft);
+    }
+
+    .atlantean .ability.level {
+      background: var(--atlantean-soft);
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 2px;
+      color: var(--muted);
+      font-size: 8.5px;
+      line-height: 1.15;
+    }
+
+    .break {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .page {
+        width: auto;
+        min-height: 0;
+        margin: 0;
+        padding: 0.25in;
+      }
+
+      .card {
+        border-width: 1.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>MythCards Paper Prototype Cards</h1>
+    <p class="note">Print at 100% scale. Each character starts at Level 1. Movement, attack, and abilities each cost that character's 1 action point. Level up by reaching the opponent's edge of the board.</p>
+
+    <section class="grid" aria-label="Printable character cards">
+      <article class="card russian">
+        <div class="header">
+          <span class="name">Gymnast</span>
+          <div class="meta"><span>Russian-Inspired</span><span>Common</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>2</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>3</strong></div>
+          <div class="stat">RANGE<strong>1</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Vault: Move through 1 adjacent allied character during movement.</div>
+          <div class="ability level"><span class="label">Level 2</span>+1 MOVE. Vault may pass through enemies but cannot end on their tile.</div>
+          <div class="ability level"><span class="label">Level 3</span>After Vaulting, may make a 1-damage attack against an adjacent enemy.</div>
+          <div class="footer">Role: agile tester piece for movement tricks and edge runs.</div>
+        </div>
+      </article>
+
+      <article class="card russian">
+        <div class="header">
+          <span class="name">White Siberian Tiger</span>
+          <div class="meta"><span>Russian-Inspired</span><span>Mount</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>4</strong></div>
+          <div class="stat">ATK<strong>2</strong></div>
+          <div class="stat">MOVE<strong>4</strong></div>
+          <div class="stat">RANGE<strong>1</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Pounce: If it moved at least 3 tiles in a straight line this turn, its attack deals +1 damage.</div>
+          <div class="ability level"><span class="label">Level 2</span>+1 HP. Pounce also pushes the target 1 tile if possible.</div>
+          <div class="ability level"><span class="label">Level 3</span>Snow Stalker: Once per turn, ignores the first 1 damage it would take after moving.</div>
+          <div class="footer">Role: fast pressure piece that rewards lane planning.</div>
+        </div>
+      </article>
+
+      <article class="card russian">
+        <div class="header">
+          <span class="name">Sniper</span>
+          <div class="meta"><span>Russian-Inspired</span><span>Warrior</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>3</strong></div>
+          <div class="stat">ATK<strong>2</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>4</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Aim: If Sniper did not move this turn, its basic attack gains +1 RANGE.</div>
+          <div class="ability level"><span class="label">Level 2</span>Piercing Shot: Attacks ignore 1 shield or damage reduction.</div>
+          <div class="ability level"><span class="label">Level 3</span>Mark Target: After damaging an enemy, the next allied attack against that enemy deals +1 damage.</div>
+          <div class="footer">Role: lane control and long-range threat.</div>
+        </div>
+      </article>
+
+      <article class="card russian">
+        <div class="header">
+          <span class="name">Army General</span>
+          <div class="meta"><span>Russian-Inspired</span><span>Leader</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>5</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>1</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Command: Choose an allied character within 2 tiles. That ally gains +1 ATK on its next attack this turn.</div>
+          <div class="ability level"><span class="label">Level 2</span>Command range becomes 3.</div>
+          <div class="ability level"><span class="label">Level 3</span>Tactical Order: Once per turn, Command may instead refresh an adjacent ally's action point.</div>
+          <div class="footer">Role: support commander. Unique: only 1 Leader.</div>
+        </div>
+      </article>
+
+      <article class="card russian">
+        <div class="header">
+          <span class="name">Bogatyr Champion</span>
+          <div class="meta"><span>Russian-Inspired</span><span>Hero</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>6</strong></div>
+          <div class="stat">ATK<strong>2</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>1</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Stand Firm: While on the center 4 tiles, gains +1 HP maximum and current HP.</div>
+          <div class="ability level"><span class="label">Level 2</span>Heroic Guard: Adjacent allies take -1 damage from attacks.</div>
+          <div class="ability level"><span class="label">Level 3</span>Last Oath: The first time this character would be defeated, it remains at 1 HP instead.</div>
+          <div class="footer">Role: protect this piece. Unique: only 1 Hero. Enemy wins if captured.</div>
+        </div>
+      </article>
+
+      <article class="card russian">
+        <div class="header">
+          <span class="name">Winter Engineer</span>
+          <div class="meta"><span>Russian-Inspired</span><span>Specialist</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>3</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>1</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Barricade: Create 1 barricade on an adjacent empty tile. Barricades block movement and have 2 HP.</div>
+          <div class="ability level"><span class="label">Level 2</span>Barricades have 3 HP and adjacent allies gain +1 defense against ranged attacks.</div>
+          <div class="ability level"><span class="label">Level 3</span>Frozen Works: Once per turn, may place a frost tile instead of a barricade. Enemies entering frost stop moving.</div>
+          <div class="footer">Role: board control and defensive setup.</div>
+        </div>
+      </article>
+
+      <article class="card russian">
+        <div class="header">
+          <span class="name">Frost Seer</span>
+          <div class="meta"><span>Russian-Inspired</span><span>Mystic</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>3</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>3</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Chill: Deal 1 damage at range 3. Target's MOVE is reduced by 1 on its next turn.</div>
+          <div class="ability level"><span class="label">Level 2</span>Winter Veil: May shield an ally within 3 tiles for 1 damage prevention.</div>
+          <div class="ability level"><span class="label">Level 3</span>Deep Freeze: Chill also prevents the target from using reaction or bonus movement effects next turn.</div>
+          <div class="footer">Role: control mystic, slows enemy advances.</div>
+        </div>
+      </article>
+
+      <article class="card atlantean">
+        <div class="header">
+          <span class="name">Quartz Attendant</span>
+          <div class="meta"><span>Atlantean</span><span>Common</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>2</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>1</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Synchronize: Gains +1 ATK while adjacent to another Atlantean.</div>
+          <div class="ability level"><span class="label">Level 2</span>Shared Pulse: Adjacent Atlanteans gain +1 defense against the first attack each turn.</div>
+          <div class="ability level"><span class="label">Level 3</span>Collective Step: If adjacent to another Atlantean, may move 1 extra tile.</div>
+          <div class="footer">Role: hive-mind common that rewards formation play.</div>
+        </div>
+      </article>
+
+      <article class="card atlantean">
+        <div class="header">
+          <span class="name">Manta Glider</span>
+          <div class="meta"><span>Atlantean</span><span>Mount</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>3</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>4</strong></div>
+          <div class="stat">RANGE<strong>1</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Glide: May move over occupied tiles but must end on an empty tile.</div>
+          <div class="ability level"><span class="label">Level 2</span>+1 ATK after moving over any character this turn.</div>
+          <div class="ability level"><span class="label">Level 3</span>Phase Current: Once per turn, may ignore terrain and barricades during movement.</div>
+          <div class="footer">Role: mobile flanker and edge-run threat.</div>
+        </div>
+      </article>
+
+      <article class="card atlantean">
+        <div class="header">
+          <span class="name">Resonance Guard</span>
+          <div class="meta"><span>Atlantean</span><span>Warrior</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>5</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>1</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Quartz Armor: Takes -1 damage from ranged attacks.</div>
+          <div class="ability level"><span class="label">Level 2</span>Redirect: Once per turn, may take damage for an adjacent ally.</div>
+          <div class="ability level"><span class="label">Level 3</span>Resonant Counter: After reducing damage, deals 1 damage back to the attacker if within range 2.</div>
+          <div class="footer">Role: protective frontline and anti-ranged anchor.</div>
+        </div>
+      </article>
+
+      <article class="card atlantean">
+        <div class="header">
+          <span class="name">Divine Conductor</span>
+          <div class="meta"><span>Atlantean</span><span>Leader</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>4</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>3</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Link Mind: Choose an ally within 3 tiles. Until end of turn, that ally may use the Conductor's RANGE for its ability if valid.</div>
+          <div class="ability level"><span class="label">Level 2</span>Link Mind may target 2 allies if both are within 2 tiles of each other.</div>
+          <div class="ability level"><span class="label">Level 3</span>Perfect Chord: Once per turn, when a linked ally defeats an enemy, refresh that ally's action point.</div>
+          <div class="footer">Role: hive-mind coordinator. Unique: only 1 Leader.</div>
+        </div>
+      </article>
+
+      <article class="card atlantean">
+        <div class="header">
+          <span class="name">Oracle Sovereign</span>
+          <div class="meta"><span>Atlantean</span><span>Hero</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>5</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>3</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Foresight: Reveal the next shared relic/event card. You may place it on the bottom of the deck.</div>
+          <div class="ability level"><span class="label">Level 2</span>Spirit Mantle: Gains a 1-damage shield at the start of your turn.</div>
+          <div class="ability level"><span class="label">Level 3</span>Collective Ascension: Once per match, all adjacent allies heal 1 and gain +1 MOVE this turn.</div>
+          <div class="footer">Role: protect this piece. Unique: only 1 Hero. Enemy wins if captured.</div>
+        </div>
+      </article>
+
+      <article class="card atlantean">
+        <div class="header">
+          <span class="name">Crystal Architect</span>
+          <div class="meta"><span>Atlantean</span><span>Specialist</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>3</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>2</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Pylon: Place a quartz pylon on an adjacent empty tile. Allies within 2 tiles of a pylon gain +1 RANGE on abilities.</div>
+          <div class="ability level"><span class="label">Level 2</span>Pylons also count as adjacent Atlanteans for Synchronize effects.</div>
+          <div class="ability level"><span class="label">Level 3</span>Relay Gate: Once per turn, an ally adjacent to a pylon may teleport to another pylon within 4 tiles.</div>
+          <div class="footer">Role: quartz technology and board shaping.</div>
+        </div>
+      </article>
+
+      <article class="card atlantean">
+        <div class="header">
+          <span class="name">Astral Harmonic</span>
+          <div class="meta"><span>Atlantean</span><span>Mystic</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat">HP<strong>3</strong></div>
+          <div class="stat">ATK<strong>1</strong></div>
+          <div class="stat">MOVE<strong>2</strong></div>
+          <div class="stat">RANGE<strong>3</strong></div>
+        </div>
+        <div class="body">
+          <div class="ability"><span class="label">Level 1</span>Resonance Shield: Shield an ally within 3 tiles for 1 damage prevention.</div>
+          <div class="ability level"><span class="label">Level 2</span>Harmonic Bind: Shielded allies also cannot be pushed or displaced this turn.</div>
+          <div class="ability level"><span class="label">Level 3</span>Astral Echo: After shielding an ally, may deal 1 damage to an enemy within 2 tiles of that ally.</div>
+          <div class="footer">Role: spiritual protection and counter-pressure.</div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

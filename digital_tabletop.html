@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MythCards Digital Tabletop Prototype</title>
+  <style>
+    :root {
+      --bg: #f2f4f7;
+      --panel: #ffffff;
+      --ink: #1f2933;
+      --muted: #667085;
+      --line: #cbd5e1;
+      --tile: #fffaf0;
+      --tile-alt: #e8eef5;
+      --center: #f8e7a2;
+      --russian: #b91c1c;
+      --russian-soft: #fde7e7;
+      --atlantean: #0369a1;
+      --atlantean-soft: #e0f2fe;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(520px, 1fr) 390px;
+      gap: 16px;
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .topbar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .btn:hover {
+      background: #f8fafc;
+    }
+
+    .btn.primary {
+      border-color: #1d4ed8;
+      background: #1d4ed8;
+      color: #fff;
+    }
+
+    .table-panel,
+    .side-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .table-panel {
+      padding: 14px;
+    }
+
+    .play-area {
+      display: grid;
+      grid-template-columns: minmax(460px, 1fr) 330px;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .board-wrap {
+      display: grid;
+      gap: 10px;
+    }
+
+    .turn-rail {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .turn-card {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+
+    .turn-card h2,
+    .turn-card h3 {
+      margin: 0;
+    }
+
+    .turn-card h2 {
+      font-size: 17px;
+    }
+
+    .turn-card h3 {
+      font-size: 14px;
+    }
+
+    .turn-start {
+      width: 100%;
+      padding: 14px 12px;
+      font-size: 15px;
+    }
+
+    .rail-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .relic-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .board-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .board {
+      width: min(76vh, 100%);
+      max-width: 760px;
+      aspect-ratio: 1;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: repeat(7, 1fr);
+      border: 2px solid #334155;
+      background: #334155;
+      gap: 2px;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .tile {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      min-height: 0;
+      background: var(--tile);
+      cursor: pointer;
+    }
+
+    .tile.alt {
+      background: var(--tile-alt);
+    }
+
+    .tile.center {
+      background: var(--center);
+    }
+
+    .tile.selected {
+      outline: 4px solid #22c55e;
+      outline-offset: -4px;
+    }
+
+    .tile.move {
+      box-shadow: inset 0 0 0 4px rgba(34, 197, 94, 0.35);
+    }
+
+    .tile.attack {
+      box-shadow: inset 0 0 0 4px rgba(239, 68, 68, 0.4);
+    }
+
+    .coord {
+      position: absolute;
+      left: 4px;
+      top: 3px;
+      color: rgba(15, 23, 42, 0.45);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .piece {
+      position: relative;
+      width: 82%;
+      height: 82%;
+      display: grid;
+      place-items: center;
+      border: 2px solid #111827;
+      border-radius: 50%;
+      color: #fff;
+      cursor: grab;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.25);
+      text-align: center;
+    }
+
+    .piece.russian {
+      background: var(--russian);
+    }
+
+    .piece.atlantean {
+      background: var(--atlantean);
+    }
+
+    .piece.dragging {
+      opacity: 0.55;
+    }
+
+    .piece .abbr {
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .piece .level {
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      background: #111827;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .piece .ap {
+      position: absolute;
+      left: -5px;
+      bottom: -5px;
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      background: #16a34a;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .piece .ap.used {
+      background: #6b7280;
+    }
+
+    .piece .mount-mark {
+      position: absolute;
+      right: -8px;
+      bottom: -8px;
+      min-width: 32px;
+      padding: 2px 4px;
+      border: 1px solid #fff;
+      border-radius: 999px;
+      background: #7c3aed;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .side-panel {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      min-height: 820px;
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tab {
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: #f8fafc;
+      padding: 10px 6px;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .tab:last-child {
+      border-right: none;
+    }
+
+    .tab.active {
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .panel-section {
+      display: none;
+      padding: 14px;
+      overflow: auto;
+    }
+
+    .panel-section.active {
+      display: block;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 10px;
+      color: #fff;
+    }
+
+    .card-header.russian {
+      background: var(--russian);
+    }
+
+    .card-header.atlantean {
+      background: var(--atlantean);
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .card-meta {
+      margin-top: 2px;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stat {
+      padding: 8px 4px;
+      border-right: 1px solid var(--line);
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .stat:last-child {
+      border-right: none;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 2px;
+      color: var(--ink);
+      font-size: 18px;
+    }
+
+    .card-body {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .ability-box {
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #f8fafc;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .ability-box strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .counter {
+      display: grid;
+      grid-template-columns: 32px 1fr 32px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .counter button {
+      height: 32px;
+      border: 0;
+      background: #f1f5f9;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .counter span {
+      text-align: center;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .relic-card {
+      display: grid;
+      gap: 6px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .relic-title {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .relic-kind {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .relic-effect {
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .rules-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .notes {
+      width: 100%;
+      min-height: 170px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .graveyard {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 44px;
+      padding: 8px;
+      border: 1px dashed var(--line);
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 5px 8px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .chip.russian {
+      background: var(--russian);
+    }
+
+    .chip.atlantean {
+      background: var(--atlantean);
+    }
+
+    .log {
+      min-height: 120px;
+      max-height: 190px;
+      overflow: auto;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #0f172a;
+      color: #dbeafe;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1040px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .board {
+        width: 100%;
+        max-width: none;
+      }
+
+      .side-panel {
+        min-height: 640px;
+      }
+
+      .play-area {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1>MythCards Digital Tabletop</h1>
+        <div class="subtitle">Prototype aid: move pieces, inspect cards, track HP/AP/levels, and draw shared relic/events.</div>
+      </div>
+      <div class="toolbar">
+        <button class="btn" id="clearHighlightsBtn">Clear Highlights</button>
+        <button class="btn primary" id="resetBtn">Reset Board</button>
+      </div>
+    </header>
+
+    <section class="table-panel">
+      <div class="play-area">
+        <div class="board-wrap">
+          <div class="board-head">
+            <strong>7x7 Board</strong>
+            <span>Click a piece to inspect. Drag to move. Highlights are advisory only.</span>
+          </div>
+          <div class="board" id="board" aria-label="MythCards 7x7 board"></div>
+        </div>
+
+        <aside class="turn-rail" aria-label="Turn controls and active relics">
+          <div class="turn-card">
+            <h2>Turn Start</h2>
+            <button class="btn" id="sideBtn">Side: Russian</button>
+            <button class="btn primary turn-start" id="turnStartBtn">Draw + Refresh AP + Next Side</button>
+            <div class="muted">Use this at the start of each turn. It draws for the shown side, refreshes AP, then flips to the other side.</div>
+          </div>
+
+          <div class="turn-card">
+            <h3>Current Event / Last Draw</h3>
+            <div id="activeDraw" class="relic-card">
+              <p class="relic-title">No card drawn yet</p>
+              <div class="relic-effect muted">Draw a shared relic/event when a turn starts. Relics go into the active player's relic slot.</div>
+            </div>
+          </div>
+
+          <div class="turn-card">
+            <h3>Active Relics</h3>
+            <div id="activeRelics" class="relic-stack">
+              <div class="relic-card">
+                <p class="relic-title">Russian: none</p>
+                <div class="relic-effect muted">Russian player has no active relic.</div>
+              </div>
+              <div class="relic-card">
+                <p class="relic-title">Atlantean: none</p>
+                <div class="relic-effect muted">Atlantean player has no active relic.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rail-actions">
+            <button class="btn" id="shuffleBtn">Shuffle Deck</button>
+            <button class="btn" id="drawOnlyBtn">Draw Only</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <aside class="side-panel">
+      <div class="tabs">
+        <button class="tab active" data-tab="cardPanel">Card</button>
+        <button class="tab" data-tab="notesPanel">Notes</button>
+        <button class="tab" data-tab="rulesPanel">Rules</button>
+      </div>
+
+      <section class="panel-section active" id="cardPanel">
+        <div id="selectedCard" class="muted">Select a piece to inspect and edit it.</div>
+      </section>
+
+      <section class="panel-section" id="notesPanel">
+        <h3>Playtest Notes</h3>
+        <textarea class="notes" id="notes" placeholder="Track balance notes, rule questions, and weird moments here."></textarea>
+        <h3>Action Log</h3>
+        <div class="log" id="log"></div>
+      </section>
+
+      <section class="panel-section" id="rulesPanel">
+        <h3>Quick Rules</h3>
+        <ol class="rules-list">
+          <li>Board is 7x7 with one center tile.</li>
+          <li>Default movement is vertical/horizontal.</li>
+          <li>Default attacks are vertical/horizontal line-of-sight.</li>
+          <li>Movement, attack, ability, mount, and dismount each cost 1 action.</li>
+          <li>Each character refreshes to 1 AP at the start of its side's turn.</li>
+          <li>Each player may have only 1 active relic.</li>
+          <li>When drawing a relic with a relic already active, choose whether to replace it.</li>
+          <li>Hero or Leader can mount an adjacent allied Mount as an action.</li>
+          <li>Mounted pair uses rider HP/ATK/RANGE/abilities and Mount MOVE.</li>
+          <li>If mounted rider HP hits 0, both rider and Mount are defeated.</li>
+          <li>Level up by reaching the opponent's edge.</li>
+          <li>Win by capturing the enemy Hero or defeating all enemy characters.</li>
+        </ol>
+        <h3>Defeated Pieces</h3>
+        <div class="graveyard" id="graveyard"></div>
+      </section>
+    </aside>
+  </main>
+
+  <script>
+    const characterTemplates = [
+      { id: 'r-gymnast', faction: 'russian', side: 'Russian', name: 'Gymnast', type: 'Common', hp: 2, atk: 1, move: 3, range: 1, abbr: 'GY', ability1: 'Passive: Vault may move through 1 adjacent allied character during movement.', level2: '+1 MOVE. Vault may pass through enemies but cannot end on their tile.', level3: 'After Vaulting, may make a 1-damage attack against an adjacent enemy.' },
+      { id: 'r-tiger', faction: 'russian', side: 'Russian', name: 'White Siberian Tiger', type: 'Mount', hp: 4, atk: 2, move: 4, range: 1, abbr: 'TG', ability1: "Passive: Pounce makes this character's attack deal +1 damage if it moved at least 3 tiles in a straight line this turn.", level2: '+1 HP. Pounce also pushes the target 1 tile if possible.', level3: 'Snow Stalker: Once per turn, ignores the first 1 damage it would take after moving.' },
+      { id: 'r-sniper', faction: 'russian', side: 'Russian', name: 'Sniper', type: 'Warrior', hp: 3, atk: 2, move: 2, range: 4, abbr: 'SN', ability1: "Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn.", level2: 'Piercing Shot: Attacks ignore 1 shield or damage reduction.', level3: 'Mark Target: After damaging an enemy, the next allied attack against that enemy deals +1 damage.' },
+      { id: 'r-general', faction: 'russian', side: 'Russian', name: 'Army General', type: 'Leader', hp: 5, atk: 1, move: 2, range: 1, abbr: 'LG', ability1: 'AP Ability: Command chooses an allied character within 2 tiles. That ally gains +1 ATK on its next attack this turn or may move 1 tile without spending an action.', level2: 'Command range becomes 3.', level3: "Tactical Order: Once per turn, Command may instead refresh an adjacent ally's action point." },
+      { id: 'r-hero', faction: 'russian', side: 'Russian', name: 'Bogatyr Champion', type: 'Hero', hp: 6, atk: 2, move: 2, range: 1, abbr: 'RH', ability1: 'Passive: Stand Firm gives +1 maximum and current HP while this character is on or adjacent to the center tile.', level2: 'Heroic Guard: Adjacent allies take -1 damage from attacks.', level3: 'Last Oath: The first time this character would be defeated, it remains at 1 HP instead.' },
+      { id: 'r-engineer', faction: 'russian', side: 'Russian', name: 'Winter Engineer', type: 'Specialist', hp: 3, atk: 1, move: 2, range: 1, abbr: 'WE', ability1: 'AP Ability: Barricade creates 1 barricade on an adjacent empty tile, or repairs an adjacent barricade or placed object by 1 HP. Barricades block movement and have 2 HP.', level2: 'Barricades have 3 HP and adjacent allies gain +1 defense against ranged attacks.', level3: 'Frozen Works: Once per turn, may place a frost tile instead of a barricade. Enemies entering frost stop moving.' },
+      { id: 'r-seer', faction: 'russian', side: 'Russian', name: 'Frost Seer', type: 'Mystic', hp: 3, atk: 1, move: 2, range: 3, abbr: 'FS', ability1: "AP Ability: Chill deals 1 damage at range 3. Target's MOVE is reduced by 1 and it cannot mount or dismount on its next turn.", level2: 'Winter Veil: May shield an ally within 3 tiles for 1 damage prevention.', level3: 'Deep Freeze: Chill also prevents the target from using reaction or bonus movement effects next turn.' },
+      { id: 'a-attendant', faction: 'atlantean', side: 'Atlantean', name: 'Quartz Attendant', type: 'Common', hp: 2, atk: 1, move: 2, range: 1, abbr: 'QA', ability1: 'Passive: Synchronize gives +1 ATK while adjacent to another Atlantean.', level2: 'Shared Pulse: Adjacent Atlanteans gain +1 defense against the first attack each turn.', level3: 'Collective Step: If adjacent to another Atlantean, may move 1 extra tile.' },
+      { id: 'a-glider', faction: 'atlantean', side: 'Atlantean', name: 'Manta Glider', type: 'Mount', hp: 3, atk: 1, move: 4, range: 1, abbr: 'MG', ability1: 'Passive: Glide may move over occupied tiles but must end on an empty tile. If carrying a Hero or Leader, the mounted pair may also glide.', level2: '+1 ATK after moving over any character this turn.', level3: 'Phase Current: Once per turn, may ignore terrain and barricades during movement.' },
+      { id: 'a-guard', faction: 'atlantean', side: 'Atlantean', name: 'Resonance Guard', type: 'Warrior', hp: 5, atk: 1, move: 2, range: 1, abbr: 'RG', ability1: 'Passive: Quartz Armor reduces ranged attack damage by 1.', level2: 'Redirect: Once per turn, may take damage for an adjacent ally.', level3: 'Resonant Counter: After reducing damage, deals 1 damage back to the attacker if within range 2.' },
+      { id: 'a-conductor', faction: 'atlantean', side: 'Atlantean', name: 'Divine Conductor', type: 'Leader', hp: 4, atk: 1, move: 2, range: 3, abbr: 'LC', ability1: "AP Ability: Link Mind chooses an ally within 3 tiles. Until end of turn, that ally may use the Conductor's RANGE for its ability if valid, and may ignore one allied character when checking line-of-sight.", level2: 'Link Mind may target 2 allies if both are within 2 tiles of each other.', level3: 'Perfect Chord: Once per turn, when a linked ally defeats an enemy, refresh that ally\'s action point.' },
+      { id: 'a-hero', faction: 'atlantean', side: 'Atlantean', name: 'Oracle Sovereign', type: 'Hero', hp: 5, atk: 1, move: 2, range: 3, abbr: 'AH', ability1: 'AP Ability: Foresight reveals the next shared relic/event card. You may place it on the bottom of the deck. Then give one adjacent ally a 1-damage shield.', level2: 'Spirit Mantle: Gains a 1-damage shield at the start of your turn.', level3: 'Collective Ascension: Once per match, all adjacent allies heal 1 and gain +1 MOVE this turn.' },
+      { id: 'a-architect', faction: 'atlantean', side: 'Atlantean', name: 'Crystal Architect', type: 'Specialist', hp: 3, atk: 1, move: 2, range: 2, abbr: 'CA', ability1: 'AP Ability: Pylon places a quartz pylon on an adjacent empty tile, or moves an existing allied pylon 1 tile. Allies within 2 tiles of a pylon gain +1 RANGE on abilities.', level2: 'Pylons also count as adjacent Atlanteans for Synchronize effects.', level3: 'Relay Gate: Once per turn, an ally adjacent to a pylon may teleport to another pylon within 4 tiles.' },
+      { id: 'a-harmonic', faction: 'atlantean', side: 'Atlantean', name: 'Astral Harmonic', type: 'Mystic', hp: 3, atk: 1, move: 2, range: 3, abbr: 'AM', ability1: 'AP Ability: Resonance Shield shields an ally within 3 tiles for 1 damage prevention. If that ally is mounted, the shield prevents 2 damage instead.', level2: 'Harmonic Bind: Shielded allies also cannot be pushed or displaced this turn.', level3: 'Astral Echo: After shielding an ally, may deal 1 damage to an enemy within 2 tiles of that ally.' }
+    ];
+
+    const relicDeckBase = [
+      ['Winter Palace Standard', 'Russian Relic - Persistent', 'Your Hero and Leader each gain +1 maximum HP while this relic is active.'],
+      ['Iron Birch Talisman', 'Russian Relic - Persistent', 'Your Common and Warrior each gain +1 maximum HP while this relic is active.'],
+      ["General's War Map", 'Russian Relic - Persistent', 'Once each turn, one of your characters gains +1 RANGE on its next attack or ability.'],
+      ['Whiteout', 'Russian Event - 1 round', 'All ranged attacks and ranged abilities have -1 RANGE, minimum 1.'],
+      ['Frozen Center', 'Russian Event - 1 round', 'The center row and center tile count as frost. A character entering frost stops moving.'],
+      ['Rally From The Snow', 'Russian Event - Immediate', 'The active player heals 1 HP on one damaged character.'],
+      ['Long Winter March', 'Russian Event - 1 turn', "The active player's first movement action this turn gains +1 MOVE."],
+      ['Quartz Heart Core', 'Atlantean Relic - Persistent', 'Your shields prevent +1 additional damage while this relic is active.'],
+      ['Hall Of Shared Minds', 'Atlantean Relic - Persistent', 'Your adjacent characters gain +1 RANGE on abilities.'],
+      ['Tideglass Obelisk', 'Atlantean Relic - Persistent', 'Your characters adjacent to a placed object gain +1 RANGE on attacks and abilities.'],
+      ['Resonance Surge', 'Atlantean Event - 1 turn', "The active player's first ability this turn has +1 RANGE."],
+      ['Psychic Undertow', 'Atlantean Event - 1 turn', "The active player's first attack this turn may push or pull the target 1 tile."],
+      ['Crystal Tide', 'Atlantean Event - 1 turn', "The active player's characters have +1 RANGE on abilities this turn."],
+      ['Dream Of The Deep City', 'Atlantean Event - Immediate', 'Reveal the next shared relic/event card. The active player may leave it on top or place it on the bottom of the deck.']
+    ];
+
+    const startingPositions = {
+      'a-attendant': [0, 0], 'a-glider': [0, 1], 'a-guard': [0, 2], 'a-hero': [0, 3], 'a-conductor': [0, 4], 'a-architect': [0, 5], 'a-harmonic': [0, 6],
+      'r-gymnast': [6, 0], 'r-tiger': [6, 1], 'r-sniper': [6, 2], 'r-hero': [6, 3], 'r-general': [6, 4], 'r-engineer': [6, 5], 'r-seer': [6, 6]
+    };
+
+    let pieces = [];
+    let selectedId = null;
+    let draggedId = null;
+    let relicDeck = [];
+    let activeRelics = { russian: null, atlantean: null };
+    let activeSide = 'russian';
+    let activeDraw = null;
+    let defeated = [];
+
+    const board = document.getElementById('board');
+    const selectedCard = document.getElementById('selectedCard');
+    const activeRelicsEl = document.getElementById('activeRelics');
+    const activeDrawEl = document.getElementById('activeDraw');
+    const logEl = document.getElementById('log');
+    const graveyard = document.getElementById('graveyard');
+
+    function clonePieces() {
+      return characterTemplates.map(template => ({
+        ...template,
+        row: startingPositions[template.id][0],
+        col: startingPositions[template.id][1],
+        currentHp: template.hp,
+        maxHp: template.hp,
+        level: 1,
+        ap: 1,
+        defeated: false,
+        mountedBy: null,
+        mountedOn: null
+      }));
+    }
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function resetGame() {
+      pieces = clonePieces();
+      selectedId = null;
+      defeated = [];
+      relicDeck = shuffle(relicDeckBase.map(([name, kind, effect]) => ({ name, kind, effect })));
+      activeRelics = { russian: null, atlantean: null };
+      activeSide = 'russian';
+      activeDraw = null;
+      renderRelics();
+      renderActiveSide();
+      logEl.innerHTML = '';
+      log('Board reset.');
+      render();
+    }
+
+    function log(message) {
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      logEl.innerHTML = `<div>[${time}] ${message}</div>` + logEl.innerHTML;
+    }
+
+    function getPiece(id) {
+      return pieces.find(piece => piece.id === id);
+    }
+
+    function pieceAt(row, col) {
+      return pieces.find(piece => !piece.defeated && piece.row === row && piece.col === col && !piece.mountedOn);
+    }
+
+    function effectiveMove(piece) {
+      if (piece.mountedOn) return piece.move;
+      if (piece.mountedBy) {
+        const mount = getPiece(piece.mountedBy);
+        return mount ? mount.move : piece.move;
+      }
+      return piece.move;
+    }
+
+    function render() {
+      board.innerHTML = '';
+      for (let row = 0; row < 7; row++) {
+        for (let col = 0; col < 7; col++) {
+          const tile = document.createElement('div');
+          tile.className = `tile ${(row + col) % 2 ? 'alt' : ''} ${row === 3 && col === 3 ? 'center' : ''}`;
+          tile.dataset.row = row;
+          tile.dataset.col = col;
+          tile.addEventListener('click', () => moveSelectedTo(row, col));
+          tile.addEventListener('dragover', event => event.preventDefault());
+          tile.addEventListener('drop', event => {
+            event.preventDefault();
+            if (draggedId) movePiece(draggedId, row, col);
+          });
+          const coord = document.createElement('span');
+          coord.className = 'coord';
+          coord.textContent = `${String.fromCharCode(65 + col)}${7 - row}`;
+          tile.appendChild(coord);
+
+          const piece = pieceAt(row, col);
+          if (piece) tile.appendChild(renderPiece(piece));
+          board.appendChild(tile);
+        }
+      }
+      highlightSelected();
+      renderCard();
+      renderGraveyard();
+      renderRelics();
+      renderActiveSide();
+    }
+
+    function renderPiece(piece) {
+      const el = document.createElement('div');
+      el.className = `piece ${piece.faction}`;
+      if (piece.id === selectedId) el.classList.add('selected-piece');
+      el.draggable = true;
+      el.title = `${piece.name} (${piece.type})`;
+      el.innerHTML = `<span class="abbr">${piece.abbr}</span><span class="level">L${piece.level}</span><span class="ap ${piece.ap ? '' : 'used'}">${piece.ap}</span>`;
+      if (piece.mountedBy) {
+        const mount = getPiece(piece.mountedBy);
+        el.innerHTML += `<span class="mount-mark">+${mount.abbr}</span>`;
+      }
+      el.addEventListener('click', event => {
+        event.stopPropagation();
+        selectedId = piece.id;
+        render();
+      });
+      el.addEventListener('dragstart', event => {
+        draggedId = piece.id;
+        el.classList.add('dragging');
+        event.dataTransfer.setData('text/plain', piece.id);
+      });
+      el.addEventListener('dragend', () => {
+        draggedId = null;
+        el.classList.remove('dragging');
+      });
+      return el;
+    }
+
+    function moveSelectedTo(row, col) {
+      if (!selectedId) return;
+      movePiece(selectedId, row, col);
+    }
+
+    function movePiece(id, row, col) {
+      const piece = getPiece(id);
+      if (!piece || piece.defeated || piece.mountedOn) return;
+      const occupant = pieceAt(row, col);
+      if (occupant && occupant.id !== id) {
+        log(`Cannot move ${piece.name}: ${coord(row, col)} is occupied by ${occupant.name}.`);
+        return;
+      }
+      const old = coord(piece.row, piece.col);
+      piece.row = row;
+      piece.col = col;
+      if (piece.mountedBy) {
+        const mount = getPiece(piece.mountedBy);
+        if (mount) {
+          mount.row = row;
+          mount.col = col;
+        }
+      }
+      log(`${piece.name} moved ${old} -> ${coord(row, col)}.`);
+      maybeLevelUp(piece);
+      render();
+    }
+
+    function maybeLevelUp(piece) {
+      const targetRow = piece.faction === 'russian' ? 0 : 6;
+      if (piece.row === targetRow && piece.level < 3) {
+        piece.level += 1;
+        log(`${piece.name} reached the opponent edge and leveled to ${piece.level}.`);
+      }
+    }
+
+    function coord(row, col) {
+      return `${String.fromCharCode(65 + col)}${7 - row}`;
+    }
+
+    function highlightSelected() {
+      document.querySelectorAll('.tile').forEach(tile => tile.classList.remove('selected', 'move', 'attack'));
+      const piece = getPiece(selectedId);
+      if (!piece || piece.defeated) return;
+      const current = document.querySelector(`[data-row="${piece.row}"][data-col="${piece.col}"]`);
+      if (current) current.classList.add('selected');
+      orthogonalTiles(piece.row, piece.col, effectiveMove(piece)).forEach(([row, col]) => {
+        const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        if (tile && !pieceAt(row, col)) tile.classList.add('move');
+      });
+      orthogonalTiles(piece.row, piece.col, piece.range).forEach(([row, col]) => {
+        const target = pieceAt(row, col);
+        const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        if (tile && target && target.faction !== piece.faction) tile.classList.add('attack');
+      });
+    }
+
+    function orthogonalTiles(row, col, distance) {
+      const tiles = [];
+      [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dr, dc]) => {
+        for (let step = 1; step <= distance; step++) {
+          const r = row + dr * step;
+          const c = col + dc * step;
+          if (r < 0 || r > 6 || c < 0 || c > 6) break;
+          tiles.push([r, c]);
+          if (pieceAt(r, c)) break;
+        }
+      });
+      return tiles;
+    }
+
+    function renderCard() {
+      const piece = getPiece(selectedId);
+      if (!piece) {
+        selectedCard.innerHTML = '<span class="muted">Select a piece to inspect and edit it.</span>';
+        return;
+      }
+      const mount = piece.mountedBy ? getPiece(piece.mountedBy) : null;
+      const rider = piece.mountedOn ? getPiece(piece.mountedOn) : null;
+      selectedCard.innerHTML = `
+        <div class="card">
+          <div class="card-header ${piece.faction}">
+            <h2 class="card-title">${piece.name}</h2>
+            <div class="card-meta">${piece.side} - ${piece.type} - ${coord(piece.row, piece.col)}</div>
+          </div>
+          <div class="stats">
+            <div class="stat">HP<strong>${piece.currentHp}/${piece.maxHp}</strong></div>
+            <div class="stat">ATK<strong>${piece.atk}</strong></div>
+            <div class="stat">MOVE<strong>${effectiveMove(piece)}</strong></div>
+            <div class="stat">RANGE<strong>${piece.range}</strong></div>
+          </div>
+          <div class="card-body">
+            ${mount ? `<div class="ability-box"><strong>Mounted</strong>Riding ${mount.name}. Uses rider stats and Mount movement. If HP hits 0, both are defeated.</div>` : ''}
+            ${rider ? `<div class="ability-box"><strong>Carrying</strong>This Mount is carrying ${rider.name} and cannot act separately.</div>` : ''}
+            <div class="ability-box"><strong>Level 1</strong>${piece.ability1}</div>
+            <div class="ability-box"><strong>Level 2</strong>${piece.level2}</div>
+            <div class="ability-box"><strong>Level 3</strong>${piece.level3}</div>
+            <div class="controls">
+              <div class="counter"><button onclick="changeHp(-1)">-</button><span>HP</span><button onclick="changeHp(1)">+</button></div>
+              <div class="counter"><button onclick="changeLevel(-1)">-</button><span>Level ${piece.level}</span><button onclick="changeLevel(1)">+</button></div>
+              <button class="btn" onclick="toggleAp()">Toggle AP</button>
+              <button class="btn" onclick="defeatSelected()">Defeat</button>
+              <button class="btn wide" onclick="mountOrDismount()">${piece.mountedBy ? 'Dismount' : 'Mount / Pair With Adjacent'}</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    window.changeHp = function(delta) {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      piece.currentHp = Math.max(0, Math.min(piece.maxHp, piece.currentHp + delta));
+      if (piece.currentHp === 0) defeatPiece(piece);
+      render();
+    };
+
+    window.changeLevel = function(delta) {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      piece.level = Math.max(1, Math.min(3, piece.level + delta));
+      render();
+    };
+
+    window.toggleAp = function() {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      piece.ap = piece.ap ? 0 : 1;
+      render();
+    };
+
+    window.defeatSelected = function() {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      defeatPiece(piece);
+      selectedId = null;
+      render();
+    };
+
+    function defeatPiece(piece) {
+      if (piece.defeated) return;
+      if (piece.mountedBy) {
+        const mount = getPiece(piece.mountedBy);
+        if (mount) {
+          mount.defeated = true;
+          defeated.push(mount);
+          log(`${mount.name} was defeated with mounted rider ${piece.name}.`);
+        }
+      }
+      if (piece.mountedOn) {
+        const rider = getPiece(piece.mountedOn);
+        if (rider) {
+          rider.defeated = true;
+          defeated.push(rider);
+          log(`${rider.name} was defeated while riding ${piece.name}.`);
+        }
+      }
+      piece.defeated = true;
+      defeated.push(piece);
+      log(`${piece.name} defeated.`);
+    }
+
+    window.mountOrDismount = function() {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      if (piece.mountedBy) {
+        dismount(piece);
+        return;
+      }
+      if (piece.type !== 'Hero' && piece.type !== 'Leader') {
+        log(`${piece.name} cannot mount. Select a Hero or Leader.`);
+        return;
+      }
+      const mount = adjacentPieces(piece).find(candidate => candidate.faction === piece.faction && candidate.type === 'Mount' && !candidate.mountedOn && !candidate.mountedBy);
+      if (!mount) {
+        log(`No adjacent allied Mount available for ${piece.name}.`);
+        return;
+      }
+      piece.row = mount.row;
+      piece.col = mount.col;
+      piece.mountedBy = mount.id;
+      mount.mountedOn = piece.id;
+      piece.ap = 0;
+      log(`${piece.name} mounted ${mount.name}.`);
+      render();
+    };
+
+    function dismount(piece) {
+      const mount = getPiece(piece.mountedBy);
+      if (!mount) return;
+      const empty = adjacentTiles(piece.row, piece.col).find(([r, c]) => !pieceAt(r, c));
+      if (!empty) {
+        log(`${piece.name} cannot dismount: no adjacent empty tile.`);
+        return;
+      }
+      mount.row = empty[0];
+      mount.col = empty[1];
+      piece.mountedBy = null;
+      mount.mountedOn = null;
+      piece.ap = 0;
+      log(`${piece.name} dismounted ${mount.name}.`);
+      render();
+    }
+
+    function adjacentTiles(row, col) {
+      return [[1,0],[-1,0],[0,1],[0,-1]]
+        .map(([dr, dc]) => [row + dr, col + dc])
+        .filter(([r, c]) => r >= 0 && r <= 6 && c >= 0 && c <= 6);
+    }
+
+    function adjacentPieces(piece) {
+      return adjacentTiles(piece.row, piece.col).map(([r, c]) => pieceAt(r, c)).filter(Boolean);
+    }
+
+    function renderGraveyard() {
+      graveyard.innerHTML = defeated.length ? defeated.map(piece => `<span class="chip ${piece.faction}">${piece.abbr} ${piece.name}</span>`).join('') : '<span class="muted">No defeated pieces yet.</span>';
+    }
+
+    function isRelic(card) {
+      return card.kind.toLowerCase().includes('relic');
+    }
+
+    function sideLabel(side) {
+      return side === 'russian' ? 'Russian' : 'Atlantean';
+    }
+
+    function renderActiveSide() {
+      document.getElementById('sideBtn').textContent = `Side: ${sideLabel(activeSide)}`;
+    }
+
+    function renderRelics() {
+      activeRelicsEl.innerHTML = ['russian', 'atlantean'].map(side => {
+        const relic = activeRelics[side];
+        if (!relic) {
+          return `<div class="relic-card"><p class="relic-title">${sideLabel(side)}: none</p><div class="relic-effect muted">${sideLabel(side)} player has no active relic.</div></div>`;
+        }
+        return `<div class="relic-card"><p class="relic-title">${sideLabel(side)}: ${relic.name}</p><div class="relic-kind">${relic.kind}</div><div class="relic-effect">${relic.effect}</div></div>`;
+      }).join('');
+
+      if (!activeDraw) {
+        activeDrawEl.innerHTML = "<p class=\"relic-title\">No card drawn yet</p><div class=\"relic-effect muted\">Draw a shared relic/event when a turn starts. Relics go into the active player's relic slot.</div>";
+        return;
+      }
+      activeDrawEl.innerHTML = `<h3 class="relic-title">${activeDraw.name}</h3><div class="relic-kind">${activeDraw.kind}</div><div class="relic-effect">${activeDraw.effect}</div>`;
+    }
+
+    function drawRelic() {
+      if (!relicDeck.length) relicDeck = shuffle(relicDeckBase.map(([name, kind, effect]) => ({ name, kind, effect })));
+      const drawn = relicDeck.shift();
+      activeDraw = drawn;
+
+      if (isRelic(drawn)) {
+        const current = activeRelics[activeSide];
+        if (!current) {
+          activeRelics[activeSide] = drawn;
+          log(`${sideLabel(activeSide)} drew and activated relic: ${drawn.name}.`);
+        } else {
+          const replace = confirm(`${sideLabel(activeSide)} already has active relic "${current.name}". Replace it with "${drawn.name}"?`);
+          if (replace) {
+            activeRelics[activeSide] = drawn;
+            log(`${sideLabel(activeSide)} replaced ${current.name} with ${drawn.name}.`);
+          } else {
+            log(`${sideLabel(activeSide)} drew ${drawn.name} and kept active relic ${current.name}.`);
+          }
+        }
+      } else {
+        log(`${sideLabel(activeSide)} drew event: ${drawn.name}.`);
+      }
+
+      renderRelics();
+    }
+
+    function refreshAp() {
+      pieces.forEach(piece => {
+        if (!piece.defeated && !piece.mountedOn) piece.ap = 1;
+      });
+      log('All active pieces refreshed to 1 AP.');
+      render();
+    }
+
+    function startTurn() {
+      const sideForTurn = activeSide;
+      refreshAp();
+      drawRelic();
+      activeSide = activeSide === 'russian' ? 'atlantean' : 'russian';
+      renderActiveSide();
+      log(`${sideLabel(sideForTurn)} turn-start reminder completed. Next side: ${sideLabel(activeSide)}.`);
+    }
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(item => item.classList.remove('active'));
+        document.querySelectorAll('.panel-section').forEach(item => item.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.getElementById('turnStartBtn').addEventListener('click', startTurn);
+    document.getElementById('drawOnlyBtn').addEventListener('click', drawRelic);
+    document.getElementById('sideBtn').addEventListener('click', () => {
+      activeSide = activeSide === 'russian' ? 'atlantean' : 'russian';
+      renderActiveSide();
+      log(`Active side set to ${sideLabel(activeSide)}.`);
+    });
+    document.getElementById('shuffleBtn').addEventListener('click', () => {
+      relicDeck = shuffle(relicDeckBase.map(([name, kind, effect]) => ({ name, kind, effect })));
+      log('Shared relic/event deck shuffled.');
+    });
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('Reset the board and counters?')) resetGame();
+    });
+    document.getElementById('clearHighlightsBtn').addEventListener('click', () => {
+      selectedId = null;
+      render();
+    });
+
+    resetGame();
+  </script>
+</body>
+</html>
