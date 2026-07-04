@@ -312,6 +312,79 @@
       font-weight: 800;
     }
 
+    .status-badges {
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      display: flex;
+      gap: 2px;
+      max-width: 112%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .status-badge {
+      min-width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #fff;
+      border-radius: 999px;
+      background: #facc15;
+      color: #111827;
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .status-badge.shield {
+      background: #38bdf8;
+    }
+
+    .status-badge.attack {
+      background: #fb7185;
+    }
+
+    .status-badge.move {
+      background: #4ade80;
+    }
+
+    .status-badge.pounce {
+      background: #f97316;
+    }
+
+    .status-badge.trophy {
+      background: #eab308;
+    }
+
+    .board-object {
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      z-index: 2;
+      min-width: 32px;
+      max-width: 72%;
+      padding: 4px 6px;
+      border: 2px solid #111827;
+      border-radius: 6px;
+      background: #f59e0b;
+      color: #111827;
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.24);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .board-object.selected {
+      outline: 3px solid #22c55e;
+      outline-offset: 1px;
+    }
+
     .side-panel {
       display: grid;
       grid-template-rows: auto auto 1fr;
@@ -441,6 +514,12 @@
       margin-top: 10px;
     }
 
+    .status-controls {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
     .counter {
       display: grid;
       grid-template-columns: 32px 1fr 32px;
@@ -492,6 +571,40 @@
     .relic-effect {
       font-size: 13px;
       line-height: 1.35;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 82px;
+      gap: 8px;
+    }
+
+    .field {
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .field input {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px;
+      color: var(--ink);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: none;
+    }
+
+    .choice-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
 
     .rules-list {
@@ -605,8 +718,18 @@
           <div class="turn-card">
             <h2>Turn Start</h2>
             <button class="btn" id="sideBtn">Side: Russian</button>
-            <button class="btn primary turn-start" id="turnStartBtn">Draw + Refresh AP + Next Side</button>
-            <div class="muted">Use this at the start of each turn. It draws for the shown side, refreshes AP, then flips to the other side.</div>
+            <button class="btn primary turn-start" id="turnStartBtn">Next Side + Refresh AP + Draw</button>
+            <div class="muted">Use this at the start of each turn. It flips to the next side first, then refreshes and draws for that side.</div>
+          </div>
+
+          <div class="turn-card">
+            <h3>Board Objects</h3>
+            <div class="field-grid">
+              <label class="field">Label <input id="objectNameInput" value="Pylon" maxlength="16"></label>
+              <label class="field">HP <input id="objectHpInput" type="number" min="0" max="9" value="2"></label>
+            </div>
+            <button class="btn" id="placeObjectBtn">Place Object</button>
+            <div id="objectStatus" class="relic-effect muted">No object selected.</div>
           </div>
 
           <div class="turn-card">
@@ -665,12 +788,15 @@
           <li>Default attacks are vertical/horizontal line-of-sight.</li>
           <li>Movement, attack, ability, mount, and dismount each cost 1 action.</li>
           <li>Each character refreshes to 1 AP at the start of its side's turn.</li>
+          <li>Tiger Pounce is activated only while the Tiger is not mounted, and marks its next attack as +2 ATK after moving.</li>
+          <li>Use character indicators to track shields, temporary attack, movement, or Pounce reminders.</li>
           <li>Each player may have only 1 active relic.</li>
           <li>When drawing a relic with a relic already active, choose whether to replace it.</li>
           <li>Hero or Leader can mount an adjacent allied Mount as an action.</li>
           <li>Mounted pair uses rider HP/ATK/RANGE/abilities and Mount MOVE.</li>
           <li>If mounted rider HP hits 0, both rider and Mount are defeated.</li>
-          <li>Level up by reaching the opponent's edge.</li>
+          <li>Reach the opponent's edge for Level 2.</li>
+          <li>For Level 3, a Level 2 character must carry a defeat trophy to the center square.</li>
           <li>Win by capturing the enemy Hero or defeating all enemy characters.</li>
         </ol>
         <h3>Defeated Pieces</h3>
@@ -682,7 +808,7 @@
   <script>
     const characterTemplates = [
       { id: 'r-gymnast', faction: 'russian', side: 'Russian', name: 'Gymnast', type: 'Common', hp: 2, atk: 1, move: 3, range: 1, abbr: 'GY', ability1: 'Passive: Vault may move through 1 adjacent allied character during movement.', level2: '+1 MOVE. Vault may pass through enemies but cannot end on their tile.', level3: 'After Vaulting, may make a 1-damage attack against an adjacent enemy.' },
-      { id: 'r-tiger', faction: 'russian', side: 'Russian', name: 'White Siberian Tiger', type: 'Mount', hp: 4, atk: 2, move: 4, range: 1, abbr: 'TG', ability1: "Passive: Pounce makes this character's attack deal +1 damage if it moved at least 3 tiles in a straight line this turn.", level2: '+1 HP. Pounce also pushes the target 1 tile if possible.', level3: 'Snow Stalker: Once per turn, ignores the first 1 damage it would take after moving.' },
+      { id: 'r-tiger', faction: 'russian', side: 'Russian', name: 'White Siberian Tiger', type: 'Mount', hp: 4, atk: 2, move: 4, range: 1, abbr: 'TG', ability1: 'Activated: Pounce is only available while this Tiger is not mounted. Mark its next attack after moving as +2 ATK. Movement and attack costs still apply.', level2: '+1 HP. Pounce also pushes the target 1 tile if possible.', level3: 'Snow Stalker: Once per turn, ignores the first 1 damage it would take after moving.' },
       { id: 'r-sniper', faction: 'russian', side: 'Russian', name: 'Sniper', type: 'Warrior', hp: 3, atk: 2, move: 2, range: 4, abbr: 'SN', ability1: "Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn.", level2: 'Piercing Shot: Attacks ignore 1 shield or damage reduction.', level3: 'Mark Target: After damaging an enemy, the next allied attack against that enemy deals +1 damage.' },
       { id: 'r-general', faction: 'russian', side: 'Russian', name: 'Army General', type: 'Leader', hp: 5, atk: 1, move: 2, range: 1, abbr: 'LG', ability1: 'AP Ability: Command chooses an allied character within 2 tiles. That ally gains +1 ATK on its next attack this turn or may move 1 tile without spending an action.', level2: 'Command range becomes 3.', level3: "Tactical Order: Once per turn, Command may instead refresh an adjacent ally's action point." },
       { id: 'r-hero', faction: 'russian', side: 'Russian', name: 'Bogatyr Champion', type: 'Hero', hp: 6, atk: 2, move: 2, range: 1, abbr: 'RH', ability1: 'Passive: Stand Firm gives +1 maximum and current HP while this character is on or adjacent to the center tile.', level2: 'Heroic Guard: Adjacent allies take -1 damage from attacks.', level3: 'Last Oath: The first time this character would be defeated, it remains at 1 HP instead.' },
@@ -727,6 +853,12 @@
     let activeSide = 'russian';
     let activeDraw = null;
     let defeated = [];
+    let boardObjects = [];
+    let selectedObjectId = null;
+    let objectPlacementArmed = false;
+    let objectMoveId = null;
+    let nextObjectId = 1;
+    let pendingRelicChoice = null;
 
     const board = document.getElementById('board');
     const selectedCard = document.getElementById('selectedCard');
@@ -734,6 +866,9 @@
     const activeDrawEl = document.getElementById('activeDraw');
     const logEl = document.getElementById('log');
     const graveyard = document.getElementById('graveyard');
+    const objectNameInput = document.getElementById('objectNameInput');
+    const objectHpInput = document.getElementById('objectHpInput');
+    const objectStatus = document.getElementById('objectStatus');
 
     function clonePieces() {
       return characterTemplates.map(template => ({
@@ -746,7 +881,8 @@
         ap: 1,
         defeated: false,
         mountedBy: null,
-        mountedOn: null
+        mountedOn: null,
+        statuses: []
       }));
     }
 
@@ -767,8 +903,15 @@
       activeRelics = { russian: null, atlantean: null };
       activeSide = 'russian';
       activeDraw = null;
+      boardObjects = [];
+      selectedObjectId = null;
+      objectPlacementArmed = false;
+      objectMoveId = null;
+      nextObjectId = 1;
+      pendingRelicChoice = null;
       renderRelics();
       renderActiveSide();
+      renderObjectStatus();
       logEl.innerHTML = '';
       log('Board reset.');
       render();
@@ -787,13 +930,26 @@
       return pieces.find(piece => !piece.defeated && piece.row === row && piece.col === col && !piece.mountedOn);
     }
 
+    function objectAt(row, col) {
+      return boardObjects.find(object => object.row === row && object.col === col);
+    }
+
     function effectiveMove(piece) {
       if (piece.mountedOn) return piece.move;
+      const statusMoveBonus = hasStatus(piece, 'move') ? 1 : 0;
       if (piece.mountedBy) {
         const mount = getPiece(piece.mountedBy);
-        return mount ? mount.move : piece.move;
+        return mount ? mount.move + statusMoveBonus : piece.move + statusMoveBonus;
       }
-      return piece.move;
+      return piece.move + statusMoveBonus;
+    }
+
+    function hasStatus(piece, id) {
+      return piece.statuses.some(status => status.id === id);
+    }
+
+    function effectiveAtk(piece) {
+      return piece.atk + (hasStatus(piece, 'pounce') ? 2 : 0) + (hasStatus(piece, 'attack') ? 1 : 0);
     }
 
     function render() {
@@ -804,7 +960,7 @@
           tile.className = `tile ${(row + col) % 2 ? 'alt' : ''} ${row === 3 && col === 3 ? 'center' : ''}`;
           tile.dataset.row = row;
           tile.dataset.col = col;
-          tile.addEventListener('click', () => moveSelectedTo(row, col));
+          tile.addEventListener('click', () => handleTileClick(row, col));
           tile.addEventListener('dragover', event => event.preventDefault());
           tile.addEventListener('drop', event => {
             event.preventDefault();
@@ -817,6 +973,8 @@
 
           const piece = pieceAt(row, col);
           if (piece) tile.appendChild(renderPiece(piece));
+          const object = objectAt(row, col);
+          if (object) tile.appendChild(renderBoardObject(object));
           board.appendChild(tile);
         }
       }
@@ -825,6 +983,7 @@
       renderGraveyard();
       renderRelics();
       renderActiveSide();
+      renderObjectStatus();
     }
 
     function renderPiece(piece) {
@@ -838,9 +997,13 @@
         const mount = getPiece(piece.mountedBy);
         el.innerHTML += `<span class="mount-mark">+${mount.abbr}</span>`;
       }
+      if (piece.statuses.length) {
+        el.innerHTML += `<span class="status-badges">${piece.statuses.map(status => `<span class="status-badge ${status.id}">${status.mark}</span>`).join('')}</span>`;
+      }
       el.addEventListener('click', event => {
         event.stopPropagation();
         selectedId = piece.id;
+        selectedObjectId = null;
         render();
       });
       el.addEventListener('dragstart', event => {
@@ -853,6 +1016,30 @@
         el.classList.remove('dragging');
       });
       return el;
+    }
+
+    function renderBoardObject(object) {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = `board-object ${object.id === selectedObjectId ? 'selected' : ''}`;
+      el.textContent = object.hp > 0 ? `${object.label} ${object.hp}` : object.label;
+      el.title = `${object.label}${object.hp > 0 ? ` (${object.hp} HP)` : ''}`;
+      el.addEventListener('click', event => {
+        event.stopPropagation();
+        selectedObjectId = object.id;
+        selectedId = null;
+        objectPlacementArmed = false;
+        render();
+      });
+      return el;
+    }
+
+    function handleTileClick(row, col) {
+      if (objectPlacementArmed) {
+        placeObject(row, col);
+        return;
+      }
+      moveSelectedTo(row, col);
     }
 
     function moveSelectedTo(row, col) {
@@ -871,6 +1058,7 @@
       const old = coord(piece.row, piece.col);
       piece.row = row;
       piece.col = col;
+      selectedObjectId = null;
       if (piece.mountedBy) {
         const mount = getPiece(piece.mountedBy);
         if (mount) {
@@ -885,9 +1073,13 @@
 
     function maybeLevelUp(piece) {
       const targetRow = piece.faction === 'russian' ? 0 : 6;
-      if (piece.row === targetRow && piece.level < 3) {
-        piece.level += 1;
-        log(`${piece.name} reached the opponent edge and leveled to ${piece.level}.`);
+      if (piece.level === 1 && piece.row === targetRow) {
+        piece.level = 2;
+        log(`${piece.name} reached the opponent edge and leveled to 2.`);
+      } else if (piece.level === 2 && piece.row === 3 && piece.col === 3 && hasStatus(piece, 'trophy')) {
+        piece.level = 3;
+        piece.statuses = piece.statuses.filter(status => status.id !== 'trophy');
+        log(`${piece.name} delivered a defeat trophy to the center and leveled to 3.`);
       }
     }
 
@@ -934,6 +1126,10 @@
       }
       const mount = piece.mountedBy ? getPiece(piece.mountedBy) : null;
       const rider = piece.mountedOn ? getPiece(piece.mountedOn) : null;
+      const statuses = piece.statuses.length
+        ? piece.statuses.map(status => status.label).join(', ')
+        : 'No indicators';
+      const pounceAvailable = piece.id === 'r-tiger' && !piece.mountedBy && !piece.mountedOn;
       selectedCard.innerHTML = `
         <div class="card">
           <div class="card-header ${piece.faction}">
@@ -942,13 +1138,14 @@
           </div>
           <div class="stats">
             <div class="stat">HP<strong>${piece.currentHp}/${piece.maxHp}</strong></div>
-            <div class="stat">ATK<strong>${piece.atk}</strong></div>
+            <div class="stat">ATK<strong>${effectiveAtk(piece)}</strong></div>
             <div class="stat">MOVE<strong>${effectiveMove(piece)}</strong></div>
             <div class="stat">RANGE<strong>${piece.range}</strong></div>
           </div>
           <div class="card-body">
             ${mount ? `<div class="ability-box"><strong>Mounted</strong>Riding ${mount.name}. Uses rider stats and Mount movement. If HP hits 0, both are defeated.</div>` : ''}
             ${rider ? `<div class="ability-box"><strong>Carrying</strong>This Mount is carrying ${rider.name} and cannot act separately.</div>` : ''}
+            <div class="ability-box"><strong>Indicators</strong>${statuses}</div>
             <div class="ability-box"><strong>Level 1</strong>${piece.ability1}</div>
             <div class="ability-box"><strong>Level 2</strong>${piece.level2}</div>
             <div class="ability-box"><strong>Level 3</strong>${piece.level3}</div>
@@ -957,6 +1154,14 @@
               <div class="counter"><button onclick="changeLevel(-1)">-</button><span>Level ${piece.level}</span><button onclick="changeLevel(1)">+</button></div>
               <button class="btn" onclick="toggleAp()">Toggle AP</button>
               <button class="btn" onclick="defeatSelected()">Defeat</button>
+              ${piece.id === 'r-tiger' ? `<button class="btn wide" onclick="activatePounce()" ${pounceAvailable ? '' : 'disabled'}>Activate Pounce (+2 ATK)</button>` : ''}
+              <div class="status-controls wide">
+                <button class="btn" onclick="toggleStatus('shield')">Shield</button>
+                <button class="btn" onclick="toggleStatus('attack')">+ATK</button>
+                <button class="btn" onclick="toggleStatus('move')">+MOVE</button>
+                <button class="btn" onclick="toggleStatus('trophy')">Trophy</button>
+              </div>
+              <button class="btn wide" onclick="clearStatuses()">Clear Indicators</button>
               <button class="btn wide" onclick="mountOrDismount()">${piece.mountedBy ? 'Dismount' : 'Mount / Pair With Adjacent'}</button>
             </div>
           </div>
@@ -982,6 +1187,46 @@
       const piece = getPiece(selectedId);
       if (!piece) return;
       piece.ap = piece.ap ? 0 : 1;
+      render();
+    };
+
+    const statusOptions = {
+      shield: { id: 'shield', mark: 'SH', label: 'Damage shield' },
+      attack: { id: 'attack', mark: '+A', label: '+1 ATK' },
+      move: { id: 'move', mark: '+M', label: '+1 MOVE' },
+      pounce: { id: 'pounce', mark: 'PO', label: 'Pounce +2 ATK' },
+      trophy: { id: 'trophy', mark: 'TR', label: 'Defeat trophy' }
+    };
+
+    window.toggleStatus = function(statusId) {
+      const piece = getPiece(selectedId);
+      const status = statusOptions[statusId];
+      if (!piece || !status) return;
+      if (hasStatus(piece, statusId)) {
+        piece.statuses = piece.statuses.filter(item => item.id !== statusId);
+      } else {
+        piece.statuses.push(status);
+      }
+      render();
+    };
+
+    window.clearStatuses = function() {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      piece.statuses = [];
+      render();
+    };
+
+    window.activatePounce = function() {
+      const piece = getPiece(selectedId);
+      if (!piece || piece.id !== 'r-tiger') return;
+      if (piece.mountedBy || piece.mountedOn) {
+        log('Pounce cannot be activated while White Siberian Tiger is mounted.');
+        return;
+      }
+      if (!hasStatus(piece, 'pounce')) piece.statuses.push(statusOptions.pounce);
+      piece.ap = 0;
+      log('White Siberian Tiger activated Pounce: next attack is +2 ATK after moving. Marked AP used.');
       render();
     };
 
@@ -1036,6 +1281,7 @@
       piece.col = mount.col;
       piece.mountedBy = mount.id;
       mount.mountedOn = piece.id;
+      mount.statuses = mount.statuses.filter(status => status.id !== 'pounce');
       piece.ap = 0;
       log(`${piece.name} mounted ${mount.name}.`);
       render();
@@ -1072,6 +1318,111 @@
       graveyard.innerHTML = defeated.length ? defeated.map(piece => `<span class="chip ${piece.faction}">${piece.abbr} ${piece.name}</span>`).join('') : '<span class="muted">No defeated pieces yet.</span>';
     }
 
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function placeObject(row, col) {
+      const existing = objectAt(row, col);
+      const label = objectNameInput.value.trim() || 'Object';
+      const hp = Math.max(0, Math.min(9, Number(objectHpInput.value) || 0));
+      if (objectMoveId) {
+        const moving = boardObjects.find(object => object.id === objectMoveId);
+        if (!moving) return;
+        if (existing && existing.id !== moving.id) {
+          log(`Cannot move ${moving.label}: ${coord(row, col)} already has ${existing.label}.`);
+          objectPlacementArmed = false;
+          objectMoveId = null;
+          render();
+          return;
+        }
+        moving.row = row;
+        moving.col = col;
+        selectedObjectId = moving.id;
+        objectPlacementArmed = false;
+        objectMoveId = null;
+        log(`${moving.label} moved to ${coord(row, col)}.`);
+        render();
+        return;
+      }
+      if (existing) {
+        existing.label = label;
+        existing.hp = hp;
+        selectedObjectId = existing.id;
+        log(`${label} updated at ${coord(row, col)}.`);
+      } else {
+        const object = { id: `object-${nextObjectId++}`, label, hp, row, col };
+        boardObjects.push(object);
+        selectedObjectId = object.id;
+        log(`${label} placed at ${coord(row, col)}.`);
+      }
+      selectedId = null;
+      objectPlacementArmed = false;
+      objectMoveId = null;
+      render();
+    }
+
+    function getSelectedObject() {
+      return boardObjects.find(object => object.id === selectedObjectId);
+    }
+
+    function renderObjectStatus() {
+      const selected = getSelectedObject();
+      if (selected) {
+        objectStatus.innerHTML = `
+          <strong>${escapeHtml(selected.label)}</strong> at ${coord(selected.row, selected.col)}
+          ${selected.hp > 0 ? ` - HP ${selected.hp}` : ''}
+          <div class="choice-actions">
+            <button class="btn" onclick="changeObjectHp(-1)">- HP</button>
+            <button class="btn" onclick="changeObjectHp(1)">+ HP</button>
+            <button class="btn" onclick="removeSelectedObject()">Remove</button>
+            <button class="btn" onclick="armObjectMove()">Move</button>
+          </div>`;
+      } else {
+        objectStatus.textContent = objectPlacementArmed ? 'Click a board tile to place the object.' : 'No object selected.';
+      }
+    }
+
+    window.armObjectPlacement = function() {
+      objectPlacementArmed = true;
+      objectMoveId = null;
+      selectedId = null;
+      selectedObjectId = null;
+      render();
+    };
+
+    window.armObjectMove = function() {
+      const selected = getSelectedObject();
+      if (!selected) return;
+      objectPlacementArmed = true;
+      objectMoveId = selected.id;
+      selectedId = null;
+      objectStatus.textContent = `Click a board tile to move ${selected.label}.`;
+    };
+
+    window.changeObjectHp = function(delta) {
+      const selected = getSelectedObject();
+      if (!selected) return;
+      selected.hp = Math.max(0, Math.min(9, selected.hp + delta));
+      render();
+    };
+
+    window.removeSelectedObject = function() {
+      const selected = getSelectedObject();
+      if (!selected) return;
+      boardObjects = boardObjects.filter(object => object.id !== selected.id);
+      log(`${selected.label} removed from ${coord(selected.row, selected.col)}.`);
+      selectedObjectId = null;
+      objectMoveId = null;
+      render();
+    };
+
     function isRelic(card) {
       return card.kind.toLowerCase().includes('relic');
     }
@@ -1097,13 +1448,24 @@
         activeDrawEl.innerHTML = "<p class=\"relic-title\">No card drawn yet</p><div class=\"relic-effect muted\">Draw a shared relic/event when a turn starts. Relics go into the active player's relic slot.</div>";
         return;
       }
-      activeDrawEl.innerHTML = `<h3 class="relic-title">${activeDraw.name}</h3><div class="relic-kind">${activeDraw.kind}</div><div class="relic-effect">${activeDraw.effect}</div>`;
+      const choice = pendingRelicChoice;
+      activeDrawEl.innerHTML = `
+        <h3 class="relic-title">${activeDraw.name}</h3>
+        <div class="relic-kind">${activeDraw.kind}</div>
+        <div class="relic-effect">${activeDraw.effect}</div>
+        ${choice ? `
+          <div class="relic-effect muted">${sideLabel(choice.side)} already has ${choice.current.name}.</div>
+          <div class="choice-actions">
+            <button class="btn primary" onclick="resolveRelicChoice(true)">Replace</button>
+            <button class="btn" onclick="resolveRelicChoice(false)">Keep Current</button>
+          </div>` : ''}`;
     }
 
     function drawRelic() {
       if (!relicDeck.length) relicDeck = shuffle(relicDeckBase.map(([name, kind, effect]) => ({ name, kind, effect })));
       const drawn = relicDeck.shift();
       activeDraw = drawn;
+      pendingRelicChoice = null;
 
       if (isRelic(drawn)) {
         const current = activeRelics[activeSide];
@@ -1111,13 +1473,8 @@
           activeRelics[activeSide] = drawn;
           log(`${sideLabel(activeSide)} drew and activated relic: ${drawn.name}.`);
         } else {
-          const replace = confirm(`${sideLabel(activeSide)} already has active relic "${current.name}". Replace it with "${drawn.name}"?`);
-          if (replace) {
-            activeRelics[activeSide] = drawn;
-            log(`${sideLabel(activeSide)} replaced ${current.name} with ${drawn.name}.`);
-          } else {
-            log(`${sideLabel(activeSide)} drew ${drawn.name} and kept active relic ${current.name}.`);
-          }
+          pendingRelicChoice = { side: activeSide, current, drawn };
+          log(`${sideLabel(activeSide)} drew ${drawn.name}. Choose whether to replace ${current.name}.`);
         }
       } else {
         log(`${sideLabel(activeSide)} drew event: ${drawn.name}.`);
@@ -1126,21 +1483,35 @@
       renderRelics();
     }
 
-    function refreshAp() {
+    window.resolveRelicChoice = function(replace) {
+      if (!pendingRelicChoice) return;
+      const { side, current, drawn } = pendingRelicChoice;
+      if (replace) {
+        activeRelics[side] = drawn;
+        log(`${sideLabel(side)} replaced ${current.name} with ${drawn.name}.`);
+      } else {
+        log(`${sideLabel(side)} kept active relic ${current.name} and discarded ${drawn.name}.`);
+      }
+      pendingRelicChoice = null;
+      renderRelics();
+    };
+
+    function refreshAp(side) {
       pieces.forEach(piece => {
-        if (!piece.defeated && !piece.mountedOn) piece.ap = 1;
+        if (!piece.defeated && !piece.mountedOn && piece.faction === side) piece.ap = 1;
       });
-      log('All active pieces refreshed to 1 AP.');
+      log(`${sideLabel(side)} active pieces refreshed to 1 AP.`);
       render();
     }
 
     function startTurn() {
-      const sideForTurn = activeSide;
-      refreshAp();
-      drawRelic();
       activeSide = activeSide === 'russian' ? 'atlantean' : 'russian';
+      const sideForTurn = activeSide;
       renderActiveSide();
-      log(`${sideLabel(sideForTurn)} turn-start reminder completed. Next side: ${sideLabel(activeSide)}.`);
+      refreshAp(sideForTurn);
+      drawRelic();
+      renderActiveSide();
+      log(`${sideLabel(sideForTurn)} turn-start completed.`);
     }
 
     document.querySelectorAll('.tab').forEach(tab => {
@@ -1168,6 +1539,16 @@
     });
     document.getElementById('clearHighlightsBtn').addEventListener('click', () => {
       selectedId = null;
+      selectedObjectId = null;
+      objectPlacementArmed = false;
+      objectMoveId = null;
+      render();
+    });
+    document.getElementById('placeObjectBtn').addEventListener('click', () => {
+      objectPlacementArmed = true;
+      objectMoveId = null;
+      selectedId = null;
+      selectedObjectId = null;
       render();
     });
 

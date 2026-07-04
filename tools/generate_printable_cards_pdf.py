@@ -23,7 +23,7 @@ CARDS = [
         "name": "White Siberian Tiger",
         "type": "Mount",
         "stats": (4, 2, 4, 1),
-        "l1": "Passive: Pounce makes this character's attack deal +1 damage if it moved at least 3 tiles in a straight line this turn.",
+        "l1": "Activated Pounce: Only while not mounted. Mark its next attack after moving as +2 ATK. Movement and attack costs still apply.",
         "l2": "+1 HP. Pounce also pushes the target 1 tile if possible.",
         "l3": "Snow Stalker: Once per turn, ignores the first 1 damage it would take after moving.",
         "role": "Fast pressure piece. Can carry an allied Hero or Leader.",
