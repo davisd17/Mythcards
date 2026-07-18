@@ -219,9 +219,10 @@ First-pass balance assumptions:
 - `RANGE` is basic attack range in tiles.
 - Default movement pattern is orthogonal: vertical and horizontal movement only.
 - Default attack pattern is orthogonal line-of-sight: vertical and horizontal only.
+- Line-of-sight rule (clarified): ranged attacks, and any AP ability that deals damage or targets at range, cannot pass through an occupied tile — ally or enemy — unless the specific card or ability explicitly states it can. Divine Conductor's Link Mind is the first card to use this exception (its target may ignore one allied character when checking line-of-sight). `[NEED: confirm whether non-damage support/utility abilities (e.g. Command, Resonance Shield, Foresight, Pylon range boost) are also subject to line-of-sight, or are exempt by default — see PRD-OQ-011]`
 - Diagonal, area, jump, teleport, or unusual patterns are special-case rules printed on characters, relics, events, or future cards.
 - Movement, basic attacks, and abilities each cost 1 AP from the player's turn pool, gated by that character having remaining character AP (see Section 11-12).
-- Level 2 and Level 3 upgrades should make pieces more interesting without making a leveled character automatically win the game.
+- Level 2 upgrades should land as a clear, noticeable power spike (not a minor +1 tweak); Level 3 upgrades should be transformative — a significant stat jump and/or a game-changing new ability — without making a leveled character automatically win the game outright. (Design directive added 2026-07-18; see Section 9's Open balance task. The Level 2/3 upgrade text in the character tables below has not yet been rewritten to this standard — flagged as a follow-up revision pass.)
 - Low-ATK characters should have stronger utility abilities so they remain fun even when their basic attacks are weak.
 
 Mounted character rules:
@@ -401,6 +402,8 @@ Terminology (decided):
 
 Open balance task: leveling should reliably be worth pursuing, not just theoretically available. Given the small 7-unit squads and instant-loss-on-Hero-capture, the risk of exposing a piece to reach the enemy edge (Level 2) or return to center with a Spirit Ember (Level 3) needs explicit playtesting to confirm the reward justifies the exposure — tune HP/ability power at Level 2/3, or the risk of the crossing itself, if early paper matches show players never attempt it.
 
+Design directive (decided, 2026-07-18): early paper-test feedback is that leveling feels hard to justify — most current Level 2 upgrades are incremental (+1 to a stat, a minor rider effect), so the risk of the crossing rarely feels worth it. Going forward, Level 2 upgrades should read as an obvious, noticeable power spike, and Level 3 upgrades should be transformative: a significant stat jump, a new game-changing ability, or a real shift in how the character plays. This is a principle for the next revision pass — the Section 8 character tables have not yet been rewritten to this standard.
+
 ## 10. Board Design
 
 ### Starting Board
@@ -546,7 +549,8 @@ Avoid pay-to-win progression. Competitive modes should prioritize fair access, r
 ### Future Modes
 
 - Ranked PvP
-- Asynchronous PvP
+- Standard / Asynchronous PvP — untimed, thoughtful pacing; matches may be played over multiple days between friends, with no move timer.
+- Timer-based / Blitz PvP — a turn or match timer forces faster decisions for players who want a quicker, more real-time match. Exact timer length: `[NEED: TBD, to be set during balance/playtesting]`.
 - Campaign
 - Draft mode
 - Puzzle mode
@@ -740,6 +744,7 @@ Design as fair-to-play first. Decide monetization after the core game is fun.
 | PRD-RISK-008 | Scope grows too quickly. | Lock prototype scope before production. |
 | PRD-RISK-009 | MVP scope (4 cultures, 28+ character cards, 40+ relic/event cards, AI opponent, full mobile UI) exceeds solo-developer capacity/timeline. | Agreed as an active risk to mitigate. Mitigation approach not yet defined — needs a sequencing/scope-cut plan (e.g. fewer cultures at MVP, smaller relic/event pool, contractor/outsourced art) before committing to Milestone 005 (MVP Planning). |
 | PRD-RISK-010 | Soviet/Cold War nuclear-accident setting draws extra app-store or platform content-review scrutiny given real-world political sensitivity. | Partially mitigated by the fiction/abstraction direction (real-world grounding as hints, not literal named figures or documented incidents). Platform policy review still recommended before major production investment. |
+| PRD-RISK-011 | Level 2/3 upgrades are currently too incremental (mostly +1 stat tweaks), so playtesters rarely find leveling worth the risk. | New design directive (Section 9): Level 2 = clear power spike, Level 3 = transformative. Character tables in Section 8 need a revision pass to meet this bar — not yet done. |
 
 ## 24. Open Questions
 
@@ -754,6 +759,8 @@ Design as fair-to-play first. Decide monetization after the core game is fun.
 | PRD-OQ-007 | What exact story role does the Closed City scientist play: protagonist, narrator, gate, victim, antagonist, or all of these at different times? | Determines campaign framing, tutorial voice, and long-term narrative structure. |
 | PRD-OQ-008 | Resolved: represented as a status/counter on the carrying character (icon such as a wisp, spark, or fractured-glass mark), not a separate physical board object. | Simplifies UI; avoids adding another placed-object type alongside barricades/pylons/frost tiles. |
 | PRD-OQ-009 | Resolved: no darker body-part language (scalp/ear) in any version of the product, including prototype notes. `Spirit Ember` is the only name used. | Removes the sensitivity risk in PRD-RISK-006 outright rather than deferring it to a later tone decision. |
+| PRD-OQ-010 | What is the per-turn or per-match timer length for the future Timer-based/Blitz PvP mode? | Determines competitive pacing and whether timing is turn-based or match-based. |
+| PRD-OQ-011 | Does the new line-of-sight blocking rule apply to non-damage support/utility abilities (Command, Resonance Shield, Foresight, Pylon range boost) that target at range, or only to attacks and damage-dealing abilities? | Affects several existing character abilities' rules text and the digital rules engine's targeting logic. |
 
 ## 25. First Development Milestones
 
@@ -832,6 +839,6 @@ Deliverables:
 3. Write short style and mechanic notes for each of the six sub-areas.
 4. Write 10-20 starter shared relic/event cards.
 5. Paper test the 14 character cards and record which pieces feel too strong, too weak, or too confusing.
-6. Revise stats, Level 2 upgrades, and Level 3 Spirit Ember rules after 3-5 paper matches.
+6. Revise stats, Level 2 upgrades, and Level 3 Spirit Ember rules after 3-5 paper matches, applying the new directive that Level 2 upgrades should be a clear power spike and Level 3 upgrades should be transformative (see Section 9).
 7. During paper testing, specifically track: how often Level 2/3 is actually reached (leveling-worth-it check), whether the 2-AP first turn meaningfully reduces first-move advantage, and how many turns pass before players stop feeling overwhelmed by per-card rules.
 8. Build the first Godot rules prototype.
