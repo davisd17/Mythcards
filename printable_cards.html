@@ -200,7 +200,7 @@
 <body>
   <main class="page">
     <h1>MythCards Paper Prototype Cards</h1>
-    <p class="note">Print at 100% scale. Each character starts at Level 1. Movement, attack, and abilities each cost that character's 1 action point. Reach the opponent's edge for Level 2. For Level 3, collect a defeat trophy from a defeated enemy and carry it to the center square.</p>
+    <p class="note">Print at 100% scale. Each character starts at Level 1. Movement, attack, and abilities each cost that character's 1 action point. Reach the opponent's edge for Level 2. For Level 3, collect a Spirit Ember from a defeated enemy and carry it to the center square.</p>
 
     <section class="grid" aria-label="Printable character cards">
       <article class="card russian">
@@ -216,9 +216,9 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Vault: Move through 1 adjacent allied character during movement.</div>
-          <div class="ability level"><span class="label">Level 2</span>+1 MOVE. Vault may pass through enemies but cannot end on their tile.</div>
-          <div class="ability level"><span class="label">Level 3</span>After Vaulting, may make a 1-damage attack against an adjacent enemy.</div>
-          <div class="footer">Role: agile tester piece for movement tricks and edge runs.</div>
+          <div class="ability level"><span class="label">Level 2</span>+1 MOVE and Vault may pass through any one occupied tile. After Vaulting, may move 1 extra tile.</div>
+          <div class="ability level"><span class="label">Level 3</span>Aurora Acrobat: +1 ATK/+1 MOVE. Once each turn after Vaulting, may make a 1-damage adjacent attack without AP.</div>
+          <div class="footer">Role: agile tester piece for movement tricks and Spirit Ember runs.</div>
         </div>
       </article>
 
@@ -235,9 +235,9 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Activated Pounce: Only while not mounted. Mark its next attack after moving as +2 ATK. Movement and attack costs still apply.</div>
-          <div class="ability level"><span class="label">Level 2</span>+1 HP. Pounce also pushes the target 1 tile if possible.</div>
-          <div class="ability level"><span class="label">Level 3</span>Snow Stalker: Once per turn, ignores the first 1 damage it would take after moving.</div>
-          <div class="footer">Role: fast pressure piece that rewards lane planning.</div>
+          <div class="ability level"><span class="label">Level 2</span>+1 HP and +1 MOVE. Pounce also pushes the target 1 tile if possible.</div>
+          <div class="ability level"><span class="label">Level 3</span>Aurora Predator: +1 ATK. If Pounce defeats, may move 2 tiles and refresh 1 character AP once per turn.</div>
+          <div class="footer">Role: fast pressure piece. Can carry a Hero/Leader, but Pounce is only while not mounted.</div>
         </div>
       </article>
 
@@ -254,8 +254,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Aim: If Sniper did not move this turn, its basic attack gains +1 RANGE.</div>
-          <div class="ability level"><span class="label">Level 2</span>Piercing Shot: Attacks ignore 1 shield or damage reduction.</div>
-          <div class="ability level"><span class="label">Level 3</span>Mark Target: After damaging an enemy, the next allied attack against that enemy deals +1 damage.</div>
+          <div class="ability level"><span class="label">Level 2</span>+1 RANGE. Piercing Shot ignores 1 shield/reduction and may ignore one allied occupied tile for line-of-sight.</div>
+          <div class="ability level"><span class="label">Level 3</span>Dead Lane: +1 ATK. Once per turn after damaging at range 3+, mark target; next allied attack deals +1 damage.</div>
           <div class="footer">Role: lane control and long-range threat.</div>
         </div>
       </article>
@@ -273,8 +273,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Command: Choose an allied character within 2 tiles. That ally gains +1 ATK on its next attack this turn.</div>
-          <div class="ability level"><span class="label">Level 2</span>Command range becomes 3.</div>
-          <div class="ability level"><span class="label">Level 3</span>Tactical Order: Once per turn, Command may instead refresh an adjacent ally's action point.</div>
+          <div class="ability level"><span class="label">Level 2</span>Command range becomes 3 and may target 2 allies. Each gets +1 ATK next attack or 1 free tile movement.</div>
+          <div class="ability level"><span class="label">Level 3</span>Tactical Mastery: +1 HP. When a Commanded ally defeats or delivers an Ember, refresh 1 allied character AP.</div>
           <div class="footer">Role: support commander. Unique: only 1 Leader.</div>
         </div>
       </article>
@@ -292,8 +292,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Stand Firm: While on the center 4 tiles, gains +1 HP maximum and current HP.</div>
-          <div class="ability level"><span class="label">Level 2</span>Heroic Guard: Adjacent allies take -1 damage from attacks.</div>
-          <div class="ability level"><span class="label">Level 3</span>Last Oath: The first time this character would be defeated, it remains at 1 HP instead.</div>
+          <div class="ability level"><span class="label">Level 2</span>Heroic Guard: +2 max/current HP while on or adjacent to center. Adjacent allies take -1 damage from attacks.</div>
+          <div class="ability level"><span class="label">Level 3</span>Last Oath: +1 ATK/+2 max HP. First time defeated, remains at 2 HP and adjacent enemies take 1 damage.</div>
           <div class="footer">Role: protect this piece. Unique: only 1 Hero. Enemy wins if captured.</div>
         </div>
       </article>
@@ -311,8 +311,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Barricade: Create 1 barricade on an adjacent empty tile. Barricades block movement and have 2 HP.</div>
-          <div class="ability level"><span class="label">Level 2</span>Barricades have 3 HP and adjacent allies gain +1 defense against ranged attacks.</div>
-          <div class="ability level"><span class="label">Level 3</span>Frozen Works: Once per turn, may place a frost tile instead of a barricade. Enemies entering frost stop moving.</div>
+          <div class="ability level"><span class="label">Level 2</span>Fortified Works: Barricades have 3 HP. Barricade may create or repair up to 2 adjacent objects.</div>
+          <div class="ability level"><span class="label">Level 3</span>Frozen Redoubt: +1 HP. Once per turn, place barricade/frost within 2. Allies by objects take -1 ranged damage.</div>
           <div class="footer">Role: board control and defensive setup.</div>
         </div>
       </article>
@@ -330,8 +330,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Chill: Deal 1 damage at range 3. Target's MOVE is reduced by 1 on its next turn.</div>
-          <div class="ability level"><span class="label">Level 2</span>Winter Veil: May shield an ally within 3 tiles for 1 damage prevention.</div>
-          <div class="ability level"><span class="label">Level 3</span>Deep Freeze: Chill also prevents the target from using reaction or bonus movement effects next turn.</div>
+          <div class="ability level"><span class="label">Level 2</span>Winter Veil: Chill also gives one ally within 3 a 1-damage shield. Shielded allies cannot be pushed this turn.</div>
+          <div class="ability level"><span class="label">Level 3</span>Deep Freeze: +1 RANGE. Chill blocks reactions/bonus movement; already-slowed targets cannot move next turn.</div>
           <div class="footer">Role: control mystic, slows enemy advances.</div>
         </div>
       </article>
@@ -349,8 +349,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Synchronize: Gains +1 ATK while adjacent to another Atlantean.</div>
-          <div class="ability level"><span class="label">Level 2</span>Shared Pulse: Adjacent Atlanteans gain +1 defense against the first attack each turn.</div>
-          <div class="ability level"><span class="label">Level 3</span>Collective Step: If adjacent to another Atlantean, may move 1 extra tile.</div>
+          <div class="ability level"><span class="label">Level 2</span>Shared Pulse: +1 HP. While adjacent, gains +1 ATK and reduces first damage to one adjacent Atlantean by 1.</div>
+          <div class="ability level"><span class="label">Level 3</span>Collective Node: +1 HP. Counts as a pylon and adjacent to Atlanteans within 2 for Sync/relay effects.</div>
           <div class="footer">Role: hive-mind common that rewards formation play.</div>
         </div>
       </article>
@@ -368,8 +368,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Glide: May move over occupied tiles but must end on an empty tile.</div>
-          <div class="ability level"><span class="label">Level 2</span>+1 ATK after moving over any character this turn.</div>
-          <div class="ability level"><span class="label">Level 3</span>Phase Current: Once per turn, may ignore terrain and barricades during movement.</div>
+          <div class="ability level"><span class="label">Level 2</span>+1 MOVE. After moving over any character, next attack this turn gains +1 ATK.</div>
+          <div class="ability level"><span class="label">Level 3</span>Phase Current: +1 HP/+1 ATK. Once per turn ignore terrain, barricades, and occupied tiles; deal 1 to one enemy moved over.</div>
           <div class="footer">Role: mobile flanker and edge-run threat.</div>
         </div>
       </article>
@@ -387,8 +387,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Quartz Armor: Takes -1 damage from ranged attacks.</div>
-          <div class="ability level"><span class="label">Level 2</span>Redirect: Once per turn, may take damage for an adjacent ally.</div>
-          <div class="ability level"><span class="label">Level 3</span>Resonant Counter: After reducing damage, deals 1 damage back to the attacker if within range 2.</div>
+          <div class="ability level"><span class="label">Level 2</span>Redirect: +1 ATK. Once per turn may take damage for adjacent ally; reduce redirected damage by 1.</div>
+          <div class="ability level"><span class="label">Level 3</span>Resonant Bastion: Adjacent allies gain 1 shield at start of turn. After reducing damage, deal 1 back within range 2.</div>
           <div class="footer">Role: protective frontline and anti-ranged anchor.</div>
         </div>
       </article>
@@ -406,8 +406,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Link Mind: Choose an ally within 3 tiles. Until end of turn, that ally may use the Conductor's RANGE for its ability if valid.</div>
-          <div class="ability level"><span class="label">Level 2</span>Link Mind may target 2 allies if both are within 2 tiles of each other.</div>
-          <div class="ability level"><span class="label">Level 3</span>Perfect Chord: Once per turn, when a linked ally defeats an enemy, refresh that ally's action point.</div>
+          <div class="ability level"><span class="label">Level 2</span>Link Mind may target 2 allies within 3. Linked allies use Conductor RANGE and ignore one allied line-of-sight blocker.</div>
+          <div class="ability level"><span class="label">Level 3</span>Perfect Chord: +1 RANGE. Once per turn, linked ally defeat or Ember delivery refreshes that ally's character AP.</div>
           <div class="footer">Role: hive-mind coordinator. Unique: only 1 Leader.</div>
         </div>
       </article>
@@ -425,8 +425,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Foresight: Reveal the next shared relic/event card. You may place it on the bottom of the deck.</div>
-          <div class="ability level"><span class="label">Level 2</span>Spirit Mantle: Gains a 1-damage shield at the start of your turn.</div>
-          <div class="ability level"><span class="label">Level 3</span>Collective Ascension: Once per match, all adjacent allies heal 1 and gain +1 MOVE this turn.</div>
+          <div class="ability level"><span class="label">Level 2</span>Spirit Mantle: At start of your turn, this character and one adjacent ally gain 1 shield. Foresight may leave revealed card on top.</div>
+          <div class="ability level"><span class="label">Level 3</span>Collective Ascension: +1 HP/+1 RANGE. Once per match, all allies heal 2, gain 1 shield, and +1 MOVE this turn.</div>
           <div class="footer">Role: protect this piece. Unique: only 1 Hero. Enemy wins if captured.</div>
         </div>
       </article>
@@ -444,8 +444,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Pylon: Place a quartz pylon on an adjacent empty tile. Allies within 2 tiles of a pylon gain +1 RANGE on abilities.</div>
-          <div class="ability level"><span class="label">Level 2</span>Pylons also count as adjacent Atlanteans for Synchronize effects.</div>
-          <div class="ability level"><span class="label">Level 3</span>Relay Gate: Once per turn, an ally adjacent to a pylon may teleport to another pylon within 4 tiles.</div>
+          <div class="ability level"><span class="label">Level 2</span>Pylon range becomes 2. Pylons have 2 HP; allies within 2 gain +1 RANGE on attacks and abilities.</div>
+          <div class="ability level"><span class="label">Level 3</span>Relay Gate: +1 HP. Once per turn, teleport ally between pylons within 4, then give that ally 1 shield.</div>
           <div class="footer">Role: quartz technology and board shaping.</div>
         </div>
       </article>
@@ -463,8 +463,8 @@
         </div>
         <div class="body">
           <div class="ability"><span class="label">Level 1</span>Resonance Shield: Shield an ally within 3 tiles for 1 damage prevention.</div>
-          <div class="ability level"><span class="label">Level 2</span>Harmonic Bind: Shielded allies also cannot be pushed or displaced this turn.</div>
-          <div class="ability level"><span class="label">Level 3</span>Astral Echo: After shielding an ally, may deal 1 damage to an enemy within 2 tiles of that ally.</div>
+          <div class="ability level"><span class="label">Level 2</span>Harmonic Bind: Resonance Shield prevents 2 damage and the shielded ally cannot be pushed, pulled, or displaced.</div>
+          <div class="ability level"><span class="label">Level 3</span>Astral Echo: +1 RANGE. After shielding, deal 1 to enemy within 2 of ally; shielded ally may move 1 tile without AP.</div>
           <div class="footer">Role: spiritual protection and counter-pressure.</div>
         </div>
       </article>

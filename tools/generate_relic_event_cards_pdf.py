@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle
@@ -7,121 +10,8 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph
 
 
-CARDS = [
-    {
-        "faction": "Russian-Inspired",
-        "name": "Winter Palace Standard",
-        "kind": "Relic",
-        "duration": "Persistent",
-        "effect": "Your Hero and Leader each gain +1 maximum HP while this relic is active.",
-        "note": "Simple durability plan for important pieces.",
-    },
-    {
-        "faction": "Russian-Inspired",
-        "name": "Iron Birch Talisman",
-        "kind": "Relic",
-        "duration": "Persistent",
-        "effect": "Your Common and Warrior each gain +1 maximum HP while this relic is active.",
-        "note": "Makes the front line sturdier.",
-    },
-    {
-        "faction": "Russian-Inspired",
-        "name": "General's War Map",
-        "kind": "Relic",
-        "duration": "Persistent",
-        "effect": "Once each turn, one of your characters gains +1 RANGE on its next attack or ability.",
-        "note": "Build around longer threat lines.",
-    },
-    {
-        "faction": "Russian-Inspired",
-        "name": "Whiteout",
-        "kind": "Event",
-        "duration": "1 round",
-        "effect": "All ranged attacks and ranged abilities have -1 RANGE, minimum 1.",
-        "note": "Temporarily softens snipers, mystics, and leaders.",
-    },
-    {
-        "faction": "Russian-Inspired",
-        "name": "Frozen Center",
-        "kind": "Event",
-        "duration": "1 round",
-        "effect": "The center row and center tile count as frost. A character entering frost stops moving.",
-        "note": "Turns the 7x7 center lane into a slowdown zone.",
-    },
-    {
-        "faction": "Russian-Inspired",
-        "name": "Rally From The Snow",
-        "kind": "Event",
-        "duration": "Immediate",
-        "effect": "The active player heals 1 HP on one damaged character.",
-        "note": "Simple recovery for one key piece.",
-    },
-    {
-        "faction": "Russian-Inspired",
-        "name": "Long Winter March",
-        "kind": "Event",
-        "duration": "1 turn",
-        "effect": "The active player's first movement action this turn gains +1 MOVE.",
-        "note": "Useful for level-up runs or repositioning.",
-    },
-    {
-        "faction": "Atlantean",
-        "name": "Quartz Heart Core",
-        "kind": "Relic",
-        "duration": "Persistent",
-        "effect": "Your shields prevent +1 additional damage while this relic is active.",
-        "note": "Build around shield-heavy play.",
-    },
-    {
-        "faction": "Atlantean",
-        "name": "Hall Of Shared Minds",
-        "kind": "Relic",
-        "duration": "Persistent",
-        "effect": "Your adjacent characters gain +1 RANGE on abilities.",
-        "note": "Rewards tight hive-mind formations.",
-    },
-    {
-        "faction": "Atlantean",
-        "name": "Tideglass Obelisk",
-        "kind": "Relic",
-        "duration": "Persistent",
-        "effect": "Your characters adjacent to a placed object gain +1 RANGE on attacks and abilities.",
-        "note": "Build around pylons, barricades, and board objects.",
-    },
-    {
-        "faction": "Atlantean",
-        "name": "Resonance Surge",
-        "kind": "Event",
-        "duration": "1 turn",
-        "effect": "The active player's first ability this turn has +1 RANGE.",
-        "note": "Simple ability reach for one turn.",
-    },
-    {
-        "faction": "Atlantean",
-        "name": "Psychic Undertow",
-        "kind": "Event",
-        "duration": "1 turn",
-        "effect": "The active player's first attack this turn may push or pull the target 1 tile.",
-        "note": "Adds one clear positioning choice.",
-    },
-    {
-        "faction": "Atlantean",
-        "name": "Crystal Tide",
-        "kind": "Event",
-        "duration": "1 round",
-        "duration": "1 turn",
-        "effect": "The active player's characters have +1 RANGE on abilities this turn.",
-        "note": "A full-turn ability range boost.",
-    },
-    {
-        "faction": "Atlantean",
-        "name": "Dream Of The Deep City",
-        "kind": "Event",
-        "duration": "Immediate",
-        "effect": "Reveal the next shared relic/event card. The active player may leave it on top or place it on the bottom of the deck.",
-        "note": "Lets the active player shape the next moment.",
-    },
-]
+DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "cards" / "relic_events.json"
+CARDS = json.loads(DATA_PATH.read_text(encoding="utf-8"))
 
 
 RUSSIAN = colors.HexColor("#b91c1c")
