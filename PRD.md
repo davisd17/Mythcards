@@ -10,12 +10,14 @@ The core story begins in a Soviet closed city in the 1980s. After a strange nucl
 
 ## 2. Product Goals
 
-- Create a polished mobile tactical game with clear rules, readable turns, and satisfying strategic depth.
-- Build a card and character system that supports 7 character types, with multiple cultural or civilization-based versions of each type.
-- Make matches short enough for mobile play while still rewarding mastery.
-- Establish a flexible rules foundation that can support future cards, cultures, modes, events, and expansions.
-- Establish a story and content framework where each faction contains multiple hidden sub-areas, each with its own style, mechanics, relics, events, and narrative identity.
-- Design the game so it can eventually support both solo play and PvP.
+| ID | Goal |
+| --- | --- |
+| PRD-GOAL-001 | Create a polished mobile tactical game with clear rules, readable turns, and satisfying strategic depth. |
+| PRD-GOAL-002 | Build a card and character system that supports 7 character types, with multiple cultural or civilization-based versions of each type. |
+| PRD-GOAL-003 | Make matches short enough for mobile play while still rewarding mastery. |
+| PRD-GOAL-004 | Establish a flexible rules foundation that can support future cards, cultures, modes, events, and expansions. |
+| PRD-GOAL-005 | Establish a story and content framework where each faction contains multiple hidden sub-areas, each with its own style, mechanics, relics, events, and narrative identity. |
+| PRD-GOAL-006 | Design the game so it can eventually support both solo play and PvP. |
 
 ## 3. Target Audience
 
@@ -136,6 +138,8 @@ The tone should support:
 - Fantasy characters who complete the narrative and make the factions playable.
 - Uncertainty about whether the battles are dreams, alternate realities, ancestral memories, or actual worlds.
 
+Direction (decided): lean further into fiction and abstraction rather than depicting real people, units, or events directly. Real-world grounding should survive as recognizable hints — eras, professions, imagery, geography, technology — rather than as literal named figures or documented incidents. This resolves part of PRD-OQ-004 in favor of myth-inspired/fictional framing over historical naming.
+
 ### Faction Sub-Area Structure
 
 Each faction has three sub-areas. Each sub-area is intended to eventually contain one of each character type, plus its own relics and events.
@@ -216,7 +220,7 @@ First-pass balance assumptions:
 - Default movement pattern is orthogonal: vertical and horizontal movement only.
 - Default attack pattern is orthogonal line-of-sight: vertical and horizontal only.
 - Diagonal, area, jump, teleport, or unusual patterns are special-case rules printed on characters, relics, events, or future cards.
-- Movement, basic attacks, and abilities each cost that character's 1 action point.
+- Movement, basic attacks, and abilities each cost 1 AP from the player's turn pool, gated by that character having remaining character AP (see Section 11-12).
 - Level 2 and Level 3 upgrades should make pieces more interesting without making a leveled character automatically win the game.
 - Low-ATK characters should have stronger utility abilities so they remain fun even when their basic attacks are weak.
 
@@ -275,6 +279,8 @@ Prototype placement rule:
 - All character cards are placed on the board at the beginning of the match.
 - Players win by capturing the enemy Hero or defeating all opposing characters.
 
+Deckbuilding direction (decided): the paper prototype and MVP keep the fixed 1-of-each-type squad described in Section 20. Deckbuilding is a planned post-prototype system, once the fixed-squad core loop is validated: a deck may combine any mix of the 7 character types plus relics/events, with no cost/mana stat on character cards — legality is governed by composition rules only (e.g. max 1 Hero, max 1 Leader, per Section 8's roster-composition limits), not a mana curve. Scope and squad-size rules for constructed decks are not yet defined and should be drafted when this system is prioritized.
+
 Properties may include:
 - Type
 - Culture
@@ -289,7 +295,7 @@ Upgrade path:
 - Each character has 3 levels.
 - Level 1 is the starting version.
 - Level 2 is earned by crossing all the way to the opponent's edge of the board.
-- Level 3 is earned after a Level 2 character collects a defeat trophy, such as a scalp or ear, from a defeated enemy and carries it to the center square.
+- Level 3 is earned after a Level 2 character collects a Spirit Ember released by a defeated enemy and carries it to the center square.
 - Levels 2 and 3 improve that character's existing identity without changing the card into a different character.
 - Card levels are part of match gameplay, not account progression or paid unlocks.
 
@@ -344,6 +350,8 @@ Examples:
 
 Relic and event cards are faction-themed, but they are still mixed into one shared deck used by both players. This means either player can benefit from or suffer from either faction's mythic forces, which keeps the paper prototype unpredictable without giving one faction a private card deck. Each player tracks one active relic slot. If a player draws a relic while their relic slot is already full, they choose whether to replace their active relic.
 
+Design intent (decided): the shared draw is not incidental variance to be minimized — it is a deliberate pillar. Both players adapting to the same unpredictable pull, regardless of faction, is meant to add randomness and forced tactical thinking each turn. Balance and playtesting should tune this pull (frequency, power level, active-slot rules), not replace it with private per-culture decks.
+
 Russian-inspired relics:
 
 | Card | Type | Duration | Effect |
@@ -378,19 +386,20 @@ Atlantean events:
 | Crystal Tide | Event | 1 turn | The active player's characters have +1 RANGE on abilities this turn. |
 | Dream Of The Deep City | Event | Immediate | Reveal the next shared relic/event card. The active player may leave it on top or place it on the bottom of the deck. |
 
-### Defeat Trophy Leveling
+### Spirit Ember Leveling
 
 The current level-up rule has two stages:
 
 | Level | Requirement | Design Purpose |
 | --- | --- | --- |
 | Level 2 | A Level 1 character crosses to the opponent's board edge. | Rewards penetration, risk, and reaching enemy territory. |
-| Level 3 | A Level 2 character collects a defeat trophy from a defeated enemy, then reaches the center square. | Forces a second tactical objective and pulls upgraded pieces back toward the contested middle. |
+| Level 3 | A Level 2 character collects a Spirit Ember from a defeated enemy, then reaches the center square. | Forces a second tactical objective and pulls upgraded pieces back toward the contested middle. |
 
-Prototype terminology:
-- The story flavor may call the trophy a scalp, ear, token, or defeat trophy.
-- The product and UI should use a flexible term such as `defeat trophy` unless the final tone intentionally supports darker language.
+Terminology (decided):
+- The mechanic and its rules/UI name is `Spirit Ember` — a fragment of spirit/myth released when an enemy is defeated within the convergence, not a literal body part. This replaces the earlier "defeat trophy / scalp / ear" language and resolves PRD-RISK-006 and PRD-OQ-009.
 - The center square becomes important for Level 3 progression in addition to positioning and relic/event effects.
+
+Open balance task: leveling should reliably be worth pursuing, not just theoretically available. Given the small 7-unit squads and instant-loss-on-Hero-capture, the risk of exposing a piece to reach the enemy edge (Level 2) or return to center with a Spirit Ember (Level 3) needs explicit playtesting to confirm the reward justifies the exposure — tune HP/ability power at Level 2/3, or the risk of the crossing itself, if early paper matches show players never attempt it.
 
 ## 10. Board Design
 
@@ -406,7 +415,7 @@ Initial requirements:
 - Show danger zones.
 - Support drag-and-drop and tap-to-confirm controls.
 - The center tile should be visually marked during testing because it is a natural tactical focal point.
-- The center tile must support Level 3 advancement when a Level 2 character carrying a defeat trophy reaches it.
+- The center tile must support Level 3 advancement when a Level 2 character carrying a Spirit Ember reaches it.
 - The digital tabletop prototype should support manually placed board objects, such as pylons, barricades, or other playtest markers.
 
 ### Future Board Features
@@ -423,19 +432,20 @@ Initial requirements:
 Recommended prototype turn structure:
 
 1. Start of turn effects resolve.
-2. Each character refreshes to 1 action point.
-3. The active player draws 1 shared relic or event card for the turn.
-4. Player takes actions in any order:
-   - Move a character by spending that character's action point.
-   - Attack with a character by spending that character's action point.
-   - Activate an ability by spending that character's action point.
-   - Pick up, carry, or deliver a defeat trophy if the final prototype implementation treats trophies as explicit board objects or status markers.
+2. The active player's AP pool refreshes: 2 AP on that player's first turn of the match, 4 AP on every turn after.
+3. Each character's own AP stat refreshes (usually 1; higher for some characters or via effects).
+4. The active player draws 1 shared relic or event card for the turn.
+5. Player takes actions in any order, limited by both the player's remaining pool AP and the acting character's remaining character AP:
+   - Move a character by spending 1 pool AP and 1 of that character's AP.
+   - Attack with a character by spending 1 pool AP and 1 of that character's AP.
+   - Activate an ability by spending 1 pool AP and 1 of that character's AP.
+   - Pick up, carry, or deliver a Spirit Ember if the final prototype implementation treats Spirit Embers as explicit board objects or status markers.
    - Resolve any active relic or event effects.
-5. Player ends turn.
-6. End of turn effects resolve.
+6. Player ends turn.
+7. End of turn effects resolve.
 
 Recommendation:
-Start with each character receiving 1 action point per turn. This creates chess-like clarity: each piece can usually do one meaningful thing before the turn passes.
+Because the pool (2 or 4 AP) is smaller than the full squad (7 characters), most turns will not see every character act — this is intentional. It forces the player to prioritize which pieces move or fight each turn rather than activating the whole board, and the smaller first-turn pool (2 AP vs. 4 AP afterward) is the prototype's mitigation for first-move advantage.
 
 ## 12. Resources
 
@@ -448,12 +458,12 @@ Possible resource systems:
 | Culture-specific resources | Strong identity | Harder to balance |
 | Hybrid action + mana | Flexible | More complex for new players |
 
-Prototype recommendation:
-- Each character refreshes to 1 action point at the start of its controller's turn.
-- Movement is an action and consumes that character's action point.
-- Attacking is an action and consumes that character's action point.
-- Using an ability is an action and consumes that character's action point.
-- Some cards may allow bonus movement, reaction actions, or action point recovery.
+Prototype recommendation (decided):
+- The active player has a turn-level AP pool: 2 AP on their first turn of the match, 4 AP every turn after. Pool AP may be spent on any combination of the player's characters' actions.
+- Independently, each character has its own AP stat — usually 1, meaning that character can act at most once per turn regardless of the pool. Some characters or effects grant a higher character AP, letting that single character take multiple actions in one turn if the pool allows it.
+- Movement, attacking, and activating an ability each cost 1 pool AP, gated by the acting character having remaining character AP of its own.
+- Because the pool caps total actions per turn well below the squad size, not every character acts every turn — a deliberate tactical constraint, not an oversight.
+- Some cards may allow bonus movement, reaction actions, or AP recovery (to either the pool or a specific character's AP).
 - Some cultures may generate special tokens later.
 
 ## 13. Victory Conditions
@@ -492,7 +502,7 @@ Progression must keep the game fair. Cards stay mechanically consistent, and unl
 
 - Each character has 3 levels.
 - Characters reach Level 2 during a match by crossing to the opponent's edge of the board.
-- Characters reach Level 3 by collecting a defeat trophy from a defeated enemy and taking it to the center square.
+- Characters reach Level 3 by collecting a Spirit Ember from a defeated enemy and taking it to the center square.
 - Level-ups should improve or deepen the character's existing role.
 - Level-ups reset each match unless a future mode explicitly says otherwise.
 
@@ -638,6 +648,37 @@ The first playable prototype should prove the core game is fun before adding col
 - The two test cultures create different playstyles.
 - Players want to immediately replay and try a different strategy.
 
+### Product-Level Requirements
+
+| ID | Requirement | Source Goal |
+| --- | --- | --- |
+| PRD-FR-001 | The prototype shall support a 7x7 tactical board with a visible center tile and two opposing player sides. | PRD-GOAL-001 |
+| PRD-FR-002 | The prototype shall support two playable cultures, Russian-inspired and Atlantean, each with one character for each of the seven base character types. | PRD-GOAL-002 |
+| PRD-FR-003 | The prototype shall support turn-based movement, attacks, character abilities, mount/dismount actions, and pass/end-turn flow. | PRD-GOAL-001 |
+| PRD-FR-004 | The prototype shall support Hero capture and army defeat victory conditions. | PRD-GOAL-001 |
+| PRD-FR-005 | The prototype shall support a shared relic/event deck with one draw for the active player each turn. | PRD-GOAL-004 |
+| PRD-FR-006 | The prototype shall support in-match character progression from Level 1 to Level 2 by reaching the opponent's edge. | PRD-GOAL-001 |
+| PRD-FR-007 | The prototype shall support Level 3 progression by having a Level 2 character collect a Spirit Ember and deliver it to the center square. | PRD-GOAL-001 |
+| PRD-FR-008 | The prototype shall expose enough debug or inspection UI for playtesters to understand HP, AP, level, status effects, relics, events, and legal actions. | PRD-GOAL-001 |
+| PRD-FR-009 | The content system shall be structured so future factions can support three sub-areas with seven character types plus relics and events. | PRD-GOAL-005 |
+| PRD-FR-010 | The MVP shall include tutorial, AI match, casual PvP, squad or cosmetic view, collection view, analytics events, local save data, and internal balancing tools. | PRD-GOAL-006 |
+| PRD-NFR-001 | The first paper prototype should complete in 10-20 minutes and the eventual mobile standard match should target 5-12 minutes. | PRD-GOAL-003 |
+| PRD-NFR-002 | The mobile UX shall keep board state, legal actions, status reminders, active relics/events, and irreversible-action confirmations readable on phone-sized screens. | PRD-GOAL-001 |
+| PRD-NFR-003 | Competitive progression shall avoid pay-to-win power advantages and keep gameplay access fair. | PRD-GOAL-001 |
+| PRD-NFR-004 | Real-world-inspired cultures shall be handled with respect, research, and fantasy framing that avoids stereotypes. | PRD-GOAL-005 |
+
+### Success Metrics
+
+| ID | Metric | Target | Validation Method |
+| --- | --- | --- | --- |
+| PRD-SM-001 | Rule comprehension | New playtesters understand legal movement, basic attacks, turn flow, and Hero capture — enough to start having fun — within 2 minutes. Mastering the nuances of individual character/relic/event cards is expected to take longer and is not part of this metric. | Observe first-session paper or digital playtests. |
+| PRD-SM-002 | Prototype match length | Paper prototype matches finish within 10-20 minutes. | Time 3-5 comparable-skill test matches. |
+| PRD-SM-003 | Mobile match target | Standard mobile matches trend toward 5-12 minutes after UX and balance tuning. | Measure digital prototype and MVP session analytics. |
+| PRD-SM-004 | Decision density | Each turn presents at least one meaningful tactical choice. | Playtest survey plus designer review of turn logs. |
+| PRD-SM-005 | Faction distinction | Playtesters can describe how Russian-inspired and Atlantean playstyles differ after one match. | Post-match interview or survey. |
+| PRD-SM-006 | Replay pull | At least half of early playtesters want to replay, switch faction, or try a different strategy after a match. | Post-match survey. |
+| PRD-SM-007 | Mobile readability | Testers can inspect unit state, legal actions, relic/event state, and victory threats without repeated menu hunting. | Mobile UX prototype observation. |
+
 ## 21. MVP Scope
 
 The MVP is the first version that could be tested with external users.
@@ -687,32 +728,36 @@ Design as fair-to-play first. Decide monetization after the core game is fun.
 
 ## 23. Risks
 
-| Risk | Mitigation |
-| --- | --- |
-| Rules become too complex | Prototype with minimal mechanics first |
-| Card balance becomes unmanageable | Build internal card data tools early |
-| Board plus cards overwhelms mobile UI | Test on phone-sized screens from the start |
-| Cultures feel cosmetic only | Give each culture a mechanical identity |
-| Sub-areas feel cosmetic only | Give each sub-area its own style, mechanics, relics, events, and narrative function |
-| Level 3 trophy objective feels too dark or confusing | Test terminology and UI; use `defeat trophy` as the neutral rules term until tone is final |
-| Multiplayer is expensive and slow | Start with local and AI matches |
-| Scope grows too quickly | Lock prototype scope before production |
+| ID | Risk | Mitigation |
+| --- | --- | --- |
+| PRD-RISK-001 | Rules become too complex. | Prototype with minimal mechanics first. |
+| PRD-RISK-002 | Card balance becomes unmanageable. | Build internal card data tools early. |
+| PRD-RISK-003 | Board plus cards overwhelms mobile UI. | Test on phone-sized screens from the start. |
+| PRD-RISK-004 | Cultures feel cosmetic only. | Give each culture a mechanical identity. |
+| PRD-RISK-005 | Sub-areas feel cosmetic only. | Give each sub-area its own style, mechanics, relics, events, and narrative function. |
+| PRD-RISK-006 | Level 3 trophy objective feels too dark or confusing. | Resolved: renamed to `Spirit Ember`, framed as a fragment of spirit/myth released by defeat rather than a body part. Still worth confirming in playtests that the framing reads as intended. |
+| PRD-RISK-007 | Multiplayer is expensive and slow. | Start with local and AI matches. |
+| PRD-RISK-008 | Scope grows too quickly. | Lock prototype scope before production. |
+| PRD-RISK-009 | MVP scope (4 cultures, 28+ character cards, 40+ relic/event cards, AI opponent, full mobile UI) exceeds solo-developer capacity/timeline. | Agreed as an active risk to mitigate. Mitigation approach not yet defined — needs a sequencing/scope-cut plan (e.g. fewer cultures at MVP, smaller relic/event pool, contractor/outsourced art) before committing to Milestone 005 (MVP Planning). |
+| PRD-RISK-010 | Soviet/Cold War nuclear-accident setting draws extra app-store or platform content-review scrutiny given real-world political sensitivity. | Partially mitigated by the fiction/abstraction direction (real-world grounding as hints, not literal named figures or documented incidents). Platform policy review still recommended before major production investment. |
 
 ## 24. Open Questions
 
-- Is the game portrait, landscape, or both?
-- What exact 7x7 starting formation should the 14 characters use?
-- Are units permanently defeated, revived, or returned to hand?
-- Should cultures be historically named, myth-inspired, or fully fictional?
-- Is the tone serious, stylized, heroic, dark, or family-friendly?
-- How many shared relic/event cards should be in the first paper prototype?
-- What exact story role does the Closed City scientist play: protagonist, narrator, gate, victim, antagonist, or all of these at different times?
-- Should the Level 3 trophy be represented as a physical board marker, a character status, or an abstract achievement?
-- How explicit should darker trophy language such as scalp or ear be in the final product versus prototype notes?
+| ID | Question | Decision Impact |
+| --- | --- | --- |
+| PRD-OQ-001 | Is the game portrait, landscape, or both? | Determines board layout, card inspection, and mobile UI constraints. |
+| PRD-OQ-002 | What exact 7x7 starting formation should the 14 characters use? | Blocks stable paper prototype setup and first digital board presets. |
+| PRD-OQ-003 | Are units permanently defeated, revived, or returned to hand? | Affects victory pacing, comeback mechanics, and event/relic design. |
+| PRD-OQ-004 | Should cultures be historically named, myth-inspired, or fully fictional? | Affects naming, research burden, audience expectations, and sensitivity review. |
+| PRD-OQ-005 | Is the tone serious, stylized, heroic, dark, or family-friendly? | Affects art direction, Spirit Ember framing, story presentation, and content rating. |
+| PRD-OQ-006 | How many shared relic/event cards should be in the first paper prototype? | Determines prototype content workload and event frequency. |
+| PRD-OQ-007 | What exact story role does the Closed City scientist play: protagonist, narrator, gate, victim, antagonist, or all of these at different times? | Determines campaign framing, tutorial voice, and long-term narrative structure. |
+| PRD-OQ-008 | Resolved: represented as a status/counter on the carrying character (icon such as a wisp, spark, or fractured-glass mark), not a separate physical board object. | Simplifies UI; avoids adding another placed-object type alongside barricades/pylons/frost tiles. |
+| PRD-OQ-009 | Resolved: no darker body-part language (scalp/ear) in any version of the product, including prototype notes. `Spirit Ember` is the only name used. | Removes the sensitivity risk in PRD-RISK-006 outright rather than deferring it to a later tone decision. |
 
 ## 25. First Development Milestones
 
-### Milestone 1: Paper Prototype
+### PRD-MILESTONE-001: Paper Prototype
 
 Goal:
 Validate basic rules with physical cards or a spreadsheet.
@@ -726,7 +771,7 @@ Deliverables:
 - Sub-area design notes for Russian-inspired and Atlantean factions
 - Playtest notes
 
-### Milestone 2: Digital Rules Prototype
+### PRD-MILESTONE-002: Digital Rules Prototype
 
 Goal:
 Build the game logic without final art.
@@ -739,11 +784,11 @@ Deliverables:
 - Character abilities
 - Shared relic/event draw
 - Character level-up trigger
-- Defeat trophy tracking for Level 3 progression
+- Spirit Ember tracking for Level 3 progression
 - Win/loss condition
 - Debug UI
 
-### Milestone 3: Mobile UX Prototype
+### PRD-MILESTONE-003: Mobile UX Prototype
 
 Goal:
 Test whether the game works on a phone.
@@ -756,7 +801,7 @@ Deliverables:
 - Legal move highlights
 - Basic animations
 
-### Milestone 4: Content Prototype
+### PRD-MILESTONE-004: Content Prototype
 
 Goal:
 Test culture identity and replayability.
@@ -768,7 +813,7 @@ Deliverables:
 - Simple balancing pass
 - Playtest survey
 
-### Milestone 5: MVP Planning
+### PRD-MILESTONE-005: MVP Planning
 
 Goal:
 Decide whether the game is strong enough to scale.
@@ -787,5 +832,6 @@ Deliverables:
 3. Write short style and mechanic notes for each of the six sub-areas.
 4. Write 10-20 starter shared relic/event cards.
 5. Paper test the 14 character cards and record which pieces feel too strong, too weak, or too confusing.
-6. Revise stats, Level 2 upgrades, and Level 3 trophy rules after 3-5 paper matches.
-7. Build the first Godot rules prototype.
+6. Revise stats, Level 2 upgrades, and Level 3 Spirit Ember rules after 3-5 paper matches.
+7. During paper testing, specifically track: how often Level 2/3 is actually reached (leveling-worth-it check), whether the 2-AP first turn meaningfully reduces first-move advantage, and how many turns pass before players stop feeling overwhelmed by per-card rules.
+8. Build the first Godot rules prototype.
