@@ -233,6 +233,30 @@ Line They Eventually Cross: they intentionally becomes a vessel to prevent a wor
 Possible catch phrase:
 - "I woke with too many names."
 
+### Nikolai Yegorov
+
+Sub-area: Russian / Closed City
+
+Card role: Common / Reactor Worker
+
+Role in story: maintenance worker assigned to the lower reactor service corridors. Nikolai is not part of the classified dream program, but he knows the facility through its pipes, cables, pressure valves, locked doors, and practical failures. When Elena's dream work and the cosmonaut remote-viewing array begin feeding symbols into reactor diagnostics, Nikolai is one of the first people to realize the accident is not only nuclear. He sees frost form around conduit seams before the alarms sound, hears voices through dead intercom lines, and finds hand-drawn symbols scratched into panels he repaired the night before.
+
+Public Role: reactor maintenance worker.
+
+Private Hunger: to get his younger sister transferred out of the Closed City before the place consumes everyone inside it.
+
+Relational Wound: his family depends on the same state system that traps them.
+
+Forbidden Attraction: the dream signal, because it shows him places beyond fences, maps, and assigned lives.
+
+Line He Will Not Cross: he will not abandon ordinary workers to save only scientists and officers.
+
+Line He Eventually Crosses: he opens sealed service routes during containment, letting the breach spread but saving trapped people.
+
+Catch phrases:
+- "Machines tell the truth before men do."
+- "If there is a door, someone built it. If someone built it, I can open it."
+
 ## Faction And Sub-Area Structure
 
 Each faction has three story sub-areas. Each sub-area should eventually include:
@@ -490,4 +514,3 @@ Generated but not yet copied into workspace:
 - Event card art should generally include no text. Card titles and effects should be app-rendered.
 - Existing gameplay change already discussed: White Siberian Tiger's Pounce should be activated, give +2 ATK, spend/mark AP, and only be available when not mounted.
 - Existing prototype need already discussed: character visual indicators should support reminders such as shield, +ATK, +MOVE, and Pounce.
-
