@@ -1,211 +1,220 @@
 [
-    {
-        "id":  "r-signal-array-turns",
-        "review_status":  "draft_for_review",
-        "faction":  "Russian-Inspired",
-        "culture":  "Russian-inspired",
-        "sub_area":  "Closed City",
-        "name":  "Signal Array Turns",
-        "kind":  "Event",
-        "duration":  "Immediate",
-        "effect":  "Reveal the top 2 cards of the shared relic/event deck. The active player may put them back in any order.",
-        "role":  "Pre-breach omen. The cosmonaut relay dish moves without command and points at a coordinate no scheduled satellite should occupy.",
-        "narrative":  {
-                          "arc_phase":  "Before The Breach",
-                          "summary":  "The first visible sign is not in the reactor. It is outside in the snow, where the signal array turns twelve degrees toward an empty part of the sky. Telemetry officers call it a servo error until the dream monitors repeat the same coordinate.",
-                          "character_pressure":  "Karpova understands the value of the anomaly before the scientists do. Elena suspects the coordinate is being answered. Orlov wants another diagnostic pass."
-                      },
-        "asset_candidates":  [
-                                 "assets/events/closed-city-signal-array-turns-event-art.png"
-                             ],
-        "review_notes":  [
-                             "Draft event card, not yet added to the playable prototype shared relic/event deck.",
-                             "Simple top-deck control establishes Closed City\u0027s signal/reveal identity.",
-                             "Can be promoted to playable deck before Leak markers exist."
-                         ]
+  {
+    "id": "r-signal-array-turns",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Event Set",
+    "set_count": "1 of 8",
+    "name": "Signal Array Turns",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "The active player's first ranged attack or ranged AP ability this turn gains +1 RANGE if the acting character is adjacent to a placed object or Leak marker.",
+    "role": "Pre-breach omen. The cosmonaut relay dish moves without command and points at a coordinate no scheduled satellite should occupy.",
+    "mechanical_lane": "Turns Closed City infrastructure into signal reach without using deck viewing or deck manipulation.",
+    "narrative": {
+      "arc_phase": "Before The Breach",
+      "summary": "The first visible sign is outside in the snow, where the signal array turns toward an empty part of the sky.",
+      "character_pressure": "Karpova understands the value of the anomaly before the scientists do. Elena suspects the coordinate is being answered."
     },
-    {
-        "id":  "r-dream-monitors-synchronize",
-        "review_status":  "draft_for_review",
-        "faction":  "Russian-Inspired",
-        "culture":  "Russian-inspired",
-        "sub_area":  "Closed City",
-        "name":  "Dream Monitors Synchronize",
-        "kind":  "Event",
-        "duration":  "Immediate",
-        "effect":  "Move 1 temporary combat marker, such as Shield, +ATK, +MOVE, Pounce, Slow, or Marked, from one character to another character within 3 tiles. Spirit Ember cannot be moved this way.",
-        "role":  "Elena\u0027s dream work stops being observation and becomes connection. Private symbols begin moving through machines and bodies.",
-        "narrative":  {
-                          "arc_phase":  "The Synchronization",
-                          "summary":  "In Elena Morozova\u0027s lab, three sleeping subjects produce the same waveform. The line bends into geometry. The machines are not recording dreams anymore. They are letting dreams touch one another.",
-                          "character_pressure":  "Elena sees proof. Orlov sees contamination. Zoya smiles before she wakes."
-                      },
-        "asset_candidates":  [
-                                 "assets/events/closed-city-dream-monitors-synchronize-event-art.png"
-                             ],
-        "review_notes":  [
-                             "Draft event card, not yet added to the playable prototype shared relic/event deck.",
-                             "Uses the same status-marker vocabulary already emerging in Closed City character drafts.",
-                             "Explicitly excludes Spirit Ember to protect Level 3 progression rules."
-                         ]
+    "asset_candidates": [
+      "assets/events/closed-city-signal-array-turns-event-art.png"
+    ],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Part of the clearly defined 8-card Closed City event set.",
+      "Revised away from top-deck reveal to avoid duplicating Atlantis prediction/card manipulation."
+    ]
+  },
+  {
+    "id": "r-dream-monitors-synchronize",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Event Set",
+    "set_count": "2 of 8",
+    "name": "Dream Monitors Synchronize",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Move 1 temporary combat marker, such as Shield, +ATK, +MOVE, Pounce, Slow, or Marked, from one character to another character within 3 tiles. Spirit Ember cannot be moved this way.",
+    "role": "Elena's dream work stops being observation and becomes connection. Private symbols begin moving through machines and bodies.",
+    "mechanical_lane": "Status-marker transfer that supports Elena and Zoya without touching Spirit Ember.",
+    "narrative": {
+      "arc_phase": "The Synchronization",
+      "summary": "Three sleeping subjects produce the same waveform. The machines are not recording dreams anymore. They are letting dreams touch one another.",
+      "character_pressure": "Elena sees proof. Orlov sees contamination. Zoya smiles before she wakes."
     },
-    {
-        "id":  "r-reactor-prayer",
-        "review_status":  "draft_for_review",
-        "faction":  "Russian-Inspired",
-        "culture":  "Russian-inspired",
-        "sub_area":  "Closed City",
-        "name":  "Reactor Prayer",
-        "kind":  "Event",
-        "duration":  "Immediate",
-        "effect":  "Choose one of your characters. That character takes 1 damage, then reveal the top card of the shared relic/event deck. You may leave it on top or place it on the bottom.",
-        "role":  "Radiation behaves like language. The reactor does not simply emit energy; it seems to ask for attention, pain, and interpretation.",
-        "narrative":  {
-                          "arc_phase":  "The Synchronization",
-                          "summary":  "The instruments record radiation in repeating structures too intentional to dismiss. Orlov calls it noise. Elena calls it grammar. Karpova calls it leverage.",
-                          "character_pressure":  "The city begins paying for information with bodies."
-                      },
-        "asset_candidates":  [
-                                 "assets/events/closed-city-reactor-prayer-event-art.png"
-                             ],
-        "review_notes":  [
-                             "Draft event card, not yet added to the playable prototype shared relic/event deck.",
-                             "Risk/reward effect supports Closed City\u0027s dangerous-knowledge identity.",
-                             "May need balance review because damage-for-deck-control can become very efficient."
-                         ]
+    "asset_candidates": [
+      "assets/events/closed-city-dream-monitors-synchronize-event-art.png"
+    ],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Part of the clearly defined 8-card Closed City event set.",
+      "Explicitly excludes Spirit Ember to protect Level 3 progression rules."
+    ]
+  },
+  {
+    "id": "r-reactor-prayer",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Event Set",
+    "set_count": "3 of 8",
+    "name": "Reactor Prayer",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "Choose one of your characters. It takes 1 damage, then its next attack or AP ability this turn gains +1 ATK or +1 RANGE.",
+    "role": "Radiation behaves like language. The reactor does not simply emit energy; it seems to ask for attention, pain, and interpretation.",
+    "mechanical_lane": "Clean risk/reward boost without deck manipulation.",
+    "narrative": {
+      "arc_phase": "The Synchronization",
+      "summary": "The instruments record radiation in repeating structures too intentional to dismiss. Orlov calls it noise. Elena calls it grammar. Karpova calls it leverage.",
+      "character_pressure": "The city begins paying for advantage with bodies."
     },
-    {
-        "id":  "r-closed-city-incident",
-        "review_status":  "draft_for_review",
-        "faction":  "Russian-Inspired",
-        "culture":  "Russian-inspired",
-        "sub_area":  "Closed City",
-        "name":  "Closed City Incident",
-        "kind":  "Event",
-        "duration":  "Immediate",
-        "effect":  "Place 2 Leak markers on different empty tiles within 2 of the center tile. Then reveal the top card of the shared relic/event deck. The active player may leave it on top or place it on the bottom.",
-        "role":  "Central Closed City story event. The reactor opens inward while Elena\u0027s remote-viewing work, cosmonaut signal systems, and anomalous radiation create the first major Convergence breach.",
-        "narrative":  {
-                          "arc_phase":  "The Incident",
-                          "archive_title":  "The Closed City Incident",
-                          "summary":  "At 02:17 local time, the reactor pulse, orbital receiver, and dream monitors synchronize around the same impossible symbol. The facility does not explode outward. It opens inward. For seventeen seconds, the Closed City exists inside overlapping realities.",
-                          "witness_fragments":  [
-                                                    "A drowned city behind reactor glass.",
-                                                    "Snow falling upward in a sealed hallway.",
-                                                    "Dead soldiers reflected in blank monitors.",
-                                                    "A white tiger walking past locked doors.",
-                                                    "Ocean pressure cracking concrete that never became wet."
-                                                ],
-                          "story_consequence":  "Dr. Mikhail Orlov is found unconscious with circular light-burn marks on his palms. Dr. Elena Morozova is not found. The first MythCards artifacts begin appearing afterward."
-                      },
-        "asset_candidates":  [
-                                 "assets/events/closed-city-incident-event-art.png"
-                             ],
-        "review_notes":  [
-                             "Draft event card, not yet added to the playable prototype shared relic/event deck.",
-                             "Effect introduces Closed City Leak markers and deck manipulation without requiring a full scenario system.",
-                             "May need balance review because it combines hazard placement with top-card control.",
-                             "If Leak markers are not available in a prototype build, use placed object/status markers as a temporary stand-in."
-                         ]
+    "asset_candidates": [
+      "assets/events/closed-city-reactor-prayer-event-art.png"
+    ],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Part of the clearly defined 8-card Closed City event set.",
+      "May need testing on low-HP Commons."
+    ]
+  },
+  {
+    "id": "r-closed-city-incident",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Event Set",
+    "set_count": "4 of 8",
+    "name": "Closed City Incident",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Place 2 Leak markers on different empty tiles within 2 of the center tile.",
+    "role": "Central Closed City breach event. The reactor pulse, orbital receiver, and dream monitors synchronize, and the facility opens inward.",
+    "mechanical_lane": "Introduces simple Leak-marker board pressure without using Atlantean-style deck manipulation.",
+    "narrative": {
+      "arc_phase": "The Incident",
+      "summary": "At 02:17 local time, the facility exists in more than one symbolic reality for seventeen seconds. The reactor does not explode outward. It opens inward.",
+      "character_pressure": "Orlov falls into coma. Elena vanishes. Karpova sees access. Yuri receives containment orders. Nikolai opens routes. VERA-7 moves without command. Zoya wakes changed."
     },
-    {
-        "id":  "r-seventeen-seconds",
-        "review_status":  "draft_for_review",
-        "faction":  "Russian-Inspired",
-        "culture":  "Russian-inspired",
-        "sub_area":  "Closed City",
-        "name":  "Seventeen Seconds",
-        "kind":  "Event",
-        "duration":  "1 turn",
-        "effect":  "The active player\u0027s first movement action this turn may move through 1 occupied tile, placed object, or Leak marker, but must end on an empty tile.",
-        "role":  "For seventeen seconds, architecture loses its authority. Corridors overlap with dream routes, drowned streets, snowfields, and rooms that were never built.",
-        "narrative":  {
-                          "arc_phase":  "The Incident",
-                          "summary":  "The final surviving clock record says the impossible lasted seventeen seconds. Everyone inside those seconds remembers a different room. Some remember no room at all.",
-                          "character_pressure":  "Nikolai finds a service route where none exists. VERA-7 accepts a path no map confirms."
-                      },
-        "asset_candidates":  [
-
-                             ],
-        "review_notes":  [
-                             "Draft event card, not yet added to the playable prototype shared relic/event deck.",
-                             "Temporary phase movement gives Closed City a distinct breach-route feel.",
-                             "Needs rules review for interaction with mounted characters."
-                         ]
+    "asset_candidates": [
+      "assets/events/closed-city-incident-event-art.png"
+    ],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Part of the clearly defined 8-card Closed City event set.",
+      "Core leak event for the Closed City sub-area."
+    ]
+  },
+  {
+    "id": "r-seventeen-seconds",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Event Set",
+    "set_count": "5 of 8",
+    "name": "Seventeen Seconds",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "The active player's first movement action this turn may move through 1 occupied tile, placed object, or Leak marker, but must end on an empty tile.",
+    "role": "For seventeen seconds, architecture loses its authority. Corridors overlap with dream routes, drowned streets, snowfields, and rooms that were never built.",
+    "mechanical_lane": "Temporary breach-route movement.",
+    "narrative": {
+      "arc_phase": "The Incident",
+      "summary": "Everyone inside the seventeen seconds remembers a different room. Some remember no room at all.",
+      "character_pressure": "Nikolai finds a service route where none exists. VERA-7 accepts a path no map confirms."
     },
-    {
-        "id":  "r-elena-missing-in-the-signal",
-        "review_status":  "draft_for_review",
-        "faction":  "Russian-Inspired",
-        "culture":  "Russian-inspired",
-        "sub_area":  "Closed City",
-        "name":  "Elena Missing In The Signal",
-        "kind":  "Event",
-        "duration":  "Immediate",
-        "effect":  "Choose one allied character. Remove one harmful temporary combat marker from that character, then move that character 1 tile to an empty adjacent tile.",
-        "role":  "Elena disappears, but her work keeps creating routes, protections, and messages through the breach.",
-        "narrative":  {
-                          "arc_phase":  "The Incident",
-                          "summary":  "After the white light, Elena Morozova is not found. Her notes remain. Her voice does not. Yet systems she built continue making choices that look too much like care.",
-                          "character_pressure":  "Yuri wants extraction. Orlov wants explanation. Karpova wants access. None of them can prove whether Elena is dead, hidden, transformed, or answering."
-                      },
-        "asset_candidates":  [
-
-                             ],
-        "review_notes":  [
-                             "Draft event card, not yet added to the playable prototype shared relic/event deck.",
-                             "A defensive/repositioning event that expresses Elena\u0027s absent presence.",
-                             "Can be reviewed against Dr. Elena Morozova\u0027s character-card mechanics to avoid overlap."
-                         ]
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Part of the clearly defined 8-card Closed City event set.",
+      "Needs rules review for mounted characters."
+    ]
+  },
+  {
+    "id": "r-elena-missing-in-the-signal",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Event Set",
+    "set_count": "6 of 8",
+    "name": "Elena Missing In The Signal",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Choose 1 allied character within 2 tiles of a Leak marker or placed object. Move it up to 2 tiles. It gains Marked until the end of the round.",
+    "role": "Elena disappears into the signal and becomes the personal wound at the center of the Closed City arc.",
+    "mechanical_lane": "Extraction with a cost; movement through the breach leaves evidence on the character.",
+    "narrative": {
+      "arc_phase": "The Incident",
+      "summary": "Elena is not found after the synchronization. The machines still answer to her work, and some survivors hear her voice in the signal.",
+      "character_pressure": "Yuri wants to rescue her, Orlov fears he lost her, Karpova wants to use the route she opened, and Zoya may know where Elena went."
     },
-    {
-        "id":  "r-the-first-card-appears",
-        "review_status":  "draft_for_review",
-        "faction":  "Russian-Inspired",
-        "culture":  "Russian-inspired",
-        "sub_area":  "Closed City",
-        "name":  "The First Card Appears",
-        "kind":  "Event",
-        "duration":  "Immediate",
-        "effect":  "Reveal the top 3 cards of the shared relic/event deck. Choose 1 relic or event among them and put it on top. Put the rest on the bottom in any order.",
-        "role":  "The first physical MythCards artifact appears near Orlov\u0027s coma bed, proving the Convergence can make symbols into objects.",
-        "narrative":  {
-                          "arc_phase":  "Aftermath And Evidence",
-                          "summary":  "Dreams can be dismissed. Witnesses can be threatened. Machines can be recalibrated. But an object can be held. The first card appears beside Orlov\u0027s pillow in a sealed medical room rimmed with frost.",
-                          "character_pressure":  "For Orlov, it suggests his unconscious mind is organizing the worlds. For Karpova, it proves the breach can produce valuable artifacts. For Elena, if she is still alive inside the signal, it may be a message."
-                      },
-        "asset_candidates":  [
-                                 "assets/events/closed-city-the-first-card-appears-event-art.png"
-                             ],
-        "review_notes":  [
-                             "Draft event card, not yet added to the playable prototype shared relic/event deck.",
-                             "Search/reorder effect expresses the first card as artifact evidence.",
-                             "May be too strong in small decks; tune top-card count during playtest."
-                         ]
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Part of the clearly defined 8-card Closed City event set.",
+      "Use Marked as a visible reminder that the breach touched the character."
+    ]
+  },
+  {
+    "id": "r-the-first-card-appears",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Event Set",
+    "set_count": "7 of 8",
+    "name": "The First Card Appears",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Place 1 Artifact marker on an empty tile adjacent to your Hero. The first allied character adjacent to that Artifact this turn gains Shield.",
+    "role": "The first physical MythCards artifact appears near Orlov's coma bed, proving the Convergence can make symbols into objects.",
+    "mechanical_lane": "Creates a temporary object-like focal point without searching or reordering the shared deck.",
+    "narrative": {
+      "arc_phase": "Aftermath And Evidence",
+      "summary": "Dreams can be dismissed. Witnesses can be threatened. Machines can be recalibrated. But an object can be held.",
+      "character_pressure": "For Orlov, the card suggests his unconscious mind is organizing the worlds. For Karpova, it proves the breach can produce valuable artifacts."
     },
-    {
-        "id":  "r-semyonov-orders-silence",
-        "review_status":  "draft_for_review",
-        "faction":  "Russian-Inspired",
-        "culture":  "Russian-inspired",
-        "sub_area":  "Closed City",
-        "name":  "Semyonov Orders Silence",
-        "kind":  "Event",
-        "duration":  "1 round",
-        "effect":  "Until the start of the active player\u0027s next turn, characters cannot reveal cards from the shared relic/event deck. Already revealed cards remain revealed.",
-        "role":  "The visible military authority tries to bury the truth before panic, Karpova, or the breach can use it.",
-        "narrative":  {
-                          "arc_phase":  "Aftermath And Evidence",
-                          "summary":  "Colonel Semyonov can lock doors, confiscate papers, threaten witnesses, and order silence. What he cannot do is make the city stop dreaming.",
-                          "character_pressure":  "Semyonov believes secrecy is survival. Karpova believes secrecy is ownership. The difference matters to everyone trapped between them."
-                      },
-        "asset_candidates":  [
-
-                             ],
-        "review_notes":  [
-                             "Draft event card, not yet added to the playable prototype shared relic/event deck.",
-                             "A temporary anti-reveal/control event that gives Semyonov a story presence without making him the primary Leader card.",
-                             "May need wording updates if reveal effects are uncommon in a given prototype build."
-                         ]
-    }
+    "asset_candidates": [
+      "assets/events/closed-city-the-first-card-appears-event-art.png"
+    ],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Part of the clearly defined 8-card Closed City event set.",
+      "Uses an Artifact marker as a prototype object marker."
+    ]
+  },
+  {
+    "id": "r-semyonov-orders-silence",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Event Set",
+    "set_count": "8 of 8",
+    "name": "Semyonov Orders Silence",
+    "kind": "Event",
+    "duration": "1 round",
+    "effect": "Until the start of the active player's next turn, characters cannot use bonus AP gained from card effects.",
+    "role": "The visible military authority tries to bury the truth before panic, Karpova, or the breach can use it.",
+    "mechanical_lane": "Temporary suppression/control that gives Semyonov story presence without making him the main Leader card.",
+    "narrative": {
+      "arc_phase": "Aftermath And Evidence",
+      "summary": "Semyonov can lock doors, confiscate papers, threaten witnesses, and order silence. What he cannot do is make the city stop dreaming.",
+      "character_pressure": "Semyonov believes secrecy is survival. Karpova believes secrecy is ownership."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Part of the clearly defined 8-card Closed City event set.",
+      "May be cut if bonus AP remains rare in the prototype."
+    ]
+  }
 ]

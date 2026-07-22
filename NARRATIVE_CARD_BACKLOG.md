@@ -634,30 +634,31 @@ These cards are currently known from the prototype shared relic/event deck.
 
 ## Proposed Closed City Event Cards
 
-These event ideas came from story work and generated art. They are not necessarily implemented in the prototype yet.
+This set contains exactly **8 Closed City event cards**. These event ideas came from story work and generated art. They are not necessarily implemented in the prototype yet.
 
-| Card | Type | Narrative Function | Possible Mechanical Direction | Asset |
-| --- | --- | --- | --- | --- |
-| Closed City Incident | Event | The reactor opens inward and realities overlap. | Create radiation/leak markers; reveal or draw extra event; temporarily alter board spaces. | Generated source: `C:\Users\Drew\.codex\generated_images\019f2e9a-7504-7ee0-9b75-0d4456667415\call_pOQGRFOYlnVYc9GVgZjfCme8.png` |
-| The First Card Appears | Event | The first MythCards artifact manifests near Orlov's coma bed. | Draw/reveal a card; create an artifact/object marker; search relic/event deck. | `assets/events/closed-city-the-first-card-appears-event-art.png` |
-| Signal Array Turns | Event | The cosmonaut relay dish moves without command. | Reveal top deck cards; choose top/bottom order; extend range from objects. | TBD |
-| Dream Monitors Synchronize | Event | Sleep-lab waveforms become shared sacred geometry. | Link two allies; copy a status; shared action or range. | TBD |
-| Containment Breach | Event | Sealed systems fail; the breach spreads through rooms and tiles. | Place leak markers; hazards spread each turn. | TBD |
-| Reactor Prayer | Event | Radiation behaves like language or prayer. | Risk/reward: take damage or status to gain relic/event advantage. | TBD |
-| Seventeen Seconds | Event | Facility exists in multiple realities for seventeen seconds. | Repeat last event effect at reduced strength; phase movement. | TBD |
-| Snow Indoors | Event | Frost appears inside sealed rooms near Orlov. | Create frost tiles; slow enemies; shield ally. | TBD |
+| # | Card | Type | Narrative Function | Possible Mechanical Direction | Asset |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Signal Array Turns | Event | The cosmonaut relay dish moves without command. | First ranged attack or AP ability gains +1 RANGE if adjacent to a placed object or Leak marker. | `assets/events/closed-city-signal-array-turns-event-art.png` |
+| 2 | Dream Monitors Synchronize | Event | Elena's sleep-lab waveforms become shared sacred geometry. | Move a temporary combat marker from one character to another within range; exclude Spirit Ember. | `assets/events/closed-city-dream-monitors-synchronize-event-art.png` |
+| 3 | Reactor Prayer | Event | Radiation behaves like language or prayer. | Take 1 damage to gain +1 ATK or +1 RANGE on the next attack or AP ability this turn. | `assets/events/closed-city-reactor-prayer-event-art.png` |
+| 4 | Closed City Incident | Event | The reactor opens inward and realities overlap. | Place 2 Leak markers near the board center. | `assets/events/closed-city-incident-event-art.png` |
+| 5 | Seventeen Seconds | Event | Facility exists in multiple realities for seventeen seconds. | First movement action may pass through one occupied tile, object, or Leak marker. | TBD |
+| 6 | Elena Missing In The Signal | Event | Elena disappears into the signal and becomes the personal wound at the center of the arc. | Move an ally near a Leak marker or object, then mark them as touched by the breach. | TBD |
+| 7 | The First Card Appears | Event | The first MythCards artifact manifests near Orlov's coma bed. | Place an Artifact marker adjacent to the Hero; an adjacent ally gains Shield. | `assets/events/closed-city-the-first-card-appears-event-art.png` |
+| 8 | Semyonov Orders Silence | Event | Official containment tries to bury the truth. | Temporarily prevents bonus AP gained from card effects. | TBD |
 
 ## Proposed Closed City Relic Cards
 
-| Card | Type | Narrative Function | Possible Mechanical Direction |
-| --- | --- | --- | --- |
-| Chintamani Fragment | Rare Relic | Karpova's confiscated mystical anchor, based on the esoteric Chintamani/Shambhala stone tradition. It reacts before the breach and may be older than the Closed City records. | The only Closed City relic that should view or manipulate the shared relic/event deck. Possible effect: once per turn, reveal the top card; you may leave it or place it on the bottom. |
-| Reactor Core Fragment | Relic | A sealed shard of the inward-opening reactor. Dangerous proof that the incident was not only radiation. | Stat/risk relic. Possible effect: your Specialist and Mystic gain +1 ATK, but the first time each enters a Leak tile each turn, it takes 1 damage. |
-| Cosmonaut Helmet With A Second Shadow | Relic | Returned-space omen and signal receiver; something came back in the reflection. | Defensive/signal relic. Possible effect: your Mount and Warrior each gain +1 maximum HP, and the first harmful psychic/status marker placed on one of them each round is ignored. |
-| Lead-Sealed Notebook | Relic | Elena's hidden notes on dream coordinates, remote viewing, and forbidden subject results. | Knowledge-without-deck-manipulation relic. Possible effect: your Leader and Specialist each gain +1 RANGE on AP abilities. |
-| Psychic Transmitter | Relic | Machine built to send dreams as signal between bodies, rooms, and eventually realities. | Status/range relic. Possible effect: once per turn, when one of your characters gains Shield, +ATK, or +MOVE, one adjacent ally may gain the same marker. |
-| Redacted Incident Tape | Relic | A recording that changes each time it is watched; proof Semyonov and Karpova cannot fully control. | Suppression/defense relic. Possible effect: enemies within 2 of your placed objects have -1 RANGE on their first attack or ability each turn. |
-| Karpova's Black Key | Relic | Karpova's private access key to doors not listed on any map. It is not mystical by origin, but it becomes coveted because access is power. | Movement/control relic. Possible effect: your Leader and Common each gain +1 MOVE, and once per turn one of them may move through one placed object or occupied allied tile but must end on an empty tile. |
+This set contains exactly **6 Closed City relic cards**. Only **Chintamani Fragment** should view or manipulate the shared relic/event deck. The Light-Burn Diagram has been replaced by **Karpova's Black Key**.
+
+| # | Card | Type | Narrative Function | Possible Mechanical Direction |
+| --- | --- | --- | --- | --- |
+| 1 | Chintamani Fragment | Rare Relic | Karpova's confiscated mystical anchor, based on the esoteric Chintamani/Shambhala stone tradition. It reacts before the breach and may be older than the Closed City records. | The only Closed City relic that views or manipulates the shared relic/event deck: once per turn, reveal the top card; leave it or place it on the bottom. |
+| 2 | Reactor Core Fragment | Relic | A sealed shard of the inward-opening reactor. Dangerous proof that the incident was not only radiation. | Stat/risk relic: Specialist and Mystic gain +1 ATK, but the first time each enters a Leak tile each turn, it takes 1 damage. |
+| 3 | Cosmonaut Helmet With A Second Shadow | Relic | Returned-space omen and signal receiver; something came back in the reflection. | Defensive stat relic: Mount and Warrior gain +1 maximum HP and ignore the first harmful temporary combat marker placed on one of them each round. |
+| 4 | Lead-Sealed Notebook | Relic | Elena's hidden notes on dream coordinates, remote viewing, and forbidden subject results. | Range stat relic: Leader and Specialist gain +1 RANGE on AP abilities. |
+| 5 | Redacted Incident Tape | Relic | A recording that changes each time it is watched; proof Semyonov and Karpova cannot fully control. | Suppression relic: enemies within 2 of your placed objects have -1 RANGE on their first attack or AP ability each turn. |
+| 6 | Karpova's Black Key | Relic | Karpova's private access key to doors not listed on any map. It replaces the Light-Burn Diagram as the coveted access relic for this set. | Movement stat relic: Leader and Common gain +1 MOVE; once each turn, one of them may move through a placed object or allied occupied tile. |
 
 ## Proposed Closed City Character Cards
 

@@ -1,0 +1,164 @@
+[
+  {
+    "id": "r-chintamani-fragment",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Relic Set",
+    "set_count": "1 of 6",
+    "name": "Chintamani Fragment",
+    "kind": "Rare Relic",
+    "duration": "Persistent",
+    "effect": "Once each turn, you may reveal the top card of the shared relic/event deck. You may leave it on top or place it on the bottom.",
+    "role": "Karpova's confiscated mystical anchor, based on the esoteric Chintamani/Shambhala stone tradition. It reacts before the breach and may be older than the Closed City records.",
+    "mechanical_lane": "The only Closed City relic currently planned to view or manipulate the shared relic/event deck.",
+    "narrative_links": [
+      "Irina Vasilievna Karpova",
+      "confiscated occult manuscripts",
+      "pre-incident preparation",
+      "reality as leverage"
+    ],
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "This is the single Closed City relic allowed to view or manipulate the shared relic/event deck.",
+      "Rare mystical relic for the Closed City sub-area."
+    ]
+  },
+  {
+    "id": "r-reactor-core-fragment",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Relic Set",
+    "set_count": "2 of 6",
+    "name": "Reactor Core Fragment",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Specialist and Mystic each gain +1 ATK. The first time each of them enters a Leak tile each turn, it takes 1 damage.",
+    "role": "A sealed shard of the inward-opening reactor. Dangerous proof that the incident was not only radiation.",
+    "mechanical_lane": "Power at a cost; rewards Elena/Zoya pressure while keeping the Closed City dangerous.",
+    "narrative_links": [
+      "Dr. Elena Morozova",
+      "Zoya Miranova",
+      "reactor pulse",
+      "radiation as language"
+    ],
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "Stat-bonus relic.",
+      "Watch for feel-bad moments if low-HP characters are forced into Leak spaces."
+    ]
+  },
+  {
+    "id": "r-cosmonaut-helmet-second-shadow",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Relic Set",
+    "set_count": "3 of 6",
+    "name": "Cosmonaut Helmet With A Second Shadow",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Mount and Warrior each gain +1 maximum HP. Once each round, ignore the first harmful temporary combat marker placed on one of them.",
+    "role": "Returned-space omen and signal receiver. Something came back in the reflection.",
+    "mechanical_lane": "Defensive containment relic for VERA-7 and Yuri.",
+    "narrative_links": [
+      "VERA-7",
+      "Major Yuri Volkov",
+      "cosmonaut signal program",
+      "outside voices"
+    ],
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "Stat-bonus and protection relic.",
+      "May need a clearer harmful-marker glossary before playable promotion."
+    ]
+  },
+  {
+    "id": "r-lead-sealed-notebook",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Relic Set",
+    "set_count": "4 of 6",
+    "name": "Lead-Sealed Notebook",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Leader and Specialist each gain +1 RANGE on AP abilities.",
+    "role": "Elena's hidden notes on dream coordinates, remote viewing, and forbidden subject results.",
+    "mechanical_lane": "Knowledge without deck manipulation; extends access and dream-lab abilities.",
+    "narrative_links": [
+      "Dr. Elena Morozova",
+      "Irina Vasilievna Karpova",
+      "dream coordinates",
+      "classified records"
+    ],
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "Stat-bonus relic.",
+      "Check overlap with existing General's War Map before playable promotion."
+    ]
+  },
+  {
+    "id": "r-redacted-incident-tape",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Relic Set",
+    "set_count": "5 of 6",
+    "name": "Redacted Incident Tape",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Enemies within 2 tiles of your placed objects have -1 RANGE on their first attack or AP ability each turn.",
+    "role": "A recording that changes each time it is watched; proof Semyonov and Karpova cannot fully control.",
+    "mechanical_lane": "Suppression around infrastructure and evidence.",
+    "narrative_links": [
+      "Colonel Viktor Semyonov",
+      "Irina Vasilievna Karpova",
+      "sealed records",
+      "evidence that will not stay edited"
+    ],
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "Suppression/control relic.",
+      "May be too passive if placed objects are uncommon."
+    ]
+  },
+  {
+    "id": "r-karpovas-black-key",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Relic Set",
+    "set_count": "6 of 6",
+    "name": "Karpova's Black Key",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Leader and Common each gain +1 MOVE. Once each turn, one of them may move through 1 placed object or allied occupied tile, but must end on an empty tile.",
+    "role": "Karpova's private access key to doors not listed on any map. It replaces the Light-Burn Diagram as the coveted access relic for this set.",
+    "mechanical_lane": "Access, movement, and controlled route-breaking.",
+    "narrative_links": [
+      "Irina Vasilievna Karpova",
+      "Nikolai Yegorov",
+      "sealed service routes",
+      "permission as power"
+    ],
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "Stat-bonus and access relic.",
+      "Could become once per round if repeated route-breaking is too strong."
+    ]
+  }
+]
