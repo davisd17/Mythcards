@@ -1,0 +1,35 @@
+[
+  {
+    "id": "r-closed-city-incident",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Closed City Incident",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Place 2 Leak markers on different empty tiles within 2 of the center tile. Then reveal the top card of the shared relic/event deck. The active player may leave it on top or place it on the bottom of the deck.",
+    "role": "Closed City story event. Represents the reactor opening inward while Elena's remote-viewing work, cosmonaut signal systems, and anomalous radiation create the first major Convergence breach.",
+    "narrative": {
+      "archive_title": "The Closed City Incident",
+      "summary": "At 02:17 local time, the reactor pulse, orbital receiver, and dream monitors synchronize around the same impossible symbol. The facility does not explode outward. It opens inward. For seventeen seconds, the Closed City exists inside overlapping realities.",
+      "witness_fragments": [
+        "A drowned city behind reactor glass.",
+        "Snow falling upward in a sealed hallway.",
+        "Dead soldiers reflected in blank monitors.",
+        "A white tiger walking past locked doors.",
+        "Ocean pressure cracking concrete that never became wet."
+      ],
+      "story_consequence": "Dr. Mikhail Orlov is found unconscious with circular light-burn marks on his palms. Dr. Elena Morozova is not found. The first MythCards artifacts begin appearing afterward."
+    },
+    "asset_candidates": [
+      "assets/events/closed-city-incident-event-art.png"
+    ],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Effect is intentionally simple: it introduces Closed City Leak markers and deck manipulation without requiring a full scenario system.",
+      "May need balance review because it combines hazard placement with top-card control.",
+      "If Leak markers are not available in a prototype build, use placed object/status markers as a temporary stand-in."
+    ]
+  }
+]
