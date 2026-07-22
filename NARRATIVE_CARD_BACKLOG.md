@@ -212,26 +212,38 @@ Line She Eventually Crosses: she steals classified records to preserve what happ
 Possible catch phrase:
 - "I know what I saw. It knew my name."
 
-### Subject Three
+### Subject 3: Zoya
 
 Sub-area: Russian / Closed City
 
-Role in story: sleep-study subject or cosmonaut candidate who wakes speaking fragments from multiple mythic traditions.
+Card role: Mystic / Subject Three
 
-Public Role: human test subject.
+Full story name: Zoya Miranova
 
-Private Hunger: to recover their own identity from the many voices inside them.
+Role in story: Subject 3: Zoya is the third subject in Elena Morozova's classified dream and remote-viewing program. Before the incident, she was used to perceive sealed rooms, distant installations, orbital dead zones, and places the program could not admit were not part of this world. After the Convergence begins, she wakes changed: still human, still physically present, but carrying voices, sensations, memories, and desires from realities that touched her while she slept.
 
-Relational Wound: used by the program without full consent.
+The files call her Subject Three because names make guilt personal.
 
-Forbidden Attraction: becoming more than one person.
+Zoya is beautiful, unsettling, and difficult to read. Her allure is not ornamental. It is part of the breach. People near her confess things, dream more vividly, remember touches that never happened, and mistake longing for instruction. She does not need to seduce people in the obvious sense. She changes the temperature of a room until people reveal what they want.
 
-Line They Will Not Cross: they will not let the voices choose who they love.
+Her deepest connection is with Orlov. Before he ever meets her awake, she appears in his coma-dreams as a woman behind glass, a voice under reactor static, and a hand reaching from black water. She knows private details about him that Elena never recorded. Orlov fears she may be a projection of his guilt. Zoya insists she met him before the accident, but not in this sequence of time.
 
-Line They Eventually Cross: they intentionally becomes a vessel to prevent a worse breach.
+Public Role: sleep-study participant and remote-viewing subject.
 
-Possible catch phrase:
+Private Hunger: to decide which parts of herself are truly hers before the voices make that decision for her.
+
+Relational Wound: the program treated her body as a receiver and her dreams as state property.
+
+Forbidden Attraction: Orlov, because his mind became the place where her fractured selves can gather and speak.
+
+Line She Will Not Cross: she will not let the program own the names of what lives inside her.
+
+Line She Eventually Crosses: she willingly opens herself as a vessel when Orlov is trapped too deeply to return alone.
+
+Catch phrases:
 - "I woke with too many names."
+- "You dreamed me before you saw me."
+- "Desire is a signal. The question is who sent it."
 
 ### Nikolai Yegorov
 
@@ -256,6 +268,122 @@ Line He Eventually Crosses: he opens sealed service routes during containment, l
 Catch phrases:
 - "Machines tell the truth before men do."
 - "If there is a door, someone built it. If someone built it, I can open it."
+
+### VERA-7
+
+Sub-area: Russian / Closed City
+
+Card role: Mount / Lunar Rover Drone
+
+Role in story: VERA-7 is a remote-operation rover built from cosmonaut training hardware, reactor-service robotics, and experimental dream-navigation equipment. Officially, it is a hazardous-environment maintenance platform. Unofficially, Elena's consciousness lab used it as a physical anchor for remote viewing across sealed spaces, orbital distances, and eventually dimensions. During the Closed City Incident, VERA-7 receives commands from no console, moves through locked service doors, and returns from places that do not exist inside the facility map.
+
+It is not alive in the ordinary sense. It is also not empty. Dream subjects begin calling it Vera, as if it were a woman listening from inside the machine. Nikolai treats it like equipment until it saves him in the lower corridors. Orlov later recognizes one of Elena's private signal phrases buried in its movement logs.
+
+Public Role: remote hazardous-environment rover.
+
+Private Hunger: to complete the last route Elena sent it on, though nobody knows whether that route leads to her, away from her, or through her.
+
+Relational Wound: it carries fragments of human intention without understanding human need.
+
+Forbidden Attraction: thresholds. It turns toward locked doors, signal dead zones, and dream-light even when doing so risks everyone following it.
+
+Line It Will Not Cross: it will not abandon a living passenger once it has accepted them.
+
+Line It Eventually Crosses: it carries someone into a place no human body was meant to enter.
+
+Catch phrases:
+- "Route accepted."
+- "No map confirms this corridor."
+- "Passenger signal retained."
+
+### Major Yuri Volkov
+
+Sub-area: Russian / Closed City
+
+Card role: Warrior / Containment Cosmonaut
+
+Role in story: Yuri Volkov was a cosmonaut candidate before the Closed City reassigned him to a classified containment unit. Official records describe him as facility security. That is deliberately incomplete. Yuri was trained for anomalous breach response: entities crossing through remote-viewing sessions, personnel contaminated by shared dreams, sealed rooms with extra occupants, and beings that appear when dream coordinates are repeated aloud.
+
+His armor is derived from cosmonaut pressure systems, reactor hazard equipment, and ritualized anti-breach procedures that no report admits are ritualized. He carries technical restraints, sealed munitions, sensor charms disguised as instruments, and a helmet rig designed to keep outside voices from entering his sleep.
+
+Yuri's hidden emotional connection is with Dr. Elena Morozova. Their relationship exists in the dangerous space between protection, desire, surveillance, and confession. He was assigned to monitor her work, then began protecting her from what the facility wanted from her. Elena never fully trusted him because he wore the state's uniform. Yuri never fully forgave Orlov because Orlov could stand beside her in the language of science while Yuri could only stand outside the lab door with a weapon.
+
+When the Closed City Incident begins, Yuri's first order is containment. His first impulse is Elena. The two do not agree.
+
+Public Role: armored containment responder.
+
+Private Hunger: to save Elena from the program, from Orlov, from the breach, and from the part of herself that wants the impossible to answer.
+
+Relational Wound: he was trained to protect humanity by treating contaminated people as threats.
+
+Forbidden Attraction: Elena's certainty that the beings beyond the breach are not only hostile.
+
+Line He Will Not Cross: he will not kill Elena, even under direct containment order.
+
+Line He Eventually Crosses: he lets an entity speak through a breach survivor because it uses Elena's voice.
+
+Catch phrases:
+- "Containment is mercy when the door opens both ways."
+- "I was trained for hostile beings. No one trained me for her."
+- "Seal the breach. Leave me the guilt."
+
+### Irina Vasilievna Karpova
+
+Sub-area: Russian / Closed City
+
+Card role: Leader / Patron of the Sealed City
+
+Role in story: Irina Karpova is not officially in command of the Closed City. That is the first lie everyone learns to repeat. On paper, she is a state-connected industrial patron, committee liaison, and director of a civilian energy-development trust. In practice, she controls budgets, housing assignments, research approvals, medical access, black-market comforts, and the private favors that keep the Closed City obedient.
+
+Scientists need her approvals. Officers need her silence. Families need her permissions. Even Colonel Semyonov, who remains the facility's visible military containment authority, answers to her influence more often than he admits.
+
+Karpova's wealth is not only money. It is access. She owns people by knowing what they want.
+
+She funded Elena's dream work before the nuclear program understood its value. She pushed Orlov's reactor diagnostics toward anomalous radiation because she had already seen matching symbols in older materials: confiscated occult manuscripts, post-war intelligence files, remote-viewing transcripts, and fragments attributed to civilizations that should not have communicated with one another.
+
+She may not have caused the Convergence, but she prepared a chair for it.
+
+Karpova sees Elena Morozova as both asset and rival. Elena wants truth. Karpova wants use. Their relationship should carry admiration, manipulation, and a possessive intellectual intimacy. Karpova recognizes Elena's brilliance before most men in the facility do, then tries to own the direction of that brilliance.
+
+Public Role: industrial patron and political liaison.
+
+Private Hunger: to become indispensable to whatever world emerges after the Convergence.
+
+Relational Wound: she was born close to power but not close enough to inherit it directly, and learned early that desire without leverage is only begging.
+
+Forbidden Attraction: the Convergence as a throne: proof that reality itself can be negotiated, purchased, blackmailed, or seduced.
+
+Line She Will Not Cross: she will not be remembered as someone else's functionary.
+
+Line She Eventually Crosses: she knowingly sacrifices people inside the Closed City to preserve access to the breach.
+
+Catch phrases:
+- "Power is only immoral when held by someone else."
+- "Do not confuse secrecy with ignorance."
+- "The door was always there. I merely paid for the light."
+
+### Colonel Viktor Semyonov
+
+Sub-area: Russian / Closed City
+
+Card role: Story figure / possible bonus card
+
+Role in story: military administrator and visible containment authority of the facility. Semyonov remains important in the narrative even though he is no longer the primary Closed City Leader card. He is the man people see giving orders when alarms sound, but his authority is constrained by Karpova's influence, classified committees, and the fear that truth will destroy the city faster than the breach.
+
+Public Role: containment authority.
+
+Private Hunger: to keep his family and city alive by keeping secrets intact.
+
+Relational Wound: loyalty to a state that has trained him to mistake silence for survival.
+
+Forbidden Attraction: total control over the breach.
+
+Line He Will Not Cross: he will not expose the city to outside panic.
+
+Line He Eventually Crosses: he sacrifices truth, and possibly civilians, to preserve containment.
+
+Possible catch phrase:
+- "Secrecy is not cowardice. It is architecture."
 
 ## Faction And Sub-Area Structure
 
@@ -390,12 +518,12 @@ This matrix lists the long-term one-of-each-type plan for each current faction s
 | Type | Winter Front | Far North | Closed City |
 | --- | --- | --- | --- |
 | Common | Infantry Conscript | Gymnast / Vanishing Circus Acrobat | Reactor Worker |
-| Mount | Armored Warhorse | White Siberian Tiger | Lunar Rover Drone |
-| Warrior | Red Army Sniper | Axe Hunter | Containment Trooper |
-| Leader | Army General | Exiled Clan Matriarch | Colonel Viktor Semyonov |
+| Mount | Armored Warhorse | White Siberian Tiger | VERA-7 |
+| Warrior | Red Army Sniper | Axe Hunter | Major Yuri Volkov |
+| Leader | Army General | Exiled Clan Matriarch | Irina Vasilievna Karpova |
 | Hero | Bogatyr Champion | Aurora-Born Guardian | Dr. Mikhail Orlov |
 | Specialist | Combat Engineer | Trail Binder | Dr. Elena Morozova |
-| Mystic | Icon Bearer | Frost Seer | Subject Three |
+| Mystic | Icon Bearer | Frost Seer | Subject 3: Zoya |
 
 ### Atlantean Character Matrix
 
@@ -480,12 +608,12 @@ These should be considered when expanding Russian/Closed City beyond the current
 | Type | Card | Story Role | Mechanical Identity |
 | --- | --- | --- | --- |
 | Common | Reactor Worker | Civilian/industrial survivor exposed to the breach. | Repair objects; remove leak markers; fragile utility. |
-| Mount | Lunar Rover Drone | Cosmonaut-program machine acting like a mount or carrier. | Carries/rides, ignores hazards, signal movement. |
-| Warrior | Containment Trooper | Armed facility guard trained for impossible breaches. | Zone control, suppression, anti-object or anti-hazard. |
-| Leader | Colonel Viktor Semyonov | Military administrator and containment authority. | Orders, lockdown, sacrifice for control. |
+| Mount | VERA-7 | Cosmonaut-program rover used as a remote-viewing anchor and hazardous-environment carrier. | Carries/rides, ignores hazards, signal movement, crosses locked or anomalous routes. |
+| Warrior | Major Yuri Volkov | Former cosmonaut candidate turned armored containment responder, emotionally bound to Elena Morozova. | Zone control, suppression, anti-being containment, breach response, anti-object or anti-hazard. |
+| Leader | Irina Vasilievna Karpova | Wealthy and influential patron who funded Elena's dream work and may know more about the Convergence than she admits. | Orders, leverage, resource control, sacrifice for advantage, manipulation of relic/event access. |
 | Hero | Dr. Mikhail Orlov | Coma gate patient and symbolic center. | Reveal/manipulate events, risk through damage/status. |
 | Specialist | Dr. Elena Morozova | Consciousness researcher and missing emotional key. | Dream links, status transfer, prediction, relationship mechanics. |
-| Mystic | Subject Three | Sleep-study subject containing many mythic voices. | Unstable effects, copy abilities, random/choice-based prophecy. |
+| Mystic | Subject 3: Zoya | Remote-viewing dream subject connected to Orlov before waking contact. Full story name: Zoya Miranova. | Unstable prophecy, desire/signal effects, copy abilities, dream links, choice-based psychic effects. |
 
 ## Generated Assets Inventory
 
