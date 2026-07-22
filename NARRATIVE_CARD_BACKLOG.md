@@ -114,6 +114,63 @@ Immediate aftermath:
 - the signal array receives transmissions while powered off
 - the first MythCards artifact appears beneath Orlov's pillow
 
+### Closed City Arc Summary
+
+The Closed City arc should unfold as a controlled disaster that was emotionally and politically prepared before it was technically triggered.
+
+Phase 1: Before The Breach
+- the city is already trapped by secrecy, ambition, desire, and fear
+- Orlov and Elena argue over whether dream data is contact or contamination
+- Karpova funds and protects the remote-viewing program because she has seen matching symbols before
+- Yuri watches Elena under containment orders while becoming emotionally attached to her
+- Nikolai notices machinery telling the truth before official systems do
+- Zoya reports Orlov in her dreams before waking contact
+- VERA-7 follows unauthorized route pings through sealed infrastructure
+
+Phase 2: The Synchronization
+- reactor pulse, cosmonaut signal array, and dream monitors align around the same symbol
+- Elena's remote-viewing work reaches across dimensions and universes, creating the convergence point
+- Orlov fails to stop, or authorizes, the final test under pressure
+- Karpova remains close enough to benefit and distant enough to deny responsibility
+
+Phase 3: The Incident
+- the reactor opens inward instead of exploding outward
+- for seventeen seconds the facility overlaps with other realities
+- Elena disappears into the signal
+- Orlov collapses and becomes the apparent gate patient
+- Zoya wakes changed
+- Yuri receives containment orders that conflict with his desire to protect Elena
+- Nikolai opens sealed service routes to save workers, possibly giving the breach new paths
+- VERA-7 moves without command
+
+Phase 4: Aftermath And Evidence
+- the state tries to seal the event inside paperwork, threats, and military containment
+- shared dreams spread through survivors
+- artifacts begin appearing, beginning with the first card near Orlov
+- Karpova collects evidence and treats the breach as opportunity
+- Semyonov orders silence because panic may destroy the city faster than truth
+
+Phase 5: The Dream War Opens
+- Orlov's coma becomes an active battlefield and symbolic route network
+- Zoya can reach Orlov through dream contact
+- Elena may be alive, dispersed, trapped, or transformed inside the signal
+- Karpova wants controlled access
+- Yuri wants extraction
+- Nikolai wants evacuation
+- VERA-7 carries a route where human bodies may not belong
+
+Core mystery: was the Convergence an accident, an invitation, or a planned opening?
+
+Core event coverage:
+- **Signal Array Turns**: first cosmonaut-system omen
+- **Dream Monitors Synchronize**: Elena's dream work merges with machinery
+- **Reactor Prayer**: radiation behaves like language
+- **Closed City Incident**: central breach
+- **Seventeen Seconds**: realities overlap
+- **Elena Missing In The Signal**: personal consequence
+- **The First Card Appears**: the dream creates a physical artifact
+- **Semyonov Orders Silence**: official containment tries to bury the truth
+
 ## Known Key Characters
 
 ### Dr. Mikhail Orlov
@@ -594,12 +651,13 @@ These event ideas came from story work and generated art. They are not necessari
 
 | Card | Type | Narrative Function | Possible Mechanical Direction |
 | --- | --- | --- | --- |
-| Reactor Core Fragment | Relic | A sealed shard of the inward-opening reactor. | Overload effects; take risk for extra action/range/damage. |
-| Cosmonaut Helmet With A Second Shadow | Relic | Returned-space omen and signal receiver. | Reveal top card; protect from psychic effects; range via signal. |
-| Lead-Sealed Notebook | Relic | Orlov/Elena's hidden notes. | Store a revealed event; replay or prevent an event. |
-| Psychic Transmitter | Relic | Machine built to send dreams as signal. | Link characters; extend ability range; share statuses. |
-| Light-Burn Diagram | Relic | Pattern burned into Orlov's palms. | Convert damage/status into card knowledge or board markers. |
-| Redacted Incident Tape | Relic | Recording that changes each time it is played. | Copy last event; reveal hidden information; force discard/replace. |
+| Chintamani Fragment | Rare Relic | Karpova's confiscated mystical anchor, based on the esoteric Chintamani/Shambhala stone tradition. It reacts before the breach and may be older than the Closed City records. | The only Closed City relic that should view or manipulate the shared relic/event deck. Possible effect: once per turn, reveal the top card; you may leave it or place it on the bottom. |
+| Reactor Core Fragment | Relic | A sealed shard of the inward-opening reactor. Dangerous proof that the incident was not only radiation. | Stat/risk relic. Possible effect: your Specialist and Mystic gain +1 ATK, but the first time each enters a Leak tile each turn, it takes 1 damage. |
+| Cosmonaut Helmet With A Second Shadow | Relic | Returned-space omen and signal receiver; something came back in the reflection. | Defensive/signal relic. Possible effect: your Mount and Warrior each gain +1 maximum HP, and the first harmful psychic/status marker placed on one of them each round is ignored. |
+| Lead-Sealed Notebook | Relic | Elena's hidden notes on dream coordinates, remote viewing, and forbidden subject results. | Knowledge-without-deck-manipulation relic. Possible effect: your Leader and Specialist each gain +1 RANGE on AP abilities. |
+| Psychic Transmitter | Relic | Machine built to send dreams as signal between bodies, rooms, and eventually realities. | Status/range relic. Possible effect: once per turn, when one of your characters gains Shield, +ATK, or +MOVE, one adjacent ally may gain the same marker. |
+| Redacted Incident Tape | Relic | A recording that changes each time it is watched; proof Semyonov and Karpova cannot fully control. | Suppression/defense relic. Possible effect: enemies within 2 of your placed objects have -1 RANGE on their first attack or ability each turn. |
+| Karpova's Black Key | Relic | Karpova's private access key to doors not listed on any map. It is not mystical by origin, but it becomes coveted because access is power. | Movement/control relic. Possible effect: your Leader and Common each gain +1 MOVE, and once per turn one of them may move through one placed object or occupied allied tile but must end on an empty tile. |
 
 ## Proposed Closed City Character Cards
 
