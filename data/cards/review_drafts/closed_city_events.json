@@ -130,7 +130,9 @@
       "summary": "Everyone inside the seventeen seconds remembers a different room. Some remember no room at all.",
       "character_pressure": "Nikolai finds a service route where none exists. VERA-7 accepts a path no map confirms."
     },
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/closed-city-seventeen-seconds-event-art.png"
+    ],
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Part of the clearly defined 8-card Closed City event set.",
@@ -156,7 +158,9 @@
       "summary": "Elena is not found after the synchronization. The machines still answer to her work, and some survivors hear her voice in the signal.",
       "character_pressure": "Yuri wants to rescue her, Orlov fears he lost her, Karpova wants to use the route she opened, and Zoya may know where Elena went."
     },
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/closed-city-elena-missing-in-the-signal-event-art.png"
+    ],
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Part of the clearly defined 8-card Closed City event set.",
@@ -174,9 +178,9 @@
     "name": "The First Card Appears",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Place 1 Artifact marker on an empty tile adjacent to your Hero. The first allied character adjacent to that Artifact this turn gains Shield.",
+    "effect": "Choose your Hero or one ally adjacent to your Hero. That character gains +1 RANGE on its next attack or AP ability this turn, and may remove 1 harmful temporary combat marker.",
     "role": "The first physical MythCards artifact appears near Orlov's coma bed, proving the Convergence can make symbols into objects.",
-    "mechanical_lane": "Creates a temporary object-like focal point without searching or reordering the shared deck.",
+    "mechanical_lane": "Immediate artifact surge: proof becomes tactical clarity without adding another board object.",
     "narrative": {
       "arc_phase": "Aftermath And Evidence",
       "summary": "Dreams can be dismissed. Witnesses can be threatened. Machines can be recalibrated. But an object can be held.",
@@ -188,7 +192,8 @@
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Part of the clearly defined 8-card Closed City event set.",
-      "Uses an Artifact marker as a prototype object marker."
+      "Revised to avoid placing an Artifact marker just to grant Shield.",
+      "Keeps the event immediate and readable while making the artifact feel more meaningful than a simple defense token."
     ]
   },
   {

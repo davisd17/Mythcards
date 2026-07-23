@@ -1,0 +1,230 @@
+[
+  {
+    "id": "r-elena-morozova",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Dr. Elena Morozova",
+    "type": "Specialist",
+    "unique": true,
+    "stats": [3, 1, 2, 3],
+    "l1": "AP Ability: Dream Link chooses an ally within 3 tiles. Move one temporary combat marker, such as Shield, +ATK, +MOVE, Pounce, Slow, or Marked, between that ally and another allied character within 2 tiles. Spirit Ember cannot be moved this way.",
+    "l2": "Signal Breach: Dream Link range becomes 4 and may move one temporary combat marker between any two characters within range. If a harmful marker is moved onto an enemy, give Elena a 1-damage shield. Spirit Ember cannot be moved this way.",
+    "l3": "Missing In The Signal: +1 RANGE. Once per match, Elena may remove herself from the board until your next turn. When she returns, place her on any empty tile adjacent to an ally and move one temporary combat marker from any character within 4 tiles to any other character within 4 tiles. Spirit Ember cannot be moved this way.",
+    "role": "Closed City consciousness specialist. Transfers status effects, turns battlefield conditions into tactical leverage, and becomes a disappearance/reposition engine at Level 3.",
+    "narrative": {
+      "public_role": "Dream/consciousness scientist.",
+      "private_hunger": "To prove that symbolic material in test subjects is not random.",
+      "relational_wound": "Intimate intellectual and emotional history with Dr. Mikhail Orlov, marked by tenderness, rivalry, and betrayal.",
+      "forbidden_attraction": "The impossible becoming true; possibly an Atlantean mind-presence that recognizes her before Orlov does.",
+      "line_she_will_not_cross": "She will not falsify dream evidence just to satisfy the state or comfort Orlov.",
+      "line_she_eventually_crosses": "She secretly routes dream-lab data into the signal archive, helping the systems synchronize.",
+      "catch_phrase": "Dreams are not private in a wounded world."
+    },
+    "asset_candidates": [
+      "assets/characters/dr-elena-morozova-character-card-art.png",
+      "assets/characters/dr-elena-morozova-profile-page.png"
+    ],
+    "review_notes": [
+      "Not added to the playable 14-card prototype deck yet.",
+      "Uses Spirit Ember-safe status movement: her status transfer explicitly excludes Spirit Ember.",
+      "Level 2 is intended to be a clear power spike by expanding range, target flexibility, and defense.",
+      "Level 3 is intended to be transformative by temporarily removing Elena from danger and letting her reassign a key combat marker when she returns."
+    ]
+  },
+  {
+    "id": "r-mikhail-orlov",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Dr. Mikhail Orlov",
+    "type": "Hero",
+    "unique": true,
+    "stats": [5, 1, 2, 3],
+    "l1": "AP Ability: Reactor Leak places a Leak marker on an empty tile within 2. The first character to enter a Leak tile takes 1 damage, then remove that marker.",
+    "l2": "Containment Pattern: +1 RANGE. Reactor Leak may place 2 Leak markers instead of 1. The markers must be on different empty tiles within range.",
+    "l3": "Slumber: +1 HP. Once per match, remove Orlov from the board until your next turn. When he returns, place him on any empty tile within 2 of where he left. Then place 1 Leak marker on an adjacent empty tile.",
+    "role": "Closed City coma-gate hero. Controls dangerous reactor leaks while his Level 3 turns his coma into a story-first disappearance and return.",
+    "narrative": {
+      "public_role": "Nuclear physicist assigned to reactor diagnostics.",
+      "private_hunger": "To prove the accident was not his fault while fearing it may be the first honest result his work ever produced.",
+      "relational_wound": "Unresolved bond with Dr. Elena Morozova.",
+      "forbidden_attraction": "The Atlantean Oracle, or the possibility that symbolic truth is more real than measurable data.",
+      "line_he_will_not_cross": "He will not treat human consciousness as expendable data again.",
+      "line_he_eventually_crosses": "He enters another person's dream to save someone, knowing it may trap them both.",
+      "catch_phrase": "The data is made of symbols."
+    },
+    "asset_candidates": [
+      "assets/characters/dr-mikhail-orlov-character-art.png",
+      "assets/characters/dr-mikhail-orlov-profile-page.png"
+    ],
+    "review_notes": [
+      "Not added to the playable 14-card prototype deck yet.",
+      "Designed as a story-center Hero rather than a conventional frontline bruiser.",
+      "Level 2 is intended to make Closed City feel distinct by expanding simple leak-marker board control.",
+      "Level 3 is intended to be transformative by making Orlov vanish into Slumber, return in a new position, and leave a reactor/dream leak behind."
+    ]
+  },
+  {
+    "id": "r-reactor-worker",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Reactor Worker",
+    "type": "Common",
+    "unique": false,
+    "stats": [2, 1, 2, 1],
+    "l1": "AP Ability: Service Route removes 1 adjacent Leak marker or repairs 1 adjacent placed object by 1 HP.",
+    "l2": "Lower Corridors: +1 HP. Service Route may target within 2 tiles and may remove or repair up to 2 different markers or placed objects.",
+    "l3": "Open The Sealed Door: +1 MOVE. This character ignores Leak damage. Once per turn, after entering a Leak tile, remove that Leak marker and move 1 extra tile.",
+    "role": "Closed City common reactor worker, represented in the story by Nikolai Yegorov. Cleans hazards, repairs objects, and turns sealed maintenance routes into safe movement through contaminated spaces.",
+    "narrative": {
+      "public_role": "Reactor maintenance worker assigned to the lower service corridors.",
+      "private_hunger": "To get his younger sister transferred out of the Closed City before the place consumes everyone inside it.",
+      "relational_wound": "His family depends on the same state system that traps them.",
+      "forbidden_attraction": "The dream signal, because it shows him places beyond fences, maps, and assigned lives.",
+      "line_he_will_not_cross": "He will not abandon ordinary workers to save only scientists and officers.",
+      "line_he_eventually_crosses": "He opens sealed service routes during containment, letting the breach spread but saving trapped people.",
+      "catch_phrase": "Machines tell the truth before men do."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Not added to the playable 14-card prototype deck yet.",
+      "Card title remains archetypal because this is a Common; Nikolai Yegorov is the named story representative.",
+      "Designed as the simplest Closed City leak-interaction card.",
+      "Level 2 is intended to be a useful power spike by doubling repair/cleanup reach.",
+      "Level 3 is intended to be transformative by turning a fragile worker into a leak-proof route opener and objective runner."
+    ]
+  },
+  {
+    "id": "r-zoya-miranova",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Zoya Miranova",
+    "type": "Mystic",
+    "unique": true,
+    "stats": [3, 1, 2, 3],
+    "l1": "AP Ability: Voice Under Static chooses an enemy within 3 tiles. Move that enemy 1 tile toward Zoya if the destination is empty.",
+    "l2": "Subject Three: +1 RANGE. After Voice Under Static moves an enemy, mark that enemy. The next allied attack against it deals +1 damage, then remove Marked.",
+    "l3": "Too Many Names: +1 HP. Once per match, after Voice Under Static moves an enemy, Zoya may use Voice Under Static again without spending AP.",
+    "role": "Closed City mystic and remote-viewing subject. Pulls enemies out of position through dream-static pressure and turns attraction, confession, and breach contact into repeatable board control.",
+    "narrative": {
+      "public_role": "Sleep-study participant and remote-viewing subject.",
+      "private_hunger": "To decide which parts of herself are truly hers before the voices make that decision for her.",
+      "relational_wound": "The program treated her body as a receiver and her dreams as state property.",
+      "forbidden_attraction": "Orlov, because his mind became the place where her fractured selves can gather and speak.",
+      "line_she_will_not_cross": "She will not let the program own the names of what lives inside her.",
+      "line_she_eventually_crosses": "She willingly opens herself as a vessel when Orlov is trapped too deeply to return alone.",
+      "catch_phrase": "I woke with too many names."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Added from the latest narrative notes for Subject 3: Zoya / Zoya Miranova.",
+      "Not added to the playable 14-card prototype deck yet.",
+      "Designed to avoid Atlantean deck-reveal mechanics and stay in Closed City board-pressure space.",
+      "Level 2 is intended to be a clear power spike by adding range and explicit Marked pressure.",
+      "Level 3 is intended to be transformative by letting Zoya chain her signature pull once per match instead of depending on three enemies lining up."
+    ]
+  },
+  {
+    "id": "r-vera-7",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "VERA-7",
+    "type": "Mount",
+    "unique": true,
+    "stats": [4, 1, 4, 1],
+    "l1": "Passive: Sealed Route lets VERA-7 ignore Leak damage during movement. If carrying a Hero or Leader, the mounted pair also ignores Leak damage.",
+    "l2": "No Map Confirms This Corridor: +1 MOVE. VERA-7 may move through one placed object or allied occupied tile during movement, but must end on an empty tile.",
+    "l3": "Passenger Signal Retained: +1 HP. Once per match after moving, VERA-7 may move 1 adjacent allied character 1 tile to an empty tile adjacent to VERA-7.",
+    "role": "Closed City mount and hazardous-environment rover. Carries important characters safely through leak zones and turns sealed routes into tactical repositioning.",
+    "narrative": {
+      "public_role": "Remote hazardous-environment rover.",
+      "private_hunger": "To complete the last route Elena sent it on, though nobody knows whether that route leads to her, away from her, or through her.",
+      "relational_wound": "It carries fragments of human intention without understanding human need.",
+      "forbidden_attraction": "Thresholds, locked doors, signal dead zones, and dream-light.",
+      "line_it_will_not_cross": "It will not abandon a living passenger once it has accepted them.",
+      "line_it_eventually_crosses": "It carries someone into a place no human body was meant to enter.",
+      "catch_phrase": "No map confirms this corridor."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Added from the latest narrative notes for VERA-7 / Lunar Rover Drone.",
+      "Not added to the playable 14-card prototype deck yet.",
+      "Designed as the Closed City movement/mount answer to Leak markers.",
+      "Level 2 is intended to be a clear power spike by letting VERA-7 navigate blocked industrial spaces.",
+      "Level 3 is intended to be transformative by letting VERA-7 retain and reposition a passenger or nearby ally once per match."
+    ]
+  },
+  {
+    "id": "r-yuri-volkov",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Major Yuri Volkov",
+    "type": "Warrior",
+    "unique": true,
+    "stats": [4, 2, 2, 2],
+    "l1": "AP Ability: Containment Shot deals 1 damage to an enemy within 2. If the target is adjacent to a Leak marker, also mark that enemy.",
+    "l2": "Pressure-Sealed Armor: +1 HP. Yuri ignores the first Leak damage he would take each turn.",
+    "l3": "Seal The Breach: +1 ATK. Once per match, after Yuri damages a marked enemy, remove Marked and that enemy cannot move on its next turn.",
+    "role": "Closed City warrior and containment responder. Punishes enemies near leak zones, survives hazardous spaces, and locks down marked breach threats.",
+    "narrative": {
+      "public_role": "Armored containment responder.",
+      "private_hunger": "To save Elena from the program, from Orlov, from the breach, and from the part of herself that wants the impossible to answer.",
+      "relational_wound": "He was trained to protect humanity by treating contaminated people as threats.",
+      "forbidden_attraction": "Elena's certainty that the beings beyond the breach are not only hostile.",
+      "line_he_will_not_cross": "He will not kill Elena, even under direct containment order.",
+      "line_he_eventually_crosses": "He lets an entity speak through a breach survivor because it uses Elena's voice.",
+      "catch_phrase": "Containment is mercy when the door opens both ways."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Added from the latest narrative notes for Major Yuri Volkov / Containment Cosmonaut.",
+      "Not added to the playable 14-card prototype deck yet.",
+      "Designed to connect Leak markers with Marked enemies without adding extra rule load.",
+      "Level 2 is intended to be a clear power spike by making Yuri safer in contaminated zones.",
+      "Level 3 is intended to be transformative by turning a marked target into a locked-down breach threat."
+    ]
+  },
+  {
+    "id": "r-irina-karpova",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Irina Vasilievna Karpova",
+    "type": "Leader",
+    "unique": true,
+    "stats": [4, 1, 2, 3],
+    "l1": "AP Ability: Access Granted chooses an allied character within 3. That ally may ignore Leak damage during its next movement this turn.",
+    "l2": "Private Favors: Access Granted may target 2 allies within 3. Each target may ignore Leak damage during its next movement this turn.",
+    "l3": "The Door Was Always There: +1 HP. Once per match, choose up to 2 allied characters within 3. Each chosen ally may move 1 tile without spending AP.",
+    "role": "Closed City leader and patron of the sealed city. Turns access, permissions, and favors into controlled movement through dangerous infrastructure.",
+    "narrative": {
+      "public_role": "Industrial patron and political liaison.",
+      "private_hunger": "To become indispensable to whatever world emerges after the Convergence.",
+      "relational_wound": "She was born close to power but not close enough to inherit it directly, and learned early that desire without leverage is only begging.",
+      "forbidden_attraction": "The Convergence as a throne: proof that reality itself can be negotiated, purchased, blackmailed, or seduced.",
+      "line_she_will_not_cross": "She will not be remembered as someone else's functionary.",
+      "line_she_eventually_crosses": "She knowingly sacrifices people inside the Closed City to preserve access to the breach.",
+      "catch_phrase": "The door was always there. I merely paid for the light."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Added from the latest narrative notes replacing Colonel Viktor Semyonov as the primary Closed City Leader card.",
+      "Not added to the playable 14-card prototype deck yet.",
+      "Designed to make Closed City movement through hazards feel political and infrastructural rather than heroic command.",
+      "Level 2 is intended to be a clear power spike by expanding safe access to two allies.",
+      "Level 3 is intended to be transformative by giving a once-per-match access-based reposition to two allies."
+    ]
+  }
+]

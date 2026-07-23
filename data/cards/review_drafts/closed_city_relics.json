@@ -37,9 +37,9 @@
     "name": "Reactor Core Fragment",
     "kind": "Relic",
     "duration": "Persistent",
-    "effect": "Your Specialist and Mystic each gain +1 ATK. The first time each of them enters a Leak tile each turn, it takes 1 damage.",
+    "effect": "Your Specialist and Mystic each gain +1 ATK. When one of them takes Leak damage, it gains +1 RANGE on its next AP ability this turn.",
     "role": "A sealed shard of the inward-opening reactor. Dangerous proof that the incident was not only radiation.",
-    "mechanical_lane": "Power at a cost; rewards Elena/Zoya pressure while keeping the Closed City dangerous.",
+    "mechanical_lane": "Turns normal Leak damage into extra signal range for Elena/Zoya instead of adding a second leak penalty.",
     "narrative_links": [
       "Dr. Elena Morozova",
       "Zoya Miranova",
@@ -50,7 +50,7 @@
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus relic.",
-      "Watch for feel-bad moments if low-HP characters are forced into Leak spaces."
+      "Revised because Leak tiles already deal 1 damage; this now rewards taking normal Leak damage rather than duplicating it."
     ]
   },
   {
