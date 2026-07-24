@@ -642,15 +642,17 @@ These cards are currently known from the prototype shared relic/event deck.
 
 This set contains exactly **8 Closed City event cards**. These event ideas came from story work and generated art. They are not necessarily implemented in the prototype yet.
 
+Detailed narrative sequence, flavor lines, visual direction, character pressure, and set-level story questions are captured in `data/cards/review_drafts/closed_city_event_narrative_arc.md`.
+
 | # | Card | Type | Narrative Function | Possible Mechanical Direction | Asset |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Signal Array Turns | Event | The cosmonaut relay dish moves without command. | First ranged attack or AP ability gains +1 RANGE if adjacent to a placed object or Leak marker. | `assets/events/closed-city-signal-array-turns-event-art.png` |
 | 2 | Dream Monitors Synchronize | Event | Elena's sleep-lab waveforms become shared sacred geometry. | Move a temporary combat marker from one character to another within range; exclude Spirit Ember. | `assets/events/closed-city-dream-monitors-synchronize-event-art.png` |
 | 3 | Reactor Prayer | Event | Radiation behaves like language or prayer. | Take 1 damage to gain +1 ATK or +1 RANGE on the next attack or AP ability this turn. | `assets/events/closed-city-reactor-prayer-event-art.png` |
 | 4 | Closed City Incident | Event | The reactor opens inward and realities overlap. | Place 2 Leak markers near the board center. | `assets/events/closed-city-incident-event-art.png` |
-| 5 | Seventeen Seconds | Event | Facility exists in multiple realities for seventeen seconds. | First movement action may pass through one occupied tile, object, or Leak marker. | TBD |
-| 6 | Elena Missing In The Signal | Event | Elena disappears into the signal and becomes the personal wound at the center of the arc. | Move an ally near a Leak marker or object, then mark them as touched by the breach. | TBD |
-| 7 | The First Card Appears | Event | The first MythCards artifact manifests near Orlov's coma bed. | Place an Artifact marker adjacent to the Hero; an adjacent ally gains Shield. | `assets/events/closed-city-the-first-card-appears-event-art.png` |
+| 5 | Seventeen Seconds | Event | Facility exists in multiple realities for seventeen seconds. | First movement action may pass through one occupied tile, object, or Leak marker. | `assets/events/closed-city-seventeen-seconds-event-art.png` |
+| 6 | Elena Missing In The Signal | Event | Elena disappears into the signal and becomes the personal wound at the center of the arc. | Move an ally near a Leak marker or placed object, then mark them as touched by the breach. | `assets/events/closed-city-elena-missing-in-the-signal-event-art.png` |
+| 7 | The First Card Appears | Event | The first MythCards artifact manifests near Orlov's coma bed. | Hero or adjacent ally gains +1 RANGE on its next attack or AP ability and may remove a harmful temporary combat marker. | `assets/events/closed-city-the-first-card-appears-event-art.png` |
 | 8 | Semyonov Orders Silence | Event | Official containment tries to bury the truth. | Temporarily prevents bonus AP gained from card effects. | TBD |
 
 ## Proposed Closed City Relic Cards
@@ -702,6 +704,38 @@ Key relationship dynamics:
 Likely Flood Survivor relics introduced through this character work:
 - **The Black Sarcophagus**: Naia's central mystery relic and tomb-prison/truth-vault.
 - **Tide-Sealed Archive**: Meret-Anu's sealed memory casket, used to preserve or imprison forbidden records, witness fragments, and bloodline proofs.
+
+## Proposed Flood Survivor Event Cards
+
+This set contains exactly **8 Flood Survivor event cards**. The current direction is **forbidden truth** more than simple protection. Stone Route and Memory marker details are provisional and should be finalized later with the prototype rules.
+
+Structured draft data is captured in `data/cards/review_drafts/flood_survivor_events.json`.
+
+| # | Card | Type | Narrative Function | Possible Mechanical Direction |
+| --- | --- | --- | --- | --- |
+| 1 | The Causeway Breathes | Event | A drowned ley-road wakes because something buried has begun calling through it. | Temporary Stone Route marker and route movement. |
+| 2 | Black Water Remembers | Event | Floodwater reflects the truth of what happened during the fall of Atlantis. | Memory markers that protect but also expose through Marked. |
+| 3 | The Vault Chooses A Witness | Event | A sealed archive opens for one character and brands them with forbidden knowledge. | Single-character AP ability range boost with Marked cost. |
+| 4 | The Name Was Cut From Stone | Event | A chiseled-out royal name returns in wet light. | Remove Shield or Mark an enemy near placed objects. |
+| 5 | Ley Stones Align | Event | Ancient stones reveal geometry built to hide a crime. | Measure the first AP ability from an allied placed object. |
+| 6 | The Drowned Seraph Speaks | Event | Thalassa-Nekh's entity speaks a judgment no ruler can redact. | Mark the first enemy that damages an ally with Memory. |
+| 7 | Tide-Sealed Archive Opens | Event | Meret-Anu's records reveal a controlled truth, but the full archive wants release. | Choose safe Shield or stronger Shield/+RANGE with Marked cost. |
+| 8 | Exiles Walk Beneath Egypt | Event | Survivors carry edited Atlantean memory into tomb geometry and later mystery traditions. | Reposition allies adjacent to placed objects. |
+
+## Proposed Flood Survivor Relic Cards
+
+This set contains exactly **6 Flood Survivor relic cards**. The rare relic is **The Emerald Tablet**, based on real Hermetic and occult traditions; **The Black Sarcophagus** remains a relic rather than an event.
+
+Structured draft data is captured in `data/cards/review_drafts/flood_survivor_relics.json`.
+
+| # | Card | Type | Narrative Function | Possible Mechanical Direction |
+| --- | --- | --- | --- | --- |
+| 1 | The Emerald Tablet | Rare Relic | A green stone tablet saved from Atlantis and carried toward Egypt, later remembered through Hermetic and alchemical tradition. | Convert Memory or placed-stone positioning into Shield or +RANGE. |
+| 2 | The Black Sarcophagus | Relic | Naia's sealed black-stone tomb, prison, archive, or body container. | Warrior/Hero max HP and attacker Marking near placed objects. |
+| 3 | Tide-Sealed Archive | Relic | Meret-Anu's sealed casket of witness fragments, bloodline proofs, drowned records, and edited truths. | Leader/Specialist AP range bonus and Memory-linked repositioning. |
+| 4 | Seraphic Burial Veil | Relic | Funerary veil from the water-burial rite that changed Thalassa-Nekh. | Mystic max HP and limited conversion of Marked into Shield. |
+| 5 | Basalt Ley Compass | Relic | Surveying instrument for living routes under floodwater, desert, and tomb foundations. | Common/Specialist movement bonus and traversal through placed objects. |
+| 6 | Pearl Of The Lower Vault | Relic | Luminous pearl containing a memory too sorrowful to speak. | Hero/Mystic AP range bonus and Marking attackers when damage is prevented. |
 
 ## Generated Assets Inventory
 

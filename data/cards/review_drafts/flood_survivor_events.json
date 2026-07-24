@@ -1,0 +1,202 @@
+[
+  {
+    "id": "a-flood-survivor-the-causeway-breathes",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Event Set",
+    "set_count": "1 of 8",
+    "name": "The Causeway Breathes",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "Place 1 Stone Route marker on an empty tile within 2 of the center tile. The active player's first movement action this turn may treat that marker as adjacent to one allied placed object or Leak marker.",
+    "role": "The drowned ley-road wakes because something buried has begun calling through it.",
+    "mechanical_lane": "Stone Route movement and temporary route placement.",
+    "narrative": {
+      "arc_phase": "The Routes Wake",
+      "summary": "A submerged basalt causeway shifts for the first time in centuries. The survivors know this is not a miracle. It is a warning.",
+      "forbidden_truth": "The roads were not built only for evacuation; some were built to hide what Atlantis did before the Flood."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Signature board marker names are provisional until Stone Route and Memory rules are finalized."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-black-water-remembers",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Event Set",
+    "set_count": "2 of 8",
+    "name": "Black Water Remembers",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Choose up to 2 characters adjacent to placed objects. Each gains 1 Memory marker, max 1 per character. A character that gains Memory this way also becomes Marked until the end of the round.",
+    "role": "Floodwater reflects the truth of what happened during the fall of Atlantis.",
+    "mechanical_lane": "Memory as protection and exposure.",
+    "narrative": {
+      "arc_phase": "Memory Rises",
+      "summary": "A flooded tomb shaft turns black and reflective. Those who look into it do not see themselves. They see the moment the water came.",
+      "forbidden_truth": "Some survivors were saved because other survivors were deliberately sealed out."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Leans into forbidden truth rather than pure protection."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-the-vault-chooses-a-witness",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Event Set",
+    "set_count": "3 of 8",
+    "name": "The Vault Chooses A Witness",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "Choose 1 allied character adjacent to a placed object. It gains +1 RANGE on AP abilities this turn and becomes Marked until the end of the round.",
+    "role": "A sealed archive opens for one character and brands them with knowledge others were denied.",
+    "mechanical_lane": "Single-character knowledge bonus with exposure cost.",
+    "narrative": {
+      "arc_phase": "Memory Rises",
+      "summary": "The vault door ignores priests, soldiers, and queens. It opens for one witness only.",
+      "forbidden_truth": "The archive does not preserve the official version. It preserves the version someone died to hide."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Good visual tie to Iset-Nara and Sahu-Ren."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-the-name-was-cut-from-stone",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Event Set",
+    "set_count": "4 of 8",
+    "name": "The Name Was Cut From Stone",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Choose 1 enemy within 2 tiles of a placed object. Remove Shield from it or Mark it until the end of the round.",
+    "role": "A carved royal name has been chiseled out of a monument, but the missing name appears in wet light.",
+    "mechanical_lane": "Expose protected characters without using the Black Sarcophagus as an event.",
+    "narrative": {
+      "arc_phase": "The Redacted Dead",
+      "summary": "A missing name returns as water-light in a wound carved through stone.",
+      "forbidden_truth": "The post-flood royal line may have been founded on a deliberate erasure."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Replaces direct Black Sarcophagus event energy; Black Sarcophagus remains a relic."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-ley-stones-align",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Event Set",
+    "set_count": "5 of 8",
+    "name": "Ley Stones Align",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "Until end of turn, the active player's first AP ability may measure range from an allied placed object instead of from the acting character.",
+    "role": "Ancient stones form a pattern that was not built for travel, but for hiding a crime.",
+    "mechanical_lane": "Placed-object range projection.",
+    "narrative": {
+      "arc_phase": "Hidden Architecture",
+      "summary": "Basalt markers beneath the board align with stars no living sky still shows.",
+      "forbidden_truth": "The geometry was designed to preserve a secret, not a civilization."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Avoids deck viewing/manipulation and strengthens Flood Survivor object identity."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-the-drowned-seraph-speaks",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Event Set",
+    "set_count": "6 of 8",
+    "name": "The Drowned Seraph Speaks",
+    "kind": "Event",
+    "duration": "1 round",
+    "effect": "Until the start of the active player's next turn, the first enemy that damages an allied character with Memory becomes Marked.",
+    "role": "The entity inside Thalassa-Nekh speaks a judgment no ruler can redact.",
+    "mechanical_lane": "Judgment, retaliation, and Memory interaction.",
+    "narrative": {
+      "arc_phase": "Judgment",
+      "summary": "The water speaks through a human mouth, and every listener remembers being guilty.",
+      "forbidden_truth": "The thing named holy by the survivors may not belong to them, and may not forgive them."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Should feel spiritual and unsettling rather than generic angelic intervention."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-tide-sealed-archive-opens",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Event Set",
+    "set_count": "7 of 8",
+    "name": "Tide-Sealed Archive Opens",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Choose one: give 1 ally Shield, or give 1 ally Shield and +1 RANGE on its next AP ability this turn, then Mark that ally until the end of the round.",
+    "role": "Meret-Anu's preserved records reveal a controlled truth, but the full archive wants release.",
+    "mechanical_lane": "Choice between safe benefit and stronger exposed benefit.",
+    "narrative": {
+      "arc_phase": "Royal Control Breaks",
+      "summary": "The sealed casket opens enough to help, but not enough to be honest.",
+      "forbidden_truth": "Meret-Anu has protected her people by controlling which truths are allowed to survive."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Tide-Sealed Archive can also remain a relic; this event represents a temporary opening of that relic's records."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-exiles-walk-beneath-egypt",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Event Set",
+    "set_count": "8 of 8",
+    "name": "Exiles Walk Beneath Egypt",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Move up to 2 allied characters that are adjacent to placed objects up to 1 tile each. They must end on empty tiles.",
+    "role": "The survivors carry forbidden Atlantean memory into underground routes, tomb geometry, and future mystery traditions.",
+    "mechanical_lane": "Small group reposition around placed objects.",
+    "narrative": {
+      "arc_phase": "The Memory Escapes",
+      "summary": "The flood survivors do not return to the surface as conquerors. They travel beneath it, leaving measurements, rites, and secrets inside stone.",
+      "forbidden_truth": "Egypt and later mystery traditions may have inherited not a pure wisdom, but a carefully edited survivor record."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Bridge card from Flood Survivors into Egyptian/Hermetic story material."
+    ]
+  }
+]
