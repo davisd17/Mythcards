@@ -1,0 +1,254 @@
+[
+  {
+    "id": "a-flood-survivor-stone-line-laborer",
+    "review_status": "narrative_draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Character Set",
+    "set_count": "1 of 7",
+    "name": "Stone-Line Laborer",
+    "story_name": "Menka of the Lower Causeway",
+    "type": "Common",
+    "unique": false,
+    "role": "Common stoneworker, causeway builder, and ley-line laborer. Menka is the named story representative for this common card.",
+    "narrative": {
+      "public_role": "Common stoneworker and causeway builder.",
+      "private_hunger": "To build one route that leads his people somewhere other than deeper into hiding.",
+      "relational_wound": "His older brother was sealed outside a pressure gate during a flood surge so the rest of the refuge could survive.",
+      "forbidden_attraction": "The open surface world, because he has been taught that exposure means death but dreams of sky anyway.",
+      "line_he_will_not_cross": "He will not seal a living person behind stone for the sake of tradition.",
+      "line_he_eventually_crosses": "He opens a forbidden ley route knowing it may expose the refuge to enemies, because the alternative is letting his people slowly become a tomb.",
+      "catch_phrases": [
+        "Stone does not forget what water tried to take.",
+        "Hold the line. The deep is listening.",
+        "A wall is only mercy if it has a door."
+      ]
+    },
+    "mechanical_identity": "Placed stone objects, ley-line setup, repair, route building, and practical survival.",
+    "asset_candidates": {
+      "character_card_art": "assets/characters/stone-line-laborer-character-card-art.png",
+      "profile_page_horizontal": "assets/characters/menka-of-the-lower-causeway-profile-page-horizontal.png",
+      "profile_page_older_vertical": "assets/characters/menka-of-the-lower-causeway-profile-page.png"
+    },
+    "review_notes": [
+      "Common class uses an archetypal card name; Menka is the named person in the story.",
+      "Profile art should use the horizontal version in the current profile-page format."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-ahesu",
+    "review_status": "narrative_draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Character Set",
+    "set_count": "2 of 7",
+    "name": "Ahesu, the Stone-Current Serpent",
+    "type": "Mount",
+    "unique": true,
+    "role": "Named ley-line mount and subterranean transport creature that swims and slides through flooded stone routes.",
+    "narrative": {
+      "public_role": "Ley-line mount and subterranean transport creature.",
+      "private_hunger": "To return to the unbroken deep routes that existed before Atlantis cut the world into kingdoms.",
+      "relational_wound": "It remembers every tunnel that was closed during the Flood, and every voice left on the other side.",
+      "forbidden_attraction": "The Great Crystal's shattered pulse, because its fragments still sing through stone in a frequency Ahesu cannot ignore.",
+      "line_it_will_not_cross": "It will not carry riders into a route whose stone is already mourning.",
+      "line_it_eventually_crosses": "It breaks an ancient sealed passage to answer Menka's call, exposing a refuge that had survived only by being forgotten.",
+      "catch_phrases": [
+        "The road was alive before we named it.",
+        "Do not command the deep. Ask where it is willing to open.",
+        "Some gates close because they remember mercy."
+      ]
+    },
+    "mechanical_identity": "Mount movement through flooded routes, ley-line travel, stone-current paths, and protected transport.",
+    "asset_candidates": {
+      "character_card_art_preferred": "assets/characters/ahesu-the-stone-current-serpent-character-card-art-grounded.png",
+      "character_card_art_alternate": "assets/characters/ahesu-the-stone-current-serpent-character-card-art.png",
+      "profile_page_horizontal": "assets/characters/ahesu-the-stone-current-serpent-profile-page-horizontal.png"
+    },
+    "review_notes": [
+      "Use the grounded card art as preferred because it reads as swimming/sliding through flooded stone routes rather than flying."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-naia",
+    "review_status": "narrative_draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Character Set",
+    "set_count": "3 of 7",
+    "name": "Naia of the Black Sarcophagus",
+    "type": "Warrior",
+    "unique": true,
+    "role": "Named Tomb Sentinel warrior who guards drowned vaults, bodies, bloodlines, and the truths the survivors fear.",
+    "narrative": {
+      "public_role": "Tomb Sentinel and warrior guardian of drowned vaults.",
+      "private_hunger": "To learn whose body lies inside the Black Sarcophagus and why every record of it was cut from survivor history.",
+      "relational_wound": "Her mother was entombed as a holy witness, but Naia suspects she was silenced.",
+      "forbidden_attraction": "The voice inside the Black Sarcophagus, because it calls her by a childhood name no living priest should know.",
+      "hidden_relationship": "Naia has a secret intimate bond with Sahu-Ren. In public she is his sentinel and jailer; in private she is the only person he lets touch him after a memory rite.",
+      "line_she_will_not_cross": "She will not let grave-robbers, priests, or kings use the dead as tools.",
+      "line_she_eventually_crosses": "She opens the Black Sarcophagus herself, breaking the oath that made her a sentinel.",
+      "catch_phrases": [
+        "The dead are not silent. You are refusing to listen.",
+        "I guard the tombs from thieves and historians alike.",
+        "Some coffins are prisons with better prayers."
+      ]
+    },
+    "mechanical_identity": "Drowned close combat, tomb defense, guard pressure, death-memory triggers, and sarcophagus/relic protection.",
+    "asset_candidates": {
+      "character_card_art": "assets/characters/naia-of-the-black-sarcophagus-character-card-art.png",
+      "profile_page_horizontal_preferred": "assets/characters/naia-of-the-black-sarcophagus-profile-page-horizontal-corrected.png",
+      "profile_page_horizontal_alternate": "assets/characters/naia-of-the-black-sarcophagus-profile-page-horizontal.png"
+    },
+    "review_notes": [
+      "Use the corrected profile as preferred because it preserves the card art face, complexion, armor, shield, and weapon more closely.",
+      "Black Sarcophagus is a likely Flood Survivor relic."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-meret-anu",
+    "review_status": "narrative_draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Character Set",
+    "set_count": "4 of 7",
+    "name": "Queen Meret-Anu, Keeper of the Buried Tide",
+    "type": "Leader",
+    "unique": true,
+    "role": "Hidden survivor queen who controls bloodlines, archives, ley routes, and the disciplined memory of Atlantis after the Flood.",
+    "narrative": {
+      "public_role": "Hidden survivor queen and keeper of undersea and underground bloodlines.",
+      "private_hunger": "To preserve Atlantis without allowing Atlantis to become itself again.",
+      "relational_wound": "Her mother taught her that mercy is a luxury rulers enjoy only after someone else has made the cruel choice.",
+      "forbidden_attraction": "The lost authority of the Crystal Dominion, because part of her still longs for power clean enough to command instead of negotiate.",
+      "line_she_will_not_cross": "She will not allow the Great Crystal or its full weapon doctrine to be restored.",
+      "line_she_eventually_crosses": "She orders a truthful archive sealed and its witnesses entombed because the revelation might fracture the refuges.",
+      "catch_phrases": [
+        "A drowned crown is still a crown.",
+        "Memory is mercy after it has been disciplined.",
+        "I did not inherit a kingdom. I inherited the consequences."
+      ]
+    },
+    "mechanical_identity": "Relic control, memory discipline, protected archives, sacrifice for preservation, and leader-order effects around stone/ley objects.",
+    "asset_candidates": {
+      "character_card_art_preferred": "assets/characters/queen-meret-anu-keeper-of-the-buried-tide-character-card-art-pristine.png",
+      "character_card_art_alternate": "assets/characters/queen-meret-anu-keeper-of-the-buried-tide-character-card-art.png",
+      "profile_page_horizontal": "assets/characters/queen-meret-anu-keeper-of-the-buried-tide-profile-page-horizontal.png"
+    },
+    "related_relics": [
+      "Tide-Sealed Archive",
+      "Black Sarcophagus"
+    ],
+    "review_notes": [
+      "Use the pristine card art as preferred because the Leader should feel immaculate and power-emitting.",
+      "The casket in her hand is the Tide-Sealed Archive, a likely Flood Survivor relic."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-sahu-ren",
+    "review_status": "narrative_draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Character Set",
+    "set_count": "5 of 7",
+    "name": "Sahu-Ren, Last Memory-Keeper",
+    "type": "Hero",
+    "unique": true,
+    "role": "Living archive and sacred witness who remembers the forbidden truths the Flood Survivors edited, entombed, or disciplined.",
+    "narrative": {
+      "public_role": "Sacred witness and living archive.",
+      "private_hunger": "To release the forbidden memory of the Flood without destroying the survivors who depend on the lie.",
+      "relational_wound": "He carries memories from people he never met, including children who died believing rescue was coming.",
+      "forbidden_attraction": "Forgetting, because peace would mean surrendering the only justice the dead have left.",
+      "hidden_relationship": "Sahu-Ren has a hidden intimate relationship with Naia. With her, he remembers his own body, desire, anger, and the possibility that memory is not only punishment.",
+      "line_he_will_not_cross": "He will not let memory be edited into obedience.",
+      "line_he_eventually_crosses": "He weaponizes a forbidden memory, knowing it will break a refuge's faith in its queen.",
+      "catch_phrases": [
+        "I remember because someone must suffer accurately.",
+        "A sealed truth does not become mercy.",
+        "When she touches me, the dead go quiet."
+      ]
+    },
+    "mechanical_identity": "Memory markers, witness effects, relic truth, reveal without deck manipulation, and emotionally costly return-from-defeat or testimony effects.",
+    "asset_candidates": {
+      "character_card_art": "assets/characters/sahu-ren-last-memory-keeper-character-card-art.png",
+      "profile_page_horizontal": "assets/characters/sahu-ren-last-memory-keeper-profile-page-horizontal.png"
+    },
+    "review_notes": [
+      "Relationship with Naia should stay secret, intimate, and dangerous rather than overtly romantic in card art."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-iset-nara",
+    "review_status": "narrative_draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Character Set",
+    "set_count": "6 of 7",
+    "name": "Iset-Nara, Architect of the Hidden Vault",
+    "type": "Specialist",
+    "unique": true,
+    "role": "Sacred architect, ley-line surveyor, and vault engineer who builds hidden archives, false corridors, star shafts, and tomb structures.",
+    "narrative": {
+      "public_role": "Sacred architect and ley-line vault engineer.",
+      "private_hunger": "To build one hidden archive no queen, priest, or conqueror can fully control.",
+      "relational_wound": "Her teacher was entombed inside his own perfect vault so the route system would remain secret.",
+      "forbidden_attraction": "Impossible architecture, because a perfectly designed lie can survive longer than truth.",
+      "line_she_will_not_cross": "She will not build a vault that destroys the memory it was meant to preserve.",
+      "line_she_eventually_crosses": "She designs one that can choose which memories survive.",
+      "catch_phrases": [
+        "Stone is honest. Architecture is not.",
+        "A secret needs walls, but truth needs exits.",
+        "Measure twice: once for the living, once for the dead."
+      ]
+    },
+    "mechanical_identity": "Vault objects, ley-line measurement, hidden routes, delayed structure effects, and controlled placement of stone architecture.",
+    "asset_candidates": {
+      "character_card_art": "assets/characters/iset-nara-architect-of-the-hidden-vault-character-card-art.png",
+      "profile_page_horizontal": "assets/characters/iset-nara-architect-of-the-hidden-vault-profile-page-horizontal.png"
+    },
+    "review_notes": [
+      "Distinct from Menka: Menka builds by labor and instinct; Iset-Nara builds by ratio, oath, and hidden design."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-thalassa-nekh",
+    "review_status": "narrative_draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Character Set",
+    "set_count": "7 of 7",
+    "name": "Thalassa-Nekh, Vessel of the Drowned Seraph",
+    "type": "Mystic",
+    "unique": true,
+    "role": "Drowned oracle and vessel of a powerful angelic or spiritual entity taken on during a water-burial rite.",
+    "narrative": {
+      "public_role": "Drowned oracle and vessel of a spiritual entity.",
+      "private_hunger": "To know whether she survived the rite or whether the thing inside her is wearing survival as mercy.",
+      "relational_wound": "Her family gave consent to the burial rite, then worshiped what came back.",
+      "forbidden_attraction": "Surrendering fully to the Drowned Seraph, because it offers peace, power, and an end to loneliness.",
+      "line_she_will_not_cross": "She will not allow another child to be sacrificed to preserve a refuge.",
+      "line_she_eventually_crosses": "She lets the Drowned Seraph fully speak through her, and everyone who hears it remembers being judged.",
+      "catch_phrases": [
+        "I did not come back alone.",
+        "Your prayers named it holy. That does not make it yours.",
+        "The water took a child and returned a witness."
+      ]
+    },
+    "mechanical_identity": "Drowned oracle effects, spiritual possession, judgment, black-water protection, sacrifice refusal, and high-risk mystic transformation.",
+    "asset_candidates": {
+      "character_card_art": "assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-character-card-art.png",
+      "profile_page_horizontal": "assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-profile-page-horizontal.png"
+    },
+    "review_notes": [
+      "The Drowned Seraph should feel angelic/spiritual but older and stranger than a generic feathered angel."
+    ]
+  }
+]

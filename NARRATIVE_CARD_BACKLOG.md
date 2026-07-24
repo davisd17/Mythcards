@@ -506,9 +506,15 @@ Mechanical identity: pylons, shields, range boosts, resonance networks, board co
 
 Story identity: post-flood Atlanteans who survived underwater, underground, or migrated into Egypt and mystery traditions.
 
-Visual style: drowned temples, sealed chambers, subterranean routes, Egyptian influence, memory stones.
+Expanded story identity: the Flood Survivors are not the glory of Atlantis. They are what remained after glory became a weapon. Some lived beneath the sea in sealed pressure temples. Some fled underground through tunnels older than the Dominion. Others migrated into Egypt and the mystery lands, encoding Atlantean memory into tomb geometry, burial chambers, star shafts, sacred measurements, and forbidden bloodlines.
 
-Mechanical identity: survival, hidden movement, recursion, relic preservation, return-from-defeat effects.
+They navigate and build on ley lines using great stonework: submerged causeways, black basalt gates, underground vaults, pyramid foundations, dolmens, sealed wells, star chambers, and temples aligned to solstice, tide, and underworld passage. Where the Crystal Dominion used pylons to command energy, the Flood Survivors use stone to persuade, anchor, redirect, slow, preserve, and conceal.
+
+Core emotional identity: survivor guilt, secrecy, preservation, and the fear that keeping Atlantis alive may also keep its sin alive.
+
+Visual style: drowned temples, sealed chambers, subterranean routes, Egyptian influence, memory stones, basalt, limestone, granite, coral-encrusted ruins, ley-line glow beneath carved channels, star maps carved into ceilings, water pressure, torchlight, and blue-green undersea darkness.
+
+Mechanical identity: survival, hidden movement, ley-line routes, placed stone objects, relic preservation, tomb/vault objects, memory markers, delayed structure effects, and return-from-defeat effects.
 
 ## Future Major Areas
 
@@ -586,13 +592,13 @@ This matrix lists the long-term one-of-each-type plan for each current faction s
 
 | Type | First Mind | Crystal Dominion | Flood Survivors |
 | --- | --- | --- | --- |
-| Common | Quartz Attendant | Crystal Thrall | Drowned Initiate |
-| Mount | Astral Manta | Manta Glider | Subterranean Serpent |
-| Warrior | Thought-Blade Guard | Resonance Guard | Tomb Sentinel |
-| Leader | Dream Conductor | Crystal Hierarch | Nile Exile-Priest |
-| Hero | Oracle Sovereign | Obelisk-Crowned Heir | Last Memory-Keeper |
-| Specialist | Star Cartographer | Crystal Architect | Vault Builder |
-| Mystic | Astral Harmonic | Tideglass Oracle | Underwater Necromancer |
+| Common | Quartz Attendant | Crystal Thrall | Stone-Line Laborer |
+| Mount | Astral Manta | Manta Glider | Ahesu, the Stone-Current Serpent |
+| Warrior | Thought-Blade Guard | Resonance Guard | Naia of the Black Sarcophagus |
+| Leader | Dream Conductor | Crystal Hierarch | Queen Meret-Anu, Keeper of the Buried Tide |
+| Hero | Oracle Sovereign | Obelisk-Crowned Heir | Sahu-Ren, Last Memory-Keeper |
+| Specialist | Star Cartographer | Crystal Architect | Iset-Nara, Architect of the Hidden Vault |
+| Mystic | Astral Harmonic | Tideglass Oracle | Thalassa-Nekh, Vessel of the Drowned Seraph |
 
 ## Current Prototype Relic And Event Cards
 
@@ -673,6 +679,29 @@ These should be considered when expanding Russian/Closed City beyond the current
 | Hero | Dr. Mikhail Orlov | Coma gate patient and symbolic center. | Reveal/manipulate events, risk through damage/status. |
 | Specialist | Dr. Elena Morozova | Consciousness researcher and missing emotional key. | Dream links, status transfer, prediction, relationship mechanics. |
 | Mystic | Subject 3: Zoya | Remote-viewing dream subject connected to Orlov before waking contact. Full story name: Zoya Miranova. | Unstable prophecy, desire/signal effects, copy abilities, dream links, choice-based psychic effects. |
+
+## Proposed Flood Survivor Character Cards
+
+This set contains exactly **7 Flood Survivor character cards**. The Common uses an archetypal card name with a named story representative; all other character types use full named characters.
+
+| Type | Card | Story Role | Mechanical Identity | Preferred Assets |
+| --- | --- | --- | --- | --- |
+| Common | Stone-Line Laborer | Common stoneworker, causeway builder, and ley-line laborer. Menka of the Lower Causeway is the named story representative. | Placed stone objects, ley-line setup, repair, route building, and practical survival. | `assets/characters/stone-line-laborer-character-card-art.png`; `assets/characters/menka-of-the-lower-causeway-profile-page-horizontal.png` |
+| Mount | Ahesu, the Stone-Current Serpent | Named ley-line mount and subterranean transport creature that swims and slides through flooded stone routes. | Mount movement through flooded routes, ley-line travel, stone-current paths, and protected transport. | `assets/characters/ahesu-the-stone-current-serpent-character-card-art-grounded.png`; `assets/characters/ahesu-the-stone-current-serpent-profile-page-horizontal.png` |
+| Warrior | Naia of the Black Sarcophagus | Tomb Sentinel warrior guarding drowned vaults, bodies, bloodlines, and buried truths. | Drowned close combat, tomb defense, guard pressure, death-memory triggers, and sarcophagus/relic protection. | `assets/characters/naia-of-the-black-sarcophagus-character-card-art.png`; `assets/characters/naia-of-the-black-sarcophagus-profile-page-horizontal-corrected.png` |
+| Leader | Queen Meret-Anu, Keeper of the Buried Tide | Hidden survivor queen who controls bloodlines, archives, ley routes, and disciplined memory. | Relic control, memory discipline, protected archives, sacrifice for preservation, and leader-order effects around stone/ley objects. | `assets/characters/queen-meret-anu-keeper-of-the-buried-tide-character-card-art-pristine.png`; `assets/characters/queen-meret-anu-keeper-of-the-buried-tide-profile-page-horizontal.png` |
+| Hero | Sahu-Ren, Last Memory-Keeper | Living archive and sacred witness who remembers the forbidden truths the Flood Survivors edited, entombed, or disciplined. | Memory markers, witness effects, relic truth, reveal without deck manipulation, and emotionally costly testimony effects. | `assets/characters/sahu-ren-last-memory-keeper-character-card-art.png`; `assets/characters/sahu-ren-last-memory-keeper-profile-page-horizontal.png` |
+| Specialist | Iset-Nara, Architect of the Hidden Vault | Sacred architect, ley-line surveyor, and vault engineer who builds hidden archives, false corridors, star shafts, and tomb structures. | Vault objects, ley-line measurement, hidden routes, delayed structure effects, and controlled placement of stone architecture. | `assets/characters/iset-nara-architect-of-the-hidden-vault-character-card-art.png`; `assets/characters/iset-nara-architect-of-the-hidden-vault-profile-page-horizontal.png` |
+| Mystic | Thalassa-Nekh, Vessel of the Drowned Seraph | Drowned oracle and vessel of a powerful angelic or spiritual entity taken on during a water-burial rite. | Drowned oracle effects, spiritual possession, judgment, black-water protection, sacrifice refusal, and high-risk mystic transformation. | `assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-character-card-art.png`; `assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-profile-page-horizontal.png` |
+
+Key relationship dynamics:
+- Naia and Sahu-Ren have a hidden intimate relationship built on truth, restraint, grief, and dangerous trust.
+- Meret-Anu wants Sahu-Ren's obedience, fears Thalassa-Nekh's undisciplined spiritual authority, and treats memory as something that must be governed.
+- Menka and Iset-Nara both build with stone, but Menka works by touch and survival while Iset-Nara works by ratio, oath, and hidden design.
+
+Likely Flood Survivor relics introduced through this character work:
+- **The Black Sarcophagus**: Naia's central mystery relic and tomb-prison/truth-vault.
+- **Tide-Sealed Archive**: Meret-Anu's sealed memory casket, used to preserve or imprison forbidden records, witness fragments, and bloodline proofs.
 
 ## Generated Assets Inventory
 
