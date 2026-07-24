@@ -1,7 +1,7 @@
 [
   {
     "id": "a-flood-survivor-stone-line-laborer",
-    "review_status": "narrative_draft_for_review",
+    "review_status": "draft_for_review",
     "faction": "Atlantean",
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
@@ -11,6 +11,10 @@
     "story_name": "Menka of the Lower Causeway",
     "type": "Common",
     "unique": false,
+    "stats": [2, 1, 2, 1],
+    "l1": "AP Ability: Stone Line places a Stone marker on an adjacent empty tile. Stone markers are placed objects with 1 HP that block movement.",
+    "l2": "Causeway Crew: +1 HP. Stone Line may place up to 2 Stone markers on different adjacent empty tiles.",
+    "l3": "Route To The Surface: +1 MOVE. This character may move through Stone markers. Once per turn after moving through a Stone marker, gain Shield.",
     "role": "Common stoneworker, causeway builder, and ley-line laborer. Menka is the named story representative for this common card.",
     "narrative": {
       "public_role": "Common stoneworker and causeway builder.",
@@ -25,7 +29,7 @@
         "A wall is only mercy if it has a door."
       ]
     },
-    "mechanical_identity": "Placed stone objects, ley-line setup, repair, route building, and practical survival.",
+    "mechanical_identity": "Placed stone objects, ley-line setup, route building, and practical survival.",
     "asset_candidates": {
       "character_card_art": "assets/characters/stone-line-laborer-character-card-art.png",
       "profile_page_horizontal": "assets/characters/menka-of-the-lower-causeway-profile-page-horizontal.png",
@@ -33,12 +37,13 @@
     },
     "review_notes": [
       "Common class uses an archetypal card name; Menka is the named person in the story.",
-      "Profile art should use the horizontal version in the current profile-page format."
+      "Profile art should use the horizontal version in the current profile-page format.",
+      "Level plan establishes the basic Flood Survivors stone-object vocabulary with disposable 1 HP blockers."
     ]
   },
   {
     "id": "a-flood-survivor-ahesu",
-    "review_status": "narrative_draft_for_review",
+    "review_status": "draft_for_review",
     "faction": "Atlantean",
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
@@ -47,6 +52,10 @@
     "name": "Ahesu, the Stone-Current Serpent",
     "type": "Mount",
     "unique": true,
+    "stats": [4, 1, 4, 1],
+    "l1": "Passive: Stone-Current may move through allied Stone markers but must end on an empty tile. If carrying a Hero or Leader, the mounted pair may also use Stone-Current.",
+    "l2": "Living Causeway: +1 MOVE. If Ahesu starts movement adjacent to a Stone marker, it may move through one occupied allied tile this movement.",
+    "l3": "Old Route Opens: +1 HP. Once per match, if Ahesu starts adjacent to a Stone marker, move it to an empty tile adjacent to another allied Stone marker within 5 tiles.",
     "role": "Named ley-line mount and subterranean transport creature that swims and slides through flooded stone routes.",
     "narrative": {
       "public_role": "Ley-line mount and subterranean transport creature.",
@@ -68,12 +77,13 @@
       "profile_page_horizontal": "assets/characters/ahesu-the-stone-current-serpent-profile-page-horizontal.png"
     },
     "review_notes": [
-      "Use the grounded card art as preferred because it reads as swimming/sliding through flooded stone routes rather than flying."
+      "Use the grounded card art as preferred because it reads as swimming/sliding through flooded stone routes rather than flying.",
+      "Level plan makes Ahesu the stone-route transport piece for Hero/Leader movement."
     ]
   },
   {
     "id": "a-flood-survivor-naia",
-    "review_status": "narrative_draft_for_review",
+    "review_status": "draft_for_review",
     "faction": "Atlantean",
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
@@ -82,6 +92,10 @@
     "name": "Naia of the Black Sarcophagus",
     "type": "Warrior",
     "unique": true,
+    "stats": [4, 2, 2, 1],
+    "l1": "Passive: Tomb Sentinel reduces the first damage Naia takes each turn by 1 while she is adjacent to a placed object.",
+    "l2": "Sarcophagus Oath: +1 HP. While adjacent to a placed object, Naia's basic attacks mark damaged enemies. The next allied attack against a marked enemy deals +1 damage, then remove Marked.",
+    "l3": "Open The Black Sarcophagus: +1 ATK. Once per match when Naia would be defeated, if she is adjacent to a placed object, she remains at 1 HP and every adjacent enemy becomes Marked.",
     "role": "Named Tomb Sentinel warrior who guards drowned vaults, bodies, bloodlines, and the truths the survivors fear.",
     "narrative": {
       "public_role": "Tomb Sentinel and warrior guardian of drowned vaults.",
@@ -105,12 +119,13 @@
     },
     "review_notes": [
       "Use the corrected profile as preferred because it preserves the card art face, complexion, armor, shield, and weapon more closely.",
-      "Black Sarcophagus is a likely Flood Survivor relic."
+      "Black Sarcophagus is a likely Flood Survivor relic.",
+      "Level plan makes Naia the tomb-defense warrior who is strongest around placed stone/vault objects."
     ]
   },
   {
     "id": "a-flood-survivor-meret-anu",
-    "review_status": "narrative_draft_for_review",
+    "review_status": "draft_for_review",
     "faction": "Atlantean",
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
@@ -119,6 +134,10 @@
     "name": "Queen Meret-Anu, Keeper of the Buried Tide",
     "type": "Leader",
     "unique": true,
+    "stats": [4, 1, 2, 3],
+    "l1": "AP Ability: Memory Discipline chooses an ally within 3 tiles. Give that ally 1 Memory marker, max 1 per character. The next time it would take damage, remove Memory to prevent 1 of that damage.",
+    "l2": "Buried Tide Order: Memory Discipline may target 2 allies within 3 tiles. If a target is adjacent to a placed object, it may move 1 tile without spending AP.",
+    "l3": "Tide-Sealed Archive: +1 HP. Once per match, allies with Memory markers cannot be defeated until the start of your next turn; if one would be defeated, remove its Memory and leave it at 1 HP.",
     "role": "Hidden survivor queen who controls bloodlines, archives, ley routes, and the disciplined memory of Atlantis after the Flood.",
     "narrative": {
       "public_role": "Hidden survivor queen and keeper of undersea and underground bloodlines.",
@@ -145,12 +164,13 @@
     ],
     "review_notes": [
       "Use the pristine card art as preferred because the Leader should feel immaculate and power-emitting.",
-      "The casket in her hand is the Tide-Sealed Archive, a likely Flood Survivor relic."
+      "The casket in her hand is the Tide-Sealed Archive, a likely Flood Survivor relic.",
+      "Level plan introduces Memory markers as preservation, not prophecy or deck control."
     ]
   },
   {
     "id": "a-flood-survivor-sahu-ren",
-    "review_status": "narrative_draft_for_review",
+    "review_status": "draft_for_review",
     "faction": "Atlantean",
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
@@ -159,6 +179,10 @@
     "name": "Sahu-Ren, Last Memory-Keeper",
     "type": "Hero",
     "unique": true,
+    "stats": [5, 1, 2, 3],
+    "l1": "Passive: Living Archive gains 1 Memory marker, max 3, the first time each turn an ally within 2 tiles takes damage.",
+    "l2": "Forbidden Testimony: +1 RANGE. Once per turn, remove 1 Memory marker from Sahu-Ren to give an ally within 3 tiles Shield or to mark an enemy within 3 tiles.",
+    "l3": "Last Memory Released: +1 HP. Once per match, remove up to 3 Memory markers from Sahu-Ren. For each removed marker, heal 1 HP on an ally within 3 tiles or deal 1 damage to a marked enemy within 3 tiles.",
     "role": "Living archive and sacred witness who remembers the forbidden truths the Flood Survivors edited, entombed, or disciplined.",
     "narrative": {
       "public_role": "Sacred witness and living archive.",
@@ -180,12 +204,13 @@
       "profile_page_horizontal": "assets/characters/sahu-ren-last-memory-keeper-profile-page-horizontal.png"
     },
     "review_notes": [
-      "Relationship with Naia should stay secret, intimate, and dangerous rather than overtly romantic in card art."
+      "Relationship with Naia should stay secret, intimate, and dangerous rather than overtly romantic in card art.",
+      "Level plan makes Sahu-Ren the memory-engine Hero: he converts witnessed harm into protection or judgment."
     ]
   },
   {
     "id": "a-flood-survivor-iset-nara",
-    "review_status": "narrative_draft_for_review",
+    "review_status": "draft_for_review",
     "faction": "Atlantean",
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
@@ -194,6 +219,10 @@
     "name": "Iset-Nara, Architect of the Hidden Vault",
     "type": "Specialist",
     "unique": true,
+    "stats": [3, 1, 2, 2],
+    "l1": "AP Ability: Hidden Geometry chooses an adjacent Stone marker. Move that Stone marker up to 2 tiles to an empty tile, or give one ally adjacent to it +1 RANGE on its next AP ability this turn.",
+    "l2": "Vault Surveyor: +1 RANGE. Hidden Geometry may choose a Stone marker within 2 tiles. After moving a Stone marker, one adjacent ally may move 1 tile without spending AP.",
+    "l3": "The Hidden Vault Opens: +1 HP. Once per match, choose an empty tile adjacent to a Stone marker and place the Hidden Vault there. The Hidden Vault is a placed object with 3 HP. Allies adjacent to it gain Shield at the start of your turn.",
     "role": "Sacred architect, ley-line surveyor, and vault engineer who builds hidden archives, false corridors, star shafts, and tomb structures.",
     "narrative": {
       "public_role": "Sacred architect and ley-line vault engineer.",
@@ -208,18 +237,19 @@
         "Measure twice: once for the living, once for the dead."
       ]
     },
-    "mechanical_identity": "Vault objects, ley-line measurement, hidden routes, delayed structure effects, and controlled placement of stone architecture.",
+    "mechanical_identity": "Stone marker manipulation, ley-line measurement, hidden routes, delayed structure effects, and one rare vault set-piece.",
     "asset_candidates": {
       "character_card_art": "assets/characters/iset-nara-architect-of-the-hidden-vault-character-card-art.png",
       "profile_page_horizontal": "assets/characters/iset-nara-architect-of-the-hidden-vault-profile-page-horizontal.png"
     },
     "review_notes": [
-      "Distinct from Menka: Menka builds by labor and instinct; Iset-Nara builds by ratio, oath, and hidden design."
+      "Distinct from Menka: Menka builds by labor and instinct; Iset-Nara builds by ratio, oath, and hidden design.",
+      "Level plan makes Iset-Nara the higher-order structure builder who rearranges Stone markers and opens one important Hidden Vault rather than creating plentiful vault markers."
     ]
   },
   {
     "id": "a-flood-survivor-thalassa-nekh",
-    "review_status": "narrative_draft_for_review",
+    "review_status": "draft_for_review",
     "faction": "Atlantean",
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
@@ -228,6 +258,10 @@
     "name": "Thalassa-Nekh, Vessel of the Drowned Seraph",
     "type": "Mystic",
     "unique": true,
+    "stats": [3, 1, 2, 3],
+    "l1": "AP Ability: Black-Water Communion chooses an ally within 3 tiles. Give that ally 1 Memory marker, max 1 per character, or move 1 Memory marker from that ally to another ally within 2 tiles.",
+    "l2": "Drowned Judgment: +1 RANGE. When an ally within Thalassa-Nekh's RANGE removes a Memory marker to prevent damage, mark the attacker.",
+    "l3": "The Drowned Seraph Takes Form: +1 HP. Once per match, Thalassa-Nekh becomes Seraph Form until your next turn. When an ally within range removes a Memory marker to prevent damage, prevent all damage from that attack instead and mark the attacker.",
     "role": "Drowned oracle and vessel of a powerful angelic or spiritual entity taken on during a water-burial rite.",
     "narrative": {
       "public_role": "Drowned oracle and vessel of a spiritual entity.",
@@ -242,13 +276,14 @@
         "The water took a child and returned a witness."
       ]
     },
-    "mechanical_identity": "Drowned oracle effects, spiritual possession, judgment, black-water protection, sacrifice refusal, and high-risk mystic transformation.",
+    "mechanical_identity": "Drowned oracle effects, spiritual possession, Memory marker movement, judgment, black-water protection, sacrifice refusal, and transformative Seraph form.",
     "asset_candidates": {
       "character_card_art": "assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-character-card-art.png",
       "profile_page_horizontal": "assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-profile-page-horizontal.png"
     },
     "review_notes": [
-      "The Drowned Seraph should feel angelic/spiritual but older and stranger than a generic feathered angel."
+      "The Drowned Seraph should feel angelic/spiritual but older and stranger than a generic feathered angel.",
+      "Level plan removes repeated self-damage, lets Thalassa-Nekh use Memory markers, and makes Level 3 a visible once-per-match Seraph transformation."
     ]
   }
 ]
