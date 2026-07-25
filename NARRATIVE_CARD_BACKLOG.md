@@ -707,18 +707,18 @@ Likely Flood Survivor relics introduced through this character work:
 
 ## Proposed Flood Survivor Event Cards
 
-This set contains exactly **8 Flood Survivor event cards**. The current direction is **forbidden truth** more than simple protection. Stone Route and Memory marker details are provisional and should be finalized later with the prototype rules.
+This set contains exactly **8 Flood Survivor event cards**. The current direction is **forbidden truth** more than simple protection. The set now uses normal **Stone markers** instead of adding a separate Stone Route marker type, keeps vault openings rare, and treats Memory markers as protective truth that often exposes the bearer.
 
 Structured draft data is captured in `data/cards/review_drafts/flood_survivor_events.json`.
 
 | # | Card | Type | Narrative Function | Possible Mechanical Direction |
 | --- | --- | --- | --- | --- |
-| 1 | The Causeway Breathes | Event | A drowned ley-road wakes because something buried has begun calling through it. | Temporary Stone Route marker and route movement. |
-| 2 | Black Water Remembers | Event | Floodwater reflects the truth of what happened during the fall of Atlantis. | Memory markers that protect but also expose through Marked. |
-| 3 | The Vault Chooses A Witness | Event | A sealed archive opens for one character and brands them with forbidden knowledge. | Single-character AP ability range boost with Marked cost. |
-| 4 | The Name Was Cut From Stone | Event | A chiseled-out royal name returns in wet light. | Remove Shield or Mark an enemy near placed objects. |
-| 5 | Ley Stones Align | Event | Ancient stones reveal geometry built to hide a crime. | Measure the first AP ability from an allied placed object. |
-| 6 | The Drowned Seraph Speaks | Event | Thalassa-Nekh's entity speaks a judgment no ruler can redact. | Mark the first enemy that damages an ally with Memory. |
+| 1 | The Causeway Breathes | Event | A drowned ley-road wakes because something buried has begun calling through it. | Place one Stone marker near center and allow one movement through a placed object while ignoring that object's effect. |
+| 2 | Black Water Remembers | Event | Floodwater reflects the truth of what happened during the fall of Atlantis. | Give one ally near a placed object a Memory marker and move it 1 tile. |
+| 3 | The Vault Chooses A Witness | Event | A sealed archive opens for one character and brands them with forbidden knowledge. | Single-character AP ability range boost with Marked cost; does not create a Vault marker. |
+| 4 | The Flood Reaches The Walls | Event | The old Flood returns at the board edges and exposes anyone at the walls. | Characters on outer edge tiles become Marked until the end of the round. |
+| 5 | Ley Stones Align | Event | Ancient stones reveal geometry built to hide a crime. | Measure the first AP ability from an allied Stone marker or placed object. |
+| 6 | The Drowned Seraph Speaks | Event | Thalassa-Nekh's entity speaks a judgment no ruler can redact. | Mystic-centered retaliation; Thalassa-Nekh gains a Shield bonus. |
 | 7 | Tide-Sealed Archive Opens | Event | Meret-Anu's records reveal a controlled truth, but the full archive wants release. | Choose safe Shield or stronger Shield/+RANGE with Marked cost. |
 | 8 | Exiles Walk Beneath Egypt | Event | Survivors carry edited Atlantean memory into tomb geometry and later mystery traditions. | Reposition allies adjacent to placed objects. |
 
@@ -734,7 +734,7 @@ Structured draft data is captured in `data/cards/review_drafts/flood_survivor_re
 | 2 | The Black Sarcophagus | Relic | Naia's sealed black-stone tomb, prison, archive, or body container. | Warrior/Hero max HP and attacker Marking near placed objects. |
 | 3 | Tide-Sealed Archive | Relic | Meret-Anu's sealed casket of witness fragments, bloodline proofs, drowned records, and edited truths. | Leader/Specialist AP range bonus and Memory-linked repositioning. |
 | 4 | Seraphic Burial Veil | Relic | Funerary veil from the water-burial rite that changed Thalassa-Nekh. | Mystic max HP and limited conversion of Marked into Shield. |
-| 5 | Basalt Ley Compass | Relic | Surveying instrument for living routes under floodwater, desert, and tomb foundations. | Common/Specialist movement bonus and traversal through placed objects. |
+| 5 | Basalt Ley Compass | Relic | Surveying instrument for living routes under floodwater, desert, and tomb foundations. | Common/Specialist movement bonus and traversal through Stone markers or placed objects. |
 | 6 | Pearl Of The Lower Vault | Relic | Luminous pearl containing a memory too sorrowful to speak. | Hero/Mystic AP range bonus and Marking attackers when damage is prevented. |
 
 ## Generated Assets Inventory

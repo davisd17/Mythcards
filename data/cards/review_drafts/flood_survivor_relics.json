@@ -10,7 +10,8 @@
     "name": "The Emerald Tablet",
     "kind": "Rare Relic",
     "duration": "Persistent",
-    "effect": "Once each turn, when one of your characters gains Memory or starts movement adjacent to a placed object, choose one allied character within 2 tiles of a placed object. It gains Shield or +1 RANGE on its next AP ability this turn.",
+    "effect": "Once each turn, after one of your characters gains Memory or starts movement adjacent to a placed object, choose one allied character within 2 tiles of a placed object. It gains Shield or +1 RANGE on its next AP ability this turn.",
+    "flavor": "As below, so the drowned city answered above.",
     "real_relic_basis": "Based on the Emerald Tablet tradition associated with Hermes Trismegistus, Hermeticism, alchemy, and the occult principle often summarized as above and below reflecting one another.",
     "role": "A green stone tablet the Flood Survivors saved from Atlantis and carried through underground routes toward Egypt. Later traditions call it Hermetic, but the Archivist suspects it is older than Hermes.",
     "mechanical_lane": "Rare wisdom relic that converts Memory and placed-stone positioning into flexible protection or range.",
@@ -20,8 +21,10 @@
       "Sahu-Ren's forbidden memory",
       "Iset-Nara's sacred measurements"
     ],
+    "art_prompt": "A green stone tablet covered in Atlantean-Hermetic symbols resting between black water and desert sand, with mirrored star geometry above and below it.",
     "asset_candidates": [],
     "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Rare relic for the Flood Survivor sub-area.",
       "This should feel like a true-myth/esoteric bridge between Atlantis, Egypt, alchemy, and later occult history.",
       "Effect avoids direct shared relic/event deck viewing or manipulation."
@@ -39,6 +42,7 @@
     "kind": "Relic",
     "duration": "Persistent",
     "effect": "Your Warrior and Hero each gain +1 maximum HP. Once each round, when an enemy adjacent to one of your placed objects attacks, Mark that enemy after the attack resolves.",
+    "flavor": "Some coffins are prisons with better prayers.",
     "role": "Naia's central mystery: a sealed black-stone coffin that may be tomb, prison, archive, or body container. The voice inside knows her childhood name.",
     "mechanical_lane": "Defensive tomb relic and attacker-marking around placed objects.",
     "narrative_links": [
@@ -47,8 +51,10 @@
       "redacted royal names",
       "the dead as witnesses"
     ],
+    "art_prompt": "A sealed black-stone sarcophagus half-submerged in a drowned vault, guarded by a bronze shield and lit by a voice-like glow leaking through the lid seam.",
     "asset_candidates": [],
     "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "User direction: keep The Black Sarcophagus primarily as a relic, not an event.",
       "May be strong with heavy placed-object builds; tune once Stone markers are finalized."
     ]
@@ -65,6 +71,7 @@
     "kind": "Relic",
     "duration": "Persistent",
     "effect": "Your Leader and Specialist each gain +1 RANGE on AP abilities. Once each turn, when an ally gains Memory, you may move that ally 1 tile. It must end on an empty tile.",
+    "flavor": "Memory is mercy after it has been disciplined.",
     "role": "Meret-Anu's sealed casket of witness fragments, bloodline proofs, drowned records, and edited truths.",
     "mechanical_lane": "Leader/Specialist range bonus and Memory-linked repositioning.",
     "narrative_links": [
@@ -73,8 +80,10 @@
       "controlled truth",
       "survivor bloodlines"
     ],
+    "art_prompt": "A royal Atlantean casket sealed with tideglass and black bronze, with tiny witness faces pressed against the inner water-lit surface.",
     "asset_candidates": [],
     "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "The casket appears in Meret-Anu's character art and can become its own relic art later.",
       "Represents memory as governed power rather than free revelation."
     ]
@@ -90,7 +99,8 @@
     "name": "Seraphic Burial Veil",
     "kind": "Relic",
     "duration": "Persistent",
-    "effect": "Your Mystic gains +1 maximum HP. Once each round, when an ally would become Marked, you may prevent that Marked condition and give that ally Shield instead.",
+    "effect": "Your Mystic gains +1 maximum HP. Once each round, when one of your allies would become Marked, you may prevent that Marked condition and give that ally Shield instead.",
+    "flavor": "The cloth was meant for a body. Something else wore it back.",
     "role": "A funerary veil used in the water-burial rite that changed Thalassa-Nekh. It is unclear whether it invited the Drowned Seraph or merely survived its arrival.",
     "mechanical_lane": "Mystic durability and limited conversion of exposure into protection.",
     "narrative_links": [
@@ -99,10 +109,12 @@
       "water-burial rites",
       "sacrifice refusal"
     ],
+    "art_prompt": "A translucent burial veil floating upright in black water, its folds suggesting vast angular wings without showing a simple human angel.",
     "asset_candidates": [],
     "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Should feel protective and unsettling, not purely holy.",
-      "Good candidate for art with translucent burial cloth, black water, and faint nonhuman presence."
+      "Pairs with Flood Survivor cards that accept Marked as the cost of receiving forbidden truth."
     ]
   },
   {
@@ -116,7 +128,8 @@
     "name": "Basalt Ley Compass",
     "kind": "Relic",
     "duration": "Persistent",
-    "effect": "Your Common and Specialist each gain +1 MOVE. Once each turn, one of them may move through 1 allied placed object, but must end on an empty tile.",
+    "effect": "Your Common and Specialist each gain +1 MOVE. Once each turn, one of them may move through 1 allied Stone marker or placed object, but must end on an empty tile.",
+    "flavor": "It points toward roads the map was ordered to forget.",
     "role": "A stone-and-metal surveying instrument used by Menka and Iset-Nara to locate living routes under floodwater, desert, and tomb foundations.",
     "mechanical_lane": "Movement stat relic and practical route-breaking through stone objects.",
     "narrative_links": [
@@ -125,8 +138,10 @@
       "ley-line navigation",
       "great stonework"
     ],
+    "art_prompt": "A basalt-and-bronze compass resting on wet carved stone, its needle pointing through a wall toward a glowing hidden causeway.",
     "asset_candidates": [],
     "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus relic.",
       "Can be tuned to once per round if repeated object traversal is too strong."
     ]
@@ -143,6 +158,7 @@
     "kind": "Relic",
     "duration": "Persistent",
     "effect": "Your Hero and Mystic each gain +1 RANGE on AP abilities. Once each round, when one of them prevents damage with Memory or Shield, Mark the attacker.",
+    "flavor": "The pearl contains a grief that still knows who caused it.",
     "role": "A luminous pearl recovered from a sealed pressure chamber beneath the drowned city. It contains a memory that cannot be spoken without making listeners weep.",
     "mechanical_lane": "Hero/Mystic range bonus and grief-as-judgment retaliation.",
     "narrative_links": [
@@ -151,8 +167,10 @@
       "lower vaults",
       "sorrow preserved as power"
     ],
+    "art_prompt": "A luminous pearl in a cracked pressure-vault reliquary, projecting a tiny sorrowful memory scene into black water.",
     "asset_candidates": [],
     "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus relic.",
       "Pairs naturally with Memory marker prevention and the Drowned Seraph event."
     ]
