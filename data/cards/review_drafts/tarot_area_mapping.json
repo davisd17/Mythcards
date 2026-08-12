@@ -1,0 +1,393 @@
+{
+  "review_status": "draft_for_review",
+  "purpose": "Track how each story area can become a complete 78-card tarot deck while preserving MythCards card identity.",
+  "canonical_deck": {
+    "major_arcana": [
+      "The Fool",
+      "The Magician",
+      "The High Priestess",
+      "The Empress",
+      "The Emperor",
+      "The Hierophant",
+      "The Lovers",
+      "The Chariot",
+      "Strength",
+      "The Hermit",
+      "Wheel Of Fortune",
+      "Justice",
+      "The Hanged Man",
+      "Death",
+      "Temperance",
+      "The Devil",
+      "The Tower",
+      "The Star",
+      "The Moon",
+      "The Sun",
+      "Judgement",
+      "The World"
+    ],
+    "minor_arcana": {
+      "Wands": ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"],
+      "Cups": ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"],
+      "Swords": ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"],
+      "Pentacles": ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"]
+    }
+  },
+  "mapping_status_values": [
+    "open",
+    "proposed",
+    "approved",
+    "alternate",
+    "needs_new_card",
+    "needs_art_audit",
+    "needs_regeneration"
+  ],
+  "art_audit_values": [
+    "matches_tarot",
+    "minor_adjustment",
+    "needs_regeneration",
+    "unmapped",
+    "no_art_yet"
+  ],
+  "area_decks": {
+    "closed_city": {
+      "area": "Russian-inspired / Closed City",
+      "deck_style": "Soviet occult-science tarot built from reactor rooms, signal arrays, dream monitors, military containment, hidden patronage, redacted evidence, and the first physical cards.",
+      "suit_style": {
+        "Wands": "signal rods, warning lights, authority badges, reactor flame",
+        "Cups": "dream monitors, sleep-lab vessels, signal water, intimate confessions",
+        "Swords": "containment blades, redacted files, command orders, diagnostic truth",
+        "Pentacles": "reactor parts, keys, helmets, notebooks, industrial relics"
+      },
+      "current_mappings": [
+        {
+          "tarot": "The Fool",
+          "mythcards_card": "Nikolai Yegorov / Reactor Worker",
+          "card_type": "Character",
+          "reason": "The ordinary worker steps through sealed routes first, not because he is chosen by doctrine, but because someone must move.",
+          "status": "proposed",
+          "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "The Magician",
+          "mythcards_card": "Dr. Mikhail Orlov",
+          "card_type": "Character",
+          "reason": "Orlov stands at the conversion point where data, symbol, reactor force, and dream become usable power.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/dr-mikhail-orlov-the-magician-character-art.png"
+        },
+        {
+          "tarot": "The High Priestess",
+          "mythcards_card": "Dr. Elena Morozova",
+          "card_type": "Character",
+          "reason": "Elena guards the threshold between measured science and hidden dream knowledge.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/dr-elena-morozova-the-high-priestess-character-card-art.png"
+        },
+        {
+          "tarot": "The Empress",
+          "mythcards_card": "Irina Vasilievna Karpova",
+          "card_type": "Character",
+          "reason": "Karpova is wealth, patronage, appetite, comfort, and control made politically fertile.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/irina-vasilievna-karpova-the-empress-character-card-art.png"
+        },
+        {
+          "tarot": "The Emperor",
+          "mythcards_card": "Colonel Viktor Semyonov",
+          "card_type": "Story / Possible Bonus Character",
+          "reason": "Semyonov is visible order, military containment, and the architecture of command.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/colonel-viktor-semyonov-the-emperor-character-card-art.png"
+        },
+        {
+          "tarot": "The Hierophant",
+          "mythcards_card": null,
+          "card_type": "Open",
+          "reason": "Keep open for now. The best fit may be a future doctrine, institution, containment protocol, or sanctioned occult-science card rather than an existing character.",
+          "status": "open",
+          "art_audit": "unmapped"
+        },
+        {
+          "tarot": "The Lovers",
+          "mythcards_card": "Elena Missing In The Signal",
+          "card_type": "Event",
+          "reason": "The event centers choice, desire, divided loyalty, and the emotional wound between Elena, Orlov, Yuri, and the breach.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/events/closed-city-elena-missing-in-the-signal-the-lovers-event-art.png"
+        },
+        {
+          "tarot": "The Chariot",
+          "mythcards_card": "VERA-7",
+          "card_type": "Character",
+          "reason": "VERA-7 is directed movement through impossible corridors and disciplined transport under pressure.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/vera-7-the-chariot-character-card-art.png"
+        },
+        {
+          "tarot": "Strength",
+          "mythcards_card": "Major Yuri Volkov",
+          "card_type": "Character",
+          "reason": "Yuri's strength is not only armor; it is restraint under desire, fear, and containment duty.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/major-yuri-volkov-strength-character-card-art.png"
+        },
+        {
+          "tarot": "The Hermit",
+          "mythcards_card": null,
+          "card_type": "Open",
+          "reason": "Keep open for now. Zoya has some Hermit signal-carrier qualities, but her core energy may fit Moon, Devil, Cups, or another dream/desire archetype better.",
+          "status": "open",
+          "art_audit": "unmapped"
+        },
+        {
+          "tarot": "Wheel Of Fortune",
+          "mythcards_card": "Seventeen Seconds",
+          "card_type": "Event",
+          "reason": "Reality turns suddenly and briefly, changing paths, fate, and position.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/events/closed-city-seventeen-seconds-wheel-of-fortune-event-art.png"
+        },
+        {
+          "tarot": "Justice",
+          "mythcards_card": null,
+          "card_type": "Open",
+          "reason": "Keep open for now. Redacted Incident Tape and Anya Lebedev are possible candidates, but Justice should represent evidence, truth, and accountability rather than official state law.",
+          "status": "open",
+          "art_audit": "unmapped"
+        },
+        {
+          "tarot": "The Hanged Man",
+          "mythcards_card": null,
+          "card_type": "Open",
+          "reason": "Keep open for now. A future Orlov coma-gate event such as The Coma Gate Opens may become the best fit, but Orlov's primary character mapping is already The Magician.",
+          "status": "open",
+          "art_audit": "unmapped"
+        },
+        {
+          "tarot": "Death",
+          "mythcards_card": null,
+          "card_type": "Open",
+          "reason": "Keep open for now. Elena Missing In The Signal and Closed City Incident are already stronger as The Lovers and The Tower; Death should wait for a more exact irreversible-transformation card.",
+          "status": "open",
+          "art_audit": "unmapped"
+        },
+        {
+          "tarot": "Temperance",
+          "mythcards_card": null,
+          "card_type": "Open",
+          "reason": "Keep open for now. Dream Monitors Synchronize and Lead-Sealed Notebook have partial fit, but Temperance should represent controlled integration or careful alchemical mixing once that card exists.",
+          "status": "open",
+          "art_audit": "unmapped"
+        },
+        {
+          "tarot": "The Devil",
+          "mythcards_card": "Karpova's Black Key",
+          "card_type": "Relic",
+          "reason": "The key turns access, permission, desire, and dependence into a beautiful trap. It represents power that opens doors while binding people to Karpova's system.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/closed-city-karpovas-black-key-the-devil-relic-art.png"
+        },
+        {
+          "tarot": "The Tower",
+          "mythcards_card": "Closed City Incident",
+          "card_type": "Event",
+          "reason": "The reactor opening inward is the area's Tower: catastrophic revelation, collapse of false structure, and divine/occult rupture.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/events/closed-city-incident-the-tower-event-art.png"
+        },
+        {
+          "tarot": "The Star",
+          "mythcards_card": "Nadia Belaya",
+          "card_type": "Character",
+          "reason": "Nadia Belaya is the Far North Mystic healer whose innocent mercy becomes proof that the breach does not only take; she saves someone after convergence exposure and gives the Russian arc its living image of hope.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/nadia-belaya-the-star-character-card-art.png",
+          "profile_asset": "assets/characters/nadia-belaya-the-star-profile-page.png",
+          "candidate_concept": {
+            "working_name": "Nadia Belaya",
+            "sub_area": "Far North",
+            "character_type": "Mystic",
+            "narrative_role": "A northern healer who understands old cold-water rites, survival medicine, and the spiritual cost of keeping someone alive after convergence exposure.",
+            "tarot_fit": "The Star as healing after catastrophe, a living sign that the Russian arc contains mercy as well as secrecy and containment.",
+            "catch_phrases": [
+              "I do not ask the wound what it deserves.",
+              "I listen for the light still breathing under the ice.",
+              "Come back. The dark has held you long enough."
+            ]
+          }
+        },
+        {
+          "tarot": "The Moon",
+          "mythcards_card": "Subject 3: Zoya / Zoya Miranova",
+          "card_type": "Character",
+          "reason": "Zoya embodies the Closed City's dream-shadow: desire, illusion, psychic distortion, hidden memory, and the dangerous pull of what Orlov thinks he understands.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/subject-3-zoya-the-moon-character-card-art-corrected.png",
+          "previous_asset": "assets/characters/subject-3-zoya-the-moon-character-card-art.png",
+          "art_note": "Corrected variant keeps the Closed City lab functional and humid rather than literally flooded; Moon symbolism comes from fogged glass, CRT crescents, lunar light, reflections, and hidden observer silhouettes."
+        },
+        {
+          "tarot": "The Sun",
+          "mythcards_card": "Reactor Prayer",
+          "card_type": "Event",
+          "reason": "A terrible inner sun gives power at a cost and exposes the body's vulnerability to light.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/events/closed-city-reactor-prayer-the-sun-event-art.png"
+        },
+        {
+          "tarot": "Ace of Pentacles",
+          "mythcards_card": "Chintamani Fragment",
+          "card_type": "Rare Relic",
+          "reason": "A small physical relic becomes the seed of material and mystical control.",
+          "status": "proposed",
+          "art_audit": "no_art_yet"
+        }
+      ]
+    },
+    "flood_survivors": {
+      "area": "Atlantean / Flood Survivors",
+      "deck_style": "Drowned Atlantean and Egyptian mystery tarot built from black water, ley stones, sealed vaults, memory rites, the Emerald Tablet, the Black Sarcophagus, hidden bloodlines, angelic judgment, and forbidden survivor truth.",
+      "suit_style": {
+        "Wands": "ley-staffs, living causeways, royal command, serpent routes",
+        "Cups": "black water, memory bowls, burial rites, drowned love",
+        "Swords": "tomb oaths, erased names, judgment, guarded truth",
+        "Pentacles": "basalt stones, tablets, sarcophagi, vault instruments, pearls"
+      },
+      "current_mappings": [
+        {
+          "tarot": "The Fool",
+          "mythcards_card": "Stone-Line Laborer / Menka of the Lower Causeway",
+          "card_type": "Character",
+          "reason": "Menka is the ordinary worker who opens forbidden routes toward an unknown future.",
+          "status": "proposed",
+          "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "The Magician",
+          "mythcards_card": "The Emerald Tablet",
+          "card_type": "Rare Relic",
+          "reason": "The Emerald Tablet is the preserved formula by which above and below, Atlantis and Egypt, symbol and matter reflect one another.",
+          "status": "proposed",
+          "art_audit": "no_art_yet"
+        },
+        {
+          "tarot": "The High Priestess",
+          "mythcards_card": "Thalassa-Nekh, Vessel of the Drowned Seraph",
+          "card_type": "Character",
+          "reason": "She is hidden spiritual knowledge embodied, and not all of that knowledge is human.",
+          "status": "proposed",
+          "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "The Empress",
+          "mythcards_card": "Queen Meret-Anu, Keeper of the Buried Tide",
+          "card_type": "Character",
+          "reason": "She is preservation, bloodline, sovereignty, and controlled fertility after catastrophe.",
+          "status": "proposed",
+          "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "The Chariot",
+          "mythcards_card": "Ahesu, the Stone-Current Serpent",
+          "card_type": "Character",
+          "reason": "Ahesu turns will, rider, and route into motion through living stone and black water.",
+          "status": "proposed",
+          "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "Strength",
+          "mythcards_card": "Naia of the Black Sarcophagus",
+          "card_type": "Character",
+          "reason": "Naia's ferocity is bound to restraint, oath, grief, and the courage to face the sealed dead.",
+          "status": "proposed",
+          "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "The Hermit",
+          "mythcards_card": "Sahu-Ren, Last Memory-Keeper",
+          "card_type": "Character",
+          "reason": "He carries a lonely inner light made from memories no society wants to face.",
+          "status": "proposed",
+          "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "Justice",
+          "mythcards_card": "The Drowned Seraph Speaks",
+          "card_type": "Event",
+          "reason": "The entity delivers judgment beyond royal editing or survivor convenience.",
+          "status": "proposed",
+          "art_audit": "no_art_yet"
+        },
+        {
+          "tarot": "Death",
+          "mythcards_card": "The Black Sarcophagus",
+          "card_type": "Relic",
+          "reason": "The sarcophagus is death, transformation, forbidden remains, and the unsealing of what must change.",
+          "status": "proposed",
+          "art_audit": "no_art_yet"
+        },
+        {
+          "tarot": "The Tower",
+          "mythcards_card": "The Name Was Cut From Stone",
+          "card_type": "Event",
+          "reason": "A false monument breaks when the erased name returns.",
+          "status": "proposed",
+          "art_audit": "no_art_yet"
+        },
+        {
+          "tarot": "The Moon",
+          "mythcards_card": "Black Water Remembers",
+          "card_type": "Event",
+          "reason": "The reflecting water reveals hidden fear, buried memory, and unstable truth.",
+          "status": "proposed",
+          "art_audit": "no_art_yet"
+        },
+        {
+          "tarot": "The World",
+          "mythcards_card": "Exiles Walk Beneath Egypt",
+          "card_type": "Event",
+          "reason": "The survivors carry the old world into the next one, completing one cycle and beginning another.",
+          "status": "proposed",
+          "art_audit": "no_art_yet"
+        },
+        {
+          "tarot": "Three of Pentacles",
+          "mythcards_card": "Iset-Nara, Architect of the Hidden Vault",
+          "card_type": "Character",
+          "reason": "She represents sacred craft, design, collaboration, and stonework as hidden knowledge.",
+          "status": "proposed",
+          "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "Ace of Wands",
+          "mythcards_card": "The Causeway Breathes",
+          "card_type": "Event",
+          "reason": "A first stirring of living route-energy and dangerous forward motion.",
+          "status": "proposed",
+          "art_audit": "no_art_yet"
+        }
+      ]
+    }
+  },
+  "next_steps": [
+    "Decide whether a game card can appear in both the playable game set and a physical tarot deck, or whether tarot deck cards are separate premium art variants.",
+    "Create one area deck tracker per sub-area as the art catalog grows.",
+    "Audit existing Closed City and Flood Survivor artwork against the proposed tarot mappings.",
+    "Fill missing Major Arcana first, then Minor Arcana suit by suit.",
+    "When generating new art, include the tarot archetype in the art prompt as a compositional constraint."
+  ]
+}
