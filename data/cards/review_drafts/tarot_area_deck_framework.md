@@ -14,6 +14,24 @@ Each area tarot deck should contain exactly one representative artwork for each 
 
 No area deck should duplicate a tarot archetype unless one version is explicitly marked as an alternate. No tarot archetype should remain unassigned in a finished physical deck.
 
+## Sub-Area Card Set Rule
+
+Each story sub-area should eventually have a complete 26-card MythCards set:
+
+- 10 characters
+- 9 events
+- 7 relics
+
+For the Russian-inspired area, the full 78-card physical tarot deck can be built from three 26-card sub-areas:
+
+- Closed City: 1980s-era science, industry, nuclear power, leaks, cosmonaut programs, remote viewing, and the first convergence incident.
+- Far North: remote northern folklore, survival, healing, animal power, old rites, and aurora/ice mysticism. Nadia Belaya belongs here, not in Closed City.
+- Winter Front / Army Era: military Russia around the World War II period, command structures, battlefield endurance, snipers, engineers, and older national mythic memory.
+
+This means a tarot mapping may temporarily appear in the Russian area tracker before its sub-area deck is fully built. When that happens, the mapping should record the card's real sub-area so later cleanup is easy.
+
+Narrative support characters can exist outside the playable 26-card count. Colonel Viktor Semyonov is currently a narrative/bonus character used to document the Closed City command structure, while Irina Vasilievna Karpova remains the primary Closed City Leader card.
+
 ## Art Direction Rule
 
 Every finished card illustration should answer two questions:

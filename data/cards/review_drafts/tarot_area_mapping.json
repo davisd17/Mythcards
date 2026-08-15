@@ -52,12 +52,129 @@
   "area_decks": {
     "closed_city": {
       "area": "Russian-inspired / Closed City",
+      "tracker_scope_note": "This tracker began with Closed City but is currently acting as the Russian tarot master planning area until separate 26-card trackers are created for Closed City, Far North, and Winter Front / Army Era.",
       "deck_style": "Soviet occult-science tarot built from reactor rooms, signal arrays, dream monitors, military containment, hidden patronage, redacted evidence, and the first physical cards.",
       "suit_style": {
         "Wands": "signal rods, warning lights, authority badges, reactor flame",
         "Cups": "dream monitors, sleep-lab vessels, signal water, intimate confessions",
         "Swords": "containment blades, redacted files, command orders, diagnostic truth",
         "Pentacles": "reactor parts, keys, helmets, notebooks, industrial relics"
+      },
+      "sub_area_deck_model": {
+        "target_cards_per_sub_area": 26,
+        "target_breakdown": {
+          "characters": 10,
+          "events": 9,
+          "relics": 7
+        },
+        "russian_sub_areas": [
+          {
+            "sub_area": "Closed City",
+            "role": "1980s-era science and industrial setting with nuclear power, leaks, cosmonaut programs, remote viewing, dream work, and the first convergence incident.",
+            "current_review_draft_count": {
+              "characters": 7,
+              "events": 8,
+              "relics": 6,
+              "total": 21
+            },
+            "remaining_to_target": {
+              "characters": 3,
+              "events": 1,
+              "relics": 1,
+              "total": 5
+            }
+          },
+          {
+            "sub_area": "Far North",
+            "role": "Remote northern Russia with survival folklore, old rites, aurora/ice mysticism, animal power, healing, the tiger, gymnast, Frost Seer, and Nadia Belaya.",
+            "note": "Nadia Belaya belongs to this sub-area even though she is temporarily tracked in the Russian tarot mapping as The Star."
+          },
+          {
+            "sub_area": "Winter Front / Army Era",
+            "role": "World War II-era and older army setting with command, snipers, engineers, battlefield endurance, sacrifice, and national mythic memory."
+          }
+        ],
+        "tarot_deck_note": "A complete Russian physical tarot deck can be built from three 26-card Russian sub-areas, giving 78 MythCards/tarot representatives without forcing Closed City alone to fill every tarot archetype."
+      },
+      "defined_card_inventory": {
+        "closed_city_review_drafts": {
+          "source_files": [
+            "data/cards/review_drafts/closed_city_characters.json",
+            "data/cards/review_drafts/closed_city_events.json",
+            "data/cards/review_drafts/closed_city_relics.json"
+          ],
+          "characters": [
+            "Dr. Elena Morozova",
+            "Dr. Mikhail Orlov",
+            "Reactor Worker / Nikolai Yegorov",
+            "Zoya Miranova",
+            "VERA-7",
+            "Major Yuri Volkov",
+            "Irina Vasilievna Karpova"
+          ],
+          "events": [
+            "Signal Array Turns",
+            "Dream Monitors Synchronize",
+            "Reactor Prayer",
+            "Closed City Incident",
+            "Seventeen Seconds",
+            "Elena Missing In The Signal",
+            "The First Card Appears",
+            "Semyonov Orders Silence"
+          ],
+          "relics": [
+            "Chintamani Fragment",
+            "Reactor Core Fragment",
+            "Cosmonaut Helmet With A Second Shadow",
+            "Lead-Sealed Notebook",
+            "Redacted Incident Tape",
+            "Karpova's Black Key"
+          ],
+          "defined_but_not_yet_tarot_mapped": [
+            "Signal Array Turns",
+            "Cosmonaut Helmet With A Second Shadow"
+          ]
+        },
+        "original_russian_prototype_cards": {
+          "source_files": [
+            "data/cards/characters.json",
+            "data/cards/relic_events.json"
+          ],
+          "far_north_and_winter_front_characters": [
+            "Gymnast",
+            "White Siberian Tiger",
+            "Sniper",
+            "Army General",
+            "Bogatyr Champion",
+            "Winter Engineer",
+            "Frost Seer"
+          ],
+          "closed_city_relic_events_in_prototype": [
+            "Chintamani Fragment",
+            "Reactor Core Fragment",
+            "Karpova's Black Key",
+            "Signal Array Turns",
+            "Reactor Prayer",
+            "Closed City Incident",
+            "Seventeen Seconds"
+          ],
+          "note": "These earlier prototype cards remain part of the planning inventory. Some have been expanded or replaced by richer review-draft versions; Far North and Winter Front cards should eventually move into their own 26-card sub-area trackers."
+        },
+        "narrative_support_cards": [
+          {
+            "name": "Colonel Viktor Semyonov",
+            "sub_area": "Closed City",
+            "role": "Narrative/bonus command figure who documents the containment authority. He is not the primary Closed City Leader card; that role belongs to Irina Vasilievna Karpova."
+          }
+        ],
+        "cross_sub_area_tarot_placeholders": [
+          {
+            "name": "Nadia Belaya",
+            "sub_area": "Far North",
+            "current_tarot": "The Star",
+            "note": "Keep her mapped in the Russian tarot plan, but do not count her as a Closed City character."
+          }
+        ]
       },
       "current_mappings": [
         {
@@ -99,6 +216,8 @@
           "tarot": "The Emperor",
           "mythcards_card": "Colonel Viktor Semyonov",
           "card_type": "Story / Possible Bonus Character",
+          "sub_area": "Closed City",
+          "set_count_role": "Narrative support / bonus; does not replace the primary Closed City Leader card and should not be counted against the standard 10-character Closed City sub-area target unless promoted later.",
           "reason": "Semyonov is visible order, military containment, and the architecture of command.",
           "status": "approved",
           "art_audit": "matches_tarot",
@@ -210,6 +329,8 @@
           "tarot": "The Star",
           "mythcards_card": "Nadia Belaya",
           "card_type": "Character",
+          "sub_area": "Far North",
+          "set_count_role": "Far North character; temporarily tracked in the Russian tarot plan and should not be counted as a Closed City character.",
           "reason": "Nadia Belaya is the Far North Mystic healer whose innocent mercy becomes proof that the breach does not only take; she saves someone after convergence exposure and gives the Russian arc its living image of hope.",
           "status": "approved",
           "art_audit": "matches_tarot",
@@ -249,12 +370,85 @@
           "approved_asset": "assets/events/closed-city-reactor-prayer-the-sun-event-art.png"
         },
         {
+          "tarot": "Judgement",
+          "mythcards_card": null,
+          "card_type": "Open",
+          "reason": "Keep open for a later Russian sub-area event where hidden witnesses, dead signals, buried experiments, or other realities answer the call. Semyonov Orders Silence is better held as a suppression/control card rather than the final reckoning.",
+          "status": "open",
+          "art_audit": "unmapped"
+        },
+        {
+          "tarot": "The World",
+          "mythcards_card": "The First Card Appears",
+          "card_type": "Event",
+          "reason": "The first physical MythCards artifact turns the convergence from dream and machinery into a complete object that can pass between worlds; it closes the first Closed City loop and opens the larger game reality.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/events/closed-city-the-first-card-appears-the-world-event-art.png"
+        },
+        {
           "tarot": "Ace of Pentacles",
           "mythcards_card": "Chintamani Fragment",
           "card_type": "Rare Relic",
           "reason": "A small physical relic becomes the seed of material and mystical control.",
-          "status": "proposed",
-          "art_audit": "no_art_yet"
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/closed-city-chintamani-fragment-ace-of-pentacles-relic-art-corrected.png",
+          "previous_asset": "assets/relics/closed-city-chintamani-fragment-ace-of-pentacles-relic-art.png",
+          "art_note": "Corrected variant keeps the Chintamani fragment sealed inside the evidence container, with the tag and cord attached outside the latch/seal rather than passing through the glass."
+        },
+        {
+          "tarot": "Two of Pentacles",
+          "mythcards_card": "Reactor Core Fragment",
+          "card_type": "Relic",
+          "reason": "The sealed reactor shard turns material power into a balancing act: useful danger, Leak exposure, and unstable advantage held under pressure.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/closed-city-reactor-core-fragment-two-of-pentacles-relic-art.png"
+        },
+        {
+          "tarot": "Three of Pentacles",
+          "mythcards_card": "Dream Monitors Synchronize",
+          "card_type": "Event",
+          "reason": "Three subjects, three monitors, and the lab team become one working occult-science structure: specialized craft, collaboration, and systems-thinking turning into contamination.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/events/closed-city-dream-monitors-synchronize-three-of-pentacles-event-art.png"
+        },
+        {
+          "tarot": "Four of Pentacles",
+          "mythcards_card": "Lead-Sealed Notebook",
+          "card_type": "Relic",
+          "reason": "The notebook turns discovery into guarded possession: classified knowledge sealed away, owned, feared, and used to extend the reach of those who control it.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/closed-city-lead-sealed-notebook-four-of-pentacles-relic-art.png"
+        },
+        {
+          "tarot": "Five of Pentacles",
+          "mythcards_card": "Semyonov Orders Silence",
+          "card_type": "Event",
+          "reason": "Semyonov's order turns hardship into institutional exclusion: witnesses are locked out of aid, truth, and resources while the state controls who is allowed inside the warmth of certainty.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/events/closed-city-semyonov-orders-silence-five-of-pentacles-event-art.png"
+        },
+        {
+          "tarot": "Six of Pentacles",
+          "mythcards_card": null,
+          "card_type": "Open",
+          "reason": "Keep open for a Closed City card more directly about rationed resources, controlled aid, debt, patronage, or unequal distribution of material support.",
+          "status": "open",
+          "art_audit": "unmapped"
+        },
+        {
+          "tarot": "Page of Swords",
+          "mythcards_card": "Redacted Incident Tape",
+          "card_type": "Relic",
+          "reason": "The tape is young, dangerous evidence: surveillance, investigation, nervous truth, and a message that changes when watched. It fits Page of Swords better than a material exchange card.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/closed-city-redacted-incident-tape-page-of-swords-relic-art.png"
         }
       ]
     },
@@ -385,8 +579,9 @@
   },
   "next_steps": [
     "Decide whether a game card can appear in both the playable game set and a physical tarot deck, or whether tarot deck cards are separate premium art variants.",
-    "Create one area deck tracker per sub-area as the art catalog grows.",
-    "Audit existing Closed City and Flood Survivor artwork against the proposed tarot mappings.",
+    "Create one 26-card tracker per sub-area as the art catalog grows, starting with Russian Closed City, Far North, and Winter Front / Army Era.",
+    "Before inventing a new tarot-specific card, check the defined card inventory for unmapped original prototype cards and review-draft cards.",
+    "Audit existing Closed City, Far North, Winter Front, and Flood Survivor artwork against the proposed tarot mappings.",
     "Fill missing Major Arcana first, then Minor Arcana suit by suit.",
     "When generating new art, include the tarot archetype in the art prompt as a compositional constraint."
   ]
