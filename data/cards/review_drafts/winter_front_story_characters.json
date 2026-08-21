@@ -1,0 +1,88 @@
+{
+  "review_status": "draft_for_review",
+  "faction": "Russian-Inspired",
+  "culture": "Russian-inspired",
+  "sub_area": "Winter Front / Army Era",
+  "target_set_size": {
+    "total": 26,
+    "characters": 10,
+    "events": 9,
+    "relics": 7
+  },
+  "narrative_frame": {
+    "position_in_russian_arc": "The Winter Front / Army Era is the Russian sub-area where war memory, national myth, endurance, command, sacrifice, machinery, frost, and battlefield ghosts enter the convergence. It sits between real historical pressure around World War II and older heroic memory, so the cards should feel like history being haunted by myth rather than a literal documentary front.",
+    "transition_from_far_north": "The Far North reveals that the land already had old wounds before the Closed City incident. As the meteor wound and Closed City signal answer each other, older national memories begin to surface: winter campaigns, abandoned roads, field hospitals, frozen radio posts, oath-bound heroes, and soldiers who are not sure whether they are alive, remembered, or summoned.",
+    "core_relationship_engine": "Winter Front characters should be defined by duty under impossible conditions. Their relationships are forged through command, guilt, loyalty, betrayal, battlefield intimacy, and the repeated question of whether survival is courage, accident, or debt."
+  },
+  "style_and_mechanics": {
+    "visual_style": "Snow-choked trenches, frozen roads, field radios, oil lamps, greatcoats, red stars, icon-like hero poses, old rifles, frost-burned metal, smoke, blood under snow, black pine forests, and mythic fire against impossible cold.",
+    "mechanical_identity": "Endurance, fortification, sacrifice, repair, command, counterattack, battlefield positioning, frozen statuses, protection under hardship, and bonuses that grow through repeated work or surviving damage."
+  },
+  "draft_cards": {
+    "characters": [
+      {
+        "name": "Bogatyr Champion",
+        "card_status": "existing_prototype_card_to_expand",
+        "type": "Hero",
+        "tarot_mapping": "King of Wands",
+        "narrative": "The Bogatyr Champion is the heroic fire inside the Winter Front: part legendary defender, part soldier-shaped memory, and part answer to the question of what Russia imagines when it must survive the cold. He may appear to soldiers as a real fighter, a battlefield saint, or a myth walking through smoke. His power is not gentle; it is oath, morale, ferocity, and the charisma that makes exhausted people stand again.",
+        "relationship_function": "He gives the Winter Front its mythic heroic pole. Other characters may argue over whether he is inspiration, propaganda, ancestral protection, or a dangerous force that turns sacrifice into something too beautiful."
+      },
+      {
+        "name": "Yakov Antonov",
+        "card_name": "Winter Engineer",
+        "card_status": "existing_prototype_card_to_expand",
+        "type": "Specialist",
+        "tarot_mapping": "Eight of Pentacles",
+        "narrative": "Yakov Antonov is a field engineer from the winter war memory layer: part sapper, part mechanic, part impossible survivor. He builds roads over ice, repairs field radios with frozen fingers, reinforces dugouts, lays wire, clears mines, and keeps people alive through work no one sings about. He does not command the front, but the front survives because of people like him.",
+        "relationship_function": "Yakov is haunted by a structure he built that saved some soldiers and trapped others. His Eight of Pentacles meaning is mastery through repetition, but also guilt through repetition: every repair, rivet, and brace is him trying to redo the one thing he cannot fix."
+      },
+      {
+        "name": "General Arkady Volkov",
+        "card_name": "Army General",
+        "card_status": "existing_prototype_card_to_expand",
+        "type": "Leader",
+        "tarot_mapping_candidate": "The Emperor",
+        "narrative": "A front commander whose authority is both necessary and morally costly. Volkov understands that the convergence is using battle memory as terrain, and he treats mythic events like supply lines: something to control before it controls him.",
+        "relationship_function": "He should create tension with the Bogatyr Champion: command versus inspiration, strategy versus oath, survival by order versus survival by belief."
+      },
+      {
+        "name": "Irina Sokolova",
+        "card_name": "Sniper",
+        "card_status": "existing_prototype_card_to_expand",
+        "type": "Specialist",
+        "tarot_mapping_candidate": "Queen of Swords",
+        "narrative": "A winter sniper who has learned to separate breath from feeling. The convergence makes her see the people she has killed as possible futures rather than past targets.",
+        "relationship_function": "She brings intimacy and distance into the same card: someone who protects others by becoming unreachable."
+      },
+      {
+        "name": "Marya Zima",
+        "card_name": "Field Nurse",
+        "card_status": "new_winter_front_character_candidate",
+        "type": "Mystic or Specialist",
+        "tarot_mapping_candidate": "Temperance",
+        "narrative": "A nurse who mixes practical triage with old winter prayers. She does not see healing as innocence; she sees it as bargaining with time, blood, and cold.",
+        "relationship_function": "She can humanize the front and contrast Nadia Belaya: Nadia is star-like rescue after catastrophe, while Marya is exhausted mercy during catastrophe."
+      },
+      {
+        "name": "The Radio Lieutenant",
+        "card_status": "new_winter_front_character_candidate",
+        "type": "Common or Specialist",
+        "tarot_mapping_candidate": "Page of Swords",
+        "narrative": "A young signal officer who hears Closed City transmissions decades before they should exist. He carries messages between command, ghosts, and future science without knowing which voice is alive.",
+        "relationship_function": "He ties Winter Front back to Closed City and makes the Russian arc feel like time is folding, not simply moving forward."
+      }
+    ],
+    "open_character_slots": [
+      "Common infantry / rifle company card",
+      "Mount or vehicle card, possibly armored sled, war horse, or spirit tank",
+      "Occult chaplain, icon-bearer, or oath keeper",
+      "Partisan scout or forest guide"
+    ]
+  },
+  "open_questions": [
+    "Should Bogatyr Champion be a literal named person, a mythic title, or both: a specific soldier wearing an old heroic role?",
+    "Should Winter Front include a Mount slot as vehicle/war horse/spirit engine, or should the Mount type be rare in this sub-area?",
+    "How directly should World War II be named in card text versus treated as a mythic winter-war memory layer?"
+  ]
+}

@@ -73,6 +73,10 @@ Structured mapping draft:
 
 `data/cards/review_drafts/tarot_area_mapping.json`
 
+Far North story/relic draft:
+
+`data/cards/review_drafts/far_north_story_relics.json`
+
 Use that file to track:
 - canonical tarot archetype names
 - which MythCards card currently maps to each archetype

@@ -1,0 +1,494 @@
+{
+  "review_status": "draft_for_review",
+  "faction": "Russian-Inspired",
+  "culture": "Russian-inspired",
+  "sub_area": "Far North",
+  "target_set_size": {
+    "total": 26,
+    "characters": 10,
+    "events": 9,
+    "relics": 7
+  },
+  "narrative_frame": {
+    "position_in_russian_arc": "The Far North is the first Russian sub-area reached after the Closed City convergence escapes the facility. It shifts the story from state science and containment into remote survival, old rites, aurora phenomena, animal power, circus performance, and northern spirit logic.",
+    "transition_from_closed_city": "A survivor from the Closed City Incident is found far beyond any plausible escape route. Nadia Belaya heals him and leaves before he can understand what happened. He follows the Deep North Circus after glimpsing its gymnast, but his desire is also being shaped by a relic he unknowingly carries back to its proper northern context.",
+    "core_relationship_engine": "Pavel's pursuit begins as attraction and longing, but the deeper question is whether he is chasing Mila as an escape from trauma, being pulled by the relic, or slowly learning to see both Mila and the Far North as real rather than symbolic rescue."
+  },
+  "setting_pillars": [
+    {
+      "name": "Deep North Circus",
+      "role": "A small traveling circus that moves between remote settlements, industrial outposts, and winter roads. Its public face is performance, acrobatics, animals, music, and temporary warmth; its hidden inheritance may preserve old movement rites, sky lore, and ways of surviving places where the aurora behaves like a door.",
+      "story_links": [
+        "Mila Vetrova",
+        "Pavel Sokolov",
+        "Buran",
+        "Sky-Hide Mirror"
+      ],
+      "visual_style": "Weathered canvas, lantern light, painted wagons, patched costumes, Soviet-era trucks, ice on rigging, breath in spotlights, red velvet dulled by frost, and aurora glow above the tent."
+    },
+    {
+      "name": "Sparse Northern Village",
+      "role": "A hardy village that the circus passes through, built around endurance rather than comfort. It has only a few inhabited houses, a clinic or healer room, a supply shed, an old radio mast, hunting trails, and a memory of the meteor that older people discuss only indirectly.",
+      "story_links": [
+        "Nadia Belaya",
+        "Pavel Sokolov",
+        "Frost Seer",
+        "meteor memory"
+      ],
+      "visual_style": "Low timber buildings, blue-black snowfields, stove smoke, stacked firewood, frozen tools, prayer cloths or old charms, lamp-lit windows, and huge silence pressing around the settlement."
+    },
+    {
+      "name": "Old Meteor Site",
+      "role": "Many years before the Closed City Incident, a meteor fell in the Far North and changed the land. The locals do not treat it as a single crater story; they remember strange sickness, missing time, animal behavior, luminous stones, aurora distortions, and dreams that began before anyone in Moscow cared.",
+      "story_links": [
+        "Sky-Hide Mirror",
+        "Aal Luuk Mas Root",
+        "Buran",
+        "Nadia Belaya",
+        "convergence entities"
+      ],
+      "visual_style": "Snow-drowned impact hollow, black glassy stones, twisted larch, magnetic compass failure, green-white aurora curtains, and buried heat under impossible frost."
+    }
+  ],
+  "supernatural_pressure": {
+    "old_layer": "The meteor made the Far North a thin place long before the Closed City accident. Some families, healers, performers, and hunters learned practical ways to live near it without naming everything they knew.",
+    "new_layer": "The Closed City convergence reactivates the meteor site. Entities, memories, and symbolic fragments from other realities now move through the old wound. Some arrive as voices, some as animal behavior, some as repeating performances, and some as memories people are certain belong to someone else.",
+    "combined_effect": "The Far North is not merely receiving the convergence; it already had an older opening. The Closed City signal and the meteor wound begin answering each other."
+  },
+  "known_story_characters": [
+    {
+      "name": "Pavel Sokolov",
+      "status": "story_candidate",
+      "role": "Closed City survivor and emotional bridge into the Far North.",
+      "narrative_function": "Carries a relic that belongs in the Far North, follows the Deep North Circus after glimpsing Mila, and gradually discovers that his survival was not random."
+    },
+    {
+      "name": "Nadia Belaya",
+      "status": "approved_character_concept",
+      "type": "Mystic or Specialist",
+      "role": "Mysterious northern healer who saves Pavel and leaves before he can understand her motives.",
+      "tarot_mapping": "The Star"
+    },
+    {
+      "name": "Mila Vetrova",
+      "status": "working_name",
+      "type": "Common",
+      "role": "Deep North Circus gymnast with brown hair in two braids pinned up on her head; her movement may preserve forgotten sky/aurora rites in the form of performance.",
+      "tarot_mapping_candidate": "Page of Wands"
+    },
+    {
+      "name": "Buran",
+      "status": "working_name",
+      "type": "Mount",
+      "card_name": "White Siberian Tiger",
+      "role": "Mystical tiger that traveled from the convergence and recognizes older crossings in the Far North.",
+      "tarot_mapping_candidate": "Knight of Wands"
+    }
+  ],
+  "draft_cards": {
+    "characters": [
+      {
+        "name": "Nadia Belaya",
+        "card_status": "new_far_north_character_card",
+        "type": "Mystic",
+        "tarot_mapping": "The Star",
+        "narrative": "Nadia finds Pavel in the snow after the Closed City convergence has thrown him into the Far North. She heals him through practical medicine, old northern rites, and aurora-linked power, then leaves before he can understand whether she saved him out of mercy, duty, or because the relic he carries called to her.",
+        "relationship_function": "She is Pavel's first image of mercy after the incident, but she refuses to become his explanation. Her leaving forces him to move forward instead of clinging to rescue."
+      },
+      {
+        "name": "Pavel Sokolov",
+        "card_status": "new_far_north_character_card_candidate",
+        "type": "Hero",
+        "tarot_mapping": "The Hanged Man",
+        "narrative": "Pavel survives the Closed City Incident in an impossible location, suspended between the facility he escaped and the northern world that seems to recognize him. He follows the Deep North Circus after seeing Mila, but his desire is tangled with trauma, displacement, and the Sky-Hide Mirror he unknowingly carries.",
+        "relationship_function": "His attraction to Mila begins as longing for beauty and escape, then becomes a test of whether he can see her as a person rather than a symbol of salvation.",
+        "asset_candidates": [
+          "assets/characters/pavel-sokolov-the-hanged-man-character-card-art.png"
+        ],
+        "profile_asset": "assets/characters/pavel-sokolov-the-hanged-man-profile-art.png",
+        "profile_page_asset": "assets/characters/pavel-sokolov-the-hanged-man-profile-page.png"
+      },
+      {
+        "name": "Mila Vetrova",
+        "card_name": "Gymnast",
+        "card_status": "existing_prototype_card_to_expand",
+        "type": "Common",
+        "tarot_mapping": "Page of Wands",
+        "narrative": "Mila is the Deep North Circus gymnast with brown hair in two braids pinned up on her head. Her public art is acrobatics, but her movement may preserve forgotten sky-hide and aurora rites disguised as performance.",
+        "relationship_function": "She draws Pavel forward, but she is not merely an object of pursuit. Her own desire is to decide whether the circus is a cage, a family, or the last living form of an old duty.",
+        "asset_candidates": [
+          "assets/characters/mila-vetrova-gymnast-page-of-wands-character-card-art.png"
+        ],
+        "profile_asset": "assets/characters/mila-vetrova-gymnast-page-of-wands-profile-art.png",
+        "profile_page_asset": "assets/characters/mila-vetrova-gymnast-page-of-wands-profile-page.png"
+      },
+      {
+        "name": "Dmitri Voronov",
+        "card_name": "Knife Thrower",
+        "card_status": "new_far_north_character_card_candidate",
+        "type": "Specialist",
+        "tarot_mapping": "Seven of Swords",
+        "narrative": "Dmitri Voronov is the Deep North Circus knife thrower, a precise and unnervingly calm performer who can pin a sleeve to a board without breaking skin, cut a rope in mid-swing, or send a blade into a moving shadow before anyone else has admitted the shadow is alive. On stage he is charming, almost careless, making danger look like flirtation and luck. Off stage he is watchful and difficult to read. Dmitri understands that the circus survives because it lies beautifully: it hides old rites inside entertainment, disguises warnings as applause, and makes the impossible look rehearsed. His knives are not sacred relics, but several are made from old northern steel touched by meteor dust, and they sometimes hum when the aurora opens too low.",
+        "relationship_function": "Dmitri's deepest bond is with Mila, because her act and his act once depended on absolute trust: she moved where his blades were not, and he threw where fear told him not to. Whether they were lovers, almost lovers, or something harder to name should remain a charged story question. Pavel feels this immediately and mistakes Dmitri for a rival before understanding that Dmitri's real threat is not possession of Mila, but knowledge of what the circus has been hiding. Dmitri may protect Mila by deceiving her, and he may protect Pavel by frightening him away from truths Pavel is not ready to carry.",
+        "story_hooks": [
+          "His blade pattern may secretly map safe paths around the meteor hollow.",
+          "He knows more about Mila's family line than he admits.",
+          "He can wound aurora-born entities only when he throws without looking directly at them.",
+          "He keeps one black-handled knife separate from the others and refuses to use it on stage.",
+          "Aksinya distrusts him because his lies are useful, which makes them harder to condemn."
+        ],
+        "catch_phrases": [
+          "A clean miss is kinder than a careless hit.",
+          "Applause is just fear after it survives.",
+          "Never watch the hand. Watch what the hand wants you to miss."
+        ],
+        "asset_candidates": [
+          "assets/characters/dmitri-voronov-knife-thrower-seven-of-swords-character-card-art-v3.png",
+          "assets/characters/dmitri-voronov-knife-thrower-seven-of-swords-character-card-art-v2.png",
+          "assets/characters/dmitri-voronov-knife-thrower-seven-of-swords-character-card-art.png"
+        ],
+        "profile_asset": "assets/characters/dmitri-voronov-knife-thrower-seven-of-swords-profile-art.png",
+        "profile_page_asset": "assets/characters/dmitri-voronov-knife-thrower-seven-of-swords-profile-page.png",
+        "art_direction_note": "Seven of Swords should show Dmitri as a handsome, guarded Deep North Circus specialist with exactly seven visible knives, using misdirection and precision rather than brute force. Dmitri should have slightly longer dark hair and identifiable deep emerald/teal or icy cobalt costume accents rather than red. V3 improves the target-board knives with darker entry points, contact shadows, and visible wood damage so they read as embedded. The art should connect him to Mila's performance world without making him a simple villain."
+      },
+      {
+        "name": "Buran",
+        "card_name": "White Siberian Tiger",
+        "card_status": "existing_prototype_card_to_expand",
+        "type": "Mount",
+        "tarot_mapping": "Knight of Wands",
+        "narrative": "Buran is the mystical white tiger that traveled from the convergence into the Far North. It recognizes old crossings around the meteor site and reacts to Pavel's relic before the humans understand why.",
+        "relationship_function": "Buran makes the Far North feel alive and judging. It moves between guardian, predator, omen, and mount depending on whether the characters honor or misuse the old paths.",
+        "asset_candidates": [
+          "assets/characters/buran-white-siberian-tiger-knight-of-wands-character-card-art.png"
+        ],
+        "profile_asset": "assets/characters/buran-white-siberian-tiger-knight-of-wands-profile-art.png",
+        "profile_page_asset": "assets/characters/buran-white-siberian-tiger-knight-of-wands-profile-page.png"
+      },
+      {
+        "name": "Aksinya Morozova",
+        "card_name": "Frost Seer",
+        "card_status": "existing_prototype_card_to_expand",
+        "type": "Mystic",
+        "tarot_mapping": "Queen of Cups",
+        "narrative": "Aksinya Morozova is known in the village as the Frost Seer, though no one says the title lightly. She was a young woman when the old meteor fell, and she survived the first winter of strange lights, missing hours, animal madness, and dreams spoken in other people's voices. Since then she has become less a village adviser than a watcher of the whole pattern. She rarely steps directly into events. Instead, she watches through bowls of meltwater, frost patterns on glass, animal tracks, and the silence that comes before a breach. Her power is not coldness without feeling: she sees pain clearly, feels compassion for those caught in the pattern, and chooses small interventions that may save a life without revealing the whole truth. She understands that the Closed City incident did not create the northern wound; it called to something already awake under the snow.",
+        "relationship_function": "Aksinya influences Pavel, Mila, Nadia, and the circus from the edges. She leaves signs, withholds answers, chooses when a door should remain closed, and lets people mistake her absence for passivity. She sees Pavel's longing for Mila as both human desire and relic-driven compulsion, but she will not simply tell him that. She respects Nadia's mercy while quietly testing its cost. With Mila, her pressure is mostly symbolic: repeated frost marks, old circus objects moved from one place to another, and warnings delivered through other people rather than confrontation.",
+        "story_hooks": [
+          "She may have known Pavel was coming before Nadia found him.",
+          "She can read the Sky-Hide Mirror only when it is cold enough for breath to freeze on its surface.",
+          "Her bowl vision can show Nadia saving Pavel in the snow, while frost patterns around the reflection reveal that Aksinya quietly influenced the timing and protection of the rescue.",
+          "She remembers the meteor's first victims and may have loved one of them.",
+          "She refuses to leave the village because she believes someone must keep watch over the old wound.",
+          "Her influence should often be felt before she is seen: frost sigils, changed footprints, a cup left full of black meltwater, or a radio going silent at exactly the right moment."
+        ],
+        "catch_phrases": [
+          "Cold tells the truth slowly.",
+          "Do not call it a vision because you prefer not to call it a warning.",
+          "The dead are quieter than the living, but they lie less."
+        ],
+        "asset_candidates": [
+          "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-character-card-art-v4.png",
+          "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-character-card-art-v3.png",
+          "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-character-card-art-v2.png",
+          "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-character-card-art.png"
+        ],
+        "profile_asset": "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-profile-art.png",
+        "profile_page_asset": "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-profile-page.png"
+      },
+      {
+        "name": "Vera Kargina",
+        "card_name": "Meteor Spear",
+        "card_status": "new_far_north_character_card_candidate",
+        "type": "Leader",
+        "tarot_mapping": "Queen of Wands",
+        "narrative": "In her younger years, Vera Kargina was the village's hard edge: hunter, trapper, meteor-site guard, and the one who walked toward strange tracks when everyone else barred the door. She carried a long spear tipped with black meteor glass, wrapped in red cloth and old protective knots. She was never mystical in the soft sense, but she survived enough impossible nights that even Aksinya stopped calling her merely brave. As the years passed, Vera became the village's practical leader, not through title or wealth, but because people had watched her stand between them and the things that came out of the aurora. Her authority is earned, scarred, and physical.",
+        "relationship_function": "Vera distrusts the circus, distrusts Pavel, and only partly trusts Nadia, but she is not closed-hearted. She judges people by whether they protect others when fear makes protection costly. Her friendship with Buran is one of the great signs of her legitimacy: the white tiger does not obey her like a trained animal, but it allows her near, answers her calls, and in rare moments lets her ride. This makes Vera one of the few humans who can cross the Far North as both defender and accepted part of its older animal power.",
+        "story_hooks": [
+          "She may have been the first living person to wound something that emerged from the old meteor hollow.",
+          "Buran recognizes her because she once spared it, saved it, or stood with it during an earlier aurora event.",
+          "Her rise to village leader creates tension with Aksinya, whose influence is hidden while Vera's authority is visible.",
+          "She sees Mila's beauty and performance as dangerous because people follow beauty into storms."
+        ],
+        "catch_phrases": [
+          "The snow keeps tracks. So do I.",
+          "If it came from the sky, it can bleed into the ground.",
+          "I do not guard the village because I love peace."
+        ],
+        "asset_candidates": [
+          "assets/characters/vera-kargina-meteor-spear-queen-of-wands-character-card-art-v3.png",
+          "assets/characters/vera-kargina-meteor-spear-queen-of-wands-character-card-art-v2.png",
+          "assets/characters/vera-kargina-meteor-spear-queen-of-wands-character-card-art.png"
+        ],
+        "profile_asset": "assets/characters/vera-kargina-meteor-spear-queen-of-wands-profile-art.png",
+        "profile_page_asset": "assets/characters/vera-kargina-meteor-spear-queen-of-wands-profile-page.png"
+      },
+      {
+        "name": "Oleg Baranov",
+        "card_name": "Iron Strongman",
+        "card_status": "new_far_north_character_card_candidate",
+        "type": "Warrior",
+        "tarot_mapping": "Nine of Wands",
+        "narrative": "Oleg Baranov is a massive Far North strongman, built like a weightlifter and hardened by years of hauling timber, lifting engine blocks, setting circus poles, and carrying injured people through whiteouts. He looks slow until he moves. Then people understand why Vera keeps him close when the village boundary has to be held. The cold does not seem to touch him the way it touches others: he can stand bare-handed in weather that numbs everyone else, sweat in freezing air, and keep moving after wounds that should drop a smaller man. Some villagers think it is stubborn blood. Aksinya suspects the old meteor changed something in him before he was born.",
+        "relationship_function": "Oleg is not the leader and does not want to be. He is the person others look for when a door must be held, a wagon must be lifted, or something from the aurora must be stopped long enough for everyone else to run. Vera trusts him as the village's living wall. Mila knows him from the circus route and treats him with teasing affection, because under the frightening body is a man who is careful with children, animals, and broken things. Buran does not challenge him, which is its own kind of respect.",
+        "story_hooks": [
+          "He may have been born during a night of meteor aurora when the village fires would not stay lit.",
+          "His body heat and endurance make him useful near the old meteor hollow, but prolonged exposure may wake something in him.",
+          "He can lift, brace, or break things no one else can, but his real test is knowing when not to use force.",
+          "His speed surprises enemies because they mistake size for slowness."
+        ],
+        "catch_phrases": [
+          "Cold is just weight. Lift it.",
+          "I do not move fast. The world moves slow.",
+          "Stand behind me. Then decide if you are afraid."
+        ],
+        "asset_candidates": [
+          "assets/characters/oleg-baranov-iron-strongman-nine-of-wands-character-card-art-v2.png",
+          "assets/characters/oleg-baranov-iron-strongman-nine-of-wands-character-card-art.png"
+        ],
+        "profile_asset": "assets/characters/oleg-baranov-iron-strongman-nine-of-wands-profile-art.png",
+        "profile_page_asset": "assets/characters/oleg-baranov-iron-strongman-nine-of-wands-profile-page.png",
+        "art_direction_note": "Oleg should have jet-black hair and beard. Nine of Wands art should show exactly nine vertical stakes/poles, with the pole he grips allowed to count as one of the nine."
+      },
+      {
+        "name": "Winter Engineer",
+        "card_status": "existing_prototype_card_to_place",
+        "type": "Specialist",
+        "tarot_mapping": "Eight of Pentacles",
+        "sub_area_note": "Move to Winter Front / Army Era during the next Russian sub-area planning pass.",
+        "narrative": "A builder of barricades, frost defenses, and survival infrastructure. This concept now belongs more naturally to the Winter Front / Army Era, where practical mastery, field repair, and military endurance can become the core of the card.",
+        "relationship_function": "The engineer grounds the myth in work: someone must keep roads open, heat running, and walls standing while spirits and memories move outside."
+      }
+    ],
+    "relics": [
+      {
+        "name": "Sky-Hide Mirror",
+        "card_status": "new_far_north_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Page of Cups",
+        "narrative": "The relic Pavel unknowingly carries from the Closed City into the Far North. Under aurora light, it does not reflect the viewer normally; it shows the sky as a dark reindeer hide pierced by stars and disturbed by moving memories.",
+        "story_function": "It is the message-bearing relic that makes Pavel's journey more than pursuit. It calls Nadia, unsettles Buran, and may belong to Mila's circus bloodline, Nadia's healer line, or an older guardian tradition.",
+        "asset_candidates": [
+          "assets/relics/far-north-sky-hide-mirror-page-of-cups-relic-art-corrected.png",
+          "assets/relics/far-north-sky-hide-mirror-page-of-cups-relic-art.png"
+        ]
+      },
+      {
+        "name": "Aal Luuk Mas Root",
+        "card_status": "new_far_north_rare_relic_card",
+        "kind": "Rare Relic",
+        "set_role": "Approved rare relic for the Far North sub-area",
+        "tarot_mapping": "The World",
+        "narrative": "A preserved living splinter or root of the Sakha/Yakut world tree, connecting upper, middle, and lower worlds. In the Far North it is not simply an object of power; it is a road that can be prayed to, misused, or awakened.",
+        "story_function": "It gives the Far North its rare relic and cosmological axis. Where the Sky-Hide Mirror reveals the boundary, the Aal Luuk Mas Root reveals the path.",
+        "asset_candidates": [
+          "assets/relics/aal-luuk-mas-root-the-world-rare-relic-art.png"
+        ]
+      },
+      {
+        "name": "Meteor-Glass Spear",
+        "card_status": "new_far_north_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Ace of Swords",
+        "narrative": "Vera's spear is not just a weapon. Its black glass tip was chipped from the old meteor site and bound with red cloth, iron wire, and protective knots by people who knew the aurora could open too low. It cuts physical things, but its real power is separation: it can split false light from true light, sever an entity's grip, or mark a boundary that should not be crossed.",
+        "story_function": "Ties Vera, Buran, the meteor, and the village boundary together through a direct martial relic. Where the Sky-Hide Mirror reveals and the Aal Luuk Mas Root opens a road, the Meteor-Glass Spear protects by cutting and dividing.",
+        "asset_candidates": [
+          "assets/relics/far-north-meteor-glass-spear-ace-of-swords-relic-art.png"
+        ],
+        "art_direction_note": "Ace of Swords relic art should show a long practical spear resting in snow beside boundary posts, with a jagged black meteor-glass blade, red cloth wraps, iron wire, leather, protective knots, and frost. The aurora should reflect in the blade like a cut in the sky. It should feel like a working village weapon made sacred through use, not a polished fantasy spear."
+      },
+      {
+        "name": "Buran's Boundary Harness",
+        "card_status": "new_far_north_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Knight of Pentacles",
+        "narrative": "The harness Vera uses on Buran is not a saddle in the ordinary sense. It is a practical binding system made from cured hide, old iron rings, red thread, meteor-dust stitching, and charms tied by several generations of boundary keepers. Buran does not need it to be ridden. The harness is for the human: it lets Vera survive the force of crossing with him without trying to dominate him.",
+        "story_function": "Makes Vera and Buran's bond concrete through trust, endurance, controlled animal power, and protection through preparation. It turns impossible movement into survivable work.",
+        "asset_candidates": [
+          "assets/relics/far-north-burans-boundary-harness-knight-of-pentacles-relic-art.png"
+        ],
+        "art_direction_note": "Knight of Pentacles relic art should show the massive tiger-sized harness hanging from a boundary post or laid over a snow-dusted crate. It should use thick cured hide, iron rings, red cords, protective knots, charms, meteor-glass studs, pale tiger hair, and nearby tiger pawprints with Vera's boot tracks. The object should feel practical, handmade, rugged, and consistent with Buran and Vera's established Far North visuals."
+      },
+      {
+        "name": "Circus Convergence Rings",
+        "card_status": "new_far_north_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Two of Pentacles",
+        "narrative": "The Deep North Circus carries two heavy iron rings that most outsiders mistake for acrobatic equipment. They are old, repaired, and worn by generations of performers, but their etched geometry is older than the circus itself. When hung with the right ropes and lantern distances, they help balance unstable convergence pressure long enough for the troupe's rite to hold.",
+        "story_function": "Gives the circus its own relic and ties performance craft directly to Atlantean convergence engineering. The rings make the Old Rite practical: not just belief, but portable hardware for balancing two forces in motion.",
+        "asset_candidates": [
+          "assets/relics/far-north-circus-convergence-rings-two-of-pentacles-relic-art.png"
+        ],
+        "art_direction_note": "Two of Pentacles relic art should show exactly two large old iron circus rings used as real acrobatic/rigging equipment. They should be heavy, blackened, scratched, wrapped with leather and red thread, and subtly etched with Atlantean geometry. The surrounding ropes and floor chalk may imply convergence balancing, but the two rings must remain the dominant relic objects."
+      },
+      {
+        "name": "Meteor Lantern",
+        "card_status": "new_far_north_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "The Hermit",
+        "narrative": "The original village path lantern was built around a tiny shard of black meteor glass. It does not simply light the dark; it shows whether a home boundary is still intact, whether the aurora is lying, and which trail can be walked safely when the sky begins to speak with a false voice.",
+        "story_function": "Gives the village a protective wisdom relic distinct from Vera's spear. Where the spear cuts and the rings balance, the Meteor Lantern guides: a small true light against cosmic confusion.",
+        "asset_candidates": [
+          "assets/relics/far-north-meteor-lantern-the-hermit-relic-art.png"
+        ],
+        "art_direction_note": "The Hermit relic art should show exactly one old handmade lantern at the village boundary, with blackened iron, scratched glass, red thread, protective knots, and a suspended black meteor-glass shard. It should feel like a practical household object made sacred by keeping people alive, with warm true light edged by aurora color."
+      }
+    ],
+    "events": [
+      {
+        "name": "Nadia Finds The Survivor",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Five of Pentacles",
+        "narrative": "Nadia finds Pavel half-buried in snow where no survivor of the Closed City Incident could have walked. His body is failing, the Sky-Hide Mirror is cold against his chest, and the aurora above him looks less like light than an open wound. She saves him with medicine, breath, prayer, and a mercy she does not explain.",
+        "story_function": "Begins the Far North arc with rescue, exile, vulnerability, and the first proof that the convergence can deliver people as well as destroy them.",
+        "asset_candidates": [
+          "assets/events/far-north-nadia-finds-the-survivor-five-of-pentacles-event-art.png"
+        ],
+        "art_direction_note": "Event art should use the same Nadia and Pavel continuity as their character cards, but be composed differently from Nadia's Star card: wider, colder, focused on Pavel's exposure, distant shelter lights, and the Sky-Hide Mirror."
+      },
+      {
+        "name": "Deep North Circus Arrives",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Six of Cups",
+        "narrative": "The circus reaches the sparse northern village with lanterns, patched canvas, music, frost-dulled costumes, and a temporary promise of warmth. Pavel sees Mila and feels memory, desire, and rescue collapse into one image.",
+        "story_function": "Introduces the circus as both human refuge and disguised ritual inheritance.",
+        "asset_candidates": [
+          "assets/events/far-north-deep-north-circus-arrives-six-of-cups-event-art-v2.png",
+          "assets/events/far-north-deep-north-circus-arrives-six-of-cups-event-art.png"
+        ],
+        "art_direction_note": "Event tableau of the Deep North Circus arriving in the sparse Far North village, with exactly six subtle cup-lanterns in the foreground, children drawn forward, elders uneasy, and circus warmth carrying nostalgia that is not entirely safe. V2 corrects the visual count to exactly six cups and simplifies the scene."
+      },
+      {
+        "name": "The Meteor Wakes Under Snow",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Judgement",
+        "narrative": "The old meteor site answers the new Closed City convergence. Buried heat stirs under impossible frost, villagers remember what they tried to forget, and entities or memories begin rising through the aurora wound.",
+        "story_function": "Reveals that the Far North was already a thin place before the Closed City incident.",
+        "asset_candidates": [
+          "assets/events/far-north-the-meteor-wakes-under-snow-judgement-event-art.png"
+        ],
+        "art_direction_note": "Judgement event art should show the old meteor impact hollow waking under snow, with black meteor glass, cracked ice, tiny witnesses at the rim, and aurora forming a natural call or horn while ghostly memories rise."
+      },
+      {
+        "name": "Aurora Opens Like A Door",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Ace of Wands",
+        "narrative": "The aurora stops behaving like weather and becomes an opening force. Light moves with intention, the tiger answers it, and old movement rites begin to matter again.",
+        "story_function": "The first active ignition of Far North mythic power after Pavel arrives.",
+        "asset_candidates": [
+          "assets/events/far-north-aurora-opens-like-a-door-ace-of-wands-event-art.png"
+        ],
+        "art_direction_note": "Ace of Wands event art should be simpler and more iconic than the meteor Judgement card: one dominant vertical aurora column as wand/door, snow and meteor glass reacting at the base, ritual track lines leading in, and Buran small at the edge answering the light."
+      },
+      {
+        "name": "The Village Refuses The Signal",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Four of Cups",
+        "narrative": "The village recognizes the invitation from the convergence and chooses refusal. Doors close, radios are shut off, charms are turned inward, and Pavel learns that survival sometimes means rejecting wonder.",
+        "story_function": "Shows the village's wisdom and fear while creating tension with Pavel's need to follow the circus.",
+        "asset_candidates": [
+          "assets/events/far-north-the-village-refuses-the-signal-four-of-cups-event-art-v2.png",
+          "assets/events/far-north-the-village-refuses-the-signal-four-of-cups-event-art.png"
+        ],
+        "art_direction_note": "Four of Cups event art should show a village refusing the aurora's offer through behavior: exactly four covered or overturned vessels in the foreground, an old radio being wrapped or silenced, window charms turned inward, villagers looking away, children being guided from windows, and the aurora outside remaining abstract and beautiful rather than forming a literal cup. V2 better conveys collective refusal and removes the literal aurora-cup."
+      },
+      {
+        "name": "Tent Lights In The Whiteout",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Two of Cups",
+        "narrative": "In a whiteout, circus lights appear where no road should remain visible. Pavel and Mila's first meaningful exchange occurs in that glow, intimate and uncertain, while the Sky-Hide Mirror responds between them.",
+        "story_function": "Turns attraction into relationship, but also marks that their connection is being watched or shaped by older forces.",
+        "asset_candidates": [
+          "assets/events/far-north-tent-lights-in-the-whiteout-two-of-cups-event-art-v3.png",
+          "assets/events/far-north-tent-lights-in-the-whiteout-two-of-cups-event-art-v2.png",
+          "assets/events/far-north-tent-lights-in-the-whiteout-two-of-cups-event-art.png"
+        ],
+        "art_direction_note": "Two of Cups event art should show Pavel and Mila sharing exactly two humble metal vodka cups in the cold, with true attraction in their faces and posture. The Sky-Hide Mirror should be visible but secondary, matching the established round dark metal frame with side loops/handles and star-hide/aurora reflection. V3 keeps the corrected looped frame and restores a more natural, physically grounded resting placement between them."
+      },
+      {
+        "name": "The Knives Mark A False Road",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Five of Swords",
+        "narrative": "Dmitri throws seven knives into the target board during a performance, but after the applause the pattern no longer matches what anyone saw on stage. The blades point toward a safe route and a deadly route at the same time. Pavel thinks Dmitri is warning him away from Mila. Mila knows Dmitri is warning him away from something older.",
+        "story_function": "Turns circus performance into coded survival language and introduces the cost of deception inside relationships.",
+        "asset_candidates": [
+          "assets/events/far-north-the-knives-mark-a-false-road-five-of-swords-event-art.png"
+        ],
+        "art_direction_note": "Five of Swords event art should center Dmitri as elegant, dangerous, and controlled inside the Deep North Circus tent. The target board should show exactly five dominant sword-like knives visibly embedded in the wood, implying two possible routes through the snow: one safe and one deadly. Pavel and Mila may appear as secondary figures, preserving the emotional misunderstanding around Dmitri's warning."
+      },
+      {
+        "name": "The Circus Performs The Old Rite",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Three of Pentacles",
+        "narrative": "Mila's acrobatics, Dmitri's knives, Oleg's rigging, drumbeats, lantern placement, and old tent ropes align into a pattern no one in the audience fully understands. The circus believes the rite is northern inheritance, but the geometry beneath it is far older: a surviving Atlantean working for stabilizing convergence points through body, symbol, sound, and intention.",
+        "story_function": "Reveals that the Deep North Circus preserves practical ritual knowledge under the cover of performance, while quietly tying the Far North arc back to Atlantis and an extremely old rite.",
+        "asset_candidates": [
+          "assets/events/far-north-the-circus-performs-the-old-rite-three-of-pentacles-event-art-v2.png",
+          "assets/events/far-north-the-circus-performs-the-old-rite-three-of-pentacles-event-art.png"
+        ],
+        "art_direction_note": "Three of Pentacles event art should show Mila, Dmitri, and Oleg as three centers of craft inside the Deep North Circus tent. The scene should read first as performance and then as occult engineering: ropes, lanterns, chalk, shadows, and rigging forming three interlocked rings around a vertical line or pillar. The symbol should suggest northern three-world cosmology, Atlantean phases, and convergence stabilization without looking like a pasted-on logo. V2 widens the composition, adds the witnessing crowd, and clarifies that Dmitri and Oleg are collaborating in the rite rather than facing off in combat."
+      },
+      {
+        "name": "Buran Breaks The Boundary",
+        "card_status": "new_far_north_event_card",
+        "kind": "Event",
+        "tarot_mapping": "The Chariot",
+        "narrative": "When the aurora presses too low and the village boundary starts to fail, Buran refuses every human command except Vera's. Together they cross the old track at speed, not fleeing the breach but driving straight through it before the entities behind the light can fully enter.",
+        "story_function": "Gives the Far North arc its mounted breakthrough: animal power, earned authority, and controlled motion against cosmic pressure.",
+        "asset_candidates": [
+          "assets/events/far-north-buran-breaks-the-boundary-the-chariot-event-art.png"
+        ],
+        "art_direction_note": "The Chariot event art should show Vera riding Buran through a failing aurora boundary at the village edge. Buran should be a massive mystical white Siberian tiger with practical harness, and Vera should carry her meteor-glass spear with red ribbons in her hair. The Chariot meaning comes from controlled motion, trust, animal force, and willpower driving between opposing aurora currents, not from a literal wheeled chariot."
+      }
+    ]
+  },
+  "relic_concepts": [
+    {
+      "name": "Sky-Hide Mirror",
+      "status": "approved_concept",
+      "kind": "Relic",
+      "real_myth_anchor": "Inspired by Evenki cosmological imagery in which the sky can be understood as a great reindeer-hide dome and stars as openings where upper-world light shows through, combined with Siberian shamanic metal mirror/disc traditions used for protection, spirit-facing, and hidden sight.",
+      "story_role": "The relic Pavel unknowingly carries out of the Closed City. Officials would mistake it for debris or an old shamanic ornament, but under aurora light it reflects the sky as a dark hide stretched over the world.",
+      "narrative_links": [
+        "Pavel Sokolov",
+        "Nadia Belaya",
+        "Mila Vetrova",
+        "Buran",
+        "Deep North Circus",
+        "aurora crossings"
+      ],
+      "meaning": "Pavel thinks he survived by accident, but the relic suggests he was carrying something home. His attraction to Mila remains emotionally real, while the mirror explains why the road, the tiger, and the circus all pull him north.",
+      "tarot_mapping_candidate": "Ace of Cups, Two of Cups, Page of Cups, or The Moon depending on whether the final card emphasizes healing, attraction, message-bearing, or hidden reflection."
+    },
+    {
+      "name": "Aal Luuk Mas Root",
+      "status": "approved_rare_far_north_relic",
+      "kind": "Rare Relic",
+      "real_myth_anchor": "Inspired by the Sakha/Yakut Aal Luuk Mas, the great world tree connecting the upper, middle, and lower worlds.",
+      "story_role": "A preserved root, carved branch, or living splinter of the world tree kept somewhere in the Far North. It is not a simple key; it is a vertical road between worlds, and using it may invite beings from above or below.",
+      "narrative_links": [
+        "Nadia Belaya",
+        "Frost Seer",
+        "Far North healer lines",
+        "upper world",
+        "middle world",
+        "lower world"
+      ],
+      "meaning": "Where the Sky-Hide Mirror reveals the boundary, the Aal Luuk Mas Root reveals the road. It is the Far North's rare mythic relic, with power tied to healing, passage, spirit debt, and the risk of drawing attention from nonhuman forces.",
+      "tarot_mapping_candidate": "The World",
+      "approved_asset": "assets/relics/aal-luuk-mas-root-the-world-rare-relic-art.png"
+    }
+  ],
+  "open_questions": [
+    "Should Pavel become a playable Far North character, or remain the story witness who connects other cards?",
+    "Should Mila Vetrova remain the gymnast's name, or should we choose a different name before card/profile art?",
+    "Does the Sky-Hide Mirror belong to Mila's circus bloodline, Nadia's healer line, or an older tiger-guardian tradition?"
+  ]
+}
