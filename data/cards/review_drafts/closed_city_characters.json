@@ -100,6 +100,38 @@
     ]
   },
   {
+    "id": "r-hospital-orderly",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Hospital Orderly",
+    "type": "Common",
+    "unique": false,
+    "stats": [2, 1, 2, 1],
+    "l1": "AP Ability: Emergency Triage chooses an adjacent allied character. Remove Marked from that ally or give that ally a 1-damage shield until the start of your next turn.",
+    "l2": "Night Ward: Emergency Triage may target an allied character within 2 tiles. If the target is adjacent to a Leak marker, that ally may move 1 tile after receiving triage.",
+    "l3": "The Ward Remembers: +1 HP. Once per match, after using Emergency Triage, this character may place 1 Ward marker on an adjacent empty tile. The first allied character to enter that tile removes Marked or gains a 1-damage shield, then remove the marker.",
+    "role": "Closed City common hospital worker, represented in the story by Galina Reznik. Provides small defensive triage, protects breach survivors, and turns the medical ward into the first place where the accident's human cost becomes impossible to hide.",
+    "narrative": {
+      "public_role": "Night-shift hospital orderly assigned to the sealed industrial ward after the reactor accident.",
+      "story_representative": "Galina Reznik",
+      "private_hunger": "To keep the injured alive long enough for someone powerful to be forced to look at them as people instead of evidence.",
+      "relational_wound": "She knows the patients' families are being lied to because she is the one cleaning blood, iodine, and black frost from the sheets.",
+      "forbidden_attraction": "The voices of the survivors, because some speak with tenderness from places and eras she has never known.",
+      "line_she_will_not_cross": "She will not let the ward become a disposal room for inconvenient witnesses.",
+      "line_she_eventually_crosses": "She hides a living breach survivor under a false death record, preserving a witness who should have vanished from the files.",
+      "catch_phrase": "No one dies quietly on my ward."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Second Closed City Common draft.",
+      "Card title remains archetypal because this is a Common; Galina Reznik is the named story representative.",
+      "Proposed tarot fit: Ace of Cups, currently unused in the Russian tarot tracker at the time of drafting.",
+      "Designed as a defensive support Common rather than another leak-cleanup worker, so it complements Reactor Worker / Nikolai Yegorov."
+    ]
+  },
+  {
     "id": "r-zoya-miranova",
     "review_status": "draft_for_review",
     "faction": "Russian-Inspired",
@@ -226,5 +258,109 @@
       "Level 2 is intended to be a clear power spike by expanding safe access to two allies.",
       "Level 3 is intended to be transformative by giving a once-per-match access-based reposition to two allies."
     ]
+  },
+  {
+    "id": "r-colonel-viktor-semyonov",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Colonel Viktor Semyonov",
+    "type": "Leader",
+    "rarity": "Rare Character",
+    "unique": true,
+    "stats": [5, 1, 2, 2],
+    "l1": "AP Ability: Containment Order chooses an allied character within 3. That ally may move 1 tile. If that ally ends adjacent to a Leak marker or enemy, give it a 1-damage shield until the start of your next turn.",
+    "l2": "Red Chain Of Command: Containment Order range becomes 4. If the chosen ally is a Common or Warrior, it also gains +1 ATK this turn.",
+    "l3": "No One Leaves The City: +1 HP. Once per match, choose up to 2 enemies within 3. Each chosen enemy cannot move more than 1 tile during its next activation.",
+    "role": "Closed City rare Leader and military containment authority. Semyonov adds command lockdown, emergency repositioning, and state force as a distinct rare Leader slot beside Karpova's patronage and access politics.",
+    "narrative": {
+      "public_role": "Colonel assigned to containment command after the Closed City Incident.",
+      "story_summary": "Colonel Viktor Semyonov arrives after the first impossible reports from the reactor ward, not as a scientist and not as a believer, but as the man sent to make reality obey procedure. He seals roads, orders records rewritten, divides survivors into useful witnesses and dangerous evidence, and turns the Closed City into a military diagram. Semyonov is frightening because he is not foolish: he understands faster than most officials that something more than a nuclear accident has occurred. His mistake is believing that understanding gives him the right to own the truth. As the convergence deepens, he becomes the rare Leader expression of state force: powerful, disciplined, distinctive, and morally dangerous.",
+      "private_hunger": "To prove that order can survive contact with the impossible if enough people obey quickly enough.",
+      "relational_wound": "He has spent his life believing mercy is a luxury command cannot afford, and the incident makes that belief both useful and monstrous.",
+      "forbidden_attraction": "The absolute clarity of emergency power: a sealed city where every door, body, report, and memory can be ordered into place.",
+      "line_he_will_not_cross": "He will not admit that the breach has already exceeded military categories.",
+      "line_he_eventually_crosses": "He knowingly condemns living witnesses to preserve the official containment story.",
+      "relationship_dynamics": {
+        "karpova": "He distrusts Karpova's appetite and money, but needs her access. Their alliance is a contest between official command and private power.",
+        "elena": "He sees Elena as both asset and contamination risk. Her refusal to simplify the dream evidence makes her dangerous to his chain of command.",
+        "orlov": "He treats Orlov as the accident's living center: a man to interrogate, preserve, or erase depending on what the state requires.",
+        "yuri": "He pressures Yuri as the perfect containment instrument, then discovers Yuri's attachment to Elena makes him less controllable than armor suggests.",
+        "galina": "Galina's hidden mercy threatens him because one protected survivor can undo an entire official report."
+      },
+      "story_hooks": [
+        "He signs the order that turns the hospital ward into a classified containment zone.",
+        "He may know the enemy cache from the Winter Front had a file connection to this same location decades earlier.",
+        "He keeps a red command map where roads, bodies, and memories are marked with the same symbols.",
+        "His official silence creates the conditions that let the first card become contraband myth instead of public evidence.",
+        "He could later return as a bonus or campaign antagonist if the Russian arc revisits the Closed City files."
+      ],
+      "catch_phrase": "No one leaves the city until the city obeys.",
+      "quote_secondary": "Mercy is not policy.",
+      "quote_tertiary": "Contain the witness, and you contain the event."
+    },
+    "asset_candidates": [
+      "assets/characters/colonel-viktor-semyonov-the-emperor-character-card-art.png"
+    ],
+    "review_notes": [
+      "Promoted from narrative/bonus support to Closed City rare Leader.",
+      "Counts as one of the two rare Closed City character slots.",
+      "Uses The Emperor tarot mapping already approved in the Russian tarot tracker.",
+      "Designed to be extra distinctive through military containment command rather than Karpova's wealth, patronage, and access-control style."
+    ],
+    "art_direction_note": "The Emperor tarot direction should show Semyonov as rare military authority, not a generic officer. He should be older, severe, controlled, and unmistakably command-class: Soviet colonel greatcoat or dress field uniform, distinctive peaked cap, red collar tabs or command stripe, leather gloves, sealed order folder, and a red command map. Place him in a Closed City containment command room with phones, wall maps, warning lamps, classified files, observation glass, and reactor/ward imagery beyond the window. The Emperor cue should come from rigid geometry: four hard verticals such as map pins, sealed doors, command posts, or red warning lights; square composition elements; a throne-like command chair or desk without making him look royal. Mood should be cold authority under reactor-red light: disciplined, frightening, intelligent, and morally compromised. Avoid silly hat shapes, medals overload, cartoon villain posture, battle action, or making him look like the regular Army General from Winter Front."
+  },
+  {
+    "id": "r-anya-lebedeva",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "name": "Anya Lebedeva",
+    "card_name": "Signal Escape Artist",
+    "type": "Specialist",
+    "rarity": "Rare Character",
+    "unique": true,
+    "stats": [3, 1, 3, 3],
+    "l1": "AP Ability: Impossible Exit chooses an allied character within 2. Move that ally 1 tile to an empty tile adjacent to a placed object, door, Leak marker, or board edge.",
+    "l2": "Balanced Frequencies: Impossible Exit range becomes 3. If the moved ally began adjacent to a Leak marker or enemy, give that ally a 1-damage shield until the start of your next turn.",
+    "l3": "Seventeen Doors At Once: +1 MOVE. Once per match, Anya may move herself and one allied character within 3 up to 2 tiles each. Each character must end on an empty tile adjacent to a different object, marker, or board edge.",
+    "role": "Closed City rare Specialist, escape artist, and convergence traveller. Anya explains how Pavel escaped the lockdown: she can mix physical lock systems, analog signal routing, occult timing, and dream geometry into a survivable passage.",
+    "narrative": {
+      "public_role": "Closed City access engineer, signal-routing technician, and state-approved performance consultant for emergency lock drills.",
+      "story_summary": "Anya Lebedeva is the one person in the Closed City who treats locked rooms as arguments instead of barriers. Before the incident she was known for practical work: relay cabinets, door circuits, alarm routing, sealed corridors, and the kind of escape demonstrations officials enjoyed because they believed every trick had been approved in advance. After Elena's dream work begins changing the behavior of the city's systems, Anya realizes the locks are no longer only mechanical. They answer timing, fear, breath, water, mirrors, and the strange balance between one place and another. When Semyonov orders the lockdown, Anya does not simply open a door. She performs an escape across categories, mixing machine logic with occult rhythm until Pavel finds seventeen seconds where the city is neither sealed nor open. Her gift makes her powerful, mysterious, and dangerous: she can travel through convergence seams, but every escape teaches the breach how to travel too.",
+      "private_hunger": "To discover whether there is any locked place, human or cosmic, that cannot be answered by the right balance of pressure, symbol, and timing.",
+      "relational_wound": "She was useful to the state as long as her impossible talents could be dismissed as technique; once the incident proves her tricks touch something real, usefulness becomes captivity.",
+      "forbidden_attraction": "Thresholds: locked doors, mirrors, sealed rooms, bodies under sedation, and moments when two realities pour through each other without spilling.",
+      "line_she_will_not_cross": "She will not let Semyonov turn every survivor into a sealed compartment.",
+      "line_she_eventually_crosses": "She opens a convergence route to save Pavel, knowing that the same route may teach something outside the city how to enter.",
+      "relationship_dynamics": {
+        "pavel": "She is the hidden hand behind Pavel's escape and may be the reason he reaches the Far North with the relic instead of dying inside the lockdown.",
+        "elena": "Elena's dream data gives Anya proof that symbols can operate machinery when the city is near convergence.",
+        "orlov": "Orlov sees her as an impossible systems problem; Anya sees him as a door trapped inside a man.",
+        "semyonov": "Semyonov wants her contained because she makes lockdown imperfect by existing.",
+        "karpova": "Karpova recognizes Anya's usefulness immediately and may try to buy, flatter, or blackmail her into opening doors no officer can command."
+      },
+      "story_hooks": [
+        "She engineers Pavel's seventeen-second escape during the lockdown.",
+        "Her escape routes may explain why some Closed City objects appear later in the Far North and Winter Front stories.",
+        "She can vanish from locked observation rooms without breaking the lock, leaving only condensation and a rearranged signal trace.",
+        "Her talent may come from a family line touched by older Russian occult theatre or by an earlier convergence event.",
+        "Every door she opens creates a moral debt: someone escapes, but something else learns the path."
+      ],
+      "catch_phrase": "Every lock is asking the wrong question.",
+      "quote_secondary": "I do not open doors. I balance exits.",
+      "quote_tertiary": "If the city can seal a person, a person can seal the city back."
+    },
+    "asset_candidates": [],
+    "review_notes": [
+      "Final Closed City character slot.",
+      "Counts as the second Closed City rare character slot.",
+      "Takes the Russian rare Specialist role if the one-extra-per-role rule is maintained.",
+      "Mapped to Temperance because she mixes physical systems, signal routing, occult timing, and convergence travel into controlled passage.",
+      "Fills the narrative gap of how Pavel escaped Semyonov's lockdown and reached the Far North."
+    ],
+    "art_direction_note": "Temperance tarot direction should make Anya mysterious, occult, and specialized rather than just a technician. Show her as a Closed City escape artist and convergence traveller in a sealed corridor/control-room threshold: one hand near an analog relay cabinet or lock mechanism, the other balancing two streams of light, water, signal static, or mercury-like reflection between enamel cups, glass insulators, keyholes, or cable coils. She should wear a practical 1980s Soviet technical uniform with subtle performance/escape-artist details: fitted dark coat, rolled sleeves, lock picks or coded tags, red thread at the wrist, old theatre charm, and a calm unreadable expression. The setting should include sealed doors, warning lamps, dream-monitor cables, condensation on glass, and a glimpse of an impossible corridor opening into aurora-lit snow. Temperance cue should be controlled mixing and balance: two vessels, two signals, two realities, one precise passage. Make her rare by giving the scene elegant occult geometry, impossible reflections, and a sense that she can leave any room. Avoid modern hacker visuals, stage magician costume, fantasy robes, literal angel wings, or making her look like a generic lab technician."
   }
 ]

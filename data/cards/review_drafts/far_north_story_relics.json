@@ -123,6 +123,28 @@
         "profile_page_asset": "assets/characters/mila-vetrova-gymnast-page-of-wands-profile-page.png"
       },
       {
+        "name": "Tomas Yurin",
+        "card_name": "Village Woodcutter",
+        "card_status": "new_far_north_character_card_candidate",
+        "type": "Common",
+        "tarot_mapping": "Seven of Pentacles",
+        "narrative": "Tomas Yurin is the village woodcutter, sled driver, fence-mender, and winter laborer people call when something heavy has to move before dark. His card title stays common because he represents the ordinary working hands of the Far North: the people who cut fuel, stack stores, repair boundary posts, haul the sick to Nadia, and keep the road visible after the wind tries to erase it. Tomas does not claim second sight, but he knows which trees never thaw, which trail markers were placed by his grandfather, and which quiet places near the old meteor hollow should be passed without speaking.",
+        "relationship_function": "Tomas grounds the Far North in labor rather than prophecy. He distrusts Pavel at first because outsiders often arrive with needs and leave with stories, but he respects anyone who works without complaint. He has a practical bond with Vera, who relies on him to keep the village supplied, and a wary respect for Aksinya, whose warnings often become work orders before anyone admits they were warnings. Mila remembers him as one of the villagers who treated the circus like people instead of an omen.",
+        "story_hooks": [
+          "He finds fresh axe marks on trees he has not touched, as if someone from another time is cutting the same winter fuel.",
+          "His sled route passes near the old meteor hollow, making him one of the few ordinary villagers who knows how the land changed before the Closed City signal returned.",
+          "He repairs boundary posts after Buran breaks through, turning supernatural crisis into physical labor.",
+          "He may discover that the old woodpile pattern around the village is also a protective diagram."
+        ],
+        "catch_phrases": [
+          "Winter respects work before courage.",
+          "If the road is gone, we make another.",
+          "A village survives by hands, not omens."
+        ],
+        "asset_candidates": [],
+        "art_direction_note": "Seven of Pentacles should show Tomas as a rugged Far North common laborer beside stacked firewood, sled runners, repaired boundary posts, and a winter axe. Include exactly seven visible cut log ends, carved post marks, or pentacle-like wood rounds as the tarot cue. He should feel ordinary but essential: practical layers, frost in beard or hair, work-worn gloves, warm lamplight from the village, and faint meteor/aurora pressure in the distance."
+      },
+      {
         "name": "Dmitri Voronov",
         "card_name": "Knife Thrower",
         "card_status": "new_far_north_character_card_candidate",
@@ -164,6 +186,30 @@
         ],
         "profile_asset": "assets/characters/buran-white-siberian-tiger-knight-of-wands-profile-art.png",
         "profile_page_asset": "assets/characters/buran-white-siberian-tiger-knight-of-wands-profile-page.png"
+      },
+      {
+        "name": "Belorog",
+        "card_name": "Aurora Reindeer",
+        "card_status": "new_far_north_rare_character_card_candidate",
+        "type": "Mount",
+        "rarity": "Rare Character",
+        "tarot_mapping": "Knight of Cups",
+        "narrative": "Belorog is the Aurora Reindeer, a rare Far North mount seen only when the boundary between mercy and death has become thin. Villagers describe it as a white-antlered presence moving without sound across snow, frozen rivers, and aurora reflections. It is not tame and not circus-trained. It appears near old trail markers, water burial places, and the paths Aksinya watches through frost. Where Buran breaks a boundary by force, Belorog carries a rider through one by surrender, compassion, and exact timing. Nadia may have followed its tracks before finding Pavel, and Pavel may later realize his survival began before any human hand touched him.",
+        "relationship_function": "Belorog deepens the Far North's spiritual side without adding another Mystic. It connects Nadia's healing, Aksinya's watching, Pavel's impossible survival, and the older meteor wound. It does not belong to one person, but it may accept a rider who carries grief without trying to dominate the crossing. Vera respects it differently than Buran: Buran answers strength and trust, while Belorog answers need, humility, and emotional truth.",
+        "story_hooks": [
+          "Nadia may have seen Belorog's tracks leading to Pavel before she found him in the snow.",
+          "Its antlers can reflect scenes from the upper, middle, and lower paths around the Aal Luuk Mas Root.",
+          "It appears near water burial places and may guide souls, survivors, or convergence travellers who are not fully in one world.",
+          "Pavel may mistake it for a fever vision until Tomas finds impossible hoofprints crossing water that never thawed.",
+          "Belorog can carry someone through an aurora crossing, but only if they stop trying to force the destination."
+        ],
+        "catch_phrases": [
+          "The soft road is not the safe road.",
+          "Do not pull the reins. Listen.",
+          "Some crossings open only for the wounded."
+        ],
+        "asset_candidates": [],
+        "art_direction_note": "Knight of Cups should show Belorog as a rare Far North mount of spiritual passage rather than speed or battle. Depict a large pale reindeer with luminous white antlers, frost-dark eyes, practical northern harness with red thread and old charms, and reflected aurora light moving through the antlers like water. The scene should include frozen river or black meltwater, low village lights, old trail markers, and the hint of the Aal Luuk Mas Root or meteor hollow in the distance. The Cups cue should be emotional and subtle: moonlit water, a small humble cup or bowl tied to the harness, or aurora reflected like liquid beneath its hooves. Avoid making it a cartoon fantasy deer, a Christmas image, a combat mount, or a duplicate of Buran's pounce/charge energy."
       },
       {
         "name": "Aksinya Morozova",

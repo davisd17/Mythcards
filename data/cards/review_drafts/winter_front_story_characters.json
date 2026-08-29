@@ -10,23 +10,68 @@
     "relics": 7
   },
   "narrative_frame": {
-    "position_in_russian_arc": "The Winter Front / Army Era is the Russian sub-area where war memory, national myth, endurance, command, sacrifice, machinery, frost, and battlefield ghosts enter the convergence. It sits between real historical pressure around World War II and older heroic memory, so the cards should feel like history being haunted by myth rather than a literal documentary front.",
-    "transition_from_far_north": "The Far North reveals that the land already had old wounds before the Closed City incident. As the meteor wound and Closed City signal answer each other, older national memories begin to surface: winter campaigns, abandoned roads, field hospitals, frozen radio posts, oath-bound heroes, and soldiers who are not sure whether they are alive, remembered, or summoned.",
-    "core_relationship_engine": "Winter Front characters should be defined by duty under impossible conditions. Their relationships are forged through command, guilt, loyalty, betrayal, battlefield intimacy, and the repeated question of whether survival is courage, accident, or debt."
+    "position_in_russian_arc": "The Winter Front / Army Era is the Russian sub-area where war memory, national myth, endurance, command, sacrifice, machinery, frost, and battlefield ghosts enter the convergence. It is set in a World War II-era winter campaign on the same land where the Closed City will eventually be built. The cards should feel like history being haunted by myth rather than a literal documentary front.",
+    "war_setting": "The front has stalled in a killing winter. Roads vanish, engines freeze, field radios lie, and exhausted soldiers are sent forward again and again because command believes time can be bought with bodies. The enemy has abandoned or hidden an occult cache in the retreating line, and Russian soldiers find objects that should not belong to any normal military archive.",
+    "closed_city_connection": "The battlefield sits above the future footprint of the Closed City. Decades before the reactor, signal array, and dream program are built, the land is already recording command pressure, sacrifice, ritual geometry, and fear. Some soldiers see flashes of sealed corridors, warning lights, cosmonaut helmets, Elena's dream monitors, and the Closed City Incident before any of those things exist.",
+    "far_north_connection": "At the same historical moment, farther north, the meteor strikes the Far North. The soldiers do not witness it directly, but radios, compasses, dreams, and occult relics react as if another wound has opened in the same sky.",
+    "circus_connection": "An old cabin near the frozen line contains a ritual setting with iron rings, rope marks, chalk geometry, and signs that someone used circus-like hardware as occult equipment long before the Deep North Circus carried the rite. The rings eventually leave the war zone and make their way north into the circus tradition.",
+    "core_relationship_engine": "Winter Front characters are defined by duty under impossible conditions. Their relationships are forged through command, guilt, loyalty, battlefield intimacy, fear of wasteful sacrifice, and the repeated question of whether survival is courage, accident, or debt."
   },
   "style_and_mechanics": {
-    "visual_style": "Snow-choked trenches, frozen roads, field radios, oil lamps, greatcoats, red stars, icon-like hero poses, old rifles, frost-burned metal, smoke, blood under snow, black pine forests, and mythic fire against impossible cold.",
+    "visual_style": "Snow-choked trenches, frozen roads, field radios, oil lamps, greatcoats, red stars, field maps, old rifles, frost-burned metal, smoke, blood under snow, black pine forests, enemy occult crates, ritual cabins, and mythic fire against impossible cold.",
+    "sub_area_twist": "Winter Front should feel more military and materially grounded than Far North, but with occult pressure under the ice: battlefield orders become rituals, maps become summoning diagrams, and repeated sacrifice leaves marks the future Closed City will unknowingly build on.",
     "mechanical_identity": "Endurance, fortification, sacrifice, repair, command, counterattack, battlefield positioning, frozen statuses, protection under hardship, and bonuses that grow through repeated work or surviving damage."
   },
   "draft_cards": {
     "characters": [
       {
+        "name": "Rifle Company Soldier",
+        "story_name": "Private Stepan Kuznetsov",
+        "card_status": "new_winter_front_character_card",
+        "type": "Common",
+        "tarot_mapping": "Ten of Wands",
+        "narrative": "The common soldier card represents the endless rifle companies sent into the white distance. In the story, Private Stepan Kuznetsov becomes the face of that mass: young, underfed, half-frozen, carrying extra ammunition for men already dead, and still moving because stopping means freezing. He is not chosen by prophecy. He is chosen by circumstance, which may be crueler.",
+        "relationship_function": "Stepan lets the Winter Front stay human. Through him, Volkov's orders have a cost, Marya's mercy has a face, and the Closed City visions feel like a burden placed on ordinary people before scientists ever name it.",
+        "asset_candidates": [
+          "assets/characters/stepan-kuznetsov-rifle-company-soldier-ten-of-wands-character-card-art.png"
+        ],
+        "profile_asset": "assets/characters/stepan-kuznetsov-rifle-company-soldier-ten-of-wands-profile-art.png",
+        "profile_page_asset": "assets/characters/stepan-kuznetsov-rifle-company-soldier-ten-of-wands-profile-page.png",
+        "art_direction_note": "First Winter Front style anchor: grounded WWII-era winter realism, snow-choked battlefield, exhausted common soldier, ten visible burdens or wand-like carried objects, distant soldiers in the storm, and only a subtle future Closed City red warning glow in the ice or whiteout."
+      },
+      {
+        "name": "Civilian Evacuee",
+        "story_name": "Anya Petrovna",
+        "card_status": "new_winter_front_character_card",
+        "type": "Common",
+        "tarot_mapping": "Six of Pentacles",
+        "narrative": "The civilian evacuee card represents the ordinary people forced through the Winter Front's frozen roads: women, old men, factory hands, teachers, villagers, and families carrying whatever could be tied in cloth. In the story, Anya Petrovna pulls a small sled with blankets, bread, a cracked icon, letters, and bundled clothing. She is not in the army, but the war moves through her life anyway.",
+        "relationship_function": "Anya gives Winter Front a civilian common life beside Stepan's soldier common life. She gives Marya someone to protect, Stepan a reason to keep walking beyond orders, and Volkov's strategy a visible civilian cost. She also notices disturbed snow, iron rings, and rope marks near the old ritual cabin before most soldiers understand their meaning.",
+        "asset_candidates": [
+          "assets/characters/anya-petrovna-civilian-evacuee-six-of-pentacles-character-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/anya-petrovna-civilian-evacuee-six-of-pentacles-profile-page.png",
+        "profile_quotes": [
+          "Bread is lighter after you share it.",
+          "Soldiers miss what mothers and widows see.",
+          "The road remembers every hand that reached back."
+        ],
+        "art_direction_note": "Six of Pentacles character art shows Anya as a civilian evacuee on a frozen wartime road, sharing scarce supplies beside a hand sled loaded with blankets, bread, a cracked icon, letters, and bundled clothing. Exactly six ration tokens, bread pieces, coins, or supply tags should remain clear and countable. Her visual signature is a patched shawl, frost-white scarf, civilian sled, protective posture, and a subtle half-buried iron ring hinting at the later Deep North Circus connection."
+      },
+      {
         "name": "Bogatyr Champion",
+        "story_name": "Ilya Voronin",
         "card_status": "existing_prototype_card_to_expand",
         "type": "Hero",
         "tarot_mapping": "King of Wands",
-        "narrative": "The Bogatyr Champion is the heroic fire inside the Winter Front: part legendary defender, part soldier-shaped memory, and part answer to the question of what Russia imagines when it must survive the cold. He may appear to soldiers as a real fighter, a battlefield saint, or a myth walking through smoke. His power is not gentle; it is oath, morale, ferocity, and the charisma that makes exhausted people stand again.",
-        "relationship_function": "He gives the Winter Front its mythic heroic pole. Other characters may argue over whether he is inspiration, propaganda, ancestral protection, or a dangerous force that turns sacrifice into something too beautiful."
+        "narrative": "Ilya Voronin is a real soldier whose battlefield presence becomes confused with older bogatyr myth. Some men swear he walks through smoke with a rifle and an axe. Others say he died three times before morning. When the enemy sends forward an occult war captain as its own champion, Ilya accepts the one-on-one challenge in the still snow and wins a brutal close duel. The convergence makes him both man and national image: oath, morale, ferocity, and the dangerous beauty of sacrifice under impossible cold.",
+        "relationship_function": "He gives the Winter Front its mythic heroic pole. Volkov wants to use him as morale. Stepan wants to believe in him. Marya fears that making sacrifice beautiful is another way to keep sending men forward.",
+        "asset_candidates": [
+          "assets/characters/ilya-voronin-bogatyr-champion-king-of-wands-character-card-art-v2.png",
+          "assets/characters/ilya-voronin-bogatyr-champion-king-of-wands-character-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/ilya-voronin-bogatyr-champion-king-of-wands-profile-page.png",
+        "art_direction_note": "King of Wands character art should show Ilya after defeating an enemy occult champion in one-on-one combat: grounded WWII-era winter soldier, wounded but standing, a single wand-like axe haft or staff weapon, ember warmth against dead winter, watching soldiers in the distance, and a subtle future Closed City red glow. V2 adds his board-readable visual signature: weathered deep red battle sash/arm wrap, local front patch/emblem, and red strips on the axe haft."
       },
       {
         "name": "Yakov Antonov",
@@ -34,55 +79,346 @@
         "card_status": "existing_prototype_card_to_expand",
         "type": "Specialist",
         "tarot_mapping": "Eight of Pentacles",
-        "narrative": "Yakov Antonov is a field engineer from the winter war memory layer: part sapper, part mechanic, part impossible survivor. He builds roads over ice, repairs field radios with frozen fingers, reinforces dugouts, lays wire, clears mines, and keeps people alive through work no one sings about. He does not command the front, but the front survives because of people like him.",
-        "relationship_function": "Yakov is haunted by a structure he built that saved some soldiers and trapped others. His Eight of Pentacles meaning is mastery through repetition, but also guilt through repetition: every repair, rivet, and brace is him trying to redo the one thing he cannot fix."
+        "narrative": "Yakov Antonov is a field engineer: part sapper, part mechanic, part impossible survivor. He builds roads over ice, repairs field radios with frozen fingers, reinforces dugouts, lays wire, clears mines, and keeps people alive through work no one sings about. His control begins to fray around Irina Sokolova, whose solitude and precision become an obsession he tells himself is respect, usefulness, and wartime necessity.",
+        "relationship_function": "Yakov is haunted by a structure he built that saved some soldiers and trapped others. His mastery is repetition, but so is his guilt: every repair, rivet, and brace is him trying to redo the one thing he cannot fix. His lust for Irina exposes the part of him that understands machines, geometry, and survival better than distance, consent, or emotional restraint. Irina notices without encouraging him, keeping their dynamic tense, unresolved, and dangerous.",
+        "asset_candidates": [
+          "assets/characters/yakov-antonov-winter-engineer-eight-of-pentacles-character-card-art.png",
+          "assets/characters/yakov-antonov-winter-engineer-eight-of-pentacles-character-card-art-v2.png"
+        ],
+        "profile_page_asset": "assets/characters/yakov-antonov-winter-engineer-eight-of-pentacles-profile-page.png",
+        "profile_quotes": [
+          "A thing holds until the cold learns its name.",
+          "I can fix wire, steel, bone. Not what I want.",
+          "Every brace remembers the weight it failed to carry."
+        ],
+        "art_direction_note": "Eight of Pentacles character art shows Yakov in a frozen WWII field workshop dugout, hunched over radio and metal repair work. Exactly eight practical crafted repair pieces are arranged around him as the tarot count. His board-readable signature should now be stronger and repeatable: cracked brass goggles, fur-lined engineer cap with a gear badge, asymmetric leather tool bib, ochre/yellow measuring sash, red wire coil, and a strapped metal forearm brace for precision repair. Irina appears only as a distant frost-blurred sniper silhouette or subtle rifle-scope reference, preserving desire and distance rather than romance."
       },
       {
         "name": "General Arkady Volkov",
         "card_name": "Army General",
         "card_status": "existing_prototype_card_to_expand",
         "type": "Leader",
-        "tarot_mapping_candidate": "The Emperor",
-        "narrative": "A front commander whose authority is both necessary and morally costly. Volkov understands that the convergence is using battle memory as terrain, and he treats mythic events like supply lines: something to control before it controls him.",
-        "relationship_function": "He should create tension with the Bogatyr Champion: command versus inspiration, strategy versus oath, survival by order versus survival by belief."
+        "tarot_mapping": "The Emperor",
+        "narrative": "Volkov is a front commander whose authority is necessary, brutal, and morally costly. He is known for throwing soldiers and lives at problems, then calling the result discipline because the land remains in his hands. When occult signs and future visions begin to appear, he treats them like supply lines: something to control before it controls him.",
+        "relationship_function": "He creates tension with the Bogatyr Champion: command versus inspiration, strategy versus oath, survival by order versus survival by belief. Stepan carries the human cost of his orders, Yakov becomes useful because he can make occult machinery look practical, and Irina is valued by Volkov too coldly as a weapon. He also foreshadows the Closed City's later command structure.",
+        "asset_candidates": [
+          "assets/characters/arkady-volkov-army-general-the-emperor-character-card-art.png",
+          "assets/characters/arkady-volkov-army-general-the-emperor-character-card-art-v2.png",
+          "assets/characters/arkady-volkov-army-general-the-emperor-character-card-art-v3.png"
+        ],
+        "profile_page_asset": "assets/characters/arkady-volkov-army-general-the-emperor-profile-page.png",
+        "profile_quotes": [
+          "Land is kept by the men willing to become it.",
+          "The map does not mourn.",
+          "A retreat is a rumor I do not permit."
+        ],
+        "art_direction_note": "The Emperor character art shows Volkov in a frozen WWII command dugout or ruined estate room, standing over a massive battle map while infantry silhouettes advance into snow outside. His board-readable signature is a red command sash/scarf, silver pointer cane, chained map case, rigid officer posture, and a low severe winter marshal cap with black fur brow, stiff peaked brim, red leather band, and metal red-star command plate. Avoid the tall papakha/parade-hat direction; it reads too silly for him. The tarot structure is four visible iron map weights pinning the territory down, a throne-like command chair, square military geometry, and faint Closed City/reactor-red grid marks bleeding through the map."
       },
       {
         "name": "Irina Sokolova",
         "card_name": "Sniper",
         "card_status": "existing_prototype_card_to_expand",
-        "type": "Specialist",
-        "tarot_mapping_candidate": "Queen of Swords",
-        "narrative": "A winter sniper who has learned to separate breath from feeling. The convergence makes her see the people she has killed as possible futures rather than past targets.",
-        "relationship_function": "She brings intimacy and distance into the same card: someone who protects others by becoming unreachable."
+        "type": "Warrior",
+        "tarot_mapping": "Queen of Swords",
+        "narrative": "Irina Sokolova is a winter sniper who has learned to separate breath from feeling. The convergence makes her see targets not only as enemies, but as possible futures. Through her scope, she sometimes glimpses sealed doors, reactor light, and people in uniforms that have not been invented yet.",
+        "relationship_function": "She brings intimacy and distance into the same card: someone who protects others by becoming unreachable. Stepan admires her, Marya worries for her, Volkov values her too easily, and Yakov's fixation unsettles her because it contains both lust and loneliness.",
+        "asset_candidates": [
+          "assets/characters/irina-sokolova-sniper-queen-of-swords-character-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/irina-sokolova-sniper-queen-of-swords-profile-page.png",
+        "profile_quotes": [
+          "Warmth makes people careless.",
+          "I do not miss. I decide.",
+          "Through the scope, even the future holds its breath."
+        ],
+        "art_direction_note": "Queen of Swords character art centers Irina's piercing icy eyes above a blue-gray scarf in a frost-white sniper cloak. Her long scoped rifle forms the sword line across the card, with a small field knife as the blade echo. The scope reflection hints at Closed City reactor-red light, sealed doors, or future uniforms. She should feel beautiful but unreachable: controlled, still, intimate, and dangerous without pin-up styling."
+      },
+      {
+        "name": "Darya Koval",
+        "card_name": "Bayonet Saint",
+        "card_status": "new_winter_front_rare_character_card_candidate",
+        "type": "Warrior",
+        "rarity": "Rare Character",
+        "tarot_mapping": "Knight of Swords",
+        "narrative": "Darya Koval is called the Bayonet Saint after the night she appeared when a trapped soldier had no hope left and was praying into the snow because there was nothing else his body could do. Out of the whiteout came rare white birds, impossible against the smoke and winter dark, and behind them Darya crossed the trench line with a rifle, a fixed bayonet, and a strip of prayer cloth frozen around her wrist. She is not officially holy, and she does not claim to be protected. The name begins as soldier superstition after men see her save the hopeless, survive impossible charges, cut through an enemy trench ritual, and return with frost on her eyelashes and bloodless clarity in her eyes. Where Irina Sokolova kills from distance, Darya closes the distance until fear has nowhere left to hide. She becomes Winter Front's rare Warrior because her courage is not only skill: it is a violent devotional focus that the enemy occult cache seems to recognize.",
+        "relationship_function": "Darya gives Winter Front a second Warrior without repeating Irina. Irina is distance, precision, and emotional separation; Darya is contact, momentum, and dangerous faith. Stepan sees her as proof a person can become more than expendable. Marya fears what the men need Darya to symbolize. Volkov wants to turn her into propaganda. Ilya respects her because she faces enemy champions without asking myth to make the work beautiful.",
+        "story_hooks": [
+          "She wins a close-quarters clash against an enemy occult trench champion after Ilya's duel has already become legend.",
+          "Her first true story appearance should come when a character has lost all hope and is praying in the snow, only for Darya to arrive out of nowhere with rare white birds moving around her.",
+          "The Saint's Field Icon may react to her presence, though she refuses to kneel to it in public.",
+          "Her bayonet may have been wrapped with cloth taken from the ritual cabin, tying her to the iron rings and old rite.",
+          "She sees brief flashes of Closed City containment corridors whenever she charges through smoke.",
+          "Her rare power may be that she can break a ritual line by crossing it without hesitation."
+        ],
+        "catch_phrases": [
+          "Pray after. Move now.",
+          "A line is only sacred until someone crosses it.",
+          "I do not fear the trench. The trench fears witness."
+        ],
+        "asset_candidates": [],
+        "art_direction_note": "Knight of Swords should show Darya as a rare Winter Front close-combat Warrior, female, fierce, beautiful in a severe battlefield way, and instantly recognizable. Grounded WWII-era winter realism: heavy greatcoat or white snow cloak, rifle with fixed bayonet, prayer cloth or red-white icon strip wrapped around her wrist or bayonet, piercing eyes, frost on lashes, smoke and snow cutting diagonally across the scene. Include rare white birds around or above her as her omen, and show a desperate praying soldier or hopeless character low in the scene so her arrival reads as sudden rescue. Tarot cue should be motion and decisive charge: sword/bayonet thrust line, wind, torn orders, and perhaps one enemy ritual line breaking beneath her boots. Make her rare with occult battlefield intensity, not fantasy armor: faint icon light, disturbed snow sigils, enemy trench candles blown out, and future Closed City red warning reflections in the ice. Avoid modern tactical gear, ornate saint halo, angel wings, pin-up pose, or duplicating Irina's sniper distance."
+      },
+      {
+        "name": "Alexei Vranov",
+        "card_name": "Cache-Born Hero",
+        "card_status": "new_winter_front_rare_character_card",
+        "type": "Hero",
+        "rarity": "Rare Character",
+        "tarot_mapping": "Six of Wands",
+        "narrative": "Alexei Vranov becomes the Winter Front's rare Hero when the enemy occult cache opens and chooses a living courier. He emerges from the snow carrying a black-and-gold Atlantean standard that should not belong to the war, while soldiers around him mistake the moment for victory. In truth, the standard turns triumph into obligation: through it Alexei glimpses pre-flood Atlantis, the future Closed City, and the Far North meteor as connected events. Marya Zima witnesses the transformation and understands that whatever survived in the cache has not been defeated, only carried forward.",
+        "relationship_function": "Alexei gives Winter Front its direct heroic bridge into the larger convergence myth. Ilya embodies national myth and battlefield morale; Alexei embodies victory contaminated by older powers. Marya sees the cost first, Volkov wants to use him, and the Closed City will eventually build on the signal he helped wake.",
+        "asset_candidates": [
+          "assets/characters/alexei-vranov-cache-born-hero-six-of-wands-character-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/alexei-vranov-cache-born-hero-six-of-wands-profile-page.png",
+        "profile_quotes": [
+          "They called it victory before they saw what followed.",
+          "The cache did not open for us. It opened through me.",
+          "I carried the standard because no one else could survive touching it."
+        ],
+        "art_direction_note": "Six of Wands rare Hero art shows Alexei in grounded Soviet winter gear partly overtaken by black-gold Atlantean cloth and bronze crystal fittings. He carries an upright Atlantean standard while exactly five additional background wands/poles make the Six of Wands structure. Marya Zima appears behind him as the female field-nurse witness, with dark hair under a gray scarf, red-cross armband, satchel, and facial scratch. Reflections in the standard tie pre-flood Atlantis, future Closed City corridors, and the Far North meteor into one victory that is also a burden."
       },
       {
         "name": "Marya Zima",
         "card_name": "Field Nurse",
-        "card_status": "new_winter_front_character_candidate",
-        "type": "Mystic or Specialist",
-        "tarot_mapping_candidate": "Temperance",
-        "narrative": "A nurse who mixes practical triage with old winter prayers. She does not see healing as innocence; she sees it as bargaining with time, blood, and cold.",
-        "relationship_function": "She can humanize the front and contrast Nadia Belaya: Nadia is star-like rescue after catastrophe, while Marya is exhausted mercy during catastrophe."
+        "card_status": "new_winter_front_character_card",
+        "type": "Mystic",
+        "tarot_mapping": "Temperance",
+        "narrative": "Marya Zima is a field nurse in her early-to-mid 30s during the Winter Front, roughly 40 years before Far North and Closed City. She mixes practical triage with old winter prayers, seeing healing not as innocence but as bargaining with time, blood, and cold. After the enemy cache is opened, she begins to sort wounds into those made by metal and those made by something reaching backward from futures she cannot name.",
+        "relationship_function": "She humanizes the front and contrasts Nadia Belaya across the bloodline. Marya is exhausted mercy during catastrophe; decades later Nadia becomes the star-like rescue after catastrophe. Marya's field book, charms, and healing rites may become the inheritance that reaches Nadia's Far North story.",
+        "asset_candidates": [
+          "assets/characters/marya-zima-field-nurse-temperance-character-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/marya-zima-field-nurse-temperance-profile-page.png",
+        "profile_quotes": [
+          "Mercy is not softness. It is work.",
+          "Some wounds arrive before the weapon.",
+          "If the future calls through blood, I still answer the living first."
+        ],
+        "art_direction_note": "Temperance character art shows Marya in her early-to-mid 30s, not grandmotherly, inside a frozen Winter Front aid station. Her visual signature is a gray wool headscarf, frost-covered red-cross armband, charm/prayer beads, cracked field book, brass medical tools, one gloved hand and one bare frost-burned hand. She pours liquid between a military medical cup and an old ritual bowl; the crossing streams glow with subtle future echoes of Nadia, Far North snow, sealed corridors, or reactor-red light."
       },
       {
-        "name": "The Radio Lieutenant",
-        "card_status": "new_winter_front_character_candidate",
-        "type": "Common or Specialist",
-        "tarot_mapping_candidate": "Page of Swords",
-        "narrative": "A young signal officer who hears Closed City transmissions decades before they should exist. He carries messages between command, ghosts, and future science without knowing which voice is alive.",
-        "relationship_function": "He ties Winter Front back to Closed City and makes the Russian arc feel like time is folding, not simply moving forward."
+        "name": "Radio Lieutenant",
+        "story_name": "Lieutenant Pavel Orlov",
+        "card_status": "new_winter_front_character_card",
+        "type": "Specialist",
+        "tarot_mapping": "Page of Swords",
+        "narrative": "Lieutenant Pavel Orlov is a young signal officer who hears Closed City transmissions decades before they should exist. He carries messages between command, ghosts, and future science without knowing which voice is alive.",
+        "relationship_function": "He ties Winter Front back to Closed City and makes the Russian arc feel like time is folding, not simply moving forward. His surname can become an uneasy echo around Dr. Mikhail Orlov later."
+      },
+      {
+        "name": "Icon Bearer",
+        "story_name": "Anastasia Lebedeva",
+        "card_status": "new_winter_front_character_card",
+        "type": "Mystic",
+        "tarot_mapping": "The Hierophant",
+        "narrative": "Anastasia Lebedeva carries a damaged field icon wrapped in cloth inside her coat. She is not officially important, but soldiers ask her to stand near doors, graves, and radio posts. The icon reacts to the enemy cache and to the old cabin rings as if recognizing a rival ritual language.",
+        "relationship_function": "She gives the Winter Front a spiritual counterweight to military command and enemy occultism. Her faith is practical: she cares less about purity than whether men return from the snow."
+      },
+      {
+        "name": "Partisan Scout",
+        "story_name": "Nikolai Baranov",
+        "card_status": "new_winter_front_character_card",
+        "type": "Specialist",
+        "tarot_mapping": "Seven of Pentacles",
+        "narrative": "Nikolai Baranov knows the forest roads, hunting paths, abandoned farmsteads, and frozen drainage lines under the future Closed City site. He finds the old cabin first, sees the ritual geometry, and realizes the enemy cache is not the beginning of the occult activity but an intrusion into something older.",
+        "relationship_function": "He bridges land knowledge and war knowledge. He distrusts Volkov, respects Yakov, and treats Stepan like someone who might live if he learns when not to obey."
+      },
+      {
+        "name": "Frozen T-34",
+        "card_status": "new_winter_front_character_card",
+        "type": "Mount",
+        "tarot_mapping": "Six of Swords",
+        "narrative": "A tank half-buried in snow becomes more than a vehicle after the occult cache opens. Sometimes it starts without fuel. Sometimes its tracks appear ahead of the column before it moves. Soldiers ride its armor as if riding a moving bunker through the impossible cold.",
+        "relationship_function": "The Mount slot becomes war machinery rather than animal power. Because Buran already carries The Chariot in Far North, the Frozen T-34 takes Six of Swords in Winter Front: haunted passage, evacuation, and soldiers being carried across lethal ground by a machine that may no longer belong only to the living.",
+        "asset_candidates": [
+          "assets/characters/frozen-t34-six-of-swords-mount-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/frozen-t34-six-of-swords-mount-profile-page.png",
+        "profile_quotes": [
+          "Climb on. The snow is listening.",
+          "I carry the living because the dead remember the road.",
+          "Forward is not victory. Sometimes it is mercy."
+        ],
+        "art_direction_note": "Six of Swords mount art shows the Frozen T-34 as haunted transport rather than Chariot momentum: a frost-caked T-34 carrying soldiers and wounded across a lethal snowfield toward uncertain safety. Exactly six sword-like bayonets or markers are planted along its path. The red star is nearly obscured, ghostly crew traces appear inside the sealed tank, impossible tracks lead ahead and behind it, and reactor-red light glows faintly under the ice beneath the treads."
       }
     ],
-    "open_character_slots": [
-      "Common infantry / rifle company card",
-      "Mount or vehicle card, possibly armored sled, war horse, or spirit tank",
-      "Occult chaplain, icon-bearer, or oath keeper",
-      "Partisan scout or forest guide"
+    "events": [
+      {
+        "name": "Winter Stalls The War",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Four of Swords",
+        "narrative": "The campaign freezes into stillness, but the two armies do not understand the winter the same way. One side has seen this kind of cold before and survives by yielding to it: sheltering the wounded, conserving breath, restoring life, and treating rest as discipline. The other side tries to power through the whiteout with haste, engines, orders, and force, only to have the cold break their momentum. Soldiers begin to believe the winter may have been sent by a higher power, and the pause reinforces religious fear, occult interpretation, and the sense that the land itself has chosen a side.",
+        "story_function": "Establishes the sub-area's historical-mythic condition: the front does not move because the land itself refuses motion. It also defines the Four of Swords meaning for this event: restoration and contemplation are not weakness, but the only sane answer to a sacred, lethal winter.",
+        "asset_candidates": [
+          "assets/events/winter-front-winter-stalls-the-war-four-of-swords-event-art-v2.png",
+          "assets/events/winter-front-winter-stalls-the-war-four-of-swords-event-art.png"
+        ],
+        "revision_candidate": {
+          "approved_asset": "assets/events/winter-front-winter-stalls-the-war-four-of-swords-event-art-v2.png",
+          "art_direction_note": "Preferred revision keeps the original iconic four frozen upright bayonet-rifles, but changes the background into a split-response winter scene: on one side, a trench aid shelter with a resting wounded soldier, warm lamp, red-cross supplies, and a contemplative soldier; on the other, distant figures, stalled armor, or tracks show the opposing force trying to rush through the cold and failing. The card should imply soldiers interpreting the impossible winter as divine intervention or occult weather, not merely bad conditions."
+        }
+      },
+      {
+        "name": "Volkov Sends Another Wave",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Five of Wands",
+        "narrative": "General Volkov orders another attack across open snow. The soldiers know what the order means. Stepan goes forward with men whose names he learned only that morning.",
+        "story_function": "Makes command, sacrifice, and common soldiers central to the Winter Front narrative.",
+        "asset_candidates": [
+          "assets/events/winter-front-volkov-sends-another-wave-five-of-wands-event-art.png"
+        ],
+        "mapping_note": "Remapped from Five of Pentacles to Five of Wands to avoid duplicating Far North's Nadia Finds The Survivor and to emphasize conflict, force, and bodies thrown into contested ground."
+      },
+      {
+        "name": "Enemy Cache Unearthed",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "The Devil",
+        "narrative": "A hidden enemy cache is found beneath a collapsed position: crates of icons, black notebooks, astrological wheels, bone counters, metal discs, and maps that do not match geography. Every object offers an explanation. None can be trusted.",
+        "story_function": "Introduces enemy occult material and the temptation to use it.",
+        "asset_candidates": [
+          "assets/events/winter-front-enemy-cache-unearthed-the-devil-event-art.png"
+        ],
+        "mapping_note": "Remapped from Seven of Cups to The Devil so the event does not duplicate the Enemy Occult Cache relic and so the card centers temptation, bondage, and dangerous power."
+      },
+      {
+        "name": "The Cabin Rite",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "The Moon",
+        "narrative": "Nikolai finds an old cabin beyond the line. Inside are rope marks, candle soot, chalk geometry, and iron rings arranged in a ritual setting. The cabin feels older than the war and aware of being found.",
+        "story_function": "Connects Winter Front to the future circus rite and reveals that the land already held ritual structure before the armies arrived.",
+        "asset_candidates": [
+          "assets/events/winter-front-the-cabin-rite-the-moon-event-art-v2.png",
+          "assets/events/winter-front-the-cabin-rite-the-moon-event-art.png"
+        ],
+        "art_revision_note": "V2 keeps the Moon composition but corrects the cabin rings so they resemble the Far North Circus Convergence Rings: thick blackened iron, red leather/thread wraps, etched geometry, and rough rope lashings."
+      },
+      {
+        "name": "Radio Snow Speaks",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Wheel of Fortune",
+        "narrative": "The frozen field radio receives a transmission that should not exist: security orders, reactor warnings, dream monitor tones, and Elena Morozova's presence reaching backward from Closed City. In the static, Elena appears like a High Priestess behind a veil of signal and ice, looking directly at the listener as if the person holding the card has also been included in the loop.",
+        "story_function": "Creates the direct Closed City time-fold and reframes the event as fate turning rather than a simple fast message. Radio dials, compass needles, waveform rings, and Elena's fourth-wall gaze reveal that time is no longer linear.",
+        "asset_candidates": [
+          "assets/events/winter-front-radio-snow-speaks-wheel-of-fortune-event-art.png",
+          "assets/events/winter-front-radio-snow-speaks-eight-of-wands-event-art.png"
+        ],
+        "mapping_note": "Remapped from Page of Swords to Eight of Wands during an earlier pass, then remapped to Wheel of Fortune after Eight of Wands art repeatedly fought the exact count. Wheel of Fortune was checked open before assignment and better fits time folding, fate, radio dials, compass rotation, and Elena's signal-born presence."
+      },
+      {
+        "name": "The Rings Leave The Cabin",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Eight of Cups",
+        "narrative": "The iron rings are removed from the cabin before the position falls. No one agrees who carried them. Later stories place them in a wagon, a medical sled, a circus caravan, and a locked archive at the same time.",
+        "story_function": "Moves the rings from Winter Front toward the Deep North Circus.",
+        "asset_candidates": [
+          "assets/events/winter-front-the-rings-leave-the-cabin-eight-of-cups-event-art.png"
+        ],
+        "mapping_note": "Remapped from Six of Swords to Eight of Cups so it does not duplicate the Frozen T-34 and instead focuses on abandoning the ritual site and carrying the mystery away."
+      },
+      {
+        "name": "Closed City Vision",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Nine of Swords",
+        "narrative": "During shelling, several soldiers see the future facility rupture: light under sealed doors, cosmonaut equipment, impossible alarms, and a card appearing where no card should be.",
+        "story_function": "Shows that the Closed City Incident is not only future fallout; it is also reaching backward through trauma, ritual, and place.",
+        "asset_candidates": [
+          "assets/events/winter-front-closed-city-vision-nine-of-swords-event-art.png"
+        ],
+        "mapping_note": "Remapped from The Tower to Nine of Swords to avoid stepping on the Closed City Incident's Tower identity and to emphasize nightmare, shell shock, and future terror."
+      },
+      {
+        "name": "Meteor Contact To The North",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "The Star",
+        "narrative": "Far to the north, the meteor strikes. On the Winter Front, compasses turn, radios scream, Marya's water freezes in a spiral, and the sky briefly shows a wound no one can march toward.",
+        "story_function": "Synchronizes Winter Front with the Far North origin event.",
+        "asset_candidates": [
+          "assets/events/winter-front-meteor-contact-to-the-north-the-star-event-art.png"
+        ]
+      },
+      {
+        "name": "Bogatyr Walks Through Smoke",
+        "card_status": "new_winter_front_event_card",
+        "kind": "Event",
+        "tarot_mapping": "Strength",
+        "narrative": "After an attack should have failed, Ilya emerges through smoke carrying Stepan and an enemy relic case. No one can agree whether they saw a man, a hero, or an old story wearing a soldier's coat.",
+        "story_function": "Pays off the mythic hero theme while refusing to make sacrifice simple.",
+        "asset_candidates": [
+          "assets/events/winter-front-bogatyr-walks-through-smoke-strength-event-art.png"
+        ]
+      }
+    ],
+    "relics": [
+      {
+        "name": "Enemy Occult Cache",
+        "card_status": "new_winter_front_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Seven of Cups",
+        "narrative": "A field cache of occult objects seized from the enemy line: notebooks, ritual discs, false icons, bone counters, star charts, and maps to places no soldier can name.",
+        "story_function": "Introduces temptation, misinformation, and the sense that several powers were already hunting convergence points."
+      },
+      {
+        "name": "Cabin Iron Rings",
+        "card_status": "new_winter_front_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Two of Pentacles",
+        "narrative": "The iron rings found in the old cabin are not yet circus relics, but they are the same objects or direct ancestors of them. Their use is balance: keeping two unstable forces from tearing the room apart.",
+        "story_function": "Connects Winter Front to the Deep North Circus and the Atlantean Old Rite."
+      },
+      {
+        "name": "Frozen Field Radio",
+        "card_status": "new_winter_front_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Page of Swords",
+        "narrative": "A cracked field radio that receives future transmissions when ice forms across its casing.",
+        "story_function": "Links the signal officer, Closed City, and war-time static."
+      },
+      {
+        "name": "Volkov's Red Map",
+        "card_status": "new_winter_front_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "The Emperor",
+        "narrative": "The general's map is covered in pins, grease pencil arrows, and casualty marks. After the cache opens, the lines sometimes rearrange into ritual diagrams.",
+        "story_function": "Makes command itself unstable: strategy becomes occult geometry."
+      },
+      {
+        "name": "Black Snow Cartridge",
+        "card_status": "new_winter_front_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Ace of Wands",
+        "narrative": "A rifle cartridge packed with blackened snow and meteor-reactive powder. It should not fire, but under aurora conditions it burns like a signal flare.",
+        "story_function": "Gives the front a small ignition relic tied to the northern meteor."
+      },
+      {
+        "name": "Marya's Thaw Cup",
+        "card_status": "new_winter_front_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Temperance",
+        "narrative": "A battered metal cup Marya uses for water, spirits, blood-washing, and prayers. It warms only when a life can still be bargained for.",
+        "story_function": "Gives the healer line a practical relic of mercy under catastrophe."
+      },
+      {
+        "name": "Saint's Field Icon",
+        "card_status": "new_winter_front_rare_relic_candidate",
+        "kind": "Rare Relic",
+        "tarot_mapping": "The Hierophant",
+        "narrative": "Anastasia's damaged icon is painted over older wood. Under cold and candlelight, a second image appears beneath the saint: not enemy occultism, but an older protective pattern that recognizes the cabin rings.",
+        "story_function": "Could become the Winter Front rare relic if we want the rare card rooted in Russian spiritual tradition rather than enemy occult technology."
+      }
     ]
   },
   "open_questions": [
-    "Should Bogatyr Champion be a literal named person, a mythic title, or both: a specific soldier wearing an old heroic role?",
-    "Should Winter Front include a Mount slot as vehicle/war horse/spirit engine, or should the Mount type be rare in this sub-area?",
-    "How directly should World War II be named in card text versus treated as a mythic winter-war memory layer?"
+    "Should the Winter Front rare relic be Saint's Field Icon, or should the rare relic be something from the enemy cache?",
+    "Should the Cabin Iron Rings be documented as the same physical rings that reach the Deep North Circus, or as predecessor rings that teach the circus pattern?",
+    "Should the Radio Lieutenant's Orlov surname become a direct family connection to Dr. Mikhail Orlov, or remain an eerie echo?"
   ]
 }

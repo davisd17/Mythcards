@@ -72,16 +72,16 @@
             "sub_area": "Closed City",
             "role": "1980s-era science and industrial setting with nuclear power, leaks, cosmonaut programs, remote viewing, dream work, and the first convergence incident.",
             "current_review_draft_count": {
-              "characters": 7,
+              "characters": 10,
               "events": 8,
               "relics": 6,
-              "total": 21
+              "total": 24
             },
             "remaining_to_target": {
-              "characters": 3,
+              "characters": 0,
               "events": 1,
               "relics": 1,
-              "total": 5
+              "total": 2
             }
           },
           {
@@ -107,10 +107,13 @@
             "Dr. Elena Morozova",
             "Dr. Mikhail Orlov",
             "Reactor Worker / Nikolai Yegorov",
+            "Hospital Orderly / Galina Reznik",
             "Zoya Miranova",
             "VERA-7",
             "Major Yuri Volkov",
-            "Irina Vasilievna Karpova"
+            "Irina Vasilievna Karpova",
+            "Colonel Viktor Semyonov",
+            "Anya Lebedeva / Signal Escape Artist"
           ],
           "events": [
             "Signal Array Turns",
@@ -165,7 +168,9 @@
             "Nadia Belaya",
             "Pavel Sokolov",
             "Mila Vetrova / Gymnast",
+            "Village Woodcutter / Tomas Yurin",
             "Buran / White Siberian Tiger",
+            "Belorog / Aurora Reindeer",
             "Aksinya Morozova / Frost Seer",
             "Vera Kargina / Meteor Spear",
             "Oleg Baranov / Iron Strongman",
@@ -193,20 +198,46 @@
             "data/cards/review_drafts/winter_front_story_characters.json"
           ],
           "characters": [
+            "Rifle Company Soldier / Private Stepan Kuznetsov",
+            "Civilian Evacuee / Anya Petrovna",
             "Bogatyr Champion",
             "Yakov Antonov / Winter Engineer",
             "General Arkady Volkov / Army General",
             "Irina Sokolova / Sniper",
+            "Darya Koval / Bayonet Saint",
             "Marya Zima / Field Nurse",
-            "The Radio Lieutenant"
+            "Radio Lieutenant / Lieutenant Pavel Orlov",
+            "Icon Bearer / Anastasia Lebedeva",
+            "Partisan Scout / Nikolai Baranov",
+            "Frozen T-34"
           ],
-          "status_note": "These are Winter Front / Army Era story/card drafts, moving the war-memory and heroic-military cards out of Far North."
+          "events": [
+            "Winter Stalls The War",
+            "Volkov Sends Another Wave",
+            "Enemy Cache Unearthed",
+            "The Cabin Rite",
+            "Radio Snow Speaks",
+            "The Rings Leave The Cabin",
+            "Closed City Vision",
+            "Meteor Contact To The North",
+            "Bogatyr Walks Through Smoke"
+          ],
+          "relics": [
+            "Enemy Occult Cache",
+            "Cabin Iron Rings",
+            "Frozen Field Radio",
+            "Volkov's Red Map",
+            "Black Snow Cartridge",
+            "Marya's Thaw Cup",
+            "Saint's Field Icon"
+          ],
+          "status_note": "These are Winter Front / Army Era story/card drafts. The sub-area is now framed as a World War II-era winter front on the future Closed City site, with enemy occult cache material, an old ritual cabin, iron rings that eventually connect to the Deep North Circus, future Closed City visions, and a simultaneous Far North meteor event."
         },
         "narrative_support_cards": [
           {
             "name": "Colonel Viktor Semyonov",
             "sub_area": "Closed City",
-            "role": "Narrative/bonus command figure who documents the containment authority. He is not the primary Closed City Leader card; that role belongs to Irina Vasilievna Karpova."
+            "role": "Promoted to Closed City rare Leader. He does not replace the primary regular Leader card, Irina Vasilievna Karpova; he occupies one of the two rare Closed City character slots."
           }
         ],
         "cross_sub_area_tarot_placeholders": [
@@ -215,6 +246,92 @@
             "sub_area": "Far North",
             "current_tarot": "The Star",
             "note": "Keep her mapped in the Russian tarot plan, but do not count her as a Closed City character."
+          }
+        ],
+        "winter_front_event_art_audit": [
+          {
+            "tarot": "Four of Swords",
+            "mythcards_card": "Winter Stalls The War",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-winter-stalls-the-war-four-of-swords-event-art-v2.png",
+            "previous_asset": "assets/events/winter-front-winter-stalls-the-war-four-of-swords-event-art.png",
+            "art_note": "Revised art keeps four frozen upright bayonet-rifles while adding the Four of Swords restoration/contemplation layer: one side survives by resting and restoring life, while the other tries to rush through a winter soldiers interpret as divine or occult intervention."
+          },
+          {
+            "tarot": "Five of Wands",
+            "mythcards_card": "Volkov Sends Another Wave",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-volkov-sends-another-wave-five-of-wands-event-art.png",
+            "art_note": "Remapped from Five of Pentacles to avoid duplicating Far North's survivor event; art shows Volkov ordering exhausted soldiers into contested snow."
+          },
+          {
+            "tarot": "The Devil",
+            "mythcards_card": "Enemy Cache Unearthed",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-enemy-cache-unearthed-the-devil-event-art.png",
+            "art_note": "Remapped from Seven of Cups to avoid duplicating the cache relic; art centers chained temptation and a smoke-shadow Devil shape."
+          },
+          {
+            "tarot": "The Moon",
+            "mythcards_card": "The Cabin Rite",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-the-cabin-rite-the-moon-event-art-v2.png",
+            "previous_asset": "assets/events/winter-front-the-cabin-rite-the-moon-event-art.png",
+            "art_note": "Moonlit cabin discovery with misleading tracks, wrong moon reflection, chalk geometry, and the iron rings in their wartime ritual origin. V2 corrects the rings to match the Far North Circus Convergence Rings relic lineage."
+          },
+          {
+            "tarot": "Wheel of Fortune",
+            "mythcards_card": "Radio Snow Speaks",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-radio-snow-speaks-wheel-of-fortune-event-art.png",
+            "previous_asset": "assets/events/winter-front-radio-snow-speaks-eight-of-wands-event-art.png",
+            "art_note": "Remapped from Eight of Wands to Wheel of Fortune after the signal art fought the exact count. The approved art shows Elena Morozova, preserving her High Priestess identity, appearing through a fate-like radio wheel and looking directly at the player/card-holder."
+          },
+          {
+            "tarot": "Eight of Cups",
+            "mythcards_card": "The Rings Leave The Cabin",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-the-rings-leave-the-cabin-eight-of-cups-event-art.png",
+            "art_note": "Remapped from Six of Swords to avoid duplicating the Frozen T-34; art shows the rings leaving on a sled while exactly eight cups remain behind."
+          },
+          {
+            "tarot": "Nine of Swords",
+            "mythcards_card": "Closed City Vision",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-closed-city-vision-nine-of-swords-event-art.png",
+            "art_note": "Remapped from The Tower to protect the Closed City Incident's Tower identity; art frames the future facility as nightmare and shell shock."
+          },
+          {
+            "tarot": "The Star",
+            "mythcards_card": "Meteor Contact To The North",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-meteor-contact-to-the-north-the-star-event-art.png",
+            "art_note": "Marya Zima watches water freeze into a star as the Far North meteor wounds the sky and radios react across distance."
+          },
+          {
+            "tarot": "Strength",
+            "mythcards_card": "Bogatyr Walks Through Smoke",
+            "card_type": "Event",
+            "sub_area": "Winter Front / Army Era",
+            "art_audit": "has_art",
+            "approved_asset": "assets/events/winter-front-bogatyr-walks-through-smoke-strength-event-art.png",
+            "art_note": "Ilya carries wounded Stepan and an enemy relic case through smoke, with a subtle lion-like smoke shape for controlled strength."
           }
         ]
       },
@@ -257,9 +374,9 @@
         {
           "tarot": "The Emperor",
           "mythcards_card": "Colonel Viktor Semyonov",
-          "card_type": "Story / Possible Bonus Character",
+          "card_type": "Character / Rare Leader",
           "sub_area": "Closed City",
-          "set_count_role": "Narrative support / bonus; does not replace the primary Closed City Leader card and should not be counted against the standard 10-character Closed City sub-area target unless promoted later.",
+          "set_count_role": "Closed City rare character slot: extra Leader for the Russian set. Does not replace Irina Vasilievna Karpova as the regular Closed City Leader.",
           "reason": "Semyonov is visible order, military containment, and the architecture of command.",
           "status": "approved",
           "art_audit": "matches_tarot",
@@ -347,11 +464,14 @@
         },
         {
           "tarot": "Temperance",
-          "mythcards_card": null,
-          "card_type": "Open",
-          "reason": "Keep open for now. Dream Monitors Synchronize and Lead-Sealed Notebook have partial fit, but Temperance should represent controlled integration or careful alchemical mixing once that card exists.",
-          "status": "open",
-          "art_audit": "unmapped"
+          "mythcards_card": "Anya Lebedeva / Signal Escape Artist",
+          "card_type": "Character / Rare Specialist",
+          "sub_area": "Closed City",
+          "set_count_role": "Closed City rare character slot: extra Specialist for the Russian set.",
+          "reason": "Anya turns Temperance into controlled passage between systems: physical locks, analog signal routing, occult timing, dream geometry, and convergence travel mixed precisely enough to create Pavel's seventeen-second escape.",
+          "status": "proposed",
+          "art_audit": "no_art_yet",
+          "art_note": "Temperance was checked open in the Russian tarot tracker before assignment. Art should show Anya balancing two signals, two vessels, or two realities inside a sealed Closed City threshold, with analog relay cabinets, warning lamps, condensation, and an impossible corridor opening toward aurora-lit snow."
         },
         {
           "tarot": "The Devil",
@@ -436,6 +556,16 @@
           "approved_asset": "assets/events/closed-city-the-first-card-appears-the-world-event-art.png"
         },
         {
+          "tarot": "Ace of Cups",
+          "mythcards_card": "Hospital Orderly / Galina Reznik",
+          "card_type": "Character / Common",
+          "sub_area": "Closed City",
+          "reason": "Galina turns the Closed City hospital ward into the first vessel of mercy after the reactor breach. Ace of Cups fits triage, compassion, the first protected survivor, and an emotional opening inside a system trying to seal every wound away as evidence.",
+          "status": "proposed",
+          "art_audit": "no_art_yet",
+          "art_note": "Ace of Cups was checked as unused in the Russian tarot tracker before assignment. The card should feel medical, intimate, and occult-scientific: a night ward, enamel basin, IV glass, iodine, black frost, and the suggestion that mercy itself is becoming a breach."
+        },
+        {
           "tarot": "Ace of Pentacles",
           "mythcards_card": "Chintamani Fragment",
           "card_type": "Rare Relic",
@@ -481,6 +611,19 @@
           "status": "approved",
           "art_audit": "matches_tarot",
           "approved_asset": "assets/events/closed-city-semyonov-orders-silence-five-of-pentacles-event-art.png"
+        },
+        {
+          "tarot": "Six of Wands",
+          "mythcards_card": "Alexei Vranov / Cache-Born Hero",
+          "card_type": "Character / Rare Hero",
+          "sub_area": "Winter Front / Army Era",
+          "set_count_role": "Winter Front rare character slot: extra Hero for the Russian set.",
+          "reason": "Alexei turns victory into a burden. The enemy occult cache chooses him as the courier of a black-and-gold Atlantean standard, so soldiers see triumph while the story reveals convergence obligation.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/alexei-vranov-cache-born-hero-six-of-wands-character-card-art.png",
+          "profile_page_asset": "assets/characters/alexei-vranov-cache-born-hero-six-of-wands-profile-page.png",
+          "art_note": "Rare Hero art shows Alexei with the black-and-gold Atlantean standard, Marya Zima as the female witness, and cross-area reflections tying pre-flood Atlantis, future Closed City, and the Far North meteor."
         },
         {
           "tarot": "Six of Pentacles",
@@ -542,6 +685,16 @@
           "profile_page_asset": "assets/characters/mila-vetrova-gymnast-page-of-wands-profile-page.png"
         },
         {
+          "tarot": "Seven of Pentacles",
+          "mythcards_card": "Village Woodcutter / Tomas Yurin",
+          "card_type": "Character / Common",
+          "sub_area": "Far North",
+          "reason": "Tomas represents the ordinary labor that lets the Far North survive: cutting fuel, repairing boundary posts, hauling supplies, keeping sled routes visible, and doing patient work long before anyone knows whether the work will be enough.",
+          "status": "proposed",
+          "art_audit": "no_art_yet",
+          "art_note": "Seven of Pentacles was checked open in the Russian tarot tracker before assignment. Art should show a rugged village laborer with stacked firewood, sled runners, repaired boundary posts, and exactly seven visible cut log ends, carved post marks, or pentacle-like wood rounds as the tarot cue."
+        },
+        {
           "tarot": "Knight of Wands",
           "mythcards_card": "Buran / White Siberian Tiger",
           "card_type": "Character / Mount",
@@ -554,6 +707,17 @@
           "profile_page_asset": "assets/characters/buran-white-siberian-tiger-knight-of-wands-profile-page.png"
         },
         {
+          "tarot": "Knight of Cups",
+          "mythcards_card": "Belorog / Aurora Reindeer",
+          "card_type": "Character / Rare Mount",
+          "sub_area": "Far North",
+          "set_count_role": "Far North rare character slot: extra Mount for the Russian set.",
+          "reason": "Belorog gives the Far North a rare Mount based on spiritual rescue, emotional truth, and convergence passage. Knight of Cups fits a mount that carries wounded or surrendered travellers through aurora-water thresholds rather than charging through danger like Buran.",
+          "status": "proposed",
+          "art_audit": "no_art_yet",
+          "art_note": "Knight of Cups was checked open in the Russian tarot tracker before assignment. Art should show a pale aurora-lit reindeer with luminous antlers, practical northern harness, red thread and charms, frozen river reflections, and a humble cup or bowl motif tied to spiritual passage."
+        },
+        {
           "tarot": "King of Wands",
           "mythcards_card": "Bogatyr Champion",
           "card_type": "Character",
@@ -561,6 +725,29 @@
           "reason": "The Bogatyr Champion is the Winter Front's mythic heroic fire: oath, charisma, morale, protection, and the dangerous beauty of sacrifice under impossible cold.",
           "status": "proposed_winter_front",
           "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "Six of Pentacles",
+          "mythcards_card": "Civilian Evacuee / Anya Petrovna",
+          "card_type": "Character / Common",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "Anya makes Winter Front's second Common civilian rather than military. Six of Pentacles fits rationing, uneven mercy, shared bread, scarce supplies, and the survival economy of evacuation roads under wartime command pressure.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/anya-petrovna-civilian-evacuee-six-of-pentacles-character-card-art.png",
+          "profile_page_asset": "assets/characters/anya-petrovna-civilian-evacuee-six-of-pentacles-profile-page.png",
+          "art_note": "Card art shows Anya at a frozen evacuation road with a civilian sled, shared bread, a cracked icon with subtle reactor-red reflection, exactly six visible ration tokens, and a half-buried iron ring hinting at the later Deep North Circus connection. Six of Pentacles was checked open before assignment."
+        },
+        {
+          "tarot": "Knight of Swords",
+          "mythcards_card": "Darya Koval / Bayonet Saint",
+          "card_type": "Character / Rare Warrior",
+          "sub_area": "Winter Front / Army Era",
+          "set_count_role": "Winter Front rare character slot: extra Warrior for the Russian set.",
+          "reason": "Darya turns Knight of Swords into close-range devotional momentum: decisive charge, bayonet-as-sword, winter wind, and the dangerous faith to cross enemy ritual lines before fear can make a doctrine out of them.",
+          "status": "proposed_winter_front",
+          "art_audit": "no_art_yet",
+          "art_note": "Knight of Swords was checked open in the Russian tarot tracker before assignment. Art should show a fierce female Winter Front close-combat warrior with rifle and fixed bayonet, prayer cloth, diagonal snow/smoke motion, and occult trench lines breaking underfoot."
         },
         {
           "tarot": "Page of Cups",
@@ -639,6 +826,18 @@
           "reason": "Yakov Antonov represents survival craft, repeated work, barricades, field repair, and practical mastery under brutal winter-war conditions.",
           "status": "proposed_winter_front",
           "art_audit": "needs_art_audit"
+        },
+        {
+          "tarot": "Six of Swords",
+          "mythcards_card": "Frozen T-34",
+          "card_type": "Character / Mount",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The Frozen T-34 is the Winter Front's haunted mechanical passage: soldiers and wounded carried across lethal ground by armor, frost, and something that may no longer belong only to the living. Six of Swords preserves Buran's Far North Chariot role while making the tank about grim transport rather than triumphant charge.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/frozen-t34-six-of-swords-mount-card-art.png",
+          "profile_page_asset": "assets/characters/frozen-t34-six-of-swords-mount-profile-page.png",
+          "art_note": "Mount art uses the Frozen T-34 as a haunted ferry across the killing field, with wounded soldiers on the armor, exactly six sword-like bayonet markers lining the passage, and reactor-red convergence glow under the ice. It intentionally avoids Chariot charge language because Far North already uses that archetype."
         },
         {
           "tarot": "Queen of Wands",
