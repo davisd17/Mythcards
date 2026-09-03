@@ -303,7 +303,7 @@
             "card_type": "Event",
             "sub_area": "Winter Front / Army Era",
             "art_audit": "has_art",
-            "approved_asset": "assets/events/winter-front-the-rings-leave-the-cabin-eight-of-cups-event-art.png",
+            "approved_asset": "assets/events/winter-front-the-rings-leave-the-cabin-eight-of-cups-event-art-v2.png",
             "art_note": "Remapped from Six of Swords to avoid duplicating the Frozen T-34; art shows the rings leaving on a sled while exactly eight cups remain behind."
           },
           {
@@ -316,13 +316,14 @@
             "art_note": "Remapped from The Tower to protect the Closed City Incident's Tower identity; art frames the future facility as nightmare and shell shock."
           },
           {
-            "tarot": "The Star",
+            "tarot": "Page of Cups",
             "mythcards_card": "Meteor Contact To The North",
             "card_type": "Event",
             "sub_area": "Winter Front / Army Era",
             "art_audit": "has_art",
-            "approved_asset": "assets/events/winter-front-meteor-contact-to-the-north-the-star-event-art.png",
-            "art_note": "Marya Zima watches water freeze into a star as the Far North meteor wounds the sky and radios react across distance."
+            "approved_asset": "assets/events/winter-front-meteor-contact-to-the-north-page-of-cups-event-art.png",
+            "previous_asset": "assets/events/winter-front-meteor-contact-to-the-north-the-star-event-art.png",
+            "art_note": "Remapped from The Star because Nadia Belaya owns that archetype. Page of Cups centers Marya Zima's battered thaw cup receiving an impossible northern omen while radios and compasses react behind her."
           },
           {
             "tarot": "Strength",
@@ -746,20 +747,67 @@
           "set_count_role": "Winter Front rare character slot: extra Warrior for the Russian set.",
           "reason": "Darya turns Knight of Swords into close-range devotional momentum: decisive charge, bayonet-as-sword, winter wind, and the dangerous faith to cross enemy ritual lines before fear can make a doctrine out of them.",
           "status": "proposed_winter_front",
-          "art_audit": "no_art_yet",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/darya-koval-bayonet-saint-knight-of-swords-character-card-art.png",
+          "profile_page_asset": "assets/characters/darya-koval-bayonet-saint-knight-of-swords-profile-page.png",
           "art_note": "Knight of Swords was checked open in the Russian tarot tracker before assignment. Art should show a fierce female Winter Front close-combat warrior with rifle and fixed bayonet, prayer cloth, diagonal snow/smoke motion, and occult trench lines breaking underfoot."
         },
         {
-          "tarot": "Page of Cups",
+          "tarot": "King of Swords",
+          "mythcards_card": "General Arkady Volkov / Army General",
+          "card_type": "Character / Leader",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "Volkov turns command into cold judgment: lives become entries on a map, and sacrifice becomes a calculation he believes he alone is fit to make.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/arkady-volkov-army-general-king-of-swords-character-card-art.png",
+          "profile_page_asset": "assets/characters/arkady-volkov-army-general-king-of-swords-profile-page.png",
+          "art_note": "Remapped from The Emperor so Colonel Viktor Semyonov can own the Emperor archetype. King of Swords centers Volkov's strategic cruelty, silver pointer-as-sword, red command sash, casualty lists, and soldiers sent into lethal snow."
+        },
+        {
+          "tarot": "Two of Wands",
+          "mythcards_card": "Volkov's Red Map",
+          "card_type": "Relic",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The map is ambition made material: one path holds the current battlefield, while the other leaves home, mercy, and ordinary command for occult certainty.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-volkovs-red-map-two-of-wands-relic-art.png",
+          "art_note": "Approved relic art shows two black field rods over a red-stained command map, with Volkov's family/home traces and a face-down icon revealing the personal cost of choosing the impossible route."
+        },
+        {
+          "tarot": "Five of Cups",
+          "mythcards_card": "Marya's Thaw Cup",
+          "card_type": "Relic",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The cup is grief and mercy rather than balance: three losses on the table, two vessels of remaining warmth, and one life that can still be bargained back from the cold.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-maryas-thaw-cup-five-of-cups-relic-art.png",
+          "art_note": "Remapped from Temperance so Marya Zima keeps Temperance as a character. Approved relic art shows the glowing thaw cup in a frozen aid station with three fallen vessels and one standing background cup."
+        },
+        {
+          "tarot": "Three of Swords",
+          "mythcards_card": "Saint's Field Icon",
+          "card_type": "Rare Relic",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The icon is wounded faith: sacred protection revealed through piercing, grief, sacrifice, and the miraculous white-bird omen around Darya.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-saints-field-icon-three-of-swords-relic-art.png",
+          "art_note": "Remapped from The Hierophant so Anastasia Lebedeva can keep formal faith authority. Approved relic art shows a cracked field icon crossed by three bayonet/sword wounds with rare white birds outside."
+        },
+        {
+          "tarot": "Page of Pentacles",
           "mythcards_card": "Sky-Hide Mirror",
           "card_type": "Relic",
           "sub_area": "Far North",
-          "reason": "The mirror is a message-bearing emotional relic: hidden reflection, attraction, memory, spiritual invitation, and the object Pavel carries without understanding.",
+          "reason": "The mirror is a physical relic Pavel carries without understanding: hidden reflection, attraction, memory, spiritual invitation, and a material lesson from the Far North path.",
           "status": "proposed",
           "art_audit": "matches_tarot",
           "approved_asset": "assets/relics/far-north-sky-hide-mirror-page-of-cups-relic-art-corrected.png",
           "previous_asset": "assets/relics/far-north-sky-hide-mirror-page-of-cups-relic-art.png",
-          "art_note": "Corrected variant increases the mirror scale to match Pavel's character artwork, making it a large hand-held disc rather than a small pendant."
+          "art_note": "Remapped from Page of Cups to Page of Pentacles so Meteor Contact To The North can own the cup-message archetype. Corrected variant increases the mirror scale to match Pavel's character artwork, making it a large hand-held disc rather than a small pendant."
         },
         {
           "tarot": "Two of Cups",

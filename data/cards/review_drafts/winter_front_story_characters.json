@@ -98,21 +98,23 @@
         "card_name": "Army General",
         "card_status": "existing_prototype_card_to_expand",
         "type": "Leader",
-        "tarot_mapping": "The Emperor",
-        "narrative": "Volkov is a front commander whose authority is necessary, brutal, and morally costly. He is known for throwing soldiers and lives at problems, then calling the result discipline because the land remains in his hands. When occult signs and future visions begin to appear, he treats them like supply lines: something to control before it controls him.",
+        "tarot_mapping": "King of Swords",
+        "narrative": "Volkov is a front commander whose authority is necessary, brutal, and morally costly. He is known for throwing soldiers and lives at problems, then calling the result discipline because the land remains in his hands. His cruelty is not chaotic; it is reason sharpened until men become entries on a map. When occult signs and future visions begin to appear, he treats them like supply lines: something to control before it controls him.",
         "relationship_function": "He creates tension with the Bogatyr Champion: command versus inspiration, strategy versus oath, survival by order versus survival by belief. Stepan carries the human cost of his orders, Yakov becomes useful because he can make occult machinery look practical, and Irina is valued by Volkov too coldly as a weapon. He also foreshadows the Closed City's later command structure.",
         "asset_candidates": [
+          "assets/characters/arkady-volkov-army-general-king-of-swords-character-card-art.png",
           "assets/characters/arkady-volkov-army-general-the-emperor-character-card-art.png",
           "assets/characters/arkady-volkov-army-general-the-emperor-character-card-art-v2.png",
           "assets/characters/arkady-volkov-army-general-the-emperor-character-card-art-v3.png"
         ],
-        "profile_page_asset": "assets/characters/arkady-volkov-army-general-the-emperor-profile-page.png",
+        "profile_page_asset": "assets/characters/arkady-volkov-army-general-king-of-swords-profile-page.png",
+        "previous_profile_page_asset": "assets/characters/arkady-volkov-army-general-the-emperor-profile-page.png",
         "profile_quotes": [
           "Land is kept by the men willing to become it.",
           "The map does not mourn.",
           "A retreat is a rumor I do not permit."
         ],
-        "art_direction_note": "The Emperor character art shows Volkov in a frozen WWII command dugout or ruined estate room, standing over a massive battle map while infantry silhouettes advance into snow outside. His board-readable signature is a red command sash/scarf, silver pointer cane, chained map case, rigid officer posture, and a low severe winter marshal cap with black fur brow, stiff peaked brim, red leather band, and metal red-star command plate. Avoid the tall papakha/parade-hat direction; it reads too silly for him. The tarot structure is four visible iron map weights pinning the territory down, a throne-like command chair, square military geometry, and faint Closed City/reactor-red grid marks bleeding through the map."
+        "art_direction_note": "King of Swords character art should keep Volkov's board-readable identity from the approved Emperor-era image: red command sash/scarf, silver pointer cane, chained map case, severe low winter marshal cap, and frozen WWII command room. Shift the tarot language from throne/order to cold judgment: the silver pointer should read like a sword over the map, casualty lists should lie beside him, infantry silhouettes should be visibly sent into lethal snow, and his expression should be rational, pitiless, and self-rewarding. Use sword-like diagonals, icy blue steel, red command marks, and a clear sense that he sends men to die for strategic and personal advancement. Avoid making him noble, merely administrative, or identical to Semyonov's Emperor authority."
       },
       {
         "name": "Irina Sokolova",
@@ -155,7 +157,15 @@
           "A line is only sacred until someone crosses it.",
           "I do not fear the trench. The trench fears witness."
         ],
-        "asset_candidates": [],
+        "asset_candidates": [
+          "assets/characters/darya-koval-bayonet-saint-knight-of-swords-character-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/darya-koval-bayonet-saint-knight-of-swords-profile-page.png",
+        "profile_quotes": [
+          "Pray after. Move now.",
+          "A line is only sacred until someone crosses it.",
+          "I do not fear the trench. The trench fears witness."
+        ],
         "art_direction_note": "Knight of Swords should show Darya as a rare Winter Front close-combat Warrior, female, fierce, beautiful in a severe battlefield way, and instantly recognizable. Grounded WWII-era winter realism: heavy greatcoat or white snow cloak, rifle with fixed bayonet, prayer cloth or red-white icon strip wrapped around her wrist or bayonet, piercing eyes, frost on lashes, smoke and snow cutting diagonally across the scene. Include rare white birds around or above her as her omen, and show a desperate praying soldier or hopeless character low in the scene so her arrival reads as sudden rescue. Tarot cue should be motion and decisive charge: sword/bayonet thrust line, wind, torn orders, and perhaps one enemy ritual line breaking beneath her boots. Make her rare with occult battlefield intensity, not fantasy armor: faint icon light, disturbed snow sigils, enemy trench candles blown out, and future Closed City red warning reflections in the ice. Avoid modern tactical gear, ornate saint halo, angel wings, pin-up pose, or duplicating Irina's sniper distance."
       },
       {
@@ -318,6 +328,7 @@
         "narrative": "The iron rings are removed from the cabin before the position falls. No one agrees who carried them. Later stories place them in a wagon, a medical sled, a circus caravan, and a locked archive at the same time.",
         "story_function": "Moves the rings from Winter Front toward the Deep North Circus.",
         "asset_candidates": [
+          "assets/events/winter-front-the-rings-leave-the-cabin-eight-of-cups-event-art-v2.png",
           "assets/events/winter-front-the-rings-leave-the-cabin-eight-of-cups-event-art.png"
         ],
         "mapping_note": "Remapped from Six of Swords to Eight of Cups so it does not duplicate the Frozen T-34 and instead focuses on abandoning the ritual site and carrying the mystery away."
@@ -338,10 +349,11 @@
         "name": "Meteor Contact To The North",
         "card_status": "new_winter_front_event_card",
         "kind": "Event",
-        "tarot_mapping": "The Star",
-        "narrative": "Far to the north, the meteor strikes. On the Winter Front, compasses turn, radios scream, Marya's water freezes in a spiral, and the sky briefly shows a wound no one can march toward.",
-        "story_function": "Synchronizes Winter Front with the Far North origin event.",
+        "tarot_mapping": "Page of Cups",
+        "narrative": "Far to the north, the meteor strikes. On the Winter Front, compasses turn, radios scream, and Marya's battered thaw cup receives the first private omen: water and vodka freezing upward into a tiny aurora-lit spiral that reflects a wound in the northern sky.",
+        "story_function": "Synchronizes Winter Front with the Far North origin event while keeping the sign intimate, emotional, and message-bearing rather than stealing Nadia Belaya's Star archetype.",
         "asset_candidates": [
+          "assets/events/winter-front-meteor-contact-to-the-north-page-of-cups-event-art.png",
           "assets/events/winter-front-meteor-contact-to-the-north-the-star-event-art.png"
         ]
       },
@@ -386,9 +398,13 @@
         "name": "Volkov's Red Map",
         "card_status": "new_winter_front_relic_card",
         "kind": "Relic",
-        "tarot_mapping": "The Emperor",
-        "narrative": "The general's map is covered in pins, grease pencil arrows, and casualty marks. After the cache opens, the lines sometimes rearrange into ritual diagrams.",
-        "story_function": "Makes command itself unstable: strategy becomes occult geometry."
+        "tarot_mapping": "Two of Wands",
+        "narrative": "The general's map is covered in pins, grease pencil arrows, casualty marks, and routes that do not exist yet. After the cache opens, the lines sometimes rearrange into ritual diagrams, showing Volkov a path away from home, mercy, and ordinary command toward conquest and occult certainty.",
+        "story_function": "Makes command itself unstable: strategy becomes occult geometry, and Volkov's ambition becomes a threshold he chooses to cross.",
+        "asset_candidates": [
+          "assets/relics/winter-front-volkovs-red-map-two-of-wands-relic-art.png"
+        ],
+        "mapping_note": "Remapped from The Emperor after Semyonov retained The Emperor and Volkov moved to King of Swords as a character. Two of Wands fits the relic as planning, projection, ambition, and leaving home."
       },
       {
         "name": "Black Snow Cartridge",
@@ -402,17 +418,25 @@
         "name": "Marya's Thaw Cup",
         "card_status": "new_winter_front_relic_card",
         "kind": "Relic",
-        "tarot_mapping": "Temperance",
+        "tarot_mapping": "Five of Cups",
         "narrative": "A battered metal cup Marya uses for water, spirits, blood-washing, and prayers. It warms only when a life can still be bargained for.",
-        "story_function": "Gives the healer line a practical relic of mercy under catastrophe."
+        "story_function": "Gives the healer line a practical relic of mercy under catastrophe, emphasizing grief, triage, and the few lives that can still be saved.",
+        "asset_candidates": [
+          "assets/relics/winter-front-maryas-thaw-cup-five-of-cups-relic-art.png"
+        ],
+        "mapping_note": "Remapped from Temperance so Marya Zima can keep Temperance as her character archetype. Five of Cups centers loss, grief, and the remaining warmth of mercy."
       },
       {
         "name": "Saint's Field Icon",
         "card_status": "new_winter_front_rare_relic_candidate",
         "kind": "Rare Relic",
-        "tarot_mapping": "The Hierophant",
+        "tarot_mapping": "Three of Swords",
         "narrative": "Anastasia's damaged icon is painted over older wood. Under cold and candlelight, a second image appears beneath the saint: not enemy occultism, but an older protective pattern that recognizes the cabin rings.",
-        "story_function": "Could become the Winter Front rare relic if we want the rare card rooted in Russian spiritual tradition rather than enemy occult technology."
+        "story_function": "Could become the Winter Front rare relic if we want the rare card rooted in Russian spiritual tradition rather than enemy occult technology. Its protection comes through sacred heartbreak rather than formal doctrine.",
+        "asset_candidates": [
+          "assets/relics/winter-front-saints-field-icon-three-of-swords-relic-art.png"
+        ],
+        "mapping_note": "Remapped from The Hierophant so Anastasia Lebedeva can keep The Hierophant as the formal faith-bearer. Three of Swords fits the icon as wounded faith, sacrifice, and protection through suffering."
       }
     ]
   },
