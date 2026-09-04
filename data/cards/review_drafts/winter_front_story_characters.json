@@ -371,12 +371,16 @@
     ],
     "relics": [
       {
-        "name": "Enemy Occult Cache",
+        "name": "Bogatyr's Relic Case",
         "card_status": "new_winter_front_relic_card",
         "kind": "Relic",
         "tarot_mapping": "Seven of Cups",
-        "narrative": "A field cache of occult objects seized from the enemy line: notebooks, ritual discs, false icons, bone counters, star charts, and maps to places no soldier can name.",
-        "story_function": "Introduces temptation, misinformation, and the sense that several powers were already hunting convergence points."
+        "narrative": "The heavy relic case Ilya Voronin carries out of smoke after the enemy cache is opened. Inside are seven cup-like vessels, each cradling an Atlantean ring etched with a different impossible route, oath, or temptation.",
+        "story_function": "Turns the enemy cache into a specific coveted object: a Seven of Cups relic of tempting paths, false answers, and Atlantean ring-power that will echo toward the cabin rite and the future circus.",
+        "asset_candidates": [
+          "assets/relics/winter-front-bogatyrs-relic-case-seven-of-cups-relic-art.png"
+        ],
+        "mapping_note": "Replaces the broader Enemy Occult Cache relic concept with the specific case recovered by the Bogatyr Champion. The Seven of Cups cue is seven vessels inside the case, each holding an Atlantean ring."
       },
       {
         "name": "Cabin Iron Rings",
@@ -437,6 +441,20 @@
           "assets/relics/winter-front-saints-field-icon-three-of-swords-relic-art.png"
         ],
         "mapping_note": "Remapped from The Hierophant so Anastasia Lebedeva can keep The Hierophant as the formal faith-bearer. Three of Swords fits the icon as wounded faith, sacrifice, and protection through suffering."
+      }
+    ],
+    "extra_open_tarot_relic_candidates": [
+      {
+        "name": "The Horizon Lens",
+        "card_status": "extra_open_tarot_relic_candidate",
+        "kind": "Relic",
+        "tarot_mapping": "Three of Wands",
+        "narrative": "A cracked brass field telescope taken from enemy occult material but older than the war. When aimed across snow, it does not show distance; it shows consequences: the stalled Winter Front, the Far North meteor glow, and future Closed City corridors.",
+        "story_function": "Preserves the approved Three of Wands relic concept as a bridge object without replacing one of the seven Winter Front relic slots.",
+        "asset_candidates": [
+          "assets/relics/winter-front-horizon-lens-three-of-wands-relic-art.png"
+        ],
+        "mapping_note": "Generated during the open-tarot relic pass. The approved revision keeps the three visions contained inside the lens rather than appearing as sky portals."
       }
     ]
   },

@@ -310,7 +310,7 @@
         "name": "Sky-Hide Mirror",
         "card_status": "new_far_north_relic_card",
         "kind": "Relic",
-        "tarot_mapping": "Page of Cups",
+        "tarot_mapping": "Page of Pentacles",
         "narrative": "The relic Pavel unknowingly carries from the Closed City into the Far North. Under aurora light, it does not reflect the viewer normally; it shows the sky as a dark reindeer hide pierced by stars and disturbed by moving memories.",
         "story_function": "It is the message-bearing relic that makes Pavel's journey more than pursuit. It calls Nadia, unsettles Buran, and may belong to Mila's circus bloodline, Nadia's healer line, or an older guardian tradition.",
         "asset_candidates": [
@@ -377,6 +377,18 @@
           "assets/relics/far-north-meteor-lantern-the-hermit-relic-art.png"
         ],
         "art_direction_note": "The Hermit relic art should show exactly one old handmade lantern at the village boundary, with blackened iron, scratched glass, red thread, protective knots, and a suspended black meteor-glass shard. It should feel like a practical household object made sacred by keeping people alive, with warm true light edged by aurora color."
+      },
+      {
+        "name": "Hearthstone Antler Crown",
+        "card_status": "new_far_north_relic_card",
+        "kind": "Relic",
+        "tarot_mapping": "Four of Wands",
+        "narrative": "An ancient stone-and-antler foundation relic at the center of the Far North village, older than the current settlement and older than the families who claim to remember its first winter. It gives the village a sacred reason to gather, remain, repair, marry, mourn, and celebrate together even when the aurora begins to lie.",
+        "story_function": "Completes the Far North relic set with a community relic: not a weapon, key, mirror, or guide, but the object that makes the village feel like a home built around an older promise.",
+        "asset_candidates": [
+          "assets/relics/far-north-hearthstone-antler-crown-four-of-wands-relic-art.png"
+        ],
+        "art_direction_note": "Four of Wands relic art shows a Far North winter celebration around the ancient stone-and-antler relic, with exactly four decorated celebration posts forming the tarot structure. The scene should emphasize village warmth, survival, belonging, lantern light, aurora, red ribbons, and a faint circus presence at the edge."
       }
     ],
     "events": [
@@ -511,7 +523,7 @@
         "aurora crossings"
       ],
       "meaning": "Pavel thinks he survived by accident, but the relic suggests he was carrying something home. His attraction to Mila remains emotionally real, while the mirror explains why the road, the tiger, and the circus all pull him north.",
-      "tarot_mapping_candidate": "Ace of Cups, Two of Cups, Page of Cups, or The Moon depending on whether the final card emphasizes healing, attraction, message-bearing, or hidden reflection."
+      "tarot_mapping_candidate": "Page of Pentacles, reflecting the mirror as the physical lesson Pavel carries into the Far North."
     },
     {
       "name": "Aal Luuk Mas Root",
@@ -530,6 +542,24 @@
       "meaning": "Where the Sky-Hide Mirror reveals the boundary, the Aal Luuk Mas Root reveals the road. It is the Far North's rare mythic relic, with power tied to healing, passage, spirit debt, and the risk of drawing attention from nonhuman forces.",
       "tarot_mapping_candidate": "The World",
       "approved_asset": "assets/relics/aal-luuk-mas-root-the-world-rare-relic-art.png"
+    },
+    {
+      "name": "Hearthstone Antler Crown",
+      "status": "approved_far_north_relic",
+      "kind": "Relic",
+      "real_myth_anchor": "A fictional Far North foundation relic built from northern antler, carved stone, red thread, meteor-glass inlay, and communal winter rites rather than a single named historical artifact.",
+      "story_role": "The ancient object at the center of the village celebration. The current settlement exists because earlier families gathered around it, survived around it, and learned to treat celebration as a protective act.",
+      "narrative_links": [
+        "Far North village",
+        "Vera Kargina",
+        "Tomas Yurin",
+        "Nadia Belaya",
+        "Deep North Circus",
+        "old northern rites"
+      ],
+      "meaning": "This relic makes the village a home rather than a refuge. It represents belonging, shared survival, marriages, funerals, seasonal feasts, and the old promise that people can remain together under a dangerous sky.",
+      "tarot_mapping_candidate": "Four of Wands",
+      "approved_asset": "assets/relics/far-north-hearthstone-antler-crown-four-of-wands-relic-art.png"
     }
   ],
   "open_questions": [

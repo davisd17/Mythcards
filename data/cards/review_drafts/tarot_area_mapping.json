@@ -178,7 +178,12 @@
           ],
           "relics": [
             "Sky-Hide Mirror",
-            "Aal Luuk Mas Root"
+            "Aal Luuk Mas Root",
+            "Meteor-Glass Spear",
+            "Buran's Boundary Harness",
+            "Circus Convergence Rings",
+            "Meteor Lantern",
+            "Hearthstone Antler Crown"
           ],
           "events": [
             "Nadia Finds The Survivor",
@@ -223,7 +228,7 @@
             "Bogatyr Walks Through Smoke"
           ],
           "relics": [
-            "Enemy Occult Cache",
+            "Bogatyr's Relic Case",
             "Cabin Iron Rings",
             "Frozen Field Radio",
             "Volkov's Red Map",
@@ -774,6 +779,28 @@
           "art_audit": "matches_tarot",
           "approved_asset": "assets/relics/winter-front-volkovs-red-map-two-of-wands-relic-art.png",
           "art_note": "Approved relic art shows two black field rods over a red-stained command map, with Volkov's family/home traces and a face-down icon revealing the personal cost of choosing the impossible route."
+        },
+        {
+          "tarot": "Three of Wands",
+          "mythcards_card": "The Horizon Lens",
+          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The Horizon Lens turns Three of Wands into foresight across fronts: Winter Front smoke, Far North meteor light, and future Closed City corridors seen together through one cracked field lens.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-horizon-lens-three-of-wands-relic-art.png",
+          "art_note": "Approved revision zooms into the cracked brass lens so the three visions appear only inside the glass, while the outside trench remains grounded and normal."
+        },
+        {
+          "tarot": "Four of Wands",
+          "mythcards_card": "Hearthstone Antler Crown",
+          "card_type": "Relic",
+          "sub_area": "Far North",
+          "reason": "The Hearthstone Antler Crown gives the Far North village its sacred foundation: celebration, home, survival, and belonging around an ancient relic that predates the settlement.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/far-north-hearthstone-antler-crown-four-of-wands-relic-art.png",
+          "art_note": "Approved relic art shows the village celebration gathered around the ancient antler-and-stone relic, with four decorated posts forming the Four of Wands structure."
         },
         {
           "tarot": "Five of Cups",
