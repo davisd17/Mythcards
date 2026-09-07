@@ -1,597 +1,684 @@
 # MythCards Business Requirements Document
 
+## Document Control
+
+| Field | Value |
+| --- | --- |
+| Source document | PRD.md (current version, including the 2026-08-14 rule decisions: player-chosen back-row deployment, line-of-sight scope resolved for non-damage abilities, explicit mount/dismount AP cost, chess-checkmate-style Hero capture, and the 3-relic/4-event-per-player shared deck) |
+| Version | 3 (resync with the 2026-08-14 GitHub pull — Closed City narrative content, `data/cards/characters.json` / `relic_events.json` — plus new business-rule decisions from this session; supersedes the v1 BRD and the interrupted v2 draft) |
+| Date | 2026-08-14 |
+| Status | Draft |
+| Prepared by | Drew Davis (solo developer/designer, acting as own PM) |
+
 ## 1. Document Purpose
 
-This Business Requirements Document converts the current MythCards Product Requirements Document into business-ready requirements for planning, stakeholder review, prototype validation, backlog decomposition, and acceptance testing.
+This Business Requirements Document enumerates the business goals, scope, stakeholders, business rules, functional requirements, non-functional requirements, data requirements, risks, dependencies, and acceptance criteria for MythCards.
 
-This BRD is derived from `PRD.md` and preserves traceability to the PRD's stable IDs where available. Requirements marked with `Inference:` are reasonable business expansions of the PRD, not explicit PRD commitments.
+This BRD is derived entirely from the current MythCards PRD (`PRD.md`) and the current prototype card data (`data/cards/characters.json`, `data/cards/relic_events.json`) and adds nothing those sources do not already support. Its job is completeness and traceability: every rule and requirement implied by the PRD gets a stable ID here, so nothing is silently dropped when work moves from paper prototype to the Godot rules prototype and beyond. See Section 17 (Traceability) for how each section maps back to its PRD source.
 
 ## 2. Product Summary
 
-MythCards is a mobile-first, turn-based tactical card-and-board game. Players command a small roster of civilization-themed character cards on a 7x7 board with a center tile, using positioning, action points, abilities, relics, events, and in-match level progression to outplay an opponent.
+MythCards is a mobile-first, turn-based tactical card-and-board game played on a 7x7 chess-like grid with one center tile. Players command a fixed squad of character cards — exactly one of each of the 7 base character types (Leader, Hero, Mount, Specialist, Warrior, Common, Mystic) — using positioning, culture identity, and tactical abilities to outplay an opponent. Players win by capturing the enemy Hero (a positional, checkmate-style condition — see BR-034) or by defeating the entire opposing army.
 
-The first playable promise is a short, readable, strategic match where two prototype cultures, Russian-inspired and Atlantean, feel mechanically distinct. The prototype should prove that the board, cards, turn structure, character abilities, shared relic/event deck, Hero capture, army defeat, and match-based leveling create replayable tactical decisions before production expands toward MVP scope.
+The story premise centers on a 1980s Soviet closed-city nuclear accident: a scientist's unconscious mind becomes a convergence point where realities, myths, and occult forces play out as tactical battles. The setting leans into fiction and abstraction — real-world eras, professions, imagery, geography, and technology appear as recognizable hints, not as literal named historical figures or documented incidents.
+
+The first prototype implements two cultures:
+- **Russian-inspired** — endurance, frost control, disciplined tactics, fortification, ranged pressure.
+- **Atlantean** — divine spirit leadership, quartz technology, hive-mind coordination, spiritual shields, resonance, board manipulation.
+
+Each culture is designed around three future story sub-areas (21 character cards per culture long-term), though the first prototype implements only a representative 14-card roster (one character per type per culture). A third sub-area's relic/event set (Closed City) is already drafted as narrative-backed content but is explicitly out of prototype scope until it clears review (BR-043A). Mobile-first design constraints apply from this first prototype onward, not only starting at the Mobile UX milestone (BR-044). The chosen technical framework is Godot.
 
 ## 3. Business Objectives
 
-| ID | Objective | Source |
-| --- | --- | --- |
-| BO-001 | Create a fair, skill-based mobile tactics game with readable turns and satisfying strategic depth. | PRD-GOAL-001 |
-| BO-002 | Establish a card and character framework that supports seven base character types across multiple cultures. | PRD-GOAL-002 |
-| BO-003 | Keep standard matches short enough for mobile play while preserving meaningful mastery. | PRD-GOAL-003 |
-| BO-004 | Build flexible rules and content foundations that can support future cards, cultures, modes, events, boards, and expansions. | PRD-GOAL-004 |
-| BO-005 | Establish a story and faction structure where cultures include sub-areas with distinct mechanics, art direction, relics, events, and narrative identity. | PRD-GOAL-005 |
-| BO-006 | Support a delivery path from paper prototype to local digital prototype, AI play, casual PvP, and future ranked/asynchronous PvP. | PRD-GOAL-006 |
-| BO-007 | Preserve competitive trust by avoiding pay-to-win progression and keeping gameplay access fair. | PRD-NFR-003 |
+| ID | Objective |
+| --- | --- |
+| BO-001 | Create a polished mobile tactical game with clear rules, readable turns, and satisfying strategic depth. |
+| BO-002 | Build a card and character system supporting 7 character types, with multiple culture-specific versions of each type. |
+| BO-003 | Keep matches short enough for mobile play while still rewarding mastery. |
+| BO-004 | Establish a flexible rules foundation that supports future cards, cultures, modes, and events. |
+| BO-005 | Establish a story and content framework where each culture contains multiple hidden sub-areas, each with its own style, mechanics, relics, events, and narrative identity. |
+| BO-006 | Design the game to eventually support both solo play and PvP. |
 
 ## 4. Success Metrics
 
-| ID | Metric | Target | Validation Method | Source |
-| --- | --- | --- | --- | --- |
-| SM-001 | Rule comprehension | New playtesters understand legal movement, basic attacks, turn flow, and Hero capture within 2 minutes. | Observe first-session paper or digital playtests. | PRD-SM-001 |
-| SM-002 | Prototype match length | Paper prototype matches finish within 10-20 minutes. | Time 3-5 comparable-skill test matches. | PRD-SM-002 |
-| SM-003 | Mobile match target | Standard mobile matches trend toward 5-12 minutes after UX and balance tuning. | Measure digital prototype and MVP session analytics. | PRD-SM-003 |
-| SM-004 | Decision density | Each turn presents at least one meaningful tactical choice. | Playtest survey plus designer review of turn logs. | PRD-SM-004 |
-| SM-005 | Faction distinction | Playtesters can describe how Russian-inspired and Atlantean playstyles differ after one match. | Post-match interview or survey. | PRD-SM-005 |
-| SM-006 | Replay pull | At least half of early playtesters want to replay, switch faction, or try a different strategy after a match. | Post-match survey. | PRD-SM-006 |
-| SM-007 | Mobile readability | Testers can inspect unit state, legal actions, relic/event state, and victory threats without repeated menu hunting. | Mobile UX prototype observation. | PRD-SM-007 |
-| SM-008 | Balance health | Neither prototype culture should win more than 60 percent of comparable-skill paper tests after initial tuning. | Track results from at least 3-5 paper matches, then expand the sample. | Inference from PRD risks and prototype success criteria |
+| ID | Metric | Target |
+| --- | --- | --- |
+| SM-001 | Rule comprehension | New playtesters understand legal movement, basic attacks, turn flow, and Hero capture — enough to start having fun — within 2 minutes. Mastering individual card nuances is expected to take longer and is not part of this metric. |
+| SM-002 | Prototype match length | Paper prototype matches finish within 10-20 minutes. |
+| SM-003 | Mobile match target | Standard mobile matches trend toward 5-12 minutes after UX and balance tuning. |
+| SM-004 | Decision density | Each turn presents at least one meaningful tactical choice. |
+| SM-005 | Culture distinction | Playtesters can describe how Russian-inspired and Atlantean playstyles differ after one match. |
+| SM-006 | Replay pull | At least half of early playtesters want to replay, switch culture, or try a different strategy after a match. |
+| SM-007 | Mobile readability | Testers can inspect unit state, legal actions, relic/event state, and victory threats without repeated menu hunting. |
+| SM-008 | Balance health | Neither prototype culture should win more than 60 percent of comparable-skill paper tests after initial tuning. |
+| SM-009 | Engagement (anti-turtling) | Paper matches do not stall into passive, non-engaging play under the new checkmate-style Hero capture rule (BR-034); playtest notes explicitly flag turtling if observed. |
 
 ## 5. Stakeholders
 
-| ID | Stakeholder | Interest | Primary Needs |
-| --- | --- | --- | --- |
-| STK-001 | Product Owner | Scope, monetization direction, roadmap, and release priorities. | Traceable requirements, decision points, and milestone readiness. |
-| STK-002 | Game Designer | Rules, characters, factions, balance, progression, and playtest iteration. | Atomic requirements, business rules, card data needs, and acceptance criteria. |
-| STK-003 | Developer | Digital prototype and future game systems. | Clear functional scope, data requirements, technical constraints, and testable edge cases. |
-| STK-004 | Artist/UI Designer | Card frames, board visuals, icons, faction identity, and mobile screens. | Art direction, UI state requirements, readability constraints, and content taxonomy. |
-| STK-005 | Narrative/Content Designer | Story premise, culture framing, sub-area identity, relics, events, and tone. | Respectful culture guidance, faction structure, terminology decisions, and content requirements. |
-| STK-006 | Playtesters | Validate fun, clarity, balance, and pacing. | Printable/digital materials, clear rules, survey prompts, and observable success criteria. |
-| STK-007 | Future Players | Fair, readable, rewarding tactical gameplay. | Clear onboarding, fair progression, legible UI, and meaningful replay value. |
+| Stakeholder | Interest |
+| --- | --- |
+| Game Designer | Defines rules, characters, cultures, balance, and progression. (Currently the same person as Developer and Product Owner.) |
+| Developer | Implements the Godot prototype and future mobile systems. |
+| Artist/UI Designer | Creates card frames, board visuals, icons, culture identity, and mobile screens. |
+| Narrative/Content Designer | Story premise, culture framing, sub-area identity, relics, events, and tone — currently producing the Closed City narrative backlog (`NARRATIVE_CARD_BACKLOG.md`) ahead of prototype implementation. |
+| Playtesters | Validate fun, clarity, balance, and pacing. |
+| Future Players | Need fair, readable, rewarding tactical gameplay. |
+| Business/Product Owner | Decides scope, monetization model, roadmap, and release priorities. |
 
 ## 6. Scope
 
 ### 6.1 Prototype Scope
 
-The first prototype must include:
-
 - 7x7 board with one visually marked center tile.
 - Two playable cultures: Russian-inspired and Atlantean.
-- Seven character types per culture: Common, Mount, Warrior, Leader, Hero, Specialist, Mystic.
-- Fourteen total character cards.
-- One copy of each character card per side for the first paper prototype.
-- Three match-based character levels.
-- Level 2 progression by reaching the opponent's edge.
-- Level 3 progression by collecting a Spirit Ember and delivering it to the center square.
-- One action point per character per turn.
-- Movement, attack, ability, mount, dismount, pass, and end-turn flow.
-- Shared relic/event deck with one draw for the active player each turn.
-- One active relic slot per player.
-- Immediate or duration-based event resolution.
-- Hero capture and army defeat victory conditions.
-- Local hotseat play for paper and early digital prototypes.
-- Simple AI as an early digital option if local human testing is insufficient.
-- Placeholder but readable art.
-- Debug or inspection UI sufficient for playtesting.
+- 14 total character cards (one of each of the 7 types per culture), sourced from `data/cards/characters.json` — see Section 12.
+- 14 total shared relic/event cards: each player contributes 3 relics and 4 events from their own culture into one shared match deck (BR-027A) — see Section 13.
+- No fixed starting formation: each player deploys their own 7 characters onto their own back row, in an arrangement of their own choosing (BR-007A).
+- Three character levels per character; Level 2 via reaching the opponent's edge, Level 3 via Spirit Ember collection and center-square delivery.
+- Turn-level AP pool: 2 AP on a player's first turn, 4 AP every turn after; each character has its own AP stat (default 1).
+- Movement, attack, ability, mount, and dismount actions, each costing 1 pool AP and 1 of the acting character's own AP (BR-020, BR-012).
+- Orthogonal movement and orthogonal line-of-sight attack as default patterns; line-of-sight blocking applies to all ranged targeting, including non-damage support/utility abilities (BR-011).
+- Hero capture (positional/checkmate-style: the Hero has no legal move at the end of its own controller's turn — BR-034) and army defeat victory conditions.
+- Local hotseat play or a simple AI in the first digital prototype.
+- Mobile-first design constraints applied from this prototype onward (BR-044).
+- Godot as the prototype engine.
 
 ### 6.2 MVP Scope
 
-The MVP should include:
+- Tutorial, AI opponent, casual PvP.
+- Squad viewer or cosmetic loadout, collection screen.
+- Four cultures, seven character types per culture, 28+ character cards.
+- 40+ shared relic/event cards. `[NEED: at MVP scale, confirm whether the per-player contribution stays fixed at 3 relics + 4 events drawn from a larger pool, or changes — not yet decided]`
+- Content architecture supporting three sub-areas per culture (seven types plus relics/events each) even though only representative content ships at MVP.
+- Cosmetic and mastery progression, mobile-ready UI, analytics events, local save data, internal balancing tools.
 
-- Tutorial.
-- AI opponent.
-- Casual PvP.
-- Squad viewer or cosmetic loadout.
-- Collection viewer.
-- Four cultures.
-- Seven character types per culture.
-- At least 28 character cards.
-- At least 40 shared relic/event cards.
-- Content architecture that can later support three sub-areas per faction.
-- Cosmetic and mastery progression.
-- Mobile-ready UI.
-- Analytics events.
-- Local save data.
-- Internal balancing tools.
-
-### 6.3 Future Scope
-
-Future scope may include:
-
-- Ranked PvP.
-- Asynchronous PvP.
-- Campaign.
-- Draft mode.
-- Puzzle mode.
-- Limited-time events.
-- Guild or clan features.
-- Culture-specific boards and skins.
-- Larger content collection.
-- Optional premium, cosmetic, expansion, or campaign monetization.
-
-### 6.4 Out Of Scope For Prototype
+### 6.3 Out Of Scope For Prototype And MVP
 
 - Real-money monetization.
 - Ranked ladder.
 - Large campaign.
 - Full live operations system.
 - Complex multiplayer infrastructure.
-- Large-scale card collection.
-- Pay-to-win progression.
-- Final art, final audio, and final animation polish.
+- Large-scale card collection system.
+- Pay-to-win progression, at any stage.
+- The drafted Closed City relic/event set (6 relics + 8 events, `review_status: draft_for_review`) until it clears review and is promoted into the playable deck (BR-043A).
 
 ## 7. Assumptions
 
-| ID | Assumption | Source |
+| ID | Assumption |
+| --- | --- |
+| AS-001 | The first prototype is validated on paper before Godot development begins. |
+| AS-002 | The first software prototype prioritizes game rules over final art, monetization, or networking. |
+| AS-003 | Players begin with all character cards placed on the board via their own back-row deployment; character cards carry no deployment cost. |
+| AS-004 | Gameplay progression never requires paid unlocks or stronger cards; cosmetic progression is acceptable if it never affects match outcomes. |
+| AS-005 | The first digital prototype can use placeholder art. |
+| AS-006 | The default board pattern is a 7x7 grid with orthogonal movement and orthogonal line-of-sight attacks — applied to all ranged targeting, including non-damage support/utility abilities — unless a specific character, relic, event, or future card states otherwise. |
+| AS-007 | Each character's own AP stat defaults to 1 (one action per turn) unless a card or effect explicitly grants more. |
+| AS-008 | Sub-area content depth (21 cards per culture) is a documented future structure; only a representative 14-card roster is required for the first prototype. |
+| AS-009 | Hero capture is fully decoupled from HP loss (BR-034/BR-034A): a Hero reduced to 0 HP is defeated like any other character but does not by itself end the match. This is a new-for-2026-08-14 assumption to be validated in paper testing, not a long-settled rule. |
+| AS-010 | Mobile-first constraints (readability, tap targets, text density) apply starting with the paper and Godot prototypes, even though those builds run on a desktop screen for development convenience. |
+
+## 8. Business Rules
+
+### 8.1 Roster Composition
+
+| ID | Rule |
+| --- | --- |
+| BR-001 | Each side may field only one Hero. |
+| BR-002 | Each side may field only one Leader. |
+| BR-003 | Each side may field up to two copies of each non-common, non-unique type: Mount, Warrior, Specialist, Mystic (future squad-building modes beyond the fixed prototype squad). |
+| BR-004 | Common characters may be used in larger numbers if a future squad size requires filler units. |
+| BR-005 | Each side must field exactly one copy of each of its seven character type cards for the prototype — no duplicates, no omissions — on a 7x7 board. This is a firm rule for the prototype, not a recommendation. |
+
+### 8.2 Setup And Placement
+
+| ID | Rule |
+| --- | --- |
+| BR-006 | Character cards have no deployment cost. |
+| BR-007 | All character cards are placed on the board at the start of the match. |
+| BR-007A | Each player deploys their own 7 characters onto their own back row — the row of 7 tiles closest to their side. There is no fixed starting formation; each player chooses the arrangement of their own units within that row. This resolves PRD-OQ-002. |
+| BR-007B | Players place their own characters themselves, rather than a designer-fixed or randomized layout (see FR-007C for the corresponding system requirement and its priority). |
+
+### 8.3 Movement And Attack Patterns
+
+| ID | Rule |
+| --- | --- |
+| BR-008 | Default movement pattern is orthogonal: vertical and horizontal only. |
+| BR-009 | Default attack pattern is orthogonal line-of-sight: vertical and horizontal only. |
+| BR-010 | Diagonal, area, jump, teleport, or other unusual movement/attack patterns require explicit rules text on the specific card or ability. |
+| BR-011 | Ranged attacks, and any ability that targets at range — including non-damage support/utility abilities such as Command, Resonance Shield, Foresight, and Pylon range boosts — cannot pass line-of-sight through an occupied tile (ally or enemy) unless the specific card or ability explicitly states an exception. This resolves PRD-OQ-011: the blocking rule applies uniformly, not only to damage-dealing effects. |
+| BR-011A | A tile holding a placed object (e.g., a barricade, a quartz pylon) also blocks line-of-sight by default, the same as an occupied character tile, unless the specific card or object explicitly states otherwise (decided 2026-09-07). No current card grants its own placed object a line-of-sight exception. |
+
+### 8.4 Mounted Pair Rules
+
+| ID | Rule |
+| --- | --- |
+| BR-012 | A Hero or Leader may mount an allied Mount as an action if adjacent to that Mount, spending 1 pool AP and 1 of that character's own AP — the same cost as any other action, and gated by both being available. |
+| BR-013 | Mounting moves the Hero or Leader onto the Mount's tile; the pair occupies one combined tile. |
+| BR-014 | A mounted pair uses the rider's HP, ATK, RANGE, level, and abilities, but the Mount's MOVE and movement pattern. |
+| BR-015 | The Mount cannot take separate actions while mounted. |
+| BR-016 | Damage is applied to the mounted rider's HP; when it reaches 0, both rider and Mount are defeated. |
+| BR-017 | Dismounting is an action, spending 1 pool AP and 1 of the rider's own character AP: the rider remains on the current tile and the Mount is placed on an adjacent empty tile. If no adjacent empty tile exists, the pair cannot dismount. |
+
+### 8.5 Turn And Action Points
+
+| ID | Rule |
+| --- | --- |
+| BR-018 | The active player's turn-level AP pool is 2 AP on their first turn of the match and 4 AP on every turn after. |
+| BR-019 | Each character has its own AP stat (default 1) capping how many actions that character can take per turn, regardless of remaining pool AP. |
+| BR-020 | Movement, attacking, activating an ability, mounting, and dismounting each cost 1 pool AP, gated by the acting character having remaining character AP. |
+| BR-021 | Because pool AP is smaller than full squad size, not every character is expected to act every turn — this is an intentional tactical constraint, not an oversight. The reduced 2-AP first turn is the prototype's mitigation for first-move advantage. |
+
+### 8.6 Character Leveling
+
+| ID | Rule |
+| --- | --- |
+| BR-022 | A Level 1 character reaches Level 2 by crossing to the opponent's board edge. |
+| BR-023 | A Level 2 character reaches Level 3 by collecting a Spirit Ember released by a defeated enemy, then reaching the center square. |
+| BR-023A | Spirit Ember pickup is automatic and immediate: when a character defeats an enemy character, the defeating character receives the Spirit Ember at that moment. No separate action, and no requirement to move onto the defeated character's tile, is needed. The carrier must still physically reach the center square while at Level 2 to trigger Level 3. |
+| BR-024 | The mechanic and its name is `Spirit Ember` — a fragment of spirit/myth released by defeat within the convergence, not a body part. No darker body-part language (scalp/ear) may appear anywhere in the product. |
+| BR-025 | Level-ups are match-based and reset at the end of each match unless a future mode explicitly states otherwise. |
+| BR-026 | Level 2 upgrades must read as a clear, noticeable power spike (not a minor +1 tweak); Level 3 upgrades must be transformative — a significant stat jump and/or a game-changing new ability — without making a leveled character an automatic win condition. The Section 12 character inventory below reflects the revised card text meeting this standard; this is no longer a pending revision (see R-011). |
+
+### 8.7 Relic And Event System
+
+| ID | Rule |
+| --- | --- |
+| BR-027 | Relic and event cards are mixed into one shared non-character deck used by both players. |
+| BR-027A | Deck construction: each player selects 3 relic cards and 4 event cards (7 cards total) from their own culture to contribute to the match's shared deck. The two players' contributions combine into one shared 14-card deck, shuffled together. In the 2-culture prototype, each culture's full relic/event set is exactly 3 relics and 4 events (Section 13), so each player's "selection" is simply their entire culture's set; this becomes a real pre-match choice once a larger relic/event pool exists. This resolves PRD-OQ-006 at 14 cards for the paper prototype. |
+| BR-028 | The active player draws one shared relic/event card each turn. |
+| BR-029 | Each player may have only one active relic at a time. |
+| BR-030 | When a player draws a relic while their relic slot is already full, they may choose to replace the active relic or discard/ignore the newly drawn relic. |
+| BR-031 | Relic replacement choices must be handled through in-game UI, not native/browser-style page-leave popups. |
+| BR-032 | Event cards do not occupy a player's relic slot; they resolve immediately or remain active for their printed duration. |
+| BR-033 | The shared, unpredictable relic/event draw is a deliberate design pillar, not incidental variance to be minimized. Balance and playtesting should tune the pull (frequency, power level, active-slot rules) rather than replace it with private per-culture decks. |
+
+### 8.8 Victory Conditions
+
+| ID | Rule |
+| --- | --- |
+| BR-034 | A Hero is captured — ending the match immediately in the opponent's favor — when, at the end of a turn taken by that Hero's own controller, the Hero (or the mounted pair carrying it) has no legal move available. This is a positional, chess-checkmate-style condition, not an HP threshold. |
+| BR-034A | Reducing a Hero's HP to 0 through combat defeats it the same way any character is defeated — it is removed from the board and counts toward Army Defeat — but does not, by itself, trigger the Hero-capture win condition (see AS-009). |
+| BR-035 | A player also wins by defeating all opposing characters (army defeat). |
+
+### 8.9 Fairness And Progression
+
+| ID | Rule |
+| --- | --- |
+| BR-036 | Competitive progression must preserve fair, identical gameplay access to all cards and character levels. |
+| BR-037 | Account unlocks must be cosmetic, mastery-based, or otherwise non-gameplay-affecting; no pay-to-win power progression at any stage. |
+
+### 8.10 Cultural Content
+
+| ID | Rule |
+| --- | --- |
+| BR-038 | Real-world-inspired cultures (e.g., Russian-inspired) must be handled with respect and research, and must avoid stereotypes. |
+| BR-039 | Real-world grounding survives as recognizable hints (eras, professions, imagery, geography, technology) rather than literal named historical figures or documented incidents. |
+
+### 8.11 Deckbuilding Direction
+
+| ID | Rule |
+| --- | --- |
+| BR-040 | The paper prototype and MVP use a fixed one-of-each-type squad per side; no deckbuilding at this stage. |
+| BR-041 | A future constructed-deck system may combine any mix of the 7 character types plus relics/events, governed by composition rules (e.g., max 1 Hero, max 1 Leader) rather than a mana-cost/curve system. `[NEED: squad-size and construction rules for future deckbuilding not yet defined — deferred until this system is prioritized]` |
+
+### 8.12 Sub-Area Content Structure
+
+| ID | Rule |
+| --- | --- |
+| BR-042 | Each culture is structured around three story sub-areas, each intended to eventually contain one of each of the 7 character types plus sub-area-specific relic and event cards (21 character cards per culture long-term). |
+| BR-043 | Only a representative 14-card roster (one character per type per culture) is required for the first prototype; players should not need to memorize the sub-area taxonomy to play — sub-area identity should read through card names, effects, art, and synergies. |
+| BR-043A | A Closed City relic/event set (6 relics + 8 events, tagged `review_status: draft_for_review` in `data/cards/review_drafts/`) is already drafted and tied to the narrative character backlog (`NARRATIVE_CARD_BACKLOG.md`). It is documented future content, not yet part of the playable prototype's 14-card shared deck (BR-027A) — tracked here so it is not silently dropped when the Closed City sub-area is prioritized. |
+
+### 8.13 Mobile-First Directive
+
+| ID | Rule |
+| --- | --- |
+| BR-044 | Mobile-first design constraints apply starting with the paper and Godot rules prototypes, not only from the Mobile UX Prototype milestone onward — board layout, card text density, and interaction patterns should assume a phone-sized target throughout development. |
+
+## 9. Functional Requirements
+
+### 9.1 Match Setup
+
+| ID | Requirement | Priority |
 | --- | --- | --- |
-| AS-001 | The first prototype will be validated on paper before Godot development begins. | PRD-MILESTONE-001 |
-| AS-002 | The first software prototype will prioritize rules, state clarity, and debug visibility over final art, monetization, or networking. | PRD-MILESTONE-002 |
-| AS-003 | Players begin prototype matches with all selected character cards placed on the board. | PRD section 9 |
-| AS-004 | Character cards do not have deployment costs in the prototype. | PRD section 9 |
-| AS-005 | Gameplay progression must not require paid unlocks or stronger cards. | PRD-NFR-003 |
-| AS-006 | Cosmetic progression is acceptable if it does not affect match outcomes. | PRD section 14 |
-| AS-007 | The first digital prototype can use placeholder art if it remains readable enough for playtesting. | PRD section 20 |
-| AS-008 | The initial board is a 7x7 grid with orthogonal movement and orthogonal line-of-sight attacks unless card rules state otherwise. | PRD section 8 |
-| AS-009 | The first implementation can represent defeat trophies as a marker, status, or abstract state until PRD-OQ-008 is resolved. | PRD-OQ-008 |
-| AS-010 | The Closed City story framing can guide content without requiring a full campaign in the prototype. | PRD sections 1 and 20 |
+| FR-001 | The system shall allow a player to select a playable culture. | Must |
+| FR-002 | The system shall support at least two prototype cultures: Russian-inspired and Atlantean. | Must |
+| FR-003 | The system shall load a fixed starting squad of exactly one of each character type for each culture. | Must |
+| FR-004 | The system shall enforce one Hero per side. | Must |
+| FR-005 | The system shall enforce one Leader per side. | Must |
+| FR-006 | The system shall support copy limits for non-common character types in future squad-building modes. | Should |
+| FR-007 | The system shall place all selected character cards on the board at match start. | Must |
+| FR-007A | The system should allow each player to place their own characters onto their own back row before the match begins. | Should |
+| FR-007B | The system shall restrict player-controlled placement to each player's own back row, with no fixed designer formation elsewhere on the board. | Must |
+| FR-008 | The system shall support configurable board layouts for future non-standard boards. | Should |
+| FR-009 | The system shall initialize a shared relic/event deck at match start. | Must |
+| FR-009A | The system shall build the match's shared relic/event deck from each player's 3-relic/4-event contribution (auto-populated from the player's culture in the 2-culture prototype). | Must |
 
-## 8. Constraints
+### 9.2 Board And Movement
 
-| ID | Constraint | Source |
+| ID | Requirement | Priority |
 | --- | --- | --- |
-| CON-001 | The prototype board size shall be 7x7. | PRD-FR-001 |
-| CON-002 | The prototype shall include exactly two playable cultures before broader MVP expansion. | PRD-FR-002 |
-| CON-003 | The prototype shall use seven base character types per culture. | PRD-GOAL-002 |
-| CON-004 | The first paper prototype shall use one copy of each character type per side. | PRD section 8 |
-| CON-005 | The first digital prototype shall be implemented in Godot unless a later decision explicitly changes the engine. | PRD section 19 |
-| CON-006 | The prototype shall not depend on networking. | PRD sections 15 and 21 |
-| CON-007 | Competitive systems shall not sell gameplay power. | PRD-NFR-003 |
-| CON-008 | Real-world-inspired cultures shall use respectful research and fantasy framing. | PRD-NFR-004 |
-| CON-009 | Mobile UI shall remain readable on phone-sized screens. | PRD-NFR-002 |
+| FR-010 | The system shall provide a 7x7 board for the prototype. | Must |
+| FR-011 | The system shall track each character's board position. | Must |
+| FR-012 | The system shall calculate legal movement based on character MOVE. | Must |
+| FR-013 | The system shall support orthogonal movement as the default movement rule. | Must |
+| FR-014 | The system shall prevent characters from ending movement on occupied tiles unless an ability allows it. | Must |
+| FR-015 | The system shall support abilities that move through occupied tiles. | Should |
+| FR-016 | The system shall support terrain or placed objects that block movement. | Should |
+| FR-017 | The system shall visually highlight legal movement tiles. | Must |
+| FR-018 | The system shall visually indicate occupied, blocked, and targetable tiles. | Must |
+| FR-018A | The system shall identify and visually mark the center tile for paper-test and digital-test layouts. | Should |
 
-## 9. Business Rules
+### 9.3 Turn And Action System
 
-| ID | Rule | Source |
+| ID | Requirement | Priority |
 | --- | --- | --- |
-| BR-001 | Each side may field only one Hero in the prototype. | PRD section 8 |
-| BR-002 | Each side may field only one Leader in the prototype. | PRD section 8 |
-| BR-003 | Each side may field up to two copies of each non-common, non-unique type in future squad-building rules unless changed by a later mode. | PRD section 8 |
-| BR-004 | Common characters may be used in larger numbers if future squad sizes require filler units. | PRD section 8 |
-| BR-005 | The first paper prototype uses one copy of each of its seven character type cards per side. | PRD section 8 |
-| BR-006 | Character cards begin on the board at match start. | PRD section 9 |
-| BR-007 | Character cards have no deployment cost in the prototype. | PRD section 9 |
-| BR-008 | Each character refreshes to one action point at the start of its controller's turn. | PRD section 12 |
-| BR-009 | Movement consumes that character's action point unless a card explicitly grants bonus movement. | PRD section 12 |
-| BR-010 | Attacking consumes that character's action point unless a card explicitly states otherwise. | PRD section 12 |
-| BR-011 | Using an AP Ability consumes that character's action point. | PRD section 9 |
-| BR-012 | Passive abilities do not consume action points by themselves. | PRD section 9 |
-| BR-013 | Activated abilities must state whether they spend AP, mark a future action, or require another cost. | PRD section 9 |
-| BR-014 | A Level 1 character reaches Level 2 by crossing to the opponent's board edge. | PRD section 9 |
-| BR-015 | A Level 2 character reaches Level 3 by collecting a Spirit Ember from a defeated enemy and delivering it to the center square. | PRD-FR-007 |
-| BR-016 | Match-based levels reset after a match unless a future mode explicitly states otherwise. | PRD section 14 |
-| BR-017 | A player wins immediately by capturing or defeating the opposing Hero. | PRD-FR-004 |
-| BR-018 | A player wins by defeating all opposing characters. | PRD-FR-004 |
-| BR-019 | Relic and event cards are mixed into one shared non-character deck. | PRD-FR-005 |
-| BR-020 | The active player draws one shared relic/event card each turn. | PRD-FR-005 |
-| BR-021 | Each player may have only one active relic at a time. | PRD section 9 |
-| BR-022 | If a player draws a relic while already holding an active relic, that player may replace the active relic or ignore/discard the new relic. | PRD section 9 |
-| BR-023 | Event cards do not occupy relic slots and resolve immediately or for their printed duration. | PRD section 9 |
-| BR-024 | Default movement is orthogonal unless a card, relic, event, terrain, or future mode states otherwise. | PRD section 8 |
-| BR-025 | Default attack pattern is orthogonal line-of-sight unless a card, relic, event, or future mode states otherwise. | PRD section 8 |
-| BR-026 | Diagonal, area, jump, teleport, or unusual patterns require explicit special rules. | PRD section 8 |
-| BR-027 | A Hero or Leader may mount an adjacent allied Mount by spending an action. | PRD section 8 |
-| BR-028 | A mounted Hero or Leader and Mount occupy the same board tile as a combined mounted pair. | PRD section 8 |
-| BR-029 | A mounted pair uses the rider's HP, ATK, RANGE, level, and abilities, but uses the Mount's MOVE and movement pattern. | PRD section 8 |
-| BR-030 | A Mount cannot take separate actions while carrying a Hero or Leader. | PRD section 8 |
-| BR-031 | Damage to a mounted pair is applied to the rider's HP. When that HP reaches 0, both rider and Mount are defeated. | PRD section 8 |
-| BR-032 | Dismounting is an action and requires a valid adjacent empty tile. | PRD section 8 |
-| BR-033 | Competitive progression must preserve fair access to gameplay power. | PRD-NFR-003 |
-| BR-034 | Account unlocks should be cosmetic, mastery-based, or non-gameplay-affecting. | PRD section 14 |
-| BR-035 | The rules and UI term for Level 3 progression is `Spirit Ember`; older body-part language is retired. | PRD-RISK-006 |
+| FR-019 | The system shall alternate turns between players. | Must |
+| FR-020 | The system shall refresh the active player's pool AP at the start of their turn: 2 AP on their first turn of the match, 4 AP on every turn after. | Must |
+| FR-020A | The system shall refresh each active character's own AP stat (default 1, higher via specific cards or effects) at the start of its controller's turn. | Must |
+| FR-021 | The system shall spend 1 pool AP and 1 of the acting character's AP when that character moves. | Must |
+| FR-022 | The system shall spend 1 pool AP and 1 of the acting character's AP when that character attacks. | Must |
+| FR-023 | The system shall spend 1 pool AP and 1 of the acting character's AP when that character uses an ability. | Must |
+| FR-024 | The system shall prevent an action when either the player's pool AP or the acting character's own AP is exhausted. | Must |
+| FR-025 | The system shall support effects that refresh pool AP or a specific character's AP. | Should |
+| FR-026 | The system shall support pass/end-turn behavior. | Must |
+| FR-027 | The system shall resolve start-of-turn and end-of-turn effects. | Should |
+| FR-027A | The system shall support mount and dismount actions for eligible Heroes and Leaders. | Must |
 
-## 10. Functional Requirements
+### 9.4 Combat
 
-### 10.1 Match Setup
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-028 | The system shall store HP, ATK, MOVE, RANGE, type, culture, level, and ability data for each character. | Must |
+| FR-029 | The system shall calculate valid attack targets using character RANGE. | Must |
+| FR-030 | The system shall apply basic attack damage using character ATK. | Must |
+| FR-031 | The system shall reduce character HP when damage is applied. | Must |
+| FR-032 | The system shall defeat and remove or mark characters when HP reaches zero. | Must |
+| FR-033 | The system shall support shields and damage prevention. | Should |
+| FR-034 | The system shall support push, displacement, and movement-stopping effects. | Should |
+| FR-035 | The system shall support range modifiers. | Should |
+| FR-036 | The system shall support damage reduction and damage redirection. | Should |
+| FR-036A | The system shall support orthogonal line-of-sight attacks as the default attack pattern. | Must |
+| FR-036B | The system shall support special attack patterns, such as diagonal, area, or non-line attacks, when card rules define them. | Should |
+| FR-036C | The system shall block all ranged targeting — attacks and any AP ability that targets at range, whether damage-dealing or non-damage support/utility — from passing through an occupied tile (ally or enemy) unless the specific card or ability explicitly states an exception. This resolves PRD-OQ-011 and supersedes the former split Must/Should requirement pending that resolution. | Must |
+| FR-036D | The system shall block the same ranged targeting from passing through a tile holding a placed object, by default, unless the specific card or object explicitly states an exception (BR-011A). | Must |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-001 | The system shall allow a player to select a playable culture for prototype matches. | Must | Enables faction identity and replay testing. | PRD-FR-002 |
-| FR-002 | The system shall support Russian-inspired and Atlantean cultures for the prototype. | Must | Required to test two distinct playstyles. | PRD-FR-002 |
-| FR-003 | The system shall load a fixed starting squad for each prototype culture. | Must | Keeps the first prototype focused and testable. | PRD section 20 |
-| FR-004 | The system shall enforce one Hero per side. | Must | Supports the Hero capture victory condition. | BR-001 |
-| FR-005 | The system shall enforce one Leader per side. | Must | Preserves intended faction command structure. | BR-002 |
-| FR-006 | The system should support configurable copy limits for future squad-building modes. | Should | Allows expansion without reworking roster rules. | BR-003 |
-| FR-007 | The system shall place all selected character cards on the board at match start. | Must | Matches the prototype's no-deployment-cost model. | BR-006 |
-| FR-008 | The system shall support configurable starting board layouts. | Must | The exact 7x7 formation remains an open decision. | PRD-OQ-002 |
-| FR-009 | The system shall initialize a shared relic/event deck at match start. | Must | Enables the shared non-character draw system. | PRD-FR-005 |
+### 9.5 Character Abilities
 
-### 10.2 Board And Movement
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-037 | The system shall support printed character abilities. | Must |
+| FR-038 | The system shall support movement abilities such as Vault and Glide. | Must |
+| FR-039 | The system shall support offensive abilities such as Chill and Pounce. | Must |
+| FR-040 | The system shall support defensive abilities such as Quartz Armor and Resonance Shield. | Must |
+| FR-041 | The system shall support support abilities such as Command and Link Mind, subject to the same line-of-sight rule as damage-dealing abilities (FR-036C, FR-036D). | Must |
+| FR-042 | The system shall support placeable objects such as barricades and quartz pylons. | Should |
+| FR-043 | The system shall support once-per-turn and once-per-match ability limits. | Should |
+| FR-044 | The system shall show ability range and legal targets before confirmation. | Must |
+| FR-045 | The system shall require confirmation before irreversible ability use. | Should |
+| FR-045A | The system shall support stronger utility abilities on low-ATK characters so low-attack pieces remain strategically useful. | Must |
+| FR-045I | The system shall distinguish passive abilities from AP-activated abilities in card text and UI. | Must |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-010 | The system shall provide a 7x7 board for the prototype. | Must | Required by the first playable scope. | PRD-FR-001 |
-| FR-011 | The system shall visually identify the center tile. | Must | The center tile is used for Level 3 progression and tactical focus. | PRD-FR-001, PRD-FR-007 |
-| FR-012 | The system shall track each character's board position. | Must | Required for movement, attacks, abilities, trophies, and victory. | PRD-FR-003 |
-| FR-013 | The system shall calculate legal movement based on character MOVE and movement rules. | Must | Enables tactical clarity. | PRD-FR-003 |
-| FR-014 | The system shall support orthogonal movement as the default movement rule. | Must | Establishes the prototype baseline. | BR-024 |
-| FR-015 | The system shall prevent characters from ending movement on occupied tiles unless a card rule allows it. | Must | Preserves board state consistency. | BR-026 |
-| FR-016 | The system shall support abilities that move over or through occupied tiles when printed rules allow them. | Should | Needed for Vault and Glide behavior. | PRD section 8 |
-| FR-017 | The system should support terrain or placed objects that block or modify movement. | Should | Needed for barricades, frost, pylons, and future maps. | PRD sections 8 and 10 |
-| FR-018 | The system shall visually highlight legal movement tiles. | Must | Supports rule comprehension and mobile usability. | PRD-NFR-002 |
-| FR-019 | The system shall visually distinguish occupied, blocked, targetable, and dangerous tiles. | Must | Supports tactical clarity. | PRD-NFR-002 |
+### 9.5A Mounted Pair System
 
-### 10.3 Turn And Action System
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-045B | The system shall allow an eligible Hero or Leader to mount an adjacent allied Mount by spending 1 pool AP and 1 of that character's own AP, and shall block the action when either is unavailable. | Must |
+| FR-045C | The system shall represent a mounted Hero or Leader and Mount as occupying one board tile. | Must |
+| FR-045D | The system shall use the rider's HP, ATK, RANGE, level, and abilities while mounted. | Must |
+| FR-045E | The system shall use the Mount's MOVE and movement pattern while mounted. | Must |
+| FR-045F | The system shall prevent the Mount from acting separately while mounted. | Must |
+| FR-045G | The system shall defeat both rider and Mount when the mounted rider's HP reaches 0. | Must |
+| FR-045H | The system shall allow dismounting as an action, spending 1 pool AP and 1 of the rider's own character AP, only when a valid adjacent empty tile exists. | Must |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-020 | The system shall alternate turns between players. | Must | Establishes the tactical match structure. | PRD-FR-003 |
-| FR-021 | The system shall resolve start-of-turn effects before the active player acts. | Should | Supports relics, events, shields, and future effects. | PRD section 11 |
-| FR-022 | The system shall refresh each active character to one action point at the start of its controller's turn. | Must | Implements the core action economy. | BR-008 |
-| FR-023 | The system shall spend a character's action point when that character moves. | Must | Enforces action economy. | BR-009 |
-| FR-024 | The system shall spend a character's action point when that character attacks. | Must | Enforces action economy. | BR-010 |
-| FR-025 | The system shall spend a character's action point when that character uses an AP Ability. | Must | Enforces action economy. | BR-011 |
-| FR-026 | The system shall prevent characters with zero action points from taking standard actions. | Must | Preserves turn clarity and rules consistency. | PRD-FR-003 |
-| FR-027 | The system should support effects that grant bonus movement, reaction actions, or action point recovery. | Should | Supports printed card abilities and future content. | PRD section 12 |
-| FR-028 | The system shall support pass and end-turn behavior. | Must | Allows turn completion when no actions remain or player chooses to stop. | PRD-FR-003 |
-| FR-029 | The system should resolve end-of-turn effects after the active player ends. | Should | Supports events and future status effects. | PRD section 11 |
+### 9.6 Character Leveling
 
-### 10.4 Combat
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-046 | The system shall track each character's current level from 1 to 3. | Must |
+| FR-047 | The system shall detect when a character reaches the opponent's board edge. | Must |
+| FR-047A | The system shall track Spirit Ember possession as a status/counter on the carrying character, not as a separate placed board object. | Must |
+| FR-048 | The system shall level up a character when it reaches the opponent's board edge (Level 2) or delivers a Spirit Ember to the center square (Level 3). | Must |
+| FR-049 | The system shall apply Level 2 and Level 3 upgrades to character rules. | Must |
+| FR-050 | The system shall prevent character levels from exceeding 3. | Must |
+| FR-051 | The system shall reset match-based levels after a match ends. | Must |
+| FR-052 | The system shall visually communicate character level and upgraded rules. | Must |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-030 | The system shall store HP, ATK, MOVE, RANGE, type, culture, level, and ability data for each character. | Must | Required for all unit interactions. | PRD section 8 |
-| FR-031 | The system shall calculate valid attack targets using character RANGE and attack pattern rules. | Must | Enables legal combat. | PRD-FR-003 |
-| FR-032 | The system shall apply basic attack damage using character ATK. | Must | Implements core combat resolution. | PRD section 8 |
-| FR-033 | The system shall reduce character HP when damage is applied. | Must | Implements defeat and survival state. | PRD section 8 |
-| FR-034 | The system shall defeat and remove or mark characters when HP reaches zero. | Must | Required for army defeat and Spirit Ember rules. | PRD-FR-004, PRD-FR-007 |
-| FR-035 | The system should support shields and damage prevention. | Should | Required by Atlantean and relic effects. | PRD section 8 |
-| FR-036 | The system should support push, pull, displacement, and movement-stopping effects. | Should | Required by Pounce, Psychic Undertow, frost, and future effects. | PRD section 9 |
-| FR-037 | The system should support range modifiers. | Should | Required by relics/events and support abilities. | PRD section 9 |
-| FR-038 | The system should support damage reduction, redirection, and counter-damage. | Should | Required by Resonance Guard and defensive mechanics. | PRD section 8 |
-| FR-039 | The system shall support orthogonal line-of-sight attacks as the default attack pattern. | Must | Establishes baseline combat readability. | BR-025 |
-| FR-040 | The system should support special attack patterns when card rules define them. | Should | Enables future card variety. | BR-026 |
+### 9.7 Relic And Event System
 
-### 10.5 Character Abilities
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-053 | The system shall maintain a shared relic/event deck used by both players. | Must |
+| FR-054 | The system shall draw one shared relic/event card each turn for the active player. | Must |
+| FR-055 | The system shall distinguish persistent relic effects from temporary event effects. | Must |
+| FR-056 | The system shall apply shared relic/event effects to the board state. | Must |
+| FR-057 | The system shall display each player's active relic clearly. | Must |
+| FR-058 | The system shall support previewing the next relic/event card if an ability allows it. | Should |
+| FR-059 | The system shall support placing a previewed card on the bottom of the shared deck. | Should |
+| FR-059A | The system shall enforce one active relic slot per player. | Must |
+| FR-059B | The system shall allow the active player to choose whether to replace their current relic when drawing a new relic, via in-game UI rather than a page-leave-style popup. | Must |
+| FR-059C | The system shall display the currently drawn or active event separately from player relic slots. | Must |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-041 | The system shall support printed character abilities. | Must | Cards are central to character identity. | PRD-FR-003 |
-| FR-042 | The system shall distinguish Passive, AP Ability, and Activated timing labels in rules and UI. | Must | Prevents AP and timing confusion. | BR-012, BR-013 |
-| FR-043 | The system shall support movement abilities such as Vault and Glide. | Must | Required by prototype cards. | PRD section 8 |
-| FR-044 | The system shall support offensive abilities such as Chill, Pounce, and Mark Target. | Must | Required by prototype cards. | PRD section 8 |
-| FR-045 | The system shall support defensive abilities such as Quartz Armor, Resonance Shield, Heroic Guard, and Last Oath. | Must | Required by prototype cards. | PRD section 8 |
-| FR-046 | The system shall support support abilities such as Command, Link Mind, and Foresight. | Must | Required by prototype cards. | PRD section 8 |
-| FR-047 | The system should support placeable objects such as barricades and quartz pylons. | Should | Required for Specialist identity and future boards. | PRD section 8 |
-| FR-048 | The system should support once-per-turn and once-per-match limits. | Should | Required by Level 3 and special effects. | PRD section 8 |
-| FR-049 | The system shall show ability range and legal targets before confirmation. | Must | Supports mobile UX and error prevention. | PRD-NFR-002 |
-| FR-050 | The system should require confirmation before irreversible ability use. | Should | Reduces accidental actions. | PRD section 16 |
+### 9.8 Victory And Match End
 
-### 10.6 Mounted Pair System
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-060 | The system shall, at the end of each turn taken by a Hero's own controller, check whether that Hero (or its mounted pair) has any legal move available. | Must |
+| FR-060A | The system shall trigger the Hero-capture win condition for the opposing player when that check finds no legal move available. | Must |
+| FR-061 | The system shall immediately end the match when a Hero-capture win is triggered. | Must |
+| FR-061A | The system shall defeat and remove a Hero whose HP reaches 0 the same way as any other character, without independently ending the match (see BR-034A, AS-009). | Must |
+| FR-062 | The system shall detect when all characters on one side are defeated. | Must |
+| FR-063 | The system shall end the match when army defeat victory occurs. | Must |
+| FR-064 | The system shall show victory and defeat states, distinguishing a Hero-capture win from an army-defeat win. | Must |
+| FR-065 | The system shall record the winning condition for playtest notes or analytics. | Should |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-051 | The system shall allow an eligible Hero or Leader to mount an adjacent allied Mount by spending an action. | Must | Required by mounted character rules. | BR-027 |
-| FR-052 | The system shall represent a mounted pair as occupying one board tile. | Must | Prevents ambiguous board occupancy. | BR-028 |
-| FR-053 | The system shall use the rider's HP, ATK, RANGE, level, and abilities while mounted. | Must | Implements mounted stat inheritance. | BR-029 |
-| FR-054 | The system shall use the Mount's MOVE and movement pattern while mounted. | Must | Implements mounted mobility. | BR-029 |
-| FR-055 | The system shall prevent a Mount from acting separately while mounted. | Must | Enforces mounted action economy. | BR-030 |
-| FR-056 | The system shall defeat both rider and Mount when the mounted rider's HP reaches 0. | Must | Implements mounted defeat rule. | BR-031 |
-| FR-057 | The system shall allow dismounting as an action only when a valid adjacent empty tile exists. | Must | Prevents illegal board states. | BR-032 |
+### 9.9 User Interface And UX
 
-### 10.7 Character Leveling And Defeat Trophies
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-066 | The system shall support tap-friendly character selection on mobile screens. | Must |
+| FR-067 | The system shall support character inspection, including stats, level, ability, and status effects. | Must |
+| FR-068 | The system shall highlight legal moves, attack ranges, ability ranges, and danger zones. | Must |
+| FR-069 | The system shall show whose turn it is. | Must |
+| FR-070 | The system shall show which characters still have action points. | Must |
+| FR-071 | The system shall show active relic/event effects. | Must |
+| FR-072 | The system shall provide clear end-turn controls. | Must |
+| FR-073 | The system shall avoid hiding critical board state behind menus. | Must |
+| FR-074 | The system shall support undo or confirmation for selected actions during prototype testing. | Should |
+| FR-074A | The system shall display character status reminders (e.g., shield, temporary attack/movement bonus, Pounce mark) directly on the board via small icons or badges. | Must |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-058 | The system shall track each character's current level from 1 to 3. | Must | Required for match progression. | PRD-FR-006, PRD-FR-007 |
-| FR-059 | The system shall detect when a Level 1 character reaches the opponent's board edge. | Must | Required for Level 2 progression. | BR-014 |
-| FR-060 | The system shall level up a character to Level 2 when it reaches the opponent's board edge. | Must | Implements first progression objective. | BR-014 |
-| FR-061 | The system shall support Spirit Ember acquisition by a Level 2 character. | Must | Required for Level 3 progression. | BR-015 |
-| FR-062 | The system shall detect when a Level 2 character carrying a Spirit Ember reaches the center square. | Must | Required for Level 3 progression. | PRD-FR-007 |
-| FR-063 | The system shall level up a qualifying character to Level 3 at the center square. | Must | Implements second progression objective. | PRD-FR-007 |
-| FR-064 | The system shall apply Level 2 and Level 3 upgrades to character rules. | Must | Makes progression meaningful. | PRD section 14 |
-| FR-065 | The system shall prevent character levels from exceeding 3. | Must | Preserves rules bounds. | PRD section 14 |
-| FR-066 | The system shall reset match-based levels after a match ends. | Must | Preserves fair match starts. | BR-016 |
-| FR-067 | The system shall visually communicate character level, Spirit Ember state, and upgraded rules. | Must | Supports comprehension and mobile readability. | PRD-NFR-002 |
+### 9.10 Progression And Fairness
 
-### 10.8 Relic And Event System
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-075 | The system shall not require paid unlocks for gameplay power. | Must |
+| FR-076 | The system shall keep character cards mechanically consistent for all players in competitive modes. | Must |
+| FR-077 | The system shall support cosmetic progression such as skins, alternate art, titles, banners, or board skins. | Should |
+| FR-078 | The system shall support culture mastery progression without changing competitive power. | Should |
+| FR-079 | The system shall support ranked progression in a future mode without gameplay stat advantages. | Could |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-068 | The system shall maintain a shared relic/event deck used by both players. | Must | Implements the shared non-character deck. | BR-019 |
-| FR-069 | The system shall draw one shared relic/event card each turn for the active player. | Must | Creates turn-to-turn board variation. | BR-020 |
-| FR-070 | The system shall distinguish persistent relic effects from temporary event effects. | Must | Prevents slot and duration confusion. | BR-021, BR-023 |
-| FR-071 | The system shall apply shared relic/event effects to the board state. | Must | Makes draws tactically meaningful. | PRD-FR-005 |
-| FR-072 | The system shall enforce one active relic slot per player. | Must | Implements relic business rule. | BR-021 |
-| FR-073 | The system shall allow a player drawing a new relic to replace or ignore/discard it when their relic slot is full. | Must | Implements relic replacement choice. | BR-022 |
-| FR-074 | The system shall display active relics for each player. | Must | Supports state visibility. | PRD-NFR-002 |
-| FR-075 | The system shall display the current or most recent event separately from player relic slots. | Must | Prevents event/relic confusion. | BR-023 |
-| FR-076 | The system should support previewing, keeping, or bottom-decking the next relic/event card when an ability allows it. | Should | Required by Foresight and Dream Of The Deep City. | PRD section 9 |
+### 9.11 Content Management
 
-### 10.9 Victory And Match End
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-080 | The system shall store character data in a format that can be edited without rewriting game logic (`data/cards/characters.json`). | Must |
+| FR-081 | The system shall store relic/event card data in a format that can be edited without rewriting game logic (`data/cards/relic_events.json`). | Must |
+| FR-082 | The system shall support adding future cultures with seven character types each. | Should |
+| FR-082A | The content system shall be structured so each future culture can support three sub-areas, each with seven character types plus sub-area-specific relics and events. | Should |
+| FR-082B | The content system shall support tracking draft/review-status content (e.g., the Closed City relic/event set) separately from the playable prototype deck until promoted. | Should |
+| FR-083 | The system shall support balancing stats and abilities across paper and digital prototypes. | Must |
+| FR-084 | The system shall support internal debug visibility for board state, action points, HP, level, and active effects. | Should |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-077 | The system shall detect when a Hero is captured or defeated. | Must | Required for primary victory condition. | BR-017 |
-| FR-078 | The system shall immediately end the match when a Hero capture victory occurs. | Must | Supports chess-like clarity. | BR-017 |
-| FR-079 | The system shall detect when all characters on one side are defeated. | Must | Required for army defeat victory. | BR-018 |
-| FR-080 | The system shall end the match when army defeat victory occurs. | Must | Prevents stale end states. | BR-018 |
-| FR-081 | The system shall show victory and defeat states. | Must | Required for match completion. | PRD-FR-004 |
-| FR-082 | The system should record the winning condition for playtest notes or analytics. | Should | Supports success metrics and balance review. | SM-004, SM-008 |
+### 9.12 Godot Prototype
 
-### 10.10 User Interface And UX
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| FR-085 | The first software prototype shall be built in Godot. | Must |
+| FR-086 | The Godot prototype shall implement the board/grid engine. | Must |
+| FR-087 | The Godot prototype shall implement the turn manager, including the pool-AP/character-AP system. | Must |
+| FR-088 | The Godot prototype shall implement character movement, attacks, abilities, level-ups, Spirit Ember tracking, and win/loss checks (including the no-legal-move Hero capture check). | Must |
+| FR-089 | The Godot prototype shall use placeholder art until core rules are validated. | Must |
+| FR-090 | The Godot prototype shall support local hotseat play before networked play. | Must |
+| FR-090A | The Godot prototype shall support exporting to Web (HTML5) to enable automated browser-based testing (e.g., Playwright). | Must |
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-083 | The system shall support tap-friendly character selection on mobile screens. | Must | Required for mobile-first play. | PRD-NFR-002 |
-| FR-084 | The system shall support character inspection including stats, level, HP, AP, abilities, Spirit Ember state, mounted state, and status effects. | Must | Required for readable tactical decisions. | PRD-FR-008 |
-| FR-085 | The system shall highlight legal moves, attack ranges, ability ranges, and danger zones. | Must | Supports tactical clarity. | PRD-NFR-002 |
-| FR-086 | The system shall show whose turn it is. | Must | Required for turn comprehension. | PRD-FR-003 |
-| FR-087 | The system shall show which characters still have action points. | Must | Required for action economy clarity. | PRD-FR-008 |
-| FR-088 | The system shall show active relic and event effects. | Must | Prevents hidden state. | PRD-FR-008 |
-| FR-089 | The system shall provide clear end-turn controls. | Must | Required for turn completion. | PRD-FR-003 |
-| FR-090 | The system shall avoid hiding critical board state behind menus. | Must | Supports mobile readability. | PRD-NFR-002 |
-| FR-091 | The system should support undo or confirmation for selected irreversible actions during prototype testing. | Should | Reduces accidental moves during learning. | PRD section 16 |
-| FR-092 | The digital tabletop prototype should support manually placed board objects or markers for pylons, barricades, trophies, and playtest notation. | Should | Helps test rules before full implementation. | PRD section 10 |
+## 10. Non-Functional Requirements
 
-### 10.11 Progression And Fairness
+### 10.1 Performance
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-093 | The system shall not require paid unlocks for gameplay power. | Must | Protects competitive trust. | PRD-NFR-003 |
-| FR-094 | The system shall keep character cards mechanically consistent for all players in competitive modes. | Must | Prevents pay-to-win or grind-to-win advantage. | PRD-NFR-003 |
-| FR-095 | The system should support cosmetic progression such as skins, alternate art, titles, banners, or board skins. | Should | Provides non-power rewards. | PRD section 14 |
-| FR-096 | The system should support culture mastery progression without changing competitive power. | Should | Supports replay and identity safely. | PRD section 14 |
-| FR-097 | The system could support ranked progression in a future mode without gameplay stat advantages. | Could | Supports future competitive roadmap. | PRD section 15 |
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| NFR-001 | The mobile prototype should maintain smooth interaction on target test devices. | Must |
+| NFR-002 | Board selection, movement highlighting, and target/line-of-sight highlighting should respond within 100 ms on target devices. | Should |
+| NFR-003 | Turn transitions should complete without noticeable delay except for intentional animations. | Should |
+| NFR-004 | The game should avoid long animations that slow repeated tactical play. | Must |
 
-### 10.12 Content Management And Expansion
+### 10.2 Usability
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-098 | The system shall store character data in a format that can be edited without rewriting game logic. | Must | Enables tuning and future content. | PRD-FR-009 |
-| FR-099 | The system shall store relic/event card data in a format that can be edited without rewriting game logic. | Must | Enables tuning and future content. | PRD-FR-009 |
-| FR-100 | The content model shall support future cultures with seven character types each. | Should | Supports expansion path. | PRD-GOAL-002 |
-| FR-101 | The content model should support three sub-areas per faction, each with seven character types plus relics and events. | Should | Supports the story/content framework. | PRD-FR-009 |
-| FR-102 | The system shall support balancing stats and abilities across paper and digital prototypes. | Must | Required for iterative tuning. | PRD-RISK-002 |
-| FR-103 | The system should support internal debug visibility for board state, action points, HP, levels, trophies, mounted state, and active effects. | Should | Supports playtest diagnosis. | PRD-FR-008 |
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| NFR-005 | The board and characters must remain readable on small mobile screens. | Must |
+| NFR-006 | Card and character text must be legible without excessive zooming. | Must |
+| NFR-007 | Players must be able to understand legal actions from visual feedback. | Must |
+| NFR-008 | The UI must clearly distinguish movement, attack, ability, and relic/event states. | Must |
+| NFR-009 | The game should minimize accidental irreversible actions through confirmation or clear input states. | Should |
+| NFR-009A | Mobile-first constraints apply from the paper and Godot rules prototypes onward, not deferred to the Mobile UX Prototype milestone (BR-044). | Must |
 
-### 10.13 Godot Prototype
+### 10.3 Balance And Fairness
 
-| ID | Requirement | Priority | Rationale | Source |
-| --- | --- | --- | --- | --- |
-| FR-104 | The first software prototype shall be built in Godot. | Must | Aligns technical direction with scope. | CON-005 |
-| FR-105 | The Godot prototype shall implement the board/grid engine. | Must | Core digital rules requirement. | PRD-MILESTONE-002 |
-| FR-106 | The Godot prototype shall implement the turn manager. | Must | Core digital rules requirement. | PRD-MILESTONE-002 |
-| FR-107 | The Godot prototype shall implement character movement, attacks, abilities, level-ups, trophies, and win/loss checks. | Must | Core digital rules requirement. | PRD-MILESTONE-002 |
-| FR-108 | The Godot prototype shall use placeholder art until core rules are validated. | Must | Maintains velocity. | AS-007 |
-| FR-109 | The Godot prototype shall support local hotseat play before networked play. | Must | Reduces early complexity. | CON-006 |
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| NFR-010 | Competitive gameplay must not depend on paid power progression. | Must |
+| NFR-011 | Both prototype cultures should have viable paths to victory. | Must |
+| NFR-012 | No single character should dominate the game without counterplay after tuning. | Must |
+| NFR-013 | Level 2 and Level 3 upgrades should reliably feel worth pursuing — reward should justify the risk of exposing a piece to reach the enemy edge or return to center with a Spirit Ember — without making comebacks impossible. | Must |
+| NFR-014 | Shared relic/event cards should create variety without deciding matches randomly. | Should |
+| NFR-015 | The checkmate-style Hero capture rule (BR-034) should reward active engagement and threat creation, not reward pure turtling; event card design is an explicit lever for this (see R-004). | Must |
 
-## 11. Non-Functional Requirements
+### 10.4 Maintainability
 
-### 11.1 Performance
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| NFR-016 | Core rules should be separated from character and card data where practical. | Must |
+| NFR-017 | Character stats and abilities should be easy to rebalance during playtesting. | Must |
+| NFR-018 | Future cultures and sub-areas should be addable without rewriting the board or turn systems. | Should |
+| NFR-019 | The codebase should support automated or scripted validation of character data where possible. | Should |
 
-| ID | Requirement | Priority | Source |
+### 10.5 Reliability
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| NFR-020 | The game state must remain consistent after every action. | Must |
+| NFR-021 | Invalid moves, attacks, and ability targets — including line-of-sight violations — must be rejected. | Must |
+| NFR-022 | The match must always be able to reach a valid end state. | Must |
+| NFR-023 | The system should log rule errors or impossible states during prototype testing. | Should |
+
+### 10.6 Accessibility
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| NFR-024 | Important state should not be communicated by color alone. | Must |
+| NFR-025 | Text, icons, and board highlights should maintain high contrast. | Must |
+| NFR-026 | Tap targets should be large enough for mobile interaction. | Must |
+| NFR-027 | Animations should not obscure critical state changes. | Should |
+
+### 10.7 Platform And Technical
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| NFR-028 | The prototype shall be developed in Godot. | Must |
+| NFR-029 | The game should be designed mobile-first. | Must |
+| NFR-030 | The architecture should not depend on networking for the first prototype. | Must |
+| NFR-031 | The prototype should be structured so AI and PvP can be added later. | Should |
+| NFR-031A | The prototype should be automatable via a Web (HTML5) export target so browser-based test tooling (e.g., Playwright) can drive and verify matches without manual play. | Must |
+
+### 10.8 Content Quality
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| NFR-032 | Real-world-inspired cultures should be treated respectfully and avoid stereotypes. | Must |
+| NFR-033 | Each culture should have distinct mechanics, silhouettes, colors, and play patterns. | Should |
+| NFR-034 | Character abilities should be concise enough to fit mobile card inspection UI. | Should |
+| NFR-035 | Placeholder art must remain readable enough for playtesting. | Must |
+
+## 11. Data Requirements
+
+### 11.1 Character Data
+
+Each character record (`data/cards/characters.json`) should include: character ID, name, faction/culture, sub-area, type, unique flag, copy limit, level, HP, ATK, MOVE, RANGE, movement pattern, attack pattern, ability text, ability timing type (passive or AP ability), ability rules data, Level 2 upgrade, Level 3 upgrade, role/flavor summary, art reference, icon reference.
+
+### 11.2 Match Data
+
+Each match record should track: player cultures, starting board layout (including each player's chosen back-row arrangement), character positions, character HP, character levels, Spirit Ember possession status per character, mounted pair state, pool AP remaining, each character's remaining AP, active relic for each player, active or most recent event effects, shared relic/event deck order and each player's 3-relic/4-event contribution, turn number, current player, defeated characters, victory condition (Hero capture vs. army defeat).
+
+### 11.3 Relic/Event Data
+
+Each relic/event record (`data/cards/relic_events.json`) should include: card ID, name, faction/culture, sub-area, kind (relic or event), duration, trigger timing, effect rules, note/flavor text, visual/audio references, review status (playable vs. `draft_for_review`, per BR-043A).
+
+### 11.4 Analytics And Playtest Reporting Data
+
+Each match record should, where feasible, also capture: match length, victory condition and which side won, turn count and action counts by action type, character level-up and Spirit Ember delivery events, relic/event draws and replacements, and observed turtling/stalling behavior (SM-009). Playtest reporting should capture comprehension time, replay interest, confusing rules, and perceived culture distinction (SM-001 through SM-009).
+
+## 12. Initial Character Card Inventory
+
+Source of truth: `data/cards/characters.json`, which matches the current PRD Section 8 tables exactly. Level 2 upgrades read as a clear power spike and Level 3 upgrades are transformative, per BR-026 — this inventory reflects the revised (2026-07-18, resynced 2026-08-14) card text, not the earlier pending-revision placeholder.
+
+### 12.1 Russian-Inspired
+
+| Character | Type | HP | ATK | MOVE | RANGE | Level 1 Ability | Level 2 Upgrade | Level 3 Upgrade |
+| --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
+| Gymnast | Common | 2 | 1 | 3 | 1 | Passive: Vault may move through 1 adjacent allied character during movement. | +1 MOVE and Vault may pass through any one occupied tile during movement. After Vaulting, this character may move 1 extra tile. | Aurora Acrobat: +1 ATK and +1 MOVE. Once each turn after Vaulting, may make a 1-damage adjacent attack without spending AP. |
+| White Siberian Tiger | Mount | 4 | 2 | 4 | 1 | Activated Pounce: only while not mounted. Marks its next attack after moving as +2 ATK. Movement and attack costs still apply. | +1 HP and +1 MOVE. Pounce also pushes the target 1 tile if possible. | Aurora Predator: +1 ATK. When Pounce defeats a target, this character may move up to 2 tiles and refresh 1 character AP once per turn. |
+| Sniper | Warrior | 3 | 2 | 2 | 4 | Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn. | +1 RANGE. Piercing Shot ignores 1 shield or damage reduction, and may ignore one occupied allied tile for line-of-sight. | Dead Lane: +1 ATK. Once per turn, after damaging an enemy at range 3 or farther, mark that enemy; the next allied attack against it deals +1 damage. |
+| Army General | Leader | 5 | 1 | 2 | 1 | AP Ability: Command chooses an allied character within 2 tiles. That ally gains +1 ATK on its next attack this turn or may move 1 tile without spending an action. | Command range becomes 3 and may target 2 allies. Each target chooses +1 ATK on its next attack or 1 free tile of movement. | Tactical Mastery: +1 HP. Once per turn when a Commanded ally defeats an enemy or delivers a Spirit Ember, refresh 1 character AP on an allied character within 2 tiles. |
+| Bogatyr Champion | Hero | 6 | 2 | 2 | 1 | Passive: Stand Firm gives +1 maximum and current HP while this character is on or adjacent to the center tile. | Heroic Guard: +2 maximum and current HP while on or adjacent to the center tile. Adjacent allies take -1 damage from attacks. | Last Oath: +1 ATK and +2 maximum HP. The first time this character would be defeated, it remains at 2 HP and adjacent enemies take 1 damage. |
+| Winter Engineer | Specialist | 3 | 1 | 2 | 1 | AP Ability: Barricade creates 1 barricade on an adjacent empty tile, or repairs an adjacent barricade or placed object by 1 HP. Barricades block movement and have 2 HP. | Fortified Works: Barricades have 3 HP. When using Barricade, create or repair up to 2 adjacent barricades or placed objects. | Frozen Redoubt: +1 HP. Once per turn, place a barricade or frost tile within 2 tiles. Allies adjacent to placed objects take -1 damage from ranged attacks. |
+| Frost Seer | Mystic | 3 | 1 | 2 | 3 | AP Ability: Chill deals 1 damage at range 3. Target's MOVE is reduced by 1 and it cannot mount or dismount on its next turn. | Winter Veil: Chill also gives one ally within 3 tiles a 1-damage shield. Shielded allies cannot be pushed this turn. | Deep Freeze: +1 RANGE. Chill also prevents the target from using reaction or bonus movement effects next turn; if the target already has a slow marker, it cannot move next turn. |
+
+### 12.2 Atlantean
+
+| Character | Type | HP | ATK | MOVE | RANGE | Level 1 Ability | Level 2 Upgrade | Level 3 Upgrade |
+| --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
+| Quartz Attendant | Common | 2 | 1 | 2 | 1 | Passive: Synchronize gives +1 ATK while adjacent to another Atlantean. | Shared Pulse: +1 HP. While adjacent to another Atlantean, gains +1 ATK and the first damage to one adjacent Atlantean each turn is reduced by 1. | Collective Node: +1 HP. Counts as a pylon and as adjacent to Atlanteans within 2 tiles for Synchronize and relay effects. |
+| Manta Glider | Mount | 3 | 1 | 4 | 1 | Passive: Glide may move over occupied tiles but must end on an empty tile. If carrying a Hero or Leader, the mounted pair may also glide. | +1 MOVE. After moving over any character, this character's next attack this turn gains +1 ATK. | Phase Current: +1 HP and +1 ATK. Once per turn, ignore terrain, barricades, and occupied tiles during movement; deal 1 damage to one enemy moved over. |
+| Resonance Guard | Warrior | 5 | 1 | 2 | 1 | Passive: Quartz Armor reduces ranged attack damage by 1. | Redirect: +1 ATK. Once per turn, may take damage for an adjacent ally; reduce that redirected damage by 1. | Resonant Bastion: Adjacent allies gain a 1-damage shield at the start of your turn. After this character reduces damage, deal 1 damage back if the attacker is within range 2. |
+| Divine Conductor | Leader | 4 | 1 | 2 | 3 | AP Ability: Link Mind chooses an ally within 3 tiles. Until end of turn, that ally may use the Conductor's RANGE for its ability if valid, and may ignore one allied character for line-of-sight. | Link Mind may target 2 allies within 3 tiles. Linked allies may use the Conductor's RANGE and ignore one allied character for line-of-sight. | Perfect Chord: +1 RANGE. Once per turn, when a linked ally defeats an enemy or delivers a Spirit Ember, refresh that ally's character AP. |
+| Oracle Sovereign | Hero | 5 | 1 | 2 | 3 | AP Ability: Foresight reveals the next shared relic/event card. You may place it on the bottom of the deck. Then give one adjacent ally a 1-damage shield. | Spirit Mantle: At the start of your turn, this character and one adjacent ally each gain a 1-damage shield. Foresight may instead leave the revealed card on top. | Collective Ascension: +1 HP and +1 RANGE. Once per match, all allies heal 2, gain a 1-damage shield, and gain +1 MOVE this turn. |
+| Crystal Architect | Specialist | 3 | 1 | 2 | 2 | AP Ability: Pylon places a quartz pylon on an adjacent empty tile, or moves an existing allied pylon 1 tile. Allies within 2 tiles of a pylon gain +1 RANGE on abilities. | Pylon range becomes 2. Pylons have 2 HP, and allies within 2 tiles of a pylon gain +1 RANGE on attacks and abilities. | Relay Gate: +1 HP. Once per turn, teleport an ally adjacent to a pylon to an empty tile adjacent to another pylon within 4 tiles, then give that ally a 1-damage shield. |
+| Astral Harmonic | Mystic | 3 | 1 | 2 | 3 | AP Ability: Resonance Shield shields an ally within 3 tiles for 1 damage prevention. If that ally is mounted, the shield prevents 2 damage instead. | Harmonic Bind: Resonance Shield prevents 2 damage and the shielded ally cannot be pushed, pulled, or displaced this turn. | Astral Echo: +1 RANGE. After shielding an ally, may deal 1 damage to an enemy within 2 tiles of that ally; the shielded ally may move 1 tile without spending AP. |
+
+## 13. Initial Relic And Event Inventory
+
+Source of truth: `data/cards/relic_events.json`. Relic and event cards are culture-themed but mixed into one shared non-character deck used by both players (BR-027, BR-033). Each player contributes their full culture set — 3 relics and 4 events — to build the shared 14-card deck (BR-027A). Each player may have only one active relic; drawing a new relic while one is already active allows that player to replace it or ignore the new draw (BR-029, BR-030).
+
+### 13.1 Russian-Inspired Relics (3)
+
+| Card | Type | Duration | Effect |
 | --- | --- | --- | --- |
-| NFR-001 | The mobile prototype should maintain smooth interaction on target test devices. | Must | PRD-NFR-002 |
-| NFR-002 | Board selection, movement highlighting, and target highlighting should respond within 100 ms on target devices. | Should | Inference from tactical clarity |
-| NFR-003 | Turn transitions should complete without noticeable delay except for intentional animations. | Should | PRD section 16 |
-| NFR-004 | The game should avoid long animations that slow repeated tactical play. | Must | PRD section 16 |
+| Winter Palace Standard | Relic | Persistent | Your Hero and Leader each gain +1 maximum HP while this relic is active. |
+| Iron Birch Talisman | Relic | Persistent | Your Common and Warrior each gain +1 maximum HP while this relic is active. |
+| General's War Map | Relic | Persistent | Once each turn, one of your characters gains +1 RANGE on its next attack or ability. |
 
-### 11.2 Usability
+### 13.2 Russian-Inspired Events (4)
 
-| ID | Requirement | Priority | Source |
+| Card | Type | Duration | Effect |
 | --- | --- | --- | --- |
-| NFR-005 | The board and characters must remain readable on small mobile screens. | Must | PRD-NFR-002 |
-| NFR-006 | Card and character text must be legible without excessive zooming. | Must | PRD section 16 |
-| NFR-007 | Players must be able to understand legal actions from visual feedback. | Must | SM-001 |
-| NFR-008 | The UI must clearly distinguish movement, attack, ability, relic, event, Spirit Ember, mounted, HP, AP, and level states. | Must | PRD-FR-008 |
-| NFR-009 | The game should minimize accidental irreversible actions through confirmation or clear input states. | Should | PRD section 16 |
-| NFR-010 | Important board state should remain visible without constant menu opening. | Must | PRD-NFR-002 |
+| Whiteout | Event | 1 round | All ranged attacks and ranged abilities have -1 RANGE, minimum 1. |
+| Frozen Center | Event | 1 round | The center row and center tile count as frost. A character entering frost stops moving. |
+| Rally From The Snow | Event | Immediate | The active player heals 1 HP on one damaged character. |
+| Long Winter March | Event | 1 turn | The active player's first movement action this turn gains +1 MOVE. |
 
-### 11.3 Balance And Fairness
+### 13.3 Atlantean Relics (3)
 
-| ID | Requirement | Priority | Source |
+| Card | Type | Duration | Effect |
 | --- | --- | --- | --- |
-| NFR-011 | Competitive gameplay must not depend on paid power progression. | Must | PRD-NFR-003 |
-| NFR-012 | Both prototype cultures should have viable paths to victory. | Must | SM-008 |
-| NFR-013 | No single character should dominate the game without counterplay after tuning. | Must | PRD-RISK-002 |
-| NFR-014 | Level 2 and Level 3 upgrades should reward successful advancement without making comeback impossible. | Must | PRD-RISK-006 |
-| NFR-015 | Shared relic/event cards should create variety without deciding matches randomly. | Should | PRD-RISK-002 |
+| Quartz Heart Core | Relic | Persistent | Your shields prevent +1 additional damage while this relic is active. |
+| Hall Of Shared Minds | Relic | Persistent | Your adjacent characters gain +1 RANGE on abilities. |
+| Tideglass Obelisk | Relic | Persistent | Your characters adjacent to a placed object gain +1 RANGE on attacks and abilities. |
 
-### 11.4 Maintainability
+### 13.4 Atlantean Events (4)
 
-| ID | Requirement | Priority | Source |
+| Card | Type | Duration | Effect |
 | --- | --- | --- | --- |
-| NFR-016 | Core rules should be separated from character and card data where practical. | Must | PRD-FR-009 |
-| NFR-017 | Character stats and abilities should be easy to rebalance during playtesting. | Must | PRD-RISK-002 |
-| NFR-018 | Future cultures and sub-areas should be addable without rewriting the board or turn systems. | Should | PRD-FR-009 |
-| NFR-019 | The codebase should support automated or scripted validation of character and relic/event data where possible. | Should | Inference from content expansion needs |
+| Resonance Surge | Event | 1 turn | The active player's first ability this turn has +1 RANGE. |
+| Psychic Undertow | Event | 1 turn | The active player's first attack this turn may push or pull the target 1 tile. |
+| Crystal Tide | Event | 1 turn | The active player's characters have +1 RANGE on abilities this turn. |
+| Dream Of The Deep City | Event | Immediate | Reveal the next shared relic/event card. The active player may leave it on top or place it on the bottom of the deck. |
 
-### 11.5 Reliability
+### 13.5 Documented Future Content — Closed City (Not Yet In Prototype Scope)
 
-| ID | Requirement | Priority | Source |
+Per BR-043A, a full Closed City relic/event set is drafted in `data/cards/review_drafts/` and tagged `draft_for_review`. It is listed here only for traceability — effect text is still subject to change and is intentionally not promoted into Section 13.1–13.4 until it clears review.
+
+- **Relics (6 of 6):** Chintamani Fragment (Rare), Reactor Core Fragment, Cosmonaut Helmet With A Second Shadow, Lead-Sealed Notebook, Redacted Incident Tape, Karpova's Black Key.
+- **Events (8 of 8):** Signal Array Turns, Dream Monitors Synchronize, Reactor Prayer, Closed City Incident, Seventeen Seconds, Elena Missing In The Signal, The First Card Appears, Semyonov Orders Silence.
+
+## 14. Risks And Mitigations
+
+| ID | Risk | Impact | Mitigation |
 | --- | --- | --- | --- |
-| NFR-020 | The game state must remain consistent after every action. | Must | PRD-FR-003 |
-| NFR-021 | Invalid moves, attacks, abilities, mount/dismount actions, Spirit Ember actions, and relic choices must be rejected. | Must | PRD-FR-003 |
-| NFR-022 | The match must always be able to reach a valid end state. | Must | PRD-FR-004 |
-| NFR-023 | The system should log rule errors or impossible states during prototype testing. | Should | PRD-FR-008 |
-
-### 11.6 Accessibility
-
-| ID | Requirement | Priority | Source |
-| --- | --- | --- | --- |
-| NFR-024 | Important state should not be communicated by color alone. | Must | PRD-NFR-002 |
-| NFR-025 | Text, icons, and board highlights should maintain high contrast. | Must | PRD section 17 |
-| NFR-026 | Tap targets should be large enough for mobile interaction. | Must | PRD section 16 |
-| NFR-027 | Animations should not obscure critical state changes. | Should | PRD section 16 |
-
-### 11.7 Content Quality
-
-| ID | Requirement | Priority | Source |
-| --- | --- | --- | --- |
-| NFR-028 | Real-world-inspired cultures should be treated respectfully and avoid stereotypes. | Must | PRD-NFR-004 |
-| NFR-029 | Each culture should have distinct mechanics, silhouettes, colors, and play patterns. | Should | PRD section 8 |
-| NFR-030 | Each sub-area should have distinct style, mechanics, relics, events, and narrative function. | Should | PRD-GOAL-005 |
-| NFR-031 | Character abilities should be concise enough to fit mobile card inspection UI. | Should | PRD section 16 |
-| NFR-032 | Placeholder art must remain readable enough for playtesting. | Must | PRD section 20 |
-
-## 12. Data And Content Requirements
-
-### 12.1 Character Data
-
-| ID | Requirement | Priority | Source |
-| --- | --- | --- | --- |
-| DR-001 | Each character record shall include character ID, name, culture, sub-area when known, type, unique flag, and copy limit. | Must | PRD sections 7 and 8 |
-| DR-002 | Each character record shall include level, HP, ATK, MOVE, RANGE, movement pattern, attack pattern, and current match state. | Must | PRD section 8 |
-| DR-003 | Each character record shall include Level 1 ability text, ability timing type, rules data, Level 2 upgrade, and Level 3 upgrade. | Must | PRD section 8 |
-| DR-004 | Each character record should include art reference, icon reference, animation reference, and audio reference when available. | Should | PRD sections 17 and 18 |
-| DR-005 | Character data shall support mounted pair state, action point state, Spirit Ember state, defeated state, and active status effects. | Must | FR-051 through FR-067 |
-
-### 12.2 Match Data
-
-| ID | Requirement | Priority | Source |
-| --- | --- | --- | --- |
-| DR-006 | Each match record shall track player cultures, starting board layout, character positions, HP, levels, mounted state, Spirit Ember state, action points, and current player. | Must | PRD-FR-008 |
-| DR-007 | Each match record shall track active relics, current or recent event effects, shared deck order, turn number, defeated characters, and victory condition. | Must | PRD-FR-005, PRD-FR-004 |
-| DR-008 | Each match record should track playtest notes, observed confusion points, match length, and replay interest during prototype testing. | Should | SM-001 through SM-006 |
-
-### 12.3 Relic/Event Data
-
-| ID | Requirement | Priority | Source |
-| --- | --- | --- | --- |
-| DR-009 | Each relic/event record shall include card ID, name, culture theme, sub-area when known, type, duration, trigger timing, effect rules, and UI text. | Must | PRD section 9 |
-| DR-010 | Each relic/event record should include visual and audio references when available. | Should | PRD sections 17 and 18 |
-| DR-011 | Relic/event data shall support shared-deck use by both players rather than private culture decks for the prototype. | Must | BR-019 |
-
-### 12.4 Content Requirements
-
-| ID | Requirement | Priority | Source |
-| --- | --- | --- | --- |
-| CR-001 | The paper prototype shall include 14 character cards: seven Russian-inspired and seven Atlantean. | Must | PRD section 20 |
-| CR-002 | The paper prototype shall include 10-20 starter shared relic/event cards. | Must | PRD section 20 |
-| CR-003 | The first content set shall include Russian-inspired Winter Front, Far North, and Closed City sub-area notes. | Should | PRD section 8 |
-| CR-004 | The first content set shall include Atlantean First Mind, Crystal Dominion, and Flood Survivors sub-area notes. | Should | PRD section 8 |
-| CR-005 | Future MVP content shall support at least four cultures, 28+ character cards, and 40+ shared relic/event cards. | Should | PRD section 21 |
-| CR-006 | Content naming and tone shall use `Spirit Ember` for Level 3 progression and avoid darker body-part language. | Must | PRD-RISK-006 |
-
-## 13. Analytics And Reporting Requirements
-
-| ID | Requirement | Priority | Source |
-| --- | --- | --- | --- |
-| AR-001 | The digital prototype should record match length. | Should | SM-002, SM-003 |
-| AR-002 | The digital prototype should record victory condition. | Should | SM-004 |
-| AR-003 | The digital prototype should record faction/culture selected. | Should | SM-005 |
-| AR-004 | The digital prototype should record turn count and action counts by action type. | Should | SM-004 |
-| AR-005 | The digital prototype should record character level-up events and Spirit Ember delivery events. | Should | PRD-FR-006, PRD-FR-007 |
-| AR-006 | The digital prototype should record relic/event draws and replacements. | Should | PRD-FR-005 |
-| AR-007 | Playtest reporting should capture comprehension time, replay interest, confusing rules, dominant cards, and perceived faction distinction. | Must | SM-001 through SM-008 |
-
-## 14. Acceptance Criteria
-
-| ID | Criterion | Applies To | Source |
-| --- | --- | --- | --- |
-| AC-001 | Both prototype cultures can complete a legal match using documented rules. | Paper Prototype | PRD-MILESTONE-001 |
-| AC-002 | New playtesters can identify legal movement and attack targets within 2 minutes. | Paper Prototype | SM-001 |
-| AC-003 | Hero capture and army defeat victories can both occur during testing. | Paper Prototype | PRD-FR-004 |
-| AC-004 | At least one character levels to Level 2 in some test matches. | Paper Prototype | PRD-FR-006 |
-| AC-005 | Level 3 Spirit Ember rules can be explained and tested, or PRD-OQ-008 is explicitly resolved before digital implementation. | Paper Prototype | PRD-FR-007 |
-| AC-006 | Shared relic/event draws affect decisions without dominating the match. | Paper Prototype | PRD-FR-005 |
-| AC-007 | Playtest notes identify balance issues for characters, cultures, relics, events, and Level 3 progression. | Paper Prototype | SM-008 |
-| AC-008 | A local digital match can be completed from setup to victory. | Digital Rules Prototype | PRD-MILESTONE-002 |
-| AC-009 | All 14 prototype character cards are represented with their stats, levels, abilities, and culture identity. | Digital Rules Prototype | PRD-FR-002 |
-| AC-010 | Movement, attacks, action points, mount/dismount, level-ups, Spirit Ember flow, relic/event draws, and victory checks work. | Digital Rules Prototype | PRD-FR-003 through PRD-FR-007 |
-| AC-011 | The UI communicates turn, selected character, legal actions, HP, AP, level, Spirit Ember state, mounted state, and active relic/event effects. | Digital Rules Prototype | PRD-FR-008 |
-| AC-012 | Placeholder art and tokens are clear enough for playtesting. | Digital Rules Prototype | PRD section 20 |
-| AC-013 | Mobile UX testing demonstrates readable board state and unit inspection on phone-sized screens. | Mobile UX Prototype | PRD-NFR-002 |
-| AC-014 | Content prototype testing demonstrates that the two cultures feel meaningfully different. | Content Prototype | SM-005 |
-| AC-015 | MVP planning produces an updated PRD, BRD, technical design document, art bible, production backlog, and MVP estimate. | MVP Planning | PRD-MILESTONE-005 |
+| R-001 | Rules become too complex. | Players may abandon the game early. | Prototype with minimal rules and simplify after playtests. |
+| R-002 | Shared relic/events create too much randomness. | Strategy may feel unfair. | Keep effects tactical, symmetric, and readable; tune per BR-033 rather than removing the shared-deck pillar. |
+| R-003 | Level-up by reaching the edge, or returning with a Spirit Ember, may create runaway advantages — or feel too risky to attempt at all. | Comebacks may become rare, or leveling may go untested. | Tune Level 2/3 power (BR-026, NFR-013) and track how often leveling is actually attempted during paper tests. |
+| R-004 | The new checkmate-style Hero capture rule (BR-034) decouples capture from combat damage entirely, which may reward overly defensive, turtling play — walling the Hero into a safe corner rather than engaging. | Matches may stall; Army Defeat alone may not reliably pull passive players into engagement. | Confirmed and agreed (2026-08-14): event card design is an explicit countermeasure. Events should be tuned to disrupt static formations and force movement (e.g. Frozen Center, Whiteout, and future cards), not left to Army Defeat alone. Track turtling explicitly in paper playtests (SM-009). |
+| R-005 | Mobile board readability may suffer. | Players may misread board state. | Test on phone-sized screens early, and apply mobile-first constraints from the paper prototype onward (BR-044), not only starting at the Mobile UX milestone. |
+| R-006 | Cultural themes may feel shallow or stereotyped. | Brand and player trust risk. | Use respectful research and fantasy framing (BR-038, BR-039). |
+| R-007 | Godot implementation may overbuild too early. | Prototype velocity may slow. | Start with rules, placeholders, and debug UI. |
+| R-008 | MVP scope (4 cultures, 28+ character cards, 40+ relic/event cards, AI opponent, full mobile UI) may exceed solo-developer capacity. | Timeline slips or burnout. | Define a sequencing/scope-cut plan (fewer cultures at MVP, smaller relic/event pool, outsourced art) before committing to MVP planning. |
+| R-009 | Soviet/Cold War nuclear-accident setting may draw extra app-store or platform content-review scrutiny. | Possible platform rejection or required rework late in development. | Partially mitigated by the fiction/abstraction direction (BR-039); recommend a platform policy review before major production investment. |
+| R-010 | *(Resolved 2026-08-14)* Line-of-sight scope for non-damage support/utility abilities was previously unresolved (PRD-OQ-011). | Would have left ambiguous rules-engine behavior for cards like Command, Resonance Shield, Foresight, Pylon range boost. | Resolved: line-of-sight blocking applies to all ranged targeting, including non-damage abilities (BR-011, FR-036C). Retained here for traceability only. |
+| R-011 | *(Resolved 2026-08-14)* Level 2/3 upgrade text across the Section 12 character roster was previously not yet rewritten to the power-spike/transformative standard. | Was driving continued playtest feedback that leveling isn't worth the risk. | Resolved: the revision pass is complete (BR-026, Section 12). Recommend confirming the rewrite lands well in the next round of paper tests rather than treating this as a pending task. |
+| R-012 | Player-chosen back-row deployment (BR-007A) could let a player accidentally box in their own Hero, or let both players independently misjudge legal starting positions. | Confusing first turns, or an accidental self-inflicted Hero-capture loss under BR-034. | Playtest specifically for this failure mode; consider a setup-time warning or legality check before the match begins (FR-007A/FR-007B implementation detail). |
+| R-013 | Placed objects now blocking line-of-sight by default (BR-011A) is a new mechanical implication no paper test has exercised yet — e.g., a Crystal Architect Pylon could unexpectedly block a Sniper's line, which may read as counter-intuitive since pylons are framed as tech/range-boost pieces, not cover. | Could feel surprising or unfun until playtested; could also meaningfully change Specialist positioning value. | Call this out specifically in the next paper-test pass; revisit BR-011A if it plays worse than expected rather than treating it as permanently settled. |
 
 ## 15. Dependencies
 
-| ID | Dependency | Blocking Area | Source |
-| --- | --- | --- | --- |
-| DEP-001 | Exact 7x7 starting formation. | Paper prototype, digital setup presets | PRD-OQ-002 |
-| DEP-002 | Decision on portrait, landscape, or both. | Mobile UX prototype | PRD-OQ-001 |
-| DEP-003 | Decision on unit defeat persistence, revival, or return behavior. | Combat, victory pacing, relic/event design | PRD-OQ-003 |
-| DEP-004 | Decision on culture naming strategy. | Art, narrative, sensitivity review | PRD-OQ-004 |
-| DEP-005 | Decision on final tone and content rating target. | Art, narrative, Spirit Ember framing | PRD-OQ-005 |
-| DEP-006 | Starter shared relic/event card count. | Paper prototype content | PRD-OQ-006 |
-| DEP-007 | Closed City scientist story role. | Narrative framing, tutorial voice | PRD-OQ-007 |
-| DEP-008 | Spirit Ember representation decision. | Level 3 rules, UI, implementation | PRD-OQ-008 |
-| DEP-009 | Spirit Ember language and darkness level decision. | Tone, localization, platform review | PRD-OQ-009 |
-| DEP-010 | Paper prototype materials or spreadsheet. | Milestone 1 | PRD-MILESTONE-001 |
-| DEP-011 | Godot installed and configured. | Digital rules prototype | PRD-MILESTONE-002 |
-| DEP-012 | Placeholder art or readable tokens. | Digital rules prototype, mobile UX | PRD-MILESTONE-002 |
-| DEP-013 | Playtest feedback from at least 3-5 matches. | Balance revision, MVP planning | SM-002, SM-008 |
+| ID | Dependency | Blocks |
+| --- | --- | --- |
+| D-001 | *(Resolved 2026-08-14)* No fixed 7x7 starting formation is needed — each player deploys their own units on their own back row in their own chosen arrangement. | BR-007A, FR-007A/FR-007B (PRD-OQ-002) |
+| D-002 | Portrait vs. landscape orientation not yet decided. | NFR-005, FR-066 (PRD-OQ-001) |
+| D-003 | Whether defeated units are permanently removed, revived, or returned to hand is not yet decided. | FR-032 (PRD-OQ-003) |
+| D-004 | *(Resolved 2026-08-14)* Line-of-sight scope for non-damage support/utility abilities applies to all ranged targeting. | FR-036C, BR-011 (PRD-OQ-011) |
+| D-005 | *(Resolved 2026-08-14)* Shared relic/event card count for the first paper prototype is 14 cards, formed by each player contributing 3 relics + 4 events from their culture. | FR-009A, BR-027A (PRD-OQ-006) |
+| D-006 | The Closed City scientist's exact story role (protagonist, narrator, gate, victim, antagonist, or a mix) is undecided. | Narrative framing, tutorial voice (PRD-OQ-007) |
+| D-007 | Per-turn or per-match timer length for the future Timer-based/Blitz PvP mode is not set. | Future mode FRs (PRD-OQ-010) |
+| D-008 | Paper prototype materials or spreadsheet, and a configured Godot environment. | FR-085 through FR-090 |
+| D-009 | Placeholder art or simple readable tokens. | NFR-035, AS-005 |
+| D-010 | Playtest feedback from at least 3-5 matches, specifically tracking leveling frequency, AP-pool first-move mitigation, turtling under the new Hero capture rule (R-004), and per-card rules overload. | NFR-013, BR-021, R-003, R-004 |
+| D-011 | MVP-scale relic/event contribution model (still 3+4 per player from a larger pool, or something else) is undecided. | Section 6.2 MVP Scope `[NEED]` |
 
-## 16. Risks And Mitigations
+## 16. Acceptance Criteria
 
-| ID | Risk | Impact | Mitigation | Source |
-| --- | --- | --- | --- | --- |
-| R-001 | Rules become too complex. | Players may abandon the game early or fail to understand legal actions. | Prototype with minimal mechanics first and simplify after playtests. | PRD-RISK-001 |
-| R-002 | Card balance becomes unmanageable. | A few cards or strategies may dominate and reduce replay value. | Build internal card data tools and track balance notes early. | PRD-RISK-002 |
-| R-003 | Board plus cards overwhelms mobile UI. | Players may misread board state or make accidental actions. | Test on phone-sized screens from the start. | PRD-RISK-003 |
-| R-004 | Cultures feel cosmetic only. | The core fantasy and replay promise weakens. | Give each culture mechanical identity, distinct visuals, and clear play patterns. | PRD-RISK-004 |
-| R-005 | Sub-areas feel cosmetic only. | Long-term content structure may feel arbitrary. | Give each sub-area its own style, mechanics, relics, events, and narrative function. | PRD-RISK-005 |
-| R-006 | Level 3 Spirit Ember objective is misunderstood. | Players may miss why defeated enemies release embers or how delivery works. | Test terminology and UI; represent Spirit Ember as a status/counter on the carrying character. | PRD-RISK-006 |
-| R-007 | Multiplayer is expensive and slow. | Delivery velocity may stall before core fun is proven. | Start with local and AI matches. | PRD-RISK-007 |
-| R-008 | Scope grows too quickly. | Prototype may become too large to finish or learn from. | Lock prototype scope before production. | PRD-RISK-008 |
-| R-009 | Real-world-inspired content is perceived as shallow or stereotyped. | Brand and player trust risk. | Use respectful research, fantasy framing, and review culture-specific content before production. | PRD-NFR-004 |
-| R-010 | Shared relic/events create too much randomness. | Strategy may feel unfair. | Keep effects tactical, readable, and bounded; track impact in playtests. | PRD-FR-005 |
+The first paper prototype is acceptable when:
+- Both cultures can complete a match using the documented rules.
+- Both players can self-deploy their 7 characters onto their own back row without confusion, and the digital rules prototype rejects placement outside that row.
+- Players can identify legal movement, attack targets, and line-of-sight blocking — including for non-damage support abilities.
+- Hero capture (no-legal-move condition, BR-034) and army defeat victories can both occur, and playtest notes record whether the checkmate-style capture rule reads clearly to new players.
+- At least one character reaches Level 2, and playtest notes record whether Level 3 was attempted and why or why not (R-003).
+- Shared relic/event draws (built from each player's 3 relics + 4 events) affect decisions without dominating the match.
+- Playtest notes explicitly flag whether matches trend toward turtling under the new Hero capture rule (R-004, SM-009).
+- Playtest notes identify balance issues for revision, including whether the 2-AP first turn meaningfully offset first-move advantage.
 
-## 17. Traceability Matrix
+The first Godot prototype is acceptable when:
+- A local match can be completed from setup to victory, including player-controlled back-row deployment.
+- All 14 character cards are represented with their stats, sourced from `data/cards/characters.json`.
+- Movement, attacks, line-of-sight (including non-damage abilities), action points (pool and per-character), mount/dismount (with correct AP cost), level-ups, Spirit Ember tracking, the no-legal-move Hero capture check, and army-defeat checks all work.
+- A shared relic/event draw happens each turn, from a deck built out of each player's 3-relic/4-event contribution.
+- The UI communicates turn, selected character, legal actions, HP, level, Spirit Ember status, and active relic/event effects, and clearly distinguishes a Hero-capture win from an army-defeat win.
+- Placeholder art is clear enough to test the game, on a mobile-first layout.
 
-| PRD Source | BRD Mapping |
+## 17. Traceability
+
+| BRD Section | PRD Source |
 | --- | --- |
-| PRD-GOAL-001 | BO-001, SM-001, SM-004, FR-010 through FR-092, NFR-001 through NFR-027 |
-| PRD-GOAL-002 | BO-002, FR-001 through FR-006, FR-098 through FR-101, CR-001, CR-005 |
-| PRD-GOAL-003 | BO-003, SM-002, SM-003, NFR-001 through NFR-004, AR-001 |
-| PRD-GOAL-004 | BO-004, FR-068 through FR-076, FR-098 through FR-103, DR-009 through DR-011 |
-| PRD-GOAL-005 | BO-005, CR-003, CR-004, NFR-028 through NFR-030, R-009 |
-| PRD-GOAL-006 | BO-006, FR-093 through FR-097, FR-104 through FR-109 |
-| PRD-FR-001 | CON-001, FR-010, FR-011 |
-| PRD-FR-002 | CON-002, FR-001 through FR-006, CR-001 |
-| PRD-FR-003 | FR-020 through FR-050, NFR-020, NFR-021 |
-| PRD-FR-004 | BR-017, BR-018, FR-077 through FR-082, AC-003 |
-| PRD-FR-005 | BR-019 through BR-023, FR-068 through FR-076, DR-009 through DR-011 |
-| PRD-FR-006 | BR-014, FR-058 through FR-060, AC-004 |
-| PRD-FR-007 | BR-015, FR-061 through FR-063, AC-005 |
-| PRD-FR-008 | FR-083 through FR-092, DR-006 through DR-008, AC-011 |
-| PRD-FR-009 | BO-004, BO-005, FR-098 through FR-103, CR-003 through CR-005 |
-| PRD-FR-010 | FR-093 through FR-109, CR-005, AR-001 through AR-007 |
-| PRD-NFR-001 | SM-002, SM-003, NFR-001 through NFR-004 |
-| PRD-NFR-002 | FR-083 through FR-092, NFR-005 through NFR-010, NFR-024 through NFR-027 |
-| PRD-NFR-003 | BO-007, BR-033, BR-034, FR-093 through FR-097, NFR-011 |
-| PRD-NFR-004 | CON-008, NFR-028, R-009 |
-| PRD-SM-001 through PRD-SM-007 | SM-001 through SM-007, AR-001 through AR-007, AC-001 through AC-015 |
-| PRD-RISK-001 through PRD-RISK-008 | R-001 through R-008 |
-| PRD-OQ-001 through PRD-OQ-009 | DEP-001 through DEP-009, OQ-001 through OQ-009 |
-| PRD-MILESTONE-001 | AC-001 through AC-007, DEP-010 |
-| PRD-MILESTONE-002 | FR-104 through FR-109, AC-008 through AC-012, DEP-011, DEP-012 |
-| PRD-MILESTONE-003 | FR-083 through FR-092, AC-013 |
-| PRD-MILESTONE-004 | SM-005, SM-008, AC-014 |
-| PRD-MILESTONE-005 | AC-015 |
+| 3. Business Objectives (BO-001–006) | PRD §2 Product Goals |
+| 4. Success Metrics (SM-001–009) | PRD §20 Success Metrics |
+| 6. Scope | PRD §20 Prototype Scope, §21 MVP Scope |
+| 8.1–8.2 Business Rules (BR-001–007B) | PRD §5 Initial Board Concept, §8 Prototype Character Roster |
+| 8.3 Business Rules (BR-008–011) | PRD §8 Prototype Character Cards (balance assumptions, line-of-sight) |
+| 8.4 Business Rules (BR-012–017) | PRD §8 Mounted Character Rules |
+| 8.5 Business Rules (BR-018–021) | PRD §11 Turn System, §12 Resources |
+| 8.6 Business Rules (BR-022–026) | PRD §9 Spirit Ember Leveling |
+| 8.7 Business Rules (BR-027–033) | PRD §9 Relic Cards, Event Cards, Prototype Relic And Event Cards |
+| 8.8 Business Rules (BR-034–035) | PRD §13 Victory Conditions |
+| 8.9 Business Rules (BR-036–037) | PRD §14 Progression, §22 Monetization Considerations |
+| 8.10 Business Rules (BR-038–039) | PRD §8 Story Premise And Tone |
+| 8.11 Business Rules (BR-040–041) | PRD §9 Character Cards (Deckbuilding direction) |
+| 8.12 Business Rules (BR-042–043A) | PRD §8 Faction Sub-Area Structure |
+| 8.13 Business Rules (BR-044) | PRD §16 Mobile UX Requirements |
+| 9. Functional Requirements | PRD §20 Product-Level Requirements (PRD-FR-001–010), elaborated against PRD §5–13 |
+| 10. Non-Functional Requirements | PRD §20 Product-Level Requirements (PRD-NFR-001–004), elaborated against PRD §16–19, §23 |
+| 12–13. Content Inventory | `data/cards/characters.json`, `data/cards/relic_events.json`, `data/cards/review_drafts/` |
+| 14. Risks | PRD §23 Risks (PRD-RISK-001–012) |
+| 15. Dependencies | PRD §24 Open Questions (PRD-OQ-001–011) |
+| 18. Next Steps | PRD §26 Immediate Next Steps |
 
-## 18. Open Questions
+## 18. Next Steps
 
-| ID | Question | Decision Impact | Source |
-| --- | --- | --- | --- |
-| OQ-001 | Is the game portrait, landscape, or both? | Determines board layout, card inspection, and mobile UI constraints. | PRD-OQ-001 |
-| OQ-002 | What exact 7x7 starting formation should the 14 characters use? | Blocks stable paper prototype setup and first digital board presets. | PRD-OQ-002 |
-| OQ-003 | Are units permanently defeated, revived, or returned to hand? | Affects victory pacing, comeback mechanics, and event/relic design. | PRD-OQ-003 |
-| OQ-004 | Should cultures be historically named, myth-inspired, or fully fictional? | Affects naming, research burden, audience expectations, and sensitivity review. | PRD-OQ-004 |
-| OQ-005 | Is the tone serious, stylized, heroic, dark, or family-friendly? | Affects art direction, Spirit Ember framing, story presentation, and content rating. | PRD-OQ-005 |
-| OQ-006 | How many shared relic/event cards should be in the first paper prototype? | Determines prototype content workload and event frequency. | PRD-OQ-006 |
-| OQ-007 | What exact story role does the Closed City scientist play? | Determines campaign framing, tutorial voice, and long-term narrative structure. | PRD-OQ-007 |
-| OQ-008 | Resolved: Spirit Ember is represented as a status/counter on the carrying character. | Affects rules clarity, UI, and implementation complexity. | PRD-OQ-008 |
-| OQ-009 | Resolved: use Spirit Ember only; do not use darker body-part language in product or prototype notes. | Affects tone, audience fit, localization, and platform/content review. | PRD-OQ-009 |
-
-## 19. Next Steps
-
-1. Resolve OQ-002 by choosing the exact 7x7 starting formation.
-2. Resolve OQ-006 by choosing the first paper prototype shared relic/event count.
-3. Resolve OQ-008 enough to paper test Level 3 progression.
-4. Print or export the 14 character cards and starter shared relic/event cards.
-5. Run 3-5 paper prototype matches and capture AR-007 playtest reporting.
-6. Revise stats, Level 2 upgrades, Level 3 Spirit Ember rules, and shared relic/event effects from playtest results.
-7. Create a technical design document for the Godot rules prototype.
-8. Decompose this BRD into epics, backlog items, acceptance tests, and milestone plans.
+1. Playtest the player-chosen back-row deployment and the checkmate-style Hero capture rule specifically — confirm both create good decisions rather than confusion, accidental self-trapping, or stalling.
+2. Draft the first version of the Closed City accident story and the scientist's role in the convergence.
+3. Write short style and mechanic notes for each of the six sub-areas.
+4. Move the Closed City relic/event drafts (`draft_for_review`) through review toward promotion, once the core 14-card prototype deck is validated (BR-043A).
+5. Paper test the 14 character cards and 14 shared relic/event cards, and record which pieces feel too strong, too weak, or too confusing.
+6. Revise stats, Level 2 upgrades, and Level 3 Spirit Ember rules after 3-5 paper matches if further tuning is needed, now that the power-spike/transformative revision pass is complete (BR-026).
+7. During paper testing, specifically track: how often Level 2/3 is actually reached (R-003 leveling-worth-it check), whether the 2-AP first turn meaningfully reduces first-move advantage, whether turtling emerges under the new Hero capture rule (R-004, SM-009), and how many turns pass before players stop feeling overwhelmed by per-card rules.
+8. Build the first Godot rules prototype.

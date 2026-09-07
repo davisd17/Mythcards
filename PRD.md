@@ -75,6 +75,7 @@ Recommended starting prototype:
 - Board size: 7x7, creating a single center tile and a tighter tactical space.
 - Units start on opposite sides.
 - Each side starts with one character of each type: Common, Mount, Warrior, Leader, Hero, Specialist, and Mystic.
+- Deployment (decided): each player places their own 7 characters (one of each type) onto their own back row — the row of 7 tiles closest to their side — before the match begins. Players choose their own arrangement within that row; there is no fixed formation. This resolves PRD-OQ-002 in favor of player choice over a designer-set formation.
 - Some spaces may later contain terrain, objectives, temples, relics, or civilization-specific structures.
 
 ### Initial Match Length Target
@@ -219,14 +220,15 @@ First-pass balance assumptions:
 - `RANGE` is basic attack range in tiles.
 - Default movement pattern is orthogonal: vertical and horizontal movement only.
 - Default attack pattern is orthogonal line-of-sight: vertical and horizontal only.
-- Line-of-sight rule (clarified): ranged attacks, and any AP ability that deals damage or targets at range, cannot pass through an occupied tile — ally or enemy — unless the specific card or ability explicitly states it can. Divine Conductor's Link Mind is the first card to use this exception (its target may ignore one allied character when checking line-of-sight). `[NEED: confirm whether non-damage support/utility abilities (e.g. Command, Resonance Shield, Foresight, Pylon range boost) are also subject to line-of-sight, or are exempt by default — see PRD-OQ-011]`
+- Line-of-sight rule (decided): ranged attacks, and any ability that targets at range — including non-damage support/utility abilities such as Command, Resonance Shield, Foresight, and Pylon range boosts, not only damage-dealing abilities — cannot pass through an occupied tile — ally or enemy — unless the specific card or ability explicitly states it can. Divine Conductor's Link Mind is the first card to use this exception (its target may ignore one allied character when checking line-of-sight). This resolves PRD-OQ-011: line-of-sight applies by default to all ranged targeting, not just damage.
+- Placed objects and line-of-sight (decided, 2026-09-07): a tile holding a placed object (e.g., a barricade, a quartz pylon) blocks line-of-sight by default, the same as an occupied character tile, unless the specific card or object explicitly states otherwise. No current card grants an exception for its own placed object.
 - Diagonal, area, jump, teleport, or unusual patterns are special-case rules printed on characters, relics, events, or future cards.
 - Movement, basic attacks, and abilities each cost 1 AP from the player's turn pool, gated by that character having remaining character AP (see Section 11-12).
 - Level 2 upgrades should land as a clear, noticeable power spike (not a minor +1 tweak); Level 3 upgrades should be transformative - a significant stat jump and/or a game-changing new ability - without making a leveled character automatically win the game outright. The current character tables have been revised toward this standard and should be validated in paper tests.
 - Low-ATK characters should have stronger utility abilities so they remain fun even when their basic attacks are weak.
 
 Mounted character rules:
-- A Hero or Leader may mount an allied Mount character as an action if adjacent to that Mount.
+- A Hero or Leader may mount an allied Mount character as an action if adjacent to that Mount, and only if both the player's pool AP and that Hero or Leader's own character AP are available — mounting costs 1 pool AP and 1 character AP like any other action (see Section 12).
 - Mounting moves the Hero or Leader onto the Mount's tile. They occupy the same space as one combined mounted pair.
 - A mounted pair uses the Hero or Leader's HP, ATK, RANGE, level, and abilities, but uses the Mount's MOVE and movement pattern.
 - The Mount cannot take separate actions while mounted.
@@ -353,6 +355,8 @@ Relic and event cards are faction-themed, but they are still mixed into one shar
 
 Design intent (decided): the shared draw is not incidental variance to be minimized — it is a deliberate pillar. Both players adapting to the same unpredictable pull, regardless of faction, is meant to add randomness and forced tactical thinking each turn. Balance and playtesting should tune this pull (frequency, power level, active-slot rules), not replace it with private per-culture decks.
 
+Deck construction (decided): each player selects 3 relic cards and 4 event cards (7 cards) to contribute to the match's shared deck. The two players' contributions combine into one shared 14-card relic/event deck, shuffled together, for that match. In the 2-culture paper prototype, each culture's full relic/event set is exactly 3 relics and 4 events, so each player's "selection" is simply their own culture's complete set — see the Russian-inspired and Atlantean tables below. This resolves PRD-OQ-006 at 14 cards for the paper prototype. Once more cultures or a larger relic/event pool exist, this 3-relic/4-event contribution becomes a real pre-match choice rather than an automatic default.
+
 Russian-inspired relics:
 
 | Card | Type | Duration | Effect |
@@ -399,6 +403,8 @@ The current level-up rule has two stages:
 Terminology (decided):
 - The mechanic and its rules/UI name is `Spirit Ember` - a fragment of spirit/myth released when an enemy is defeated within the convergence, not a literal body part. This resolves PRD-RISK-006 and PRD-OQ-009.
 - The center square becomes important for Level 3 progression in addition to positioning and relic/event effects.
+
+Collection mechanic (decided, 2026-08-28): Spirit Ember pickup is automatic and immediate — when a character defeats an enemy character, the defeating character receives the Spirit Ember at that moment. No separate action, and no requirement to move onto the defeated character's tile, is needed to collect it. The character must still physically carry it to the center square while at Level 2 to trigger Level 3.
 
 Open balance task: leveling should reliably be worth pursuing, not just theoretically available. Given the small 7-unit squads and instant-loss-on-Hero-capture, the risk of exposing a piece to reach the enemy edge (Level 2) or return to center with a Spirit Ember (Level 3) needs explicit playtesting to confirm the reward justifies the exposure — tune HP/ability power at Level 2/3, or the risk of the crossing itself, if early paper matches show players never attempt it.
 
@@ -476,6 +482,8 @@ Prototype victory condition:
 ### Hero Capture
 
 Win immediately by capturing the enemy Hero.
+
+Hero capture rule (decided): a Hero is captured — ending the match immediately in the opponent's favor — when, at the end of a turn taken by that Hero's own controller, the Hero (or the mounted pair carrying it) has no legal move available. This is a positional, chess-checkmate-style condition, not an HP threshold: it replaces combat damage as the trigger for the instant Hero-capture win. Reducing a Hero's HP to 0 in combat defeats it the same way any character is defeated — it is removed from the board and counts toward Army Defeat — but does not by itself end the match. `Assumption: this fully decouples Hero capture from HP loss; a Hero can be attacked to 0 HP without instantly losing the match unless it is also immobilized. Validate this reading in paper tests before locking it in.`
 
 Pros:
 - Strong chess-like clarity.
@@ -559,6 +567,8 @@ Avoid pay-to-win progression. Competitive modes should prioritize fair access, r
 
 ## 16. Mobile UX Requirements
 
+Mobile-first directive (decided): optimize for mobile from the beginning, not only starting at the Mobile UX Prototype milestone. Board layout, card text density, tap-target sizing, and interaction patterns should assume a phone-sized target from the paper prototype and Godot rules prototype onward, even while those builds run on a desktop screen for development convenience.
+
 - Portrait orientation should be considered first unless board readability requires landscape.
 - Board must remain readable on small phones.
 - Cards need large, legible text and icons.
@@ -635,7 +645,8 @@ The first playable prototype should prove the core game is fun before adding col
 - 7 character types
 - 1 version of each type per culture
 - 14 total character cards
-- 10-20 shared relic/event cards
+- 14 shared relic/event cards (each player contributes 3 relics and 4 events from their own culture; see Section 9)
+- No fixed starting formation — each player deploys their 7 characters on their own back row in their own chosen arrangement
 - First-pass story framing around the Closed City accident and convergence dream
 - Design notes for the six faction sub-areas, while only a representative 14-card roster is implemented for the first prototype
 - Local match against another human on same device or a very simple AI
@@ -745,22 +756,23 @@ Design as fair-to-play first. Decide monetization after the core game is fun.
 | PRD-RISK-009 | MVP scope (4 cultures, 28+ character cards, 40+ relic/event cards, AI opponent, full mobile UI) exceeds solo-developer capacity/timeline. | Agreed as an active risk to mitigate. Mitigation approach not yet defined — needs a sequencing/scope-cut plan (e.g. fewer cultures at MVP, smaller relic/event pool, contractor/outsourced art) before committing to Milestone 005 (MVP Planning). |
 | PRD-RISK-010 | Soviet/Cold War nuclear-accident setting draws extra app-store or platform content-review scrutiny given real-world political sensitivity. | Partially mitigated by the fiction/abstraction direction (real-world grounding as hints, not literal named figures or documented incidents). Platform policy review still recommended before major production investment. |
 | PRD-RISK-011 | Level 2/3 upgrades may still be hard to justify if crossing the board remains too risky. | Initial revision pass complete: Level 2 now aims for a clear power spike, and Level 3 aims to be transformative. Paper tests should validate whether the rewards are strong enough without creating runaway wins. |
+| PRD-RISK-012 | The chess-checkmate-style Hero capture rule (Section 13) may reward overly defensive, turtling play — walling the Hero in a safe corner rather than engaging — since combat damage alone no longer ends the match. | Agreed: event card design is an explicit countermeasure. Events (e.g. Frozen Center, Whiteout, and future cards) should be tuned to disrupt static formations, force movement, or open blocked lanes, rather than assuming Army Defeat alone will pull turtling players into engagement. Track turtling behavior specifically in paper playtests. |
 
 ## 24. Open Questions
 
 | ID | Question | Decision Impact |
 | --- | --- | --- |
 | PRD-OQ-001 | Is the game portrait, landscape, or both? | Determines board layout, card inspection, and mobile UI constraints. |
-| PRD-OQ-002 | What exact 7x7 starting formation should the 14 characters use? | Blocks stable paper prototype setup and first digital board presets. |
+| PRD-OQ-002 | Resolved: no fixed formation. Each player deploys their 7 characters onto their own back row in an arrangement of their own choosing. | Unblocks paper prototype setup and first digital board presets; removes the need to design/balance a single designer-set formation. |
 | PRD-OQ-003 | Are units permanently defeated, revived, or returned to hand? | Affects victory pacing, comeback mechanics, and event/relic design. |
 | PRD-OQ-004 | Should cultures be historically named, myth-inspired, or fully fictional? | Affects naming, research burden, audience expectations, and sensitivity review. |
 | PRD-OQ-005 | Is the tone serious, stylized, heroic, dark, or family-friendly? | Affects art direction, Spirit Ember framing, story presentation, and content rating. |
-| PRD-OQ-006 | How many shared relic/event cards should be in the first paper prototype? | Determines prototype content workload and event frequency. |
+| PRD-OQ-006 | Resolved: 14 shared relic/event cards for the paper prototype, formed by each player contributing 3 relics and 4 events from their culture. | Determines prototype content workload and event frequency; matches the existing Russian-inspired and Atlantean relic/event tables exactly. |
 | PRD-OQ-007 | What exact story role does the Closed City scientist play: protagonist, narrator, gate, victim, antagonist, or all of these at different times? | Determines campaign framing, tutorial voice, and long-term narrative structure. |
 | PRD-OQ-008 | Resolved: represented as a status/counter on the carrying character (icon such as a wisp, spark, or fractured-glass mark), not a separate physical board object. | Simplifies UI; avoids adding another placed-object type alongside barricades/pylons/frost tiles. |
 | PRD-OQ-009 | Resolved: no darker body-part language in any version of the product, including prototype notes. `Spirit Ember` is the only name used. | Removes the sensitivity risk in PRD-RISK-006 outright rather than deferring it to a later tone decision. |
 | PRD-OQ-010 | What is the per-turn or per-match timer length for the future Timer-based/Blitz PvP mode? | Determines competitive pacing and whether timing is turn-based or match-based. |
-| PRD-OQ-011 | Does the new line-of-sight blocking rule apply to non-damage support/utility abilities (Command, Resonance Shield, Foresight, Pylon range boost) that target at range, or only to attacks and damage-dealing abilities? | Affects several existing character abilities' rules text and the digital rules engine's targeting logic. |
+| PRD-OQ-011 | Resolved: yes, the line-of-sight blocking rule applies to non-damage support/utility abilities (Command, Resonance Shield, Foresight, Pylon range boost) as well as attacks and damage-dealing abilities. | Applies uniformly to several existing character abilities' rules text and the digital rules engine's targeting logic. |
 
 ## 25. First Development Milestones
 
@@ -772,7 +784,7 @@ Validate basic rules with physical cards or a spreadsheet.
 Deliverables:
 - Board sketch
 - 14 character cards
-- 10 shared relic/event cards
+- 14 shared relic/event cards (3 relics + 4 events per player)
 - 1-page rules sheet
 - Draft story premise for the Closed City accident and convergence
 - Sub-area design notes for Russian-inspired and Atlantean factions
@@ -834,11 +846,10 @@ Deliverables:
 
 ## 26. Immediate Next Steps
 
-1. Choose the exact 7x7 starting formation.
-2. Draft the first version of the Closed City accident story and the scientist's role in the convergence.
-3. Write short style and mechanic notes for each of the six sub-areas.
-4. Write 10-20 starter shared relic/event cards.
-5. Paper test the 14 character cards and record which pieces feel too strong, too weak, or too confusing.
-6. Revise stats, Level 2 upgrades, and Level 3 Spirit Ember rules after 3-5 paper matches, applying the new directive that Level 2 upgrades should be a clear power spike and Level 3 upgrades should be transformative (see Section 9).
-7. During paper testing, specifically track: how often Level 2/3 is actually reached (leveling-worth-it check), whether the 2-AP first turn meaningfully reduces first-move advantage, and how many turns pass before players stop feeling overwhelmed by per-card rules.
-8. Build the first Godot rules prototype.
+1. Draft the first version of the Closed City accident story and the scientist's role in the convergence.
+2. Write short style and mechanic notes for each of the six sub-areas.
+3. Paper test the 14 character cards and 14 shared relic/event cards, and record which pieces feel too strong, too weak, or too confusing.
+4. Playtest the player-chosen back-row deployment and the checkmate-style Hero capture rule specifically — confirm both create good decisions rather than confusion, accidental self-trapping, or stalling.
+5. Revise stats, Level 2 upgrades, and Level 3 Spirit Ember rules after 3-5 paper matches, applying the directive that Level 2 upgrades should be a clear power spike and Level 3 upgrades should be transformative (see Section 9).
+6. During paper testing, specifically track: how often Level 2/3 is actually reached (leveling-worth-it check), whether the 2-AP first turn meaningfully reduces first-move advantage, whether turtling/defensive play emerges under the new Hero capture rule (PRD-RISK-012), and how many turns pass before players stop feeling overwhelmed by per-card rules.
+7. Build the first Godot rules prototype.
