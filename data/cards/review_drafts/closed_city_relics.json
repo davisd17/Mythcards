@@ -6,7 +6,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "1 of 6",
+    "set_count": "1 of 7",
     "name": "Chintamani Fragment",
     "kind": "Rare Relic",
     "duration": "Persistent",
@@ -33,7 +33,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "2 of 6",
+    "set_count": "2 of 7",
     "name": "Reactor Core Fragment",
     "kind": "Relic",
     "duration": "Persistent",
@@ -46,7 +46,9 @@
       "reactor pulse",
       "radiation as language"
     ],
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/closed-city-reactor-core-fragment-king-of-pentacles-relic-art.png"
+    ],
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus relic.",
@@ -60,7 +62,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "3 of 6",
+    "set_count": "3 of 7",
     "name": "Cosmonaut Helmet With A Second Shadow",
     "kind": "Relic",
     "duration": "Persistent",
@@ -87,7 +89,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "4 of 6",
+    "set_count": "4 of 7",
     "name": "Lead-Sealed Notebook",
     "kind": "Relic",
     "duration": "Persistent",
@@ -114,7 +116,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "5 of 6",
+    "set_count": "5 of 7",
     "name": "Redacted Incident Tape",
     "kind": "Relic",
     "duration": "Persistent",
@@ -141,7 +143,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "6 of 6",
+    "set_count": "6 of 7",
     "name": "Karpova's Black Key",
     "kind": "Relic",
     "duration": "Persistent",
@@ -159,6 +161,37 @@
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus and access relic.",
       "Could become once per round if repeated route-breaking is too strong."
+    ]
+  },
+  {
+    "id": "r-karpovas-velvet-decanter",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Relic Set",
+    "set_count": "7 of 7",
+    "name": "Karpova's Velvet Decanter",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Draft effect pending. Should express comfort, private advantage, satisfaction, or elite resource control without becoming another deck-manipulation relic.",
+    "role": "A comfortable luxury object from Irina Vasilievna Karpova's private Closed City suite: crystal, velvet, dark red liquor, and privilege made tangible. The relic represents appetite, private satisfaction, and the disturbing comfort of having what others are denied.",
+    "mechanical_lane": "Luxury, resource advantage, morale denial, or reward-for-control lane to be balanced later.",
+    "tarot_mapping": "Nine of Cups",
+    "narrative_links": [
+      "Irina Vasilievna Karpova",
+      "private patronage",
+      "Closed City privilege",
+      "comfort as control"
+    ],
+    "asset_candidates": [
+      "assets/relics/closed-city-karpovas-velvet-decanter-nine-of-cups-relic-art.png"
+    ],
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "Completes Closed City's target of seven relics.",
+      "Nine of Cups relic: private satisfaction, indulgence, and wish fulfillment with a hidden cost.",
+      "Approved art has the decanter as focal object with exactly nine glasses/cup cues."
     ]
   }
 ]

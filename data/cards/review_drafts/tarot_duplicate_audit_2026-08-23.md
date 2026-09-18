@@ -1,5 +1,7 @@
 # Tarot Duplicate Audit - 2026-08-23
 
+Historical snapshot only. The current Russian deck tracker supersedes these decisions; Radio Lieutenant, Icon Bearer, and Partisan Scout are narrative-only and no longer reserve tarot mappings.
+
 Purpose: identify tarot archetypes mapped to more than one distinct card inside the same sub-area draft.
 
 ## Summary

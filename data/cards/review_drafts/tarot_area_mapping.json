@@ -73,15 +73,15 @@
             "role": "1980s-era science and industrial setting with nuclear power, leaks, cosmonaut programs, remote viewing, dream work, and the first convergence incident.",
             "current_review_draft_count": {
               "characters": 10,
-              "events": 8,
-              "relics": 6,
-              "total": 24
+              "events": 9,
+              "relics": 7,
+              "total": 26
             },
             "remaining_to_target": {
               "characters": 0,
-              "events": 1,
-              "relics": 1,
-              "total": 2
+              "events": 0,
+              "relics": 0,
+              "total": 0
             }
           },
           {
@@ -123,7 +123,8 @@
             "Seventeen Seconds",
             "Elena Missing In The Signal",
             "The First Card Appears",
-            "Semyonov Orders Silence"
+            "Semyonov Orders Silence",
+            "Subject 3 Wakes"
           ],
           "relics": [
             "Chintamani Fragment",
@@ -131,7 +132,8 @@
             "Cosmonaut Helmet With A Second Shadow",
             "Lead-Sealed Notebook",
             "Redacted Incident Tape",
-            "Karpova's Black Key"
+            "Karpova's Black Key",
+            "Karpova's Velvet Decanter"
           ],
           "defined_but_not_yet_tarot_mapped": []
         },
@@ -211,9 +213,7 @@
             "Irina Sokolova / Sniper",
             "Darya Koval / Bayonet Saint",
             "Marya Zima / Field Nurse",
-            "Radio Lieutenant / Lieutenant Pavel Orlov",
-            "Icon Bearer / Anastasia Lebedeva",
-            "Partisan Scout / Nikolai Baranov",
+            "Alexei Vranov / Cache-Born Hero",
             "Frozen T-34"
           ],
           "events": [
@@ -229,14 +229,13 @@
           ],
           "relics": [
             "Bogatyr's Relic Case",
-            "Cabin Iron Rings",
             "Frozen Field Radio",
             "Volkov's Red Map",
             "Black Snow Cartridge",
             "Marya's Thaw Cup",
             "Saint's Field Icon"
           ],
-          "status_note": "These are Winter Front / Army Era story/card drafts. The sub-area is now framed as a World War II-era winter front on the future Closed City site, with enemy occult cache material, an old ritual cabin, iron rings that eventually connect to the Deep North Circus, future Closed City visions, and a simultaneous Far North meteor event."
+          "status_note": "These are Winter Front / Army Era story/card drafts. Ten playable characters are listed; Pavel Orlov, Anastasia Lebedeva, and Nikolai Baranov remain narrative-only and reserve no tarot slots. The sub-area is framed as a World War II-era winter front on the future Closed City site, with enemy occult cache material, an old ritual cabin, iron rings that eventually connect to the Deep North Circus, future Closed City visions, and a simultaneous Far North meteor event."
         },
         "narrative_support_cards": [
           {
@@ -476,7 +475,9 @@
           "set_count_role": "Closed City rare character slot: extra Specialist for the Russian set.",
           "reason": "Anya turns Temperance into controlled passage between systems: physical locks, analog signal routing, occult timing, dream geometry, and convergence travel mixed precisely enough to create Pavel's seventeen-second escape.",
           "status": "proposed",
-          "art_audit": "no_art_yet",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/anya-lebedeva-signal-escape-artist-temperance-character-card-art.png",
+          "profile_page_asset": "assets/characters/anya-lebedeva-signal-escape-artist-temperance-profile-page.png",
           "art_note": "Temperance was checked open in the Russian tarot tracker before assignment. Art should show Anya balancing two signals, two vessels, or two realities inside a sealed Closed City threshold, with analog relay cabinets, warning lamps, condensation, and an impossible corridor opening toward aurora-lit snow."
         },
         {
@@ -568,7 +569,9 @@
           "sub_area": "Closed City",
           "reason": "Galina turns the Closed City hospital ward into the first vessel of mercy after the reactor breach. Ace of Cups fits triage, compassion, the first protected survivor, and an emotional opening inside a system trying to seal every wound away as evidence.",
           "status": "proposed",
-          "art_audit": "no_art_yet",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/galina-reznik-hospital-orderly-ace-of-cups-character-card-art.png",
+          "profile_page_asset": "assets/characters/galina-reznik-hospital-orderly-ace-of-cups-profile-page.png",
           "art_note": "Ace of Cups was checked as unused in the Russian tarot tracker before assignment. The card should feel medical, intimate, and occult-scientific: a night ward, enamel basin, IV glass, iodine, black frost, and the suggestion that mercy itself is becoming a breach."
         },
         {
@@ -583,13 +586,15 @@
           "art_note": "Corrected variant keeps the Chintamani fragment sealed inside the evidence container, with the tag and cord attached outside the latch/seal rather than passing through the glass."
         },
         {
-          "tarot": "Two of Pentacles",
+          "tarot": "King of Pentacles",
           "mythcards_card": "Reactor Core Fragment",
           "card_type": "Relic",
-          "reason": "The sealed reactor shard turns material power into a balancing act: useful danger, Leak exposure, and unstable advantage held under pressure.",
+          "reason": "The sealed reactor shard is the Closed City's prized source of material power: whoever controls its dangerous output can turn the breach into a lasting instrument of influence.",
           "status": "approved",
           "art_audit": "matches_tarot",
-          "approved_asset": "assets/relics/closed-city-reactor-core-fragment-two-of-pentacles-relic-art.png"
+          "approved_asset": "assets/relics/closed-city-reactor-core-fragment-king-of-pentacles-relic-art.png",
+          "previous_asset": "assets/relics/closed-city-reactor-core-fragment-two-of-pentacles-relic-art.png",
+          "art_note": "Approved revision preserves the shard but replaces the paired gauges with a locked power pedestal, a single pentacle seal, and conduits carrying its energy into the Closed City."
         },
         {
           "tarot": "Three of Pentacles",
@@ -697,7 +702,9 @@
           "sub_area": "Far North",
           "reason": "Tomas represents the ordinary labor that lets the Far North survive: cutting fuel, repairing boundary posts, hauling supplies, keeping sled routes visible, and doing patient work long before anyone knows whether the work will be enough.",
           "status": "proposed",
-          "art_audit": "no_art_yet",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/tomas-yurin-village-woodcutter-seven-of-pentacles-character-card-art.png",
+          "profile_page_asset": "assets/characters/tomas-yurin-village-woodcutter-seven-of-pentacles-profile-page.png",
           "art_note": "Seven of Pentacles was checked open in the Russian tarot tracker before assignment. Art should show a rugged village laborer with stacked firewood, sled runners, repaired boundary posts, and exactly seven visible cut log ends, carved post marks, or pentacle-like wood rounds as the tarot cue."
         },
         {
@@ -720,7 +727,9 @@
           "set_count_role": "Far North rare character slot: extra Mount for the Russian set.",
           "reason": "Belorog gives the Far North a rare Mount based on spiritual rescue, emotional truth, and convergence passage. Knight of Cups fits a mount that carries wounded or surrendered travellers through aurora-water thresholds rather than charging through danger like Buran.",
           "status": "proposed",
-          "art_audit": "no_art_yet",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/belorog-aurora-reindeer-knight-of-cups-character-card-art.png",
+          "profile_page_asset": "assets/characters/belorog-aurora-reindeer-knight-of-cups-profile-page.png",
           "art_note": "Knight of Cups was checked open in the Russian tarot tracker before assignment. Art should show a pale aurora-lit reindeer with luminous antlers, practical northern harness, red thread and charms, frozen river reflections, and a humble cup or bowl motif tied to spiritual passage."
         },
         {
@@ -792,6 +801,17 @@
           "art_note": "Approved revision zooms into the cracked brass lens so the three visions appear only inside the glass, while the outside trench remains grounded and normal."
         },
         {
+          "tarot": "Three of Cups",
+          "mythcards_card": "The Sister-Vow Binding",
+          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The Sister-Vow Binding turns Three of Cups into friendship made portable: three humble cups, three shared memories, and Darya's red-white cloth binding intimacy to battlefield courage.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-sister-vow-binding-three-of-cups-relic-art.png",
+          "art_note": "Approved relic art keeps exactly three cups in the warm memory scene, exactly three hanging cup-lockets, and Darya's long red-white prayer cloth wrapping through the charm and bayonet without showing a blunt end."
+        },
+        {
           "tarot": "Four of Wands",
           "mythcards_card": "Hearthstone Antler Crown",
           "card_type": "Relic",
@@ -801,6 +821,61 @@
           "art_audit": "matches_tarot",
           "approved_asset": "assets/relics/far-north-hearthstone-antler-crown-four-of-wands-relic-art.png",
           "art_note": "Approved relic art shows the village celebration gathered around the ancient antler-and-stone relic, with four decorated posts forming the Four of Wands structure."
+        },
+        {
+          "tarot": "Seven of Wands",
+          "mythcards_card": "The Ridge Rifle",
+          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The Ridge Rifle turns Seven of Wands into lonely high-ground defense: Irina's weapon holding a ridge against many pressures, both military and occult.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-ridge-rifle-seven-of-wands-relic-art.png",
+          "art_note": "Approved relic art centers the sniper rifle as a defensive line object tied to Irina and the Winter Front ridge."
+        },
+        {
+          "tarot": "Two of Swords",
+          "mythcards_card": "The Blind-Marked Kopeck",
+          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "Irina's coin suspends the moment before a consequential shot, expressing Two of Swords as a painful choice between equally real outcomes.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-blind-marked-kopeck-two-of-swords-relic-art.png",
+          "art_note": "Approved art shows Irina, the suspended blind-marked coin, and exactly two crossed blades."
+        },
+        {
+          "tarot": "Nine of Cups",
+          "mythcards_card": "Karpova's Velvet Decanter",
+          "card_type": "Relic",
+          "sub_area": "Closed City",
+          "reason": "The decanter turns Nine of Cups into private satisfaction, indulgence, and comfort as control: Karpova enjoying what the Closed City denies everyone else.",
+          "status": "approved",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/closed-city-karpovas-velvet-decanter-nine-of-cups-relic-art.png",
+          "art_note": "Approved relic art centers a crystal decanter in Karpova's private suite with exactly nine glasses/cup cues, burgundy velvet, occult-science papers, the Black Key, and cold reactor lights beyond the glass."
+        },
+        {
+          "tarot": "Ten of Cups",
+          "mythcards_card": "The Hearth-Locket Pair",
+          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The paired lockets turn Ten of Cups into hidden love, imagined family, and a fragile future: Stepan and Marya each carrying the other's image through the war.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-hearth-locket-pair-ten-of-cups-relic-art.png",
+          "art_note": "Approved relic art shows realistic paired lockets, Stepan's gloved hand holding Marya's portrait, Marya's nurse hand holding Stepan's portrait, and exactly ten cup motifs over a warm home vision."
+        },
+        {
+          "tarot": "King of Cups",
+          "mythcards_card": "The Twin Waters Flask",
+          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "The Twin Waters Flask turns King of Cups into mastered compassion: Marya holding living water and dead water in balance, deciding mercy with steady emotional authority.",
+          "status": "proposed_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/winter-front-twin-waters-flask-king-of-cups-relic-art.png",
+          "art_note": "Approved relic art shows a believable twin-chamber field flask with cold silver-blue dead water, warm golden living water, medical cloth, icon imagery, and restrained crown/cup authority."
         },
         {
           "tarot": "Five of Cups",
@@ -822,7 +897,7 @@
           "status": "proposed_winter_front",
           "art_audit": "matches_tarot",
           "approved_asset": "assets/relics/winter-front-saints-field-icon-three-of-swords-relic-art.png",
-          "art_note": "Remapped from The Hierophant so Anastasia Lebedeva can keep formal faith authority. Approved relic art shows a cracked field icon crossed by three bayonet/sword wounds with rare white birds outside."
+          "art_note": "Remapped from The Hierophant to Three of Swords. Approved relic art shows a cracked field icon crossed by three bayonet/sword wounds with rare white birds outside."
         },
         {
           "tarot": "Page of Pentacles",

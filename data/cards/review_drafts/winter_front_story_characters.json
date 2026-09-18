@@ -208,33 +208,6 @@
         "art_direction_note": "Temperance character art shows Marya in her early-to-mid 30s, not grandmotherly, inside a frozen Winter Front aid station. Her visual signature is a gray wool headscarf, frost-covered red-cross armband, charm/prayer beads, cracked field book, brass medical tools, one gloved hand and one bare frost-burned hand. She pours liquid between a military medical cup and an old ritual bowl; the crossing streams glow with subtle future echoes of Nadia, Far North snow, sealed corridors, or reactor-red light."
       },
       {
-        "name": "Radio Lieutenant",
-        "story_name": "Lieutenant Pavel Orlov",
-        "card_status": "new_winter_front_character_card",
-        "type": "Specialist",
-        "tarot_mapping": "Page of Swords",
-        "narrative": "Lieutenant Pavel Orlov is a young signal officer who hears Closed City transmissions decades before they should exist. He carries messages between command, ghosts, and future science without knowing which voice is alive.",
-        "relationship_function": "He ties Winter Front back to Closed City and makes the Russian arc feel like time is folding, not simply moving forward. His surname can become an uneasy echo around Dr. Mikhail Orlov later."
-      },
-      {
-        "name": "Icon Bearer",
-        "story_name": "Anastasia Lebedeva",
-        "card_status": "new_winter_front_character_card",
-        "type": "Mystic",
-        "tarot_mapping": "The Hierophant",
-        "narrative": "Anastasia Lebedeva carries a damaged field icon wrapped in cloth inside her coat. She is not officially important, but soldiers ask her to stand near doors, graves, and radio posts. The icon reacts to the enemy cache and to the old cabin rings as if recognizing a rival ritual language.",
-        "relationship_function": "She gives the Winter Front a spiritual counterweight to military command and enemy occultism. Her faith is practical: she cares less about purity than whether men return from the snow."
-      },
-      {
-        "name": "Partisan Scout",
-        "story_name": "Nikolai Baranov",
-        "card_status": "new_winter_front_character_card",
-        "type": "Specialist",
-        "tarot_mapping": "Seven of Pentacles",
-        "narrative": "Nikolai Baranov knows the forest roads, hunting paths, abandoned farmsteads, and frozen drainage lines under the future Closed City site. He finds the old cabin first, sees the ritual geometry, and realizes the enemy cache is not the beginning of the occult activity but an intrusion into something older.",
-        "relationship_function": "He bridges land knowledge and war knowledge. He distrusts Volkov, respects Yakov, and treats Stepan like someone who might live if he learns when not to obey."
-      },
-      {
         "name": "Frozen T-34",
         "card_status": "new_winter_front_character_card",
         "type": "Mount",
@@ -383,14 +356,6 @@
         "mapping_note": "Replaces the broader Enemy Occult Cache relic concept with the specific case recovered by the Bogatyr Champion. The Seven of Cups cue is seven vessels inside the case, each holding an Atlantean ring."
       },
       {
-        "name": "Cabin Iron Rings",
-        "card_status": "new_winter_front_relic_card",
-        "kind": "Relic",
-        "tarot_mapping": "Two of Pentacles",
-        "narrative": "The iron rings found in the old cabin are not yet circus relics, but they are the same objects or direct ancestors of them. Their use is balance: keeping two unstable forces from tearing the room apart.",
-        "story_function": "Connects Winter Front to the Deep North Circus and the Atlantean Old Rite."
-      },
-      {
         "name": "Frozen Field Radio",
         "card_status": "new_winter_front_relic_card",
         "kind": "Relic",
@@ -440,7 +405,7 @@
         "asset_candidates": [
           "assets/relics/winter-front-saints-field-icon-three-of-swords-relic-art.png"
         ],
-        "mapping_note": "Remapped from The Hierophant so Anastasia Lebedeva can keep The Hierophant as the formal faith-bearer. Three of Swords fits the icon as wounded faith, sacrifice, and protection through suffering."
+        "mapping_note": "Remapped from The Hierophant to Three of Swords, which fits the icon as wounded faith, sacrifice, and protection through suffering."
       }
     ],
     "extra_open_tarot_relic_candidates": [
@@ -455,12 +420,92 @@
           "assets/relics/winter-front-horizon-lens-three-of-wands-relic-art.png"
         ],
         "mapping_note": "Generated during the open-tarot relic pass. The approved revision keeps the three visions contained inside the lens rather than appearing as sky portals."
+      },
+      {
+        "name": "The Ridge Rifle",
+        "card_status": "extra_open_tarot_relic_candidate",
+        "kind": "Relic",
+        "tarot_mapping": "Seven of Wands",
+        "narrative": "Irina Sokolova's ridge rifle becomes more than a sniper's weapon after the occult cache wakes. Its barrel holds a defensive line in the snow, and its sight remembers the exact ridge where one person stood against many advancing shapes.",
+        "story_function": "Turns Seven of Wands into a Winter Front relic of high-ground defense, resistance, and the lonely courage of holding position when retreat would be easier.",
+        "asset_candidates": [
+          "assets/relics/winter-front-ridge-rifle-seven-of-wands-relic-art.png"
+        ],
+        "mapping_note": "Approved during the open-tarot relic pass as the sniper-rifle relic. The card should preserve Irina's precision and the Seven of Wands theme of defending a ridge against pressure."
+      },
+      {
+        "name": "The Sister-Vow Binding",
+        "card_status": "extra_open_tarot_relic_candidate",
+        "kind": "Relic",
+        "tarot_mapping": "Three of Cups",
+        "narrative": "A braided battlefield relic made from Darya Koval's red-white prayer cloth and three small cup-shaped memory lockets. It preserves the warmth of three women sharing humble cups before the war turns friendship into oath, and it carries that memory into the snow beside Darya's bayonet.",
+        "story_function": "Turns Three of Cups into a Winter Front relic of friendship, chosen loyalty, and intimate memory under war pressure. The relic explains why Darya's distinctive cloth matters beyond costume: it is a surviving vow, not decoration.",
+        "asset_candidates": [
+          "assets/relics/winter-front-sister-vow-binding-three-of-cups-relic-art.png"
+        ],
+        "mapping_note": "Approved during the open-tarot relic pass. Final art keeps exactly three cups in the warm memory scene, exactly three hanging cup-lockets, and Darya's long red-white cloth wrapping through the charm and bayonet without a visible end."
+      },
+      {
+        "name": "The Hearth-Locket Pair",
+        "card_status": "extra_open_tarot_relic_candidate",
+        "kind": "Relic",
+        "tarot_mapping": "Ten of Cups",
+        "narrative": "Two battered field lockets carry the hidden love between Private Stepan Kuznetsov and Marya Zima. Marya holds Stepan's side, and Stepan holds Marya's, each keeping the other's image close while the front makes any future feel dangerous to name. When opened together, the lockets reveal an impossible warm home: hearth, shelter, family silhouettes, and a blessing neither character fully trusts.",
+        "story_function": "Turns Ten of Cups into an intimate Winter Front relic of private love, imagined family, emotional endurance, and the painful hope of home inside war.",
+        "asset_candidates": [
+          "assets/relics/winter-front-hearth-locket-pair-ten-of-cups-relic-art.png"
+        ],
+        "mapping_note": "Approved during the open-tarot relic pass. Final art shows realistic paired lockets, Stepan's gloved hand holding Marya's portrait, Marya's nurse hand holding Stepan's portrait, and exactly ten cup motifs arcing over the warm home vision."
+      },
+      {
+        "name": "The Twin Waters Flask",
+        "card_status": "extra_open_tarot_relic_candidate",
+        "kind": "Relic",
+        "tarot_mapping": "King of Cups",
+        "narrative": "Marya Zima's two-chamber field flask holds water that should not remain liquid in the Winter Front cold. One chamber carries dead water, which closes wounds and gathers the body back from ruin. The other carries living water, which warms breath and calls strength back toward the waking world.",
+        "story_function": "Turns King of Cups into mastered compassion: Marya's ability to hold grief, mercy, triage, and spiritual responsibility without being ruled by panic or sentiment.",
+        "asset_candidates": [
+          "assets/relics/winter-front-twin-waters-flask-king-of-cups-relic-art.png"
+        ],
+        "mapping_note": "Inspired by Russian and Slavic living-water/dead-water healing traditions. Approved art shows a believable twin-chamber field flask with cold silver-blue dead water, warm golden living water, medical cloth, icon imagery, and restrained crown/cup authority."
+      },
+      {
+        "name": "The Blind-Marked Kopeck",
+        "card_status": "extra_open_tarot_relic_candidate",
+        "kind": "Relic",
+        "tarot_mapping": "Two of Swords",
+        "narrative": "Irina Sokolova keeps the worn coin beneath the wrap of her rifle stock. One face is scratched blind; the other bears a tiny closed eye. Before a shot that could change more than a battle, she flips it to hold two possible outcomes equally real for a few seconds. She must choose before it lands.",
+        "story_function": "Gives Irina a brief moment of suspended consequence when duty, mercy, and loyalty pull her in different directions. The coin preserves the choice but cannot remove the guilt that follows it.",
+        "asset_candidates": [
+          "assets/relics/winter-front-blind-marked-kopeck-two-of-swords-relic-art.png"
+        ],
+        "mapping_note": "Approved Two of Swords art keeps Irina's established likeness and wrapped sniper rifle, with the coin suspended before her and exactly two crossed blades."
       }
     ]
   },
+  "non_deck_story_characters": [
+    {
+      "name": "Lieutenant Pavel Orlov",
+      "former_card_name": "Radio Lieutenant",
+      "narrative": "A young signal officer hears Closed City transmissions decades before they should exist. He carries messages between command, ghosts, and future science without knowing which voice is alive.",
+      "relationship_function": "He ties Winter Front back to Closed City and makes the Russian arc feel like time is folding, not simply moving forward. His surname can become an uneasy echo around Dr. Mikhail Orlov later."
+    },
+    {
+      "name": "Anastasia Lebedeva",
+      "former_card_name": "Icon Bearer",
+      "narrative": "She carries a damaged field icon wrapped in cloth inside her coat. Soldiers ask her to stand near doors, graves, and radio posts. The icon reacts to the enemy cache and old cabin rings as if recognizing a rival ritual language.",
+      "relationship_function": "Her practical faith is a spiritual counterweight to military command and enemy occultism; she cares whether men return from the snow."
+    },
+    {
+      "name": "Nikolai Baranov",
+      "former_card_name": "Partisan Scout",
+      "narrative": "He knows the forest roads, hunting paths, abandoned farmsteads, and frozen drainage lines beneath the future Closed City site. He finds the old cabin first and recognizes that the enemy cache intrudes on older ritual activity.",
+      "relationship_function": "He bridges land knowledge and war knowledge. He distrusts Volkov, respects Yakov, and treats Stepan like someone who might live if he learns when not to obey."
+    }
+  ],
   "open_questions": [
     "Should the Winter Front rare relic be Saint's Field Icon, or should the rare relic be something from the enemy cache?",
-    "Should the Cabin Iron Rings be documented as the same physical rings that reach the Deep North Circus, or as predecessor rings that teach the circus pattern?",
-    "Should the Radio Lieutenant's Orlov surname become a direct family connection to Dr. Mikhail Orlov, or remain an eerie echo?"
+    "Are the rings seen in The Cabin Rite the same physical rings that reach the Deep North Circus, or predecessor rings that teach the circus pattern?",
+    "Should Lieutenant Pavel Orlov's surname become a direct family connection to Dr. Mikhail Orlov, or remain an eerie echo?"
   ]
 }

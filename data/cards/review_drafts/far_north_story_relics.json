@@ -141,7 +141,10 @@
           "If the road is gone, we make another.",
           "A village survives by hands, not omens."
         ],
-        "asset_candidates": [],
+        "asset_candidates": [
+          "assets/characters/tomas-yurin-village-woodcutter-seven-of-pentacles-character-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/tomas-yurin-village-woodcutter-seven-of-pentacles-profile-page.png",
         "art_direction_note": "Seven of Pentacles should show Tomas as a rugged Far North common laborer beside stacked firewood, sled runners, repaired boundary posts, and a winter axe. Include exactly seven visible cut log ends, carved post marks, or pentacle-like wood rounds as the tarot cue. He should feel ordinary but essential: practical layers, frost in beard or hair, work-worn gloves, warm lamplight from the village, and faint meteor/aurora pressure in the distance."
       },
       {
@@ -208,7 +211,10 @@
           "Do not pull the reins. Listen.",
           "Some crossings open only for the wounded."
         ],
-        "asset_candidates": [],
+        "asset_candidates": [
+          "assets/characters/belorog-aurora-reindeer-knight-of-cups-character-card-art.png"
+        ],
+        "profile_page_asset": "assets/characters/belorog-aurora-reindeer-knight-of-cups-profile-page.png",
         "art_direction_note": "Knight of Cups should show Belorog as a rare Far North mount of spiritual passage rather than speed or battle. Depict a large pale reindeer with luminous white antlers, frost-dark eyes, practical northern harness with red thread and old charms, and reflected aurora light moving through the antlers like water. The scene should include frozen river or black meltwater, low village lights, old trail markers, and the hint of the Aal Luuk Mas Root or meteor hollow in the distance. The Cups cue should be emotional and subtle: moonlit water, a small humble cup or bowl tied to the harness, or aurora reflected like liquid beneath its hooves. Avoid making it a cartoon fantasy deer, a Christmas image, a combat mount, or a duplicate of Buran's pounce/charge energy."
       },
       {

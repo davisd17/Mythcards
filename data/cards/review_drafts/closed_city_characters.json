@@ -123,7 +123,10 @@
       "line_she_eventually_crosses": "She hides a living breach survivor under a false death record, preserving a witness who should have vanished from the files.",
       "catch_phrase": "No one dies quietly on my ward."
     },
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/characters/galina-reznik-hospital-orderly-ace-of-cups-character-card-art.png"
+    ],
+    "profile_page_asset": "assets/characters/galina-reznik-hospital-orderly-ace-of-cups-profile-page.png",
     "review_notes": [
       "Second Closed City Common draft.",
       "Card title remains archetypal because this is a Common; Galina Reznik is the named story representative.",
@@ -353,7 +356,10 @@
       "quote_secondary": "I do not open doors. I balance exits.",
       "quote_tertiary": "If the city can seal a person, a person can seal the city back."
     },
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/characters/anya-lebedeva-signal-escape-artist-temperance-character-card-art.png"
+    ],
+    "profile_page_asset": "assets/characters/anya-lebedeva-signal-escape-artist-temperance-profile-page.png",
     "review_notes": [
       "Final Closed City character slot.",
       "Counts as the second Closed City rare character slot.",
