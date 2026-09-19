@@ -175,6 +175,7 @@
     "name": "VERA-7",
     "type": "Mount",
     "unique": true,
+    "tarot_mapping": "Queen of Pentacles",
     "stats": [4, 1, 4, 1],
     "l1": "Passive: Sealed Route lets VERA-7 ignore Leak damage during movement. If carrying a Hero or Leader, the mounted pair also ignores Leak damage.",
     "l2": "No Map Confirms This Corridor: +1 MOVE. VERA-7 may move through one placed object or allied occupied tile during movement, but must end on an empty tile.",
@@ -189,7 +190,9 @@
       "line_it_eventually_crosses": "It carries someone into a place no human body was meant to enter.",
       "catch_phrase": "No map confirms this corridor."
     },
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/characters/vera-7-queen-of-pentacles-character-card-art.png"
+    ],
     "review_notes": [
       "Added from the latest narrative notes for VERA-7 / Lunar Rover Drone.",
       "Not added to the playable 14-card prototype deck yet.",

@@ -284,10 +284,12 @@
         "name": "Radio Snow Speaks",
         "card_status": "new_winter_front_event_card",
         "kind": "Event",
-        "tarot_mapping": "Wheel of Fortune",
+        "tarot_mapping": "Three of Wands",
         "narrative": "The frozen field radio receives a transmission that should not exist: security orders, reactor warnings, dream monitor tones, and Elena Morozova's presence reaching backward from Closed City. In the static, Elena appears like a High Priestess behind a veil of signal and ice, looking directly at the listener as if the person holding the card has also been included in the loop.",
         "story_function": "Creates the direct Closed City time-fold and reframes the event as fate turning rather than a simple fast message. Radio dials, compass needles, waveform rings, and Elena's fourth-wall gaze reveal that time is no longer linear.",
         "asset_candidates": [
+          "assets/events/winter-front-radio-snow-speaks-three-of-wands-event-art-v2.png",
+          "assets/events/winter-front-radio-snow-speaks-three-of-wands-event-art.png",
           "assets/events/winter-front-radio-snow-speaks-wheel-of-fortune-event-art.png",
           "assets/events/winter-front-radio-snow-speaks-eight-of-wands-event-art.png"
         ],
@@ -334,38 +336,19 @@
         "name": "Bogatyr Walks Through Smoke",
         "card_status": "new_winter_front_event_card",
         "kind": "Event",
-        "tarot_mapping": "Strength",
+        "tarot_mapping": "Ten of Swords",
         "narrative": "After an attack should have failed, Ilya emerges through smoke carrying Stepan and an enemy relic case. No one can agree whether they saw a man, a hero, or an old story wearing a soldier's coat.",
         "story_function": "Pays off the mythic hero theme while refusing to make sacrifice simple.",
         "asset_candidates": [
+          "assets/events/winter-front-bogatyr-walks-through-smoke-ten-of-swords-event-art.png",
           "assets/events/winter-front-bogatyr-walks-through-smoke-strength-event-art.png"
         ]
       }
     ],
     "relics": [
       {
-        "name": "Bogatyr's Relic Case",
-        "card_status": "new_winter_front_relic_card",
-        "kind": "Relic",
-        "tarot_mapping": "Seven of Cups",
-        "narrative": "The heavy relic case Ilya Voronin carries out of smoke after the enemy cache is opened. Inside are seven cup-like vessels, each cradling an Atlantean ring etched with a different impossible route, oath, or temptation.",
-        "story_function": "Turns the enemy cache into a specific coveted object: a Seven of Cups relic of tempting paths, false answers, and Atlantean ring-power that will echo toward the cabin rite and the future circus.",
-        "asset_candidates": [
-          "assets/relics/winter-front-bogatyrs-relic-case-seven-of-cups-relic-art.png"
-        ],
-        "mapping_note": "Replaces the broader Enemy Occult Cache relic concept with the specific case recovered by the Bogatyr Champion. The Seven of Cups cue is seven vessels inside the case, each holding an Atlantean ring."
-      },
-      {
-        "name": "Frozen Field Radio",
-        "card_status": "new_winter_front_relic_card",
-        "kind": "Relic",
-        "tarot_mapping": "Page of Swords",
-        "narrative": "A cracked field radio that receives future transmissions when ice forms across its casing.",
-        "story_function": "Links the signal officer, Closed City, and war-time static."
-      },
-      {
         "name": "Volkov's Red Map",
-        "card_status": "new_winter_front_relic_card",
+        "card_status": "active_winter_front_relic_card",
         "kind": "Relic",
         "tarot_mapping": "Two of Wands",
         "narrative": "The general's map is covered in pins, grease pencil arrows, casualty marks, and routes that do not exist yet. After the cache opens, the lines sometimes rearrange into ritual diagrams, showing Volkov a path away from home, mercy, and ordinary command toward conquest and occult certainty.",
@@ -376,54 +359,8 @@
         "mapping_note": "Remapped from The Emperor after Semyonov retained The Emperor and Volkov moved to King of Swords as a character. Two of Wands fits the relic as planning, projection, ambition, and leaving home."
       },
       {
-        "name": "Black Snow Cartridge",
-        "card_status": "new_winter_front_relic_card",
-        "kind": "Relic",
-        "tarot_mapping": "Ace of Wands",
-        "narrative": "A rifle cartridge packed with blackened snow and meteor-reactive powder. It should not fire, but under aurora conditions it burns like a signal flare.",
-        "story_function": "Gives the front a small ignition relic tied to the northern meteor."
-      },
-      {
-        "name": "Marya's Thaw Cup",
-        "card_status": "new_winter_front_relic_card",
-        "kind": "Relic",
-        "tarot_mapping": "Five of Cups",
-        "narrative": "A battered metal cup Marya uses for water, spirits, blood-washing, and prayers. It warms only when a life can still be bargained for.",
-        "story_function": "Gives the healer line a practical relic of mercy under catastrophe, emphasizing grief, triage, and the few lives that can still be saved.",
-        "asset_candidates": [
-          "assets/relics/winter-front-maryas-thaw-cup-five-of-cups-relic-art.png"
-        ],
-        "mapping_note": "Remapped from Temperance so Marya Zima can keep Temperance as her character archetype. Five of Cups centers loss, grief, and the remaining warmth of mercy."
-      },
-      {
-        "name": "Saint's Field Icon",
-        "card_status": "new_winter_front_rare_relic_candidate",
-        "kind": "Rare Relic",
-        "tarot_mapping": "Three of Swords",
-        "narrative": "Anastasia's damaged icon is painted over older wood. Under cold and candlelight, a second image appears beneath the saint: not enemy occultism, but an older protective pattern that recognizes the cabin rings.",
-        "story_function": "Could become the Winter Front rare relic if we want the rare card rooted in Russian spiritual tradition rather than enemy occult technology. Its protection comes through sacred heartbreak rather than formal doctrine.",
-        "asset_candidates": [
-          "assets/relics/winter-front-saints-field-icon-three-of-swords-relic-art.png"
-        ],
-        "mapping_note": "Remapped from The Hierophant to Three of Swords, which fits the icon as wounded faith, sacrifice, and protection through suffering."
-      }
-    ],
-    "extra_open_tarot_relic_candidates": [
-      {
-        "name": "The Horizon Lens",
-        "card_status": "extra_open_tarot_relic_candidate",
-        "kind": "Relic",
-        "tarot_mapping": "Three of Wands",
-        "narrative": "A cracked brass field telescope taken from enemy occult material but older than the war. When aimed across snow, it does not show distance; it shows consequences: the stalled Winter Front, the Far North meteor glow, and future Closed City corridors.",
-        "story_function": "Preserves the approved Three of Wands relic concept as a bridge object without replacing one of the seven Winter Front relic slots.",
-        "asset_candidates": [
-          "assets/relics/winter-front-horizon-lens-three-of-wands-relic-art.png"
-        ],
-        "mapping_note": "Generated during the open-tarot relic pass. The approved revision keeps the three visions contained inside the lens rather than appearing as sky portals."
-      },
-      {
         "name": "The Ridge Rifle",
-        "card_status": "extra_open_tarot_relic_candidate",
+        "card_status": "active_winter_front_relic_card",
         "kind": "Relic",
         "tarot_mapping": "Seven of Wands",
         "narrative": "Irina Sokolova's ridge rifle becomes more than a sniper's weapon after the occult cache wakes. Its barrel holds a defensive line in the snow, and its sight remembers the exact ridge where one person stood against many advancing shapes.",
@@ -434,32 +371,32 @@
         "mapping_note": "Approved during the open-tarot relic pass as the sniper-rifle relic. The card should preserve Irina's precision and the Seven of Wands theme of defending a ridge against pressure."
       },
       {
-        "name": "The Sister-Vow Binding",
-        "card_status": "extra_open_tarot_relic_candidate",
+        "name": "Marya's Thaw Cup",
+        "card_status": "active_winter_front_relic_card",
         "kind": "Relic",
-        "tarot_mapping": "Three of Cups",
-        "narrative": "A braided battlefield relic made from Darya Koval's red-white prayer cloth and three small cup-shaped memory lockets. It preserves the warmth of three women sharing humble cups before the war turns friendship into oath, and it carries that memory into the snow beside Darya's bayonet.",
-        "story_function": "Turns Three of Cups into a Winter Front relic of friendship, chosen loyalty, and intimate memory under war pressure. The relic explains why Darya's distinctive cloth matters beyond costume: it is a surviving vow, not decoration.",
+        "tarot_mapping": "Five of Cups",
+        "narrative": "A battered metal cup Marya uses for water, spirits, blood-washing, and prayers. It warms only when a life can still be bargained for.",
+        "story_function": "Gives the healer line a practical relic of mercy under catastrophe, emphasizing grief, triage, and the few lives that can still be saved.",
         "asset_candidates": [
-          "assets/relics/winter-front-sister-vow-binding-three-of-cups-relic-art.png"
+          "assets/relics/winter-front-maryas-thaw-cup-five-of-cups-relic-art.png"
         ],
-        "mapping_note": "Approved during the open-tarot relic pass. Final art keeps exactly three cups in the warm memory scene, exactly three hanging cup-lockets, and Darya's long red-white cloth wrapping through the charm and bayonet without a visible end."
+        "mapping_note": "Remapped from Temperance so Marya Zima can keep Temperance as her character archetype. Five of Cups centers loss, grief, and the remaining warmth of mercy."
       },
       {
-        "name": "The Hearth-Locket Pair",
-        "card_status": "extra_open_tarot_relic_candidate",
+        "name": "Bogatyr's Relic Case",
+        "card_status": "active_winter_front_relic_card",
         "kind": "Relic",
-        "tarot_mapping": "Ten of Cups",
-        "narrative": "Two battered field lockets carry the hidden love between Private Stepan Kuznetsov and Marya Zima. Marya holds Stepan's side, and Stepan holds Marya's, each keeping the other's image close while the front makes any future feel dangerous to name. When opened together, the lockets reveal an impossible warm home: hearth, shelter, family silhouettes, and a blessing neither character fully trusts.",
-        "story_function": "Turns Ten of Cups into an intimate Winter Front relic of private love, imagined family, emotional endurance, and the painful hope of home inside war.",
+        "tarot_mapping": "Seven of Cups",
+        "narrative": "The heavy relic case Ilya Voronin carries out of smoke after the enemy cache is opened. Inside are seven cup-like vessels, each cradling an Atlantean ring etched with a different impossible route, oath, or temptation.",
+        "story_function": "Turns the enemy cache into a specific coveted object: a Seven of Cups relic of tempting paths, false answers, and Atlantean ring-power that will echo toward the cabin rite and the future circus.",
         "asset_candidates": [
-          "assets/relics/winter-front-hearth-locket-pair-ten-of-cups-relic-art.png"
+          "assets/relics/winter-front-bogatyrs-relic-case-seven-of-cups-relic-art.png"
         ],
-        "mapping_note": "Approved during the open-tarot relic pass. Final art shows realistic paired lockets, Stepan's gloved hand holding Marya's portrait, Marya's nurse hand holding Stepan's portrait, and exactly ten cup motifs arcing over the warm home vision."
+        "mapping_note": "Replaces the broader Enemy Occult Cache relic concept with the specific case recovered by the Bogatyr Champion. The Seven of Cups cue is seven vessels inside the case, each holding an Atlantean ring."
       },
       {
         "name": "The Twin Waters Flask",
-        "card_status": "extra_open_tarot_relic_candidate",
+        "card_status": "active_winter_front_relic_card",
         "kind": "Relic",
         "tarot_mapping": "King of Cups",
         "narrative": "Marya Zima's two-chamber field flask holds water that should not remain liquid in the Winter Front cold. One chamber carries dead water, which closes wounds and gathers the body back from ruin. The other carries living water, which warms breath and calls strength back toward the waking world.",
@@ -471,7 +408,7 @@
       },
       {
         "name": "The Blind-Marked Kopeck",
-        "card_status": "extra_open_tarot_relic_candidate",
+        "card_status": "active_winter_front_relic_card",
         "kind": "Relic",
         "tarot_mapping": "Two of Swords",
         "narrative": "Irina Sokolova keeps the worn coin beneath the wrap of her rifle stock. One face is scratched blind; the other bears a tiny closed eye. Before a shot that could change more than a battle, she flips it to hold two possible outcomes equally real for a few seconds. She must choose before it lands.",
@@ -480,6 +417,56 @@
           "assets/relics/winter-front-blind-marked-kopeck-two-of-swords-relic-art.png"
         ],
         "mapping_note": "Approved Two of Swords art keeps Irina's established likeness and wrapped sniper rifle, with the coin suspended before her and exactly two crossed blades."
+      },
+      {
+        "name": "Saint's Field Icon",
+        "card_status": "active_winter_front_rare_relic_card",
+        "kind": "Rare Relic",
+        "tarot_mapping": "Three of Swords",
+        "narrative": "Anastasia's damaged icon is painted over older wood. Under cold and candlelight, a second image appears beneath the saint: not enemy occultism, but an older protective pattern that recognizes the cabin rings.",
+        "story_function": "Could become the Winter Front rare relic if we want the rare card rooted in Russian spiritual tradition rather than enemy occult technology. Its protection comes through sacred heartbreak rather than formal doctrine.",
+        "asset_candidates": [
+          "assets/relics/winter-front-saints-field-icon-three-of-swords-relic-art.png"
+        ],
+        "mapping_note": "Remapped from The Hierophant to Three of Swords, which fits the icon as wounded faith, sacrifice, and protection through suffering."
+      }
+    ],
+    "bonus_story_art": [
+      {
+        "name": "The Horizon Lens",
+        "card_status": "approved_bonus_story_art_not_a_card",
+        "kind": "Bonus Story Art",
+        "narrative": "A cracked brass field telescope taken from enemy occult material but older than the war. When aimed across snow, it does not show distance; it shows consequences: the stalled Winter Front, the Far North meteor glow, and future Closed City corridors.",
+        "story_function": "Preserves the approved Three of Wands relic concept as a bridge object without replacing one of the seven Winter Front relic slots.",
+        "asset_candidates": [
+          "assets/relics/winter-front-horizon-lens-three-of-wands-relic-art.png"
+        ],
+        "mapping_note": "Generated during the open-tarot relic pass. The approved revision keeps the three visions contained inside the lens rather than appearing as sky portals.",
+        "former_tarot_inspiration": "Three of Wands"
+      },
+      {
+        "name": "The Sister-Vow Binding",
+        "card_status": "approved_bonus_story_art_not_a_card",
+        "kind": "Bonus Story Art",
+        "narrative": "A braided battlefield relic made from Darya Koval's red-white prayer cloth and three small cup-shaped memory lockets. It preserves the warmth of three women sharing humble cups before the war turns friendship into oath, and it carries that memory into the snow beside Darya's bayonet.",
+        "story_function": "Turns Three of Cups into a Winter Front relic of friendship, chosen loyalty, and intimate memory under war pressure. The relic explains why Darya's distinctive cloth matters beyond costume: it is a surviving vow, not decoration.",
+        "asset_candidates": [
+          "assets/relics/winter-front-sister-vow-binding-three-of-cups-relic-art.png"
+        ],
+        "mapping_note": "Approved during the open-tarot relic pass. Final art keeps exactly three cups in the warm memory scene, exactly three hanging cup-lockets, and Darya's long red-white cloth wrapping through the charm and bayonet without a visible end.",
+        "former_tarot_inspiration": "Three of Cups"
+      },
+      {
+        "name": "The Hearth-Locket Pair",
+        "card_status": "approved_bonus_story_art_not_a_card",
+        "kind": "Bonus Story Art",
+        "narrative": "Two battered field lockets carry the hidden love between Private Stepan Kuznetsov and Marya Zima. Marya holds Stepan's side, and Stepan holds Marya's, each keeping the other's image close while the front makes any future feel dangerous to name. When opened together, the lockets reveal an impossible warm home: hearth, shelter, family silhouettes, and a blessing neither character fully trusts.",
+        "story_function": "Turns Ten of Cups into an intimate Winter Front relic of private love, imagined family, emotional endurance, and the painful hope of home inside war.",
+        "asset_candidates": [
+          "assets/relics/winter-front-hearth-locket-pair-ten-of-cups-relic-art.png"
+        ],
+        "mapping_note": "Approved during the open-tarot relic pass. Final art shows realistic paired lockets, Stepan's gloved hand holding Marya's portrait, Marya's nurse hand holding Stepan's portrait, and exactly ten cup motifs arcing over the warm home vision.",
+        "former_tarot_inspiration": "Ten of Cups"
       }
     ]
   },

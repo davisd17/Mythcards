@@ -27,10 +27,70 @@
       "The World"
     ],
     "minor_arcana": {
-      "Wands": ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"],
-      "Cups": ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"],
-      "Swords": ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"],
-      "Pentacles": ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"]
+      "Wands": [
+        "Ace",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+        "Ten",
+        "Page",
+        "Knight",
+        "Queen",
+        "King"
+      ],
+      "Cups": [
+        "Ace",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+        "Ten",
+        "Page",
+        "Knight",
+        "Queen",
+        "King"
+      ],
+      "Swords": [
+        "Ace",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+        "Ten",
+        "Page",
+        "Knight",
+        "Queen",
+        "King"
+      ],
+      "Pentacles": [
+        "Ace",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+        "Ten",
+        "Page",
+        "Knight",
+        "Queen",
+        "King"
+      ]
     }
   },
   "mapping_status_values": [
@@ -228,14 +288,20 @@
             "Bogatyr Walks Through Smoke"
           ],
           "relics": [
-            "Bogatyr's Relic Case",
-            "Frozen Field Radio",
             "Volkov's Red Map",
-            "Black Snow Cartridge",
+            "The Ridge Rifle",
             "Marya's Thaw Cup",
+            "Bogatyr's Relic Case",
+            "The Twin Waters Flask",
+            "The Blind-Marked Kopeck",
             "Saint's Field Icon"
           ],
-          "status_note": "These are Winter Front / Army Era story/card drafts. Ten playable characters are listed; Pavel Orlov, Anastasia Lebedeva, and Nikolai Baranov remain narrative-only and reserve no tarot slots. The sub-area is framed as a World War II-era winter front on the future Closed City site, with enemy occult cache material, an old ritual cabin, iron rings that eventually connect to the Deep North Circus, future Closed City visions, and a simultaneous Far North meteor event."
+          "status_note": "Winter Front has ten playable characters, nine events, and exactly seven active relic cards. Pavel Orlov, Anastasia Lebedeva, and Nikolai Baranov remain narrative-only characters. The Horizon Lens, Sister-Vow Binding, and Hearth-Locket Pair retain approved lore and artwork as bonus story art but reserve no tarot mappings. Frozen Field Radio and Black Snow Cartridge were removed from the relic roster.",
+          "bonus_story_art": [
+            "The Horizon Lens",
+            "The Sister-Vow Binding",
+            "The Hearth-Locket Pair"
+          ]
         },
         "narrative_support_cards": [
           {
@@ -292,14 +358,18 @@
             "art_note": "Moonlit cabin discovery with misleading tracks, wrong moon reflection, chalk geometry, and the iron rings in their wartime ritual origin. V2 corrects the rings to match the Far North Circus Convergence Rings relic lineage."
           },
           {
-            "tarot": "Wheel of Fortune",
+            "tarot": "Three of Wands",
             "mythcards_card": "Radio Snow Speaks",
             "card_type": "Event",
             "sub_area": "Winter Front / Army Era",
             "art_audit": "has_art",
-            "approved_asset": "assets/events/winter-front-radio-snow-speaks-wheel-of-fortune-event-art.png",
-            "previous_asset": "assets/events/winter-front-radio-snow-speaks-eight-of-wands-event-art.png",
-            "art_note": "Remapped from Eight of Wands to Wheel of Fortune after the signal art fought the exact count. The approved art shows Elena Morozova, preserving her High Priestess identity, appearing through a fate-like radio wheel and looking directly at the player/card-holder."
+            "approved_asset": "assets/events/winter-front-radio-snow-speaks-three-of-wands-event-art-v2.png",
+            "previous_assets": [
+              "assets/events/winter-front-radio-snow-speaks-three-of-wands-event-art.png",
+              "assets/events/winter-front-radio-snow-speaks-wheel-of-fortune-event-art.png",
+              "assets/events/winter-front-radio-snow-speaks-eight-of-wands-event-art.png"
+            ],
+            "art_note": "Three of Wands V2 shows Elena Morozova looking directly at the player above exactly three aerial masts. The future Closed City signal is centered directly beneath Elena, the Winter Front remains on the left, and the Far North meteor and aurora occupy the right horizon."
           },
           {
             "tarot": "Eight of Cups",
@@ -330,13 +400,14 @@
             "art_note": "Remapped from The Star because Nadia Belaya owns that archetype. Page of Cups centers Marya Zima's battered thaw cup receiving an impossible northern omen while radios and compasses react behind her."
           },
           {
-            "tarot": "Strength",
+            "tarot": "Ten of Swords",
             "mythcards_card": "Bogatyr Walks Through Smoke",
             "card_type": "Event",
             "sub_area": "Winter Front / Army Era",
             "art_audit": "has_art",
-            "approved_asset": "assets/events/winter-front-bogatyr-walks-through-smoke-strength-event-art.png",
-            "art_note": "Ilya carries wounded Stepan and an enemy relic case through smoke, with a subtle lion-like smoke shape for controlled strength."
+            "approved_asset": "assets/events/winter-front-bogatyr-walks-through-smoke-ten-of-swords-event-art.png",
+            "previous_asset": "assets/events/winter-front-bogatyr-walks-through-smoke-strength-event-art.png",
+            "art_note": "Ten of Swords revision keeps Ilya carrying wounded Stepan and the enemy relic case through the ruined assault. Exactly ten planted rifle-bayonets frame the aftermath, while cold dawn behind the smoke suggests survival after catastrophic defeat."
           }
         ]
       },
@@ -405,13 +476,15 @@
           "approved_asset": "assets/events/closed-city-elena-missing-in-the-signal-the-lovers-event-art.png"
         },
         {
-          "tarot": "The Chariot",
+          "tarot": "Queen of Pentacles",
           "mythcards_card": "VERA-7",
           "card_type": "Character",
-          "reason": "VERA-7 is directed movement through impossible corridors and disciplined transport under pressure.",
+          "reason": "VERA-7 turns the Queen of Pentacles into practical mechanical care: a materially secure mobile sanctuary that protects a living passenger through contaminated corridors. Karpova's comfort inside the rover also exposes the unequal security her wealth and authority provide.",
           "status": "approved",
           "art_audit": "matches_tarot",
-          "approved_asset": "assets/characters/vera-7-the-chariot-character-card-art.png"
+          "approved_asset": "assets/characters/vera-7-queen-of-pentacles-character-card-art.png",
+          "previous_asset": "assets/characters/vera-7-the-chariot-character-card-art.png",
+          "art_note": "Queen of Pentacles revision keeps VERA-7 as the dominant subject while Irina Vasilievna Karpova rides in its protected passenger seat. The rover's brass pentacle program seal, rugged material presence, and mobile comfort express practical care, stability, and the shadow of privileged safety."
         },
         {
           "tarot": "Strength",
@@ -790,28 +863,6 @@
           "art_note": "Approved relic art shows two black field rods over a red-stained command map, with Volkov's family/home traces and a face-down icon revealing the personal cost of choosing the impossible route."
         },
         {
-          "tarot": "Three of Wands",
-          "mythcards_card": "The Horizon Lens",
-          "card_type": "Relic / Extra Open-Tarot Candidate",
-          "sub_area": "Winter Front / Army Era",
-          "reason": "The Horizon Lens turns Three of Wands into foresight across fronts: Winter Front smoke, Far North meteor light, and future Closed City corridors seen together through one cracked field lens.",
-          "status": "proposed_winter_front",
-          "art_audit": "matches_tarot",
-          "approved_asset": "assets/relics/winter-front-horizon-lens-three-of-wands-relic-art.png",
-          "art_note": "Approved revision zooms into the cracked brass lens so the three visions appear only inside the glass, while the outside trench remains grounded and normal."
-        },
-        {
-          "tarot": "Three of Cups",
-          "mythcards_card": "The Sister-Vow Binding",
-          "card_type": "Relic / Extra Open-Tarot Candidate",
-          "sub_area": "Winter Front / Army Era",
-          "reason": "The Sister-Vow Binding turns Three of Cups into friendship made portable: three humble cups, three shared memories, and Darya's red-white cloth binding intimacy to battlefield courage.",
-          "status": "proposed_winter_front",
-          "art_audit": "matches_tarot",
-          "approved_asset": "assets/relics/winter-front-sister-vow-binding-three-of-cups-relic-art.png",
-          "art_note": "Approved relic art keeps exactly three cups in the warm memory scene, exactly three hanging cup-lockets, and Darya's long red-white prayer cloth wrapping through the charm and bayonet without showing a blunt end."
-        },
-        {
           "tarot": "Four of Wands",
           "mythcards_card": "Hearthstone Antler Crown",
           "card_type": "Relic",
@@ -825,10 +876,10 @@
         {
           "tarot": "Seven of Wands",
           "mythcards_card": "The Ridge Rifle",
-          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "card_type": "Relic",
           "sub_area": "Winter Front / Army Era",
           "reason": "The Ridge Rifle turns Seven of Wands into lonely high-ground defense: Irina's weapon holding a ridge against many pressures, both military and occult.",
-          "status": "proposed_winter_front",
+          "status": "approved_winter_front",
           "art_audit": "matches_tarot",
           "approved_asset": "assets/relics/winter-front-ridge-rifle-seven-of-wands-relic-art.png",
           "art_note": "Approved relic art centers the sniper rifle as a defensive line object tied to Irina and the Winter Front ridge."
@@ -836,10 +887,10 @@
         {
           "tarot": "Two of Swords",
           "mythcards_card": "The Blind-Marked Kopeck",
-          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "card_type": "Relic",
           "sub_area": "Winter Front / Army Era",
           "reason": "Irina's coin suspends the moment before a consequential shot, expressing Two of Swords as a painful choice between equally real outcomes.",
-          "status": "approved",
+          "status": "approved_winter_front",
           "art_audit": "matches_tarot",
           "approved_asset": "assets/relics/winter-front-blind-marked-kopeck-two-of-swords-relic-art.png",
           "art_note": "Approved art shows Irina, the suspended blind-marked coin, and exactly two crossed blades."
@@ -856,23 +907,12 @@
           "art_note": "Approved relic art centers a crystal decanter in Karpova's private suite with exactly nine glasses/cup cues, burgundy velvet, occult-science papers, the Black Key, and cold reactor lights beyond the glass."
         },
         {
-          "tarot": "Ten of Cups",
-          "mythcards_card": "The Hearth-Locket Pair",
-          "card_type": "Relic / Extra Open-Tarot Candidate",
-          "sub_area": "Winter Front / Army Era",
-          "reason": "The paired lockets turn Ten of Cups into hidden love, imagined family, and a fragile future: Stepan and Marya each carrying the other's image through the war.",
-          "status": "proposed_winter_front",
-          "art_audit": "matches_tarot",
-          "approved_asset": "assets/relics/winter-front-hearth-locket-pair-ten-of-cups-relic-art.png",
-          "art_note": "Approved relic art shows realistic paired lockets, Stepan's gloved hand holding Marya's portrait, Marya's nurse hand holding Stepan's portrait, and exactly ten cup motifs over a warm home vision."
-        },
-        {
           "tarot": "King of Cups",
           "mythcards_card": "The Twin Waters Flask",
-          "card_type": "Relic / Extra Open-Tarot Candidate",
+          "card_type": "Relic",
           "sub_area": "Winter Front / Army Era",
           "reason": "The Twin Waters Flask turns King of Cups into mastered compassion: Marya holding living water and dead water in balance, deciding mercy with steady emotional authority.",
-          "status": "proposed_winter_front",
+          "status": "approved_winter_front",
           "art_audit": "matches_tarot",
           "approved_asset": "assets/relics/winter-front-twin-waters-flask-king-of-cups-relic-art.png",
           "art_note": "Approved relic art shows a believable twin-chamber field flask with cold silver-blue dead water, warm golden living water, medical cloth, icon imagery, and restrained crown/cup authority."
