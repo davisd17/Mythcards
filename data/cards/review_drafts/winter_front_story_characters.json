@@ -193,10 +193,12 @@
         "card_name": "Field Nurse",
         "card_status": "new_winter_front_character_card",
         "type": "Mystic",
-        "tarot_mapping": "Temperance",
+        "tarot_mapping": "Justice",
         "narrative": "Marya Zima is a field nurse in her early-to-mid 30s during the Winter Front, roughly 40 years before Far North and Closed City. She mixes practical triage with old winter prayers, seeing healing not as innocence but as bargaining with time, blood, and cold. After the enemy cache is opened, she begins to sort wounds into those made by metal and those made by something reaching backward from futures she cannot name.",
         "relationship_function": "She humanizes the front and contrasts Nadia Belaya across the bloodline. Marya is exhausted mercy during catastrophe; decades later Nadia becomes the star-like rescue after catastrophe. Marya's field book, charms, and healing rites may become the inheritance that reaches Nadia's Far North story.",
         "asset_candidates": [
+          "assets/characters/marya-zima-field-nurse-justice-character-card-art-v2.png",
+          "assets/characters/marya-zima-field-nurse-justice-character-card-art.png",
           "assets/characters/marya-zima-field-nurse-temperance-character-card-art.png"
         ],
         "profile_page_asset": "assets/characters/marya-zima-field-nurse-temperance-profile-page.png",
@@ -271,14 +273,15 @@
         "name": "The Cabin Rite",
         "card_status": "new_winter_front_event_card",
         "kind": "Event",
-        "tarot_mapping": "The Moon",
+        "tarot_mapping": "Death",
         "narrative": "Nikolai finds an old cabin beyond the line. Inside are rope marks, candle soot, chalk geometry, and iron rings arranged in a ritual setting. The cabin feels older than the war and aware of being found.",
         "story_function": "Connects Winter Front to the future circus rite and reveals that the land already held ritual structure before the armies arrived.",
         "asset_candidates": [
+          "assets/events/winter-front-the-cabin-rite-death-event-art.png",
           "assets/events/winter-front-the-cabin-rite-the-moon-event-art-v2.png",
           "assets/events/winter-front-the-cabin-rite-the-moon-event-art.png"
         ],
-        "art_revision_note": "V2 keeps the Moon composition but corrects the cabin rings so they resemble the Far North Circus Convergence Rings: thick blackened iron, red leather/thread wraps, etched geometry, and rough rope lashings."
+        "art_revision_note": "Death revision preserves the Far North Circus Convergence Rings lineage while showing the old rite ending and transforming into its future circus form: one ring lies in the dead remains, another turns toward warm lantern light, and dawn replaces the false moon."
       },
       {
         "name": "Radio Snow Speaks",

@@ -348,14 +348,17 @@
             "art_note": "Remapped from Seven of Cups to avoid duplicating the cache relic; art centers chained temptation and a smoke-shadow Devil shape."
           },
           {
-            "tarot": "The Moon",
+            "tarot": "Death",
             "mythcards_card": "The Cabin Rite",
             "card_type": "Event",
             "sub_area": "Winter Front / Army Era",
             "art_audit": "has_art",
-            "approved_asset": "assets/events/winter-front-the-cabin-rite-the-moon-event-art-v2.png",
-            "previous_asset": "assets/events/winter-front-the-cabin-rite-the-moon-event-art.png",
-            "art_note": "Moonlit cabin discovery with misleading tracks, wrong moon reflection, chalk geometry, and the iron rings in their wartime ritual origin. V2 corrects the rings to match the Far North Circus Convergence Rings relic lineage."
+            "approved_asset": "assets/events/winter-front-the-cabin-rite-death-event-art.png",
+            "previous_assets": [
+              "assets/events/winter-front-the-cabin-rite-the-moon-event-art-v2.png",
+              "assets/events/winter-front-the-cabin-rite-the-moon-event-art.png"
+            ],
+            "art_note": "Death revision shows the abandoned rite passing into another form. One blackened iron convergence ring lies among dead candles and rotted rope while another turns toward future circus lantern light; Nikolai pauses at the threshold beneath a frost-white birch and dawn."
           },
           {
             "tarot": "Three of Wands",
@@ -554,13 +557,18 @@
           "art_note": "Temperance was checked open in the Russian tarot tracker before assignment. Art should show Anya balancing two signals, two vessels, or two realities inside a sealed Closed City threshold, with analog relay cabinets, warning lamps, condensation, and an impossible corridor opening toward aurora-lit snow."
         },
         {
-          "tarot": "The Devil",
+          "tarot": "The Hierophant",
           "mythcards_card": "Karpova's Black Key",
           "card_type": "Relic",
-          "reason": "The key turns access, permission, desire, and dependence into a beautiful trap. It represents power that opens doors while binding people to Karpova's system.",
+          "reason": "The Black Key makes institutional permission into initiation: Karpova controls access to restricted places, secret knowledge, and the Closed City's hidden order through rank, ritual, and obedience.",
           "status": "approved",
           "art_audit": "matches_tarot",
-          "approved_asset": "assets/relics/closed-city-karpovas-black-key-the-devil-relic-art.png"
+          "approved_asset": "assets/relics/closed-city-karpovas-black-key-the-hierophant-relic-art-v2.png",
+          "previous_assets": [
+            "assets/relics/closed-city-karpovas-black-key-the-hierophant-relic-art.png",
+            "assets/relics/closed-city-karpovas-black-key-the-devil-relic-art.png"
+          ],
+          "art_note": "Hierophant V2 grounds the Black Key in a cramped Closed City checkpoint with wired glass, a tired guard, exposed pipes, fluorescent light, paper authorization, two crossed administrative keys, and five access seals. Karpova bestows permission through bureaucracy rather than public ceremony."
         },
         {
           "tarot": "The Tower",
@@ -627,13 +635,15 @@
           "art_note": "Event art centers the cracked meteor hollow, black glass fragments, tiny witnesses, and an aurora shaped like a natural calling horn with ghostly memory-figures rising through it."
         },
         {
-          "tarot": "The World",
+          "tarot": "Ten of Pentacles",
           "mythcards_card": "The First Card Appears",
           "card_type": "Event",
-          "reason": "The first physical MythCards artifact turns the convergence from dream and machinery into a complete object that can pass between worlds; it closes the first Closed City loop and opens the larger game reality.",
+          "reason": "The first physical MythCards artifact becomes the material ancestor of every card that follows: proof, inheritance, institutional possession, and a system that will outlive everyone present in Orlov's ward.",
           "status": "approved",
           "art_audit": "matches_tarot",
-          "approved_asset": "assets/events/closed-city-the-first-card-appears-the-world-event-art.png"
+          "approved_asset": "assets/events/closed-city-the-first-card-appears-ten-of-pentacles-event-art.png",
+          "previous_asset": "assets/events/closed-city-the-first-card-appears-the-world-event-art.png",
+          "art_note": "Ten of Pentacles revision centers one physical card on a hospital evidence tray surrounded by exactly ten brass evidence medallions in a branching inheritance pattern. Orlov remains unconscious, a ward worker reacts, and Karpova watches through wired glass with possessive calculation."
         },
         {
           "tarot": "Ace of Cups",
@@ -737,13 +747,15 @@
           "previous_asset": "assets/events/closed-city-signal-array-turns-event-art.png"
         },
         {
-          "tarot": "Nine of Swords",
+          "tarot": "Nine of Pentacles",
           "mythcards_card": "Cosmonaut Helmet With A Second Shadow",
           "card_type": "Relic",
-          "reason": "The recovered helmet is nightmare evidence: sleepless dread, returned trauma, guilt, and proof that something came back in the reflection.",
+          "reason": "The recovered helmet is an elite and isolated achievement of the cosmonaut program: nine mission honors surround a rare institutional possession, while the second presence in its visor reveals the private cost of that success.",
           "status": "approved",
           "art_audit": "matches_tarot",
-          "approved_asset": "assets/relics/closed-city-cosmonaut-helmet-second-shadow-nine-of-swords-relic-art.png"
+          "approved_asset": "assets/relics/closed-city-cosmonaut-helmet-second-shadow-nine-of-pentacles-relic-art.png",
+          "previous_asset": "assets/relics/closed-city-cosmonaut-helmet-second-shadow-nine-of-swords-relic-art.png",
+          "art_note": "Remapped from Nine of Swords to resolve its conflict with Closed City Vision. Revised art presents exactly nine mission medallions, a cultivated plant, and the second presence confined to the helmet's visor reflection."
         },
         {
           "tarot": "Ace of Wands",
@@ -1007,6 +1019,22 @@
           "profile_asset": "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-profile-art.png",
           "profile_page_asset": "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-profile-page.png",
           "art_note": "V4 keeps the clear scrying reflection and hidden frost influence from v3 while improving continuity with Nadia Belaya's approved artwork: hooded off-white robe, red embroidery, brown braid, pendant, and warm Star-like healing light as she saves Pavel."
+        },
+        {
+          "tarot": "Justice",
+          "mythcards_card": "Marya Zima",
+          "card_type": "Character / Mystic",
+          "sub_area": "Winter Front / Army Era",
+          "reason": "Marya expresses Justice through battlefield triage: dividing scarce medicine, warmth, attention, and time while judging which wounds can still be treated and accepting the human cost of every decision.",
+          "status": "approved_winter_front",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/characters/marya-zima-field-nurse-justice-character-card-art-v2.png",
+          "previous_assets": [
+            "assets/characters/marya-zima-field-nurse-justice-character-card-art.png",
+            "assets/characters/marya-zima-field-nurse-temperance-character-card-art.png"
+          ],
+          "profile_page_asset": "assets/characters/marya-zima-field-nurse-temperance-profile-page.png",
+          "art_note": "Justice V2 preserves Marya's gray headscarf, facial scratch, red-cross armband, prayer beads, two wounded soldiers, level brass medical balance, and restrained surgical blade. She now clearly holds her battered off-white enamel Thaw Cup, whose warm glow identifies her personal relic and illuminates the triage decision."
         },
         {
           "tarot": "Eight of Pentacles",

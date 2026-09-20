@@ -189,7 +189,7 @@
     "set_count": "7 of 9",
     "name": "The First Card Appears",
     "kind": "Event",
-    "tarot_mapping": "The World",
+    "tarot_mapping": "Ten of Pentacles",
     "duration": "Immediate",
     "effect": "Choose your Hero or one ally adjacent to your Hero. That character gains +1 RANGE on its next attack or AP ability this turn, and may remove 1 harmful temporary combat marker.",
     "role": "The first physical MythCards artifact appears near Orlov's coma bed, proving the Convergence can make symbols into objects.",
@@ -200,6 +200,7 @@
       "character_pressure": "For Orlov, the card suggests his unconscious mind is organizing the worlds. For Karpova, it proves the breach can produce valuable artifacts."
     },
     "asset_candidates": [
+      "assets/events/closed-city-the-first-card-appears-ten-of-pentacles-event-art.png",
       "assets/events/closed-city-the-first-card-appears-the-world-event-art.png",
       "assets/events/closed-city-the-first-card-appears-event-art.png"
     ],

@@ -69,13 +69,17 @@
     "effect": "Your Mount and Warrior each gain +1 maximum HP. Once each round, ignore the first harmful temporary combat marker placed on one of them.",
     "role": "Returned-space omen and signal receiver. Something came back in the reflection.",
     "mechanical_lane": "Defensive containment relic for VERA-7 and Yuri.",
+    "tarot_mapping": "Nine of Pentacles",
     "narrative_links": [
       "VERA-7",
       "Major Yuri Volkov",
       "cosmonaut signal program",
       "outside voices"
     ],
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/closed-city-cosmonaut-helmet-second-shadow-nine-of-pentacles-relic-art.png",
+      "assets/relics/closed-city-cosmonaut-helmet-second-shadow-nine-of-swords-relic-art.png"
+    ],
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus and protection relic.",
@@ -146,6 +150,7 @@
     "set_count": "6 of 7",
     "name": "Karpova's Black Key",
     "kind": "Relic",
+    "tarot_mapping": "The Hierophant",
     "duration": "Persistent",
     "effect": "Your Leader and Common each gain +1 MOVE. Once each turn, one of them may move through 1 placed object or allied occupied tile, but must end on an empty tile.",
     "role": "Karpova's private access key to doors not listed on any map. It replaces the Light-Burn Diagram as the coveted access relic for this set.",
@@ -156,7 +161,11 @@
       "sealed service routes",
       "permission as power"
     ],
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/closed-city-karpovas-black-key-the-hierophant-relic-art-v2.png",
+      "assets/relics/closed-city-karpovas-black-key-the-hierophant-relic-art.png",
+      "assets/relics/closed-city-karpovas-black-key-the-devil-relic-art.png"
+    ],
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus and access relic.",
