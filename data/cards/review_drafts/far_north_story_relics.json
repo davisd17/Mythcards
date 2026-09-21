@@ -402,13 +402,14 @@
         "name": "Nadia Finds The Survivor",
         "card_status": "new_far_north_event_card",
         "kind": "Event",
-        "tarot_mapping": "Five of Pentacles",
+        "tarot_mapping": "Ten of Cups",
         "narrative": "Nadia finds Pavel half-buried in snow where no survivor of the Closed City Incident could have walked. His body is failing, the Sky-Hide Mirror is cold against his chest, and the aurora above him looks less like light than an open wound. She saves him with medicine, breath, prayer, and a mercy she does not explain.",
-        "story_function": "Begins the Far North arc with rescue, exile, vulnerability, and the first proof that the convergence can deliver people as well as destroy them.",
+        "story_function": "Begins the Far North arc with rescue and vulnerability while foreshadowing the chosen family Pavel will find among Nadia, the village, and the circus.",
         "asset_candidates": [
+          "assets/events/far-north-nadia-finds-the-survivor-ten-of-cups-event-art.png",
           "assets/events/far-north-nadia-finds-the-survivor-five-of-pentacles-event-art.png"
         ],
-        "art_direction_note": "Event art should use the same Nadia and Pavel continuity as their character cards, but be composed differently from Nadia's Star card: wider, colder, focused on Pavel's exposure, distant shelter lights, and the Sky-Hide Mirror."
+        "art_direction_note": "Ten of Cups revision preserves Nadia and Pavel's rescue composition while turning the aurora into a gentle protective arc. Exactly ten brighter stars carry the tarot count, and the dim Sky-Hide Mirror offers a subtle future vision of Pavel finding community without overpowering the present rescue."
       },
       {
         "name": "Deep North Circus Arrives",
@@ -490,14 +491,15 @@
         "name": "The Circus Performs The Old Rite",
         "card_status": "new_far_north_event_card",
         "kind": "Event",
-        "tarot_mapping": "Three of Pentacles",
+        "tarot_mapping": "Three of Cups",
         "narrative": "Mila's acrobatics, Dmitri's knives, Oleg's rigging, drumbeats, lantern placement, and old tent ropes align into a pattern no one in the audience fully understands. The circus believes the rite is northern inheritance, but the geometry beneath it is far older: a surviving Atlantean working for stabilizing convergence points through body, symbol, sound, and intention.",
-        "story_function": "Reveals that the Deep North Circus preserves practical ritual knowledge under the cover of performance, while quietly tying the Far North arc back to Atlantis and an extremely old rite.",
+        "story_function": "Reveals that the Deep North Circus preserves practical ritual knowledge through communal joy, trust, and performance, while quietly tying the Far North arc back to Atlantis and an extremely old rite.",
         "asset_candidates": [
+          "assets/events/far-north-the-circus-performs-the-old-rite-three-of-cups-event-art.png",
           "assets/events/far-north-the-circus-performs-the-old-rite-three-of-pentacles-event-art-v2.png",
           "assets/events/far-north-the-circus-performs-the-old-rite-three-of-pentacles-event-art.png"
         ],
-        "art_direction_note": "Three of Pentacles event art should show Mila, Dmitri, and Oleg as three centers of craft inside the Deep North Circus tent. The scene should read first as performance and then as occult engineering: ropes, lanterns, chalk, shadows, and rigging forming three interlocked rings around a vertical line or pillar. The symbol should suggest northern three-world cosmology, Atlantean phases, and convergence stabilization without looking like a pasted-on logo. V2 widens the composition, adds the witnessing crowd, and clarifies that Dmitri and Oleg are collaborating in the rite rather than facing off in combat."
+        "art_direction_note": "Three of Cups revision preserves Mila, Dmitri, and Oleg as collaborators inside the Deep North Circus tent while emphasizing communal joy, trust, and belonging. Exactly three modest ritual cups anchor a single joined Atlantean-northern light pattern, with the witnessing crowd emotionally participating in the rite."
       },
       {
         "name": "Buran Breaks The Boundary",

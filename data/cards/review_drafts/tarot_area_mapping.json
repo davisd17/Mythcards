@@ -1158,15 +1158,16 @@
           "art_note": "V3 keeps Dmitri's longer dark hair and deep teal/emerald costume accents while improving the target-board knives with darker entry points, contact shadows, and visible wood damage so the blades read as embedded."
         },
         {
-          "tarot": "Five of Pentacles",
+          "tarot": "Ten of Cups",
           "mythcards_card": "Nadia Finds The Survivor",
           "card_type": "Event",
           "sub_area": "Far North",
-          "reason": "Pavel is found outside the warmth and certainty of the world he knew, injured in the snow after an impossible displacement. Nadia's rescue turns Five of Pentacles toward mercy in exile: suffering, exposure, and the hand that reaches someone before the cold takes them.",
+          "reason": "Nadia's mercy does more than save Pavel from the snow: it begins the chosen family he will find among the Far North village and circus, turning an impossible arrival into the first promise of belonging.",
           "status": "proposed",
           "art_audit": "matches_tarot",
-          "approved_asset": "assets/events/far-north-nadia-finds-the-survivor-five-of-pentacles-event-art.png",
-          "art_note": "Event art keeps Nadia and Pavel continuity while distinguishing itself from Nadia's character card through wider composition, Pavel's exposure, the visible Sky-Hide Mirror, distant shelter lights, and the huge aurora wound overhead."
+          "approved_asset": "assets/events/far-north-nadia-finds-the-survivor-ten-of-cups-event-art.png",
+          "previous_asset": "assets/events/far-north-nadia-finds-the-survivor-five-of-pentacles-event-art.png",
+          "art_note": "Remapped from Five of Pentacles to resolve its conflict with Semyonov Orders Silence. Revised art preserves Nadia and Pavel's rescue, softens the mirror vision, and represents fulfillment through exactly ten brighter stars beneath a gentle protective aurora."
         },
         {
           "tarot": "Five of Swords",
@@ -1180,16 +1181,16 @@
           "art_note": "Event art centers Dmitri in the Deep North Circus tent with five dominant embedded blades on the target board, Pavel and Mila secondary in the snowy background, and the warning framed as both performance and deception."
         },
         {
-          "tarot": "Three of Pentacles",
+          "tarot": "Three of Cups",
           "mythcards_card": "The Circus Performs The Old Rite",
           "card_type": "Event",
           "sub_area": "Far North",
-          "reason": "The circus act reveals hidden craft and collaboration: acrobatics, knives, rigging, lanterns, ropes, music, and embodied memory forming an extremely old Atlantean convergence rite disguised as entertainment.",
+          "reason": "The circus rite awakens through communal joy, trust, rhythm, and shared inheritance: Mila, Dmitri, Oleg, and the witnessing crowd briefly become one celebratory body sustaining an ancient Atlantean convergence working.",
           "status": "proposed",
           "art_audit": "matches_tarot",
-          "approved_asset": "assets/events/far-north-the-circus-performs-the-old-rite-three-of-pentacles-event-art-v2.png",
-          "previous_asset": "assets/events/far-north-the-circus-performs-the-old-rite-three-of-pentacles-event-art.png",
-          "art_note": "V2 shows Mila, Dmitri, and Oleg forming three centers of craft inside the tent, with a witnessing crowd and rope/lantern/floor geometry suggesting three interlocked rings around a vertical convergence mark. Dmitri and Oleg read as collaborators in the rite rather than opponents."
+          "approved_asset": "assets/events/far-north-the-circus-performs-the-old-rite-three-of-cups-event-art.png",
+          "previous_asset": "assets/events/far-north-the-circus-performs-the-old-rite-three-of-pentacles-event-art-v2.png",
+          "art_note": "Remapped from Three of Pentacles to resolve its conflict with Dream Monitors Synchronize. Revised art preserves Mila, Dmitri, Oleg, and the crowd while using exactly three ritual cups and one joined light pattern to express communal trust and celebration."
         },
         {
           "tarot": "The Chariot",
