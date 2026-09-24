@@ -506,9 +506,15 @@ Mechanical identity: pylons, shields, range boosts, resonance networks, board co
 
 Story identity: post-flood Atlanteans who survived underwater, underground, or migrated into Egypt and mystery traditions.
 
-Visual style: drowned temples, sealed chambers, subterranean routes, Egyptian influence, memory stones.
+Expanded story identity: the Flood Survivors are not the glory of Atlantis. They are what remained after glory became a weapon. Some lived beneath the sea in sealed pressure temples. Some fled underground through tunnels older than the Dominion. Others migrated into Egypt and the mystery lands, encoding Atlantean memory into tomb geometry, burial chambers, star shafts, sacred measurements, and forbidden bloodlines.
 
-Mechanical identity: survival, hidden movement, recursion, relic preservation, return-from-defeat effects.
+They navigate and build on ley lines using great stonework: submerged causeways, black basalt gates, underground vaults, pyramid foundations, dolmens, sealed wells, star chambers, and temples aligned to solstice, tide, and underworld passage. Where the Crystal Dominion used pylons to command energy, the Flood Survivors use stone to persuade, anchor, redirect, slow, preserve, and conceal.
+
+Core emotional identity: survivor guilt, secrecy, preservation, and the fear that keeping Atlantis alive may also keep its sin alive.
+
+Visual style: drowned temples, sealed chambers, subterranean routes, Egyptian influence, memory stones, basalt, limestone, granite, coral-encrusted ruins, ley-line glow beneath carved channels, star maps carved into ceilings, water pressure, torchlight, and blue-green undersea darkness.
+
+Mechanical identity: survival, hidden movement, ley-line routes, placed stone objects, relic preservation, tomb/vault objects, memory markers, delayed structure effects, and return-from-defeat effects.
 
 ## Future Major Areas
 
@@ -586,13 +592,13 @@ This matrix lists the long-term one-of-each-type plan for each current faction s
 
 | Type | First Mind | Crystal Dominion | Flood Survivors |
 | --- | --- | --- | --- |
-| Common | Quartz Attendant | Crystal Thrall | Drowned Initiate |
-| Mount | Astral Manta | Manta Glider | Subterranean Serpent |
-| Warrior | Thought-Blade Guard | Resonance Guard | Tomb Sentinel |
-| Leader | Dream Conductor | Crystal Hierarch | Nile Exile-Priest |
-| Hero | Oracle Sovereign | Obelisk-Crowned Heir | Last Memory-Keeper |
-| Specialist | Star Cartographer | Crystal Architect | Vault Builder |
-| Mystic | Astral Harmonic | Tideglass Oracle | Underwater Necromancer |
+| Common | Quartz Attendant | Crystal Thrall | Stone-Line Laborer |
+| Mount | Astral Manta | Manta Glider | Ahesu, the Stone-Current Serpent |
+| Warrior | Thought-Blade Guard | Resonance Guard | Naia of the Black Sarcophagus |
+| Leader | Dream Conductor | Crystal Hierarch | Queen Meret-Anu, Keeper of the Buried Tide |
+| Hero | Oracle Sovereign | Obelisk-Crowned Heir | Sahu-Ren, Last Memory-Keeper |
+| Specialist | Star Cartographer | Crystal Architect | Iset-Nara, Architect of the Hidden Vault |
+| Mystic | Astral Harmonic | Tideglass Oracle | Thalassa-Nekh, Vessel of the Drowned Seraph |
 
 ## Current Prototype Relic And Event Cards
 
@@ -636,15 +642,17 @@ These cards are currently known from the prototype shared relic/event deck.
 
 This set contains exactly **8 Closed City event cards**. These event ideas came from story work and generated art. They are not necessarily implemented in the prototype yet.
 
+Detailed narrative sequence, flavor lines, visual direction, character pressure, and set-level story questions are captured in `data/cards/review_drafts/closed_city_event_narrative_arc.md`.
+
 | # | Card | Type | Narrative Function | Possible Mechanical Direction | Asset |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Signal Array Turns | Event | The cosmonaut relay dish moves without command. | First ranged attack or AP ability gains +1 RANGE if adjacent to a placed object or Leak marker. | `assets/events/closed-city-signal-array-turns-event-art.png` |
 | 2 | Dream Monitors Synchronize | Event | Elena's sleep-lab waveforms become shared sacred geometry. | Move a temporary combat marker from one character to another within range; exclude Spirit Ember. | `assets/events/closed-city-dream-monitors-synchronize-event-art.png` |
 | 3 | Reactor Prayer | Event | Radiation behaves like language or prayer. | Take 1 damage to gain +1 ATK or +1 RANGE on the next attack or AP ability this turn. | `assets/events/closed-city-reactor-prayer-event-art.png` |
 | 4 | Closed City Incident | Event | The reactor opens inward and realities overlap. | Place 2 Leak markers near the board center. | `assets/events/closed-city-incident-event-art.png` |
-| 5 | Seventeen Seconds | Event | Facility exists in multiple realities for seventeen seconds. | First movement action may pass through one occupied tile, object, or Leak marker. | TBD |
-| 6 | Elena Missing In The Signal | Event | Elena disappears into the signal and becomes the personal wound at the center of the arc. | Move an ally near a Leak marker or object, then mark them as touched by the breach. | TBD |
-| 7 | The First Card Appears | Event | The first MythCards artifact manifests near Orlov's coma bed. | Place an Artifact marker adjacent to the Hero; an adjacent ally gains Shield. | `assets/events/closed-city-the-first-card-appears-event-art.png` |
+| 5 | Seventeen Seconds | Event | Facility exists in multiple realities for seventeen seconds. | First movement action may pass through one occupied tile, object, or Leak marker. | `assets/events/closed-city-seventeen-seconds-event-art.png` |
+| 6 | Elena Missing In The Signal | Event | Elena disappears into the signal and becomes the personal wound at the center of the arc. | Move an ally near a Leak marker or placed object, then mark them as touched by the breach. | `assets/events/closed-city-elena-missing-in-the-signal-event-art.png` |
+| 7 | The First Card Appears | Event | The first MythCards artifact manifests near Orlov's coma bed. | Hero or adjacent ally gains +1 RANGE on its next attack or AP ability and may remove a harmful temporary combat marker. | `assets/events/closed-city-the-first-card-appears-event-art.png` |
 | 8 | Semyonov Orders Silence | Event | Official containment tries to bury the truth. | Temporarily prevents bonus AP gained from card effects. | TBD |
 
 ## Proposed Closed City Relic Cards
@@ -673,6 +681,61 @@ These should be considered when expanding Russian/Closed City beyond the current
 | Hero | Dr. Mikhail Orlov | Coma gate patient and symbolic center. | Reveal/manipulate events, risk through damage/status. |
 | Specialist | Dr. Elena Morozova | Consciousness researcher and missing emotional key. | Dream links, status transfer, prediction, relationship mechanics. |
 | Mystic | Subject 3: Zoya | Remote-viewing dream subject connected to Orlov before waking contact. Full story name: Zoya Miranova. | Unstable prophecy, desire/signal effects, copy abilities, dream links, choice-based psychic effects. |
+
+## Proposed Flood Survivor Character Cards
+
+This set contains exactly **7 Flood Survivor character cards**. The Common uses an archetypal card name with a named story representative; all other character types use full named characters.
+
+| Type | Card | Story Role | Mechanical Identity | Preferred Assets |
+| --- | --- | --- | --- | --- |
+| Common | Stone-Line Laborer | Common stoneworker, causeway builder, and ley-line laborer. Menka of the Lower Causeway is the named story representative. | Placed stone objects, ley-line setup, repair, route building, and practical survival. | `assets/characters/stone-line-laborer-character-card-art.png`; `assets/characters/menka-of-the-lower-causeway-profile-page-horizontal.png` |
+| Mount | Ahesu, the Stone-Current Serpent | Named ley-line mount and subterranean transport creature that swims and slides through flooded stone routes. | Mount movement through flooded routes, ley-line travel, stone-current paths, and protected transport. | `assets/characters/ahesu-the-stone-current-serpent-character-card-art-grounded.png`; `assets/characters/ahesu-the-stone-current-serpent-profile-page-horizontal.png` |
+| Warrior | Naia of the Black Sarcophagus | Tomb Sentinel warrior guarding drowned vaults, bodies, bloodlines, and buried truths. | Drowned close combat, tomb defense, guard pressure, death-memory triggers, and sarcophagus/relic protection. | `assets/characters/naia-of-the-black-sarcophagus-character-card-art.png`; `assets/characters/naia-of-the-black-sarcophagus-profile-page-horizontal-corrected.png` |
+| Leader | Queen Meret-Anu, Keeper of the Buried Tide | Hidden survivor queen who controls bloodlines, archives, ley routes, and disciplined memory. | Relic control, memory discipline, protected archives, sacrifice for preservation, and leader-order effects around stone/ley objects. | `assets/characters/queen-meret-anu-keeper-of-the-buried-tide-character-card-art-pristine.png`; `assets/characters/queen-meret-anu-keeper-of-the-buried-tide-profile-page-horizontal.png` |
+| Hero | Sahu-Ren, Last Memory-Keeper | Living archive and sacred witness who remembers the forbidden truths the Flood Survivors edited, entombed, or disciplined. | Memory markers, witness effects, relic truth, reveal without deck manipulation, and emotionally costly testimony effects. | `assets/characters/sahu-ren-last-memory-keeper-character-card-art.png`; `assets/characters/sahu-ren-last-memory-keeper-profile-page-horizontal.png` |
+| Specialist | Iset-Nara, Architect of the Hidden Vault | Sacred architect, ley-line surveyor, and vault engineer who builds hidden archives, false corridors, star shafts, and tomb structures. | Vault objects, ley-line measurement, hidden routes, delayed structure effects, and controlled placement of stone architecture. | `assets/characters/iset-nara-architect-of-the-hidden-vault-character-card-art.png`; `assets/characters/iset-nara-architect-of-the-hidden-vault-profile-page-horizontal.png` |
+| Mystic | Thalassa-Nekh, Vessel of the Drowned Seraph | Drowned oracle and vessel of a powerful angelic or spiritual entity taken on during a water-burial rite. | Drowned oracle effects, spiritual possession, judgment, black-water protection, sacrifice refusal, and high-risk mystic transformation. | `assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-character-card-art.png`; `assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-profile-page-horizontal.png` |
+
+Key relationship dynamics:
+- Naia and Sahu-Ren have a hidden intimate relationship built on truth, restraint, grief, and dangerous trust.
+- Meret-Anu wants Sahu-Ren's obedience, fears Thalassa-Nekh's undisciplined spiritual authority, and treats memory as something that must be governed.
+- Menka and Iset-Nara both build with stone, but Menka works by touch and survival while Iset-Nara works by ratio, oath, and hidden design.
+
+Likely Flood Survivor relics introduced through this character work:
+- **The Black Sarcophagus**: Naia's central mystery relic and tomb-prison/truth-vault.
+- **Tide-Sealed Archive**: Meret-Anu's sealed memory casket, used to preserve or imprison forbidden records, witness fragments, and bloodline proofs.
+
+## Proposed Flood Survivor Event Cards
+
+This set contains exactly **8 Flood Survivor event cards**. The current direction is **forbidden truth** more than simple protection. The set now uses normal **Stone markers** instead of adding a separate Stone Route marker type, keeps vault openings rare, and treats Memory markers as protective truth that often exposes the bearer.
+
+Structured draft data is captured in `data/cards/review_drafts/flood_survivor_events.json`.
+
+| # | Card | Type | Narrative Function | Possible Mechanical Direction |
+| --- | --- | --- | --- | --- |
+| 1 | The Causeway Breathes | Event | A drowned ley-road wakes because something buried has begun calling through it. | Place one Stone marker near center and allow one movement through a placed object while ignoring that object's effect. |
+| 2 | Black Water Remembers | Event | Floodwater reflects the truth of what happened during the fall of Atlantis. | Give one ally near a placed object a Memory marker and move it 1 tile. |
+| 3 | The Vault Chooses A Witness | Event | A sealed archive opens for one character and brands them with forbidden knowledge. | Single-character AP ability range boost with Marked cost; does not create a Vault marker. |
+| 4 | The Flood Reaches The Walls | Event | The old Flood returns at the board edges and exposes anyone at the walls. | Characters on outer edge tiles become Marked until the end of the round. |
+| 5 | Ley Stones Align | Event | Ancient stones reveal geometry built to hide a crime. | Measure the first AP ability from an allied Stone marker or placed object. |
+| 6 | The Drowned Seraph Speaks | Event | Thalassa-Nekh's entity speaks a judgment no ruler can redact. | Mystic-centered retaliation; Thalassa-Nekh gains a Shield bonus. |
+| 7 | Tide-Sealed Archive Opens | Event | Meret-Anu's records reveal a controlled truth, but the full archive wants release. | Choose safe Shield or stronger Shield/+RANGE with Marked cost. |
+| 8 | Exiles Walk Beneath Egypt | Event | Survivors carry edited Atlantean memory into tomb geometry and later mystery traditions. | Reposition allies adjacent to placed objects. |
+
+## Proposed Flood Survivor Relic Cards
+
+This set contains exactly **6 Flood Survivor relic cards**. The rare relic is **The Emerald Tablet**, based on real Hermetic and occult traditions; **The Black Sarcophagus** remains a relic rather than an event.
+
+Structured draft data is captured in `data/cards/review_drafts/flood_survivor_relics.json`.
+
+| # | Card | Type | Narrative Function | Possible Mechanical Direction |
+| --- | --- | --- | --- | --- |
+| 1 | The Emerald Tablet | Rare Relic | A green stone tablet saved from Atlantis and carried toward Egypt, later remembered through Hermetic and alchemical tradition. | Convert Memory or placed-stone positioning into Shield or +RANGE. |
+| 2 | The Black Sarcophagus | Relic | Naia's sealed black-stone tomb, prison, archive, or body container. | Warrior/Hero max HP and attacker Marking near placed objects. |
+| 3 | Tide-Sealed Archive | Relic | Meret-Anu's sealed casket of witness fragments, bloodline proofs, drowned records, and edited truths. | Leader/Specialist AP range bonus and Memory-linked repositioning. |
+| 4 | Seraphic Burial Veil | Relic | Funerary veil from the water-burial rite that changed Thalassa-Nekh. | Mystic max HP and limited conversion of Marked into Shield. |
+| 5 | Basalt Ley Compass | Relic | Surveying instrument for living routes under floodwater, desert, and tomb foundations. | Common/Specialist movement bonus and traversal through Stone markers or placed objects. |
+| 6 | Pearl Of The Lower Vault | Relic | Luminous pearl containing a memory too sorrowful to speak. | Hero/Mystic AP range bonus and Marking attackers when damage is prevented. |
 
 ## Generated Assets Inventory
 

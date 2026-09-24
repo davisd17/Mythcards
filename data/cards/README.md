@@ -4,6 +4,7 @@ This folder is the start of the shared card data structure for collaborators.
 
 - `characters.json` is the source data for prototype character cards.
 - `relic_events.json` is the source data for prototype relic and event cards.
+- `review_drafts/` holds proposed cards that are ready for story/mechanic review but are not yet part of the playable prototype deck.
 
 Editing guidance:
 - Keep IDs stable once referenced by code, art, or playtest notes.

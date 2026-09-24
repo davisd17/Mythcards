@@ -6,7 +6,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "1 of 6",
+    "set_count": "1 of 7",
     "name": "Chintamani Fragment",
     "kind": "Rare Relic",
     "duration": "Persistent",
@@ -33,24 +33,26 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "2 of 6",
+    "set_count": "2 of 7",
     "name": "Reactor Core Fragment",
     "kind": "Relic",
     "duration": "Persistent",
-    "effect": "Your Specialist and Mystic each gain +1 ATK. The first time each of them enters a Leak tile each turn, it takes 1 damage.",
+    "effect": "Your Specialist and Mystic each gain +1 ATK. When one of them takes Leak damage, it gains +1 RANGE on its next AP ability this turn.",
     "role": "A sealed shard of the inward-opening reactor. Dangerous proof that the incident was not only radiation.",
-    "mechanical_lane": "Power at a cost; rewards Elena/Zoya pressure while keeping the Closed City dangerous.",
+    "mechanical_lane": "Turns normal Leak damage into extra signal range for Elena/Zoya instead of adding a second leak penalty.",
     "narrative_links": [
       "Dr. Elena Morozova",
       "Zoya Miranova",
       "reactor pulse",
       "radiation as language"
     ],
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/closed-city-reactor-core-fragment-king-of-pentacles-relic-art.png"
+    ],
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus relic.",
-      "Watch for feel-bad moments if low-HP characters are forced into Leak spaces."
+      "Revised because Leak tiles already deal 1 damage; this now rewards taking normal Leak damage rather than duplicating it."
     ]
   },
   {
@@ -60,20 +62,24 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "3 of 6",
+    "set_count": "3 of 7",
     "name": "Cosmonaut Helmet With A Second Shadow",
     "kind": "Relic",
     "duration": "Persistent",
     "effect": "Your Mount and Warrior each gain +1 maximum HP. Once each round, ignore the first harmful temporary combat marker placed on one of them.",
     "role": "Returned-space omen and signal receiver. Something came back in the reflection.",
     "mechanical_lane": "Defensive containment relic for VERA-7 and Yuri.",
+    "tarot_mapping": "Nine of Pentacles",
     "narrative_links": [
       "VERA-7",
       "Major Yuri Volkov",
       "cosmonaut signal program",
       "outside voices"
     ],
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/closed-city-cosmonaut-helmet-second-shadow-nine-of-pentacles-relic-art.png",
+      "assets/relics/closed-city-cosmonaut-helmet-second-shadow-nine-of-swords-relic-art.png"
+    ],
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus and protection relic.",
@@ -87,7 +93,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "4 of 6",
+    "set_count": "4 of 7",
     "name": "Lead-Sealed Notebook",
     "kind": "Relic",
     "duration": "Persistent",
@@ -114,7 +120,7 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "5 of 6",
+    "set_count": "5 of 7",
     "name": "Redacted Incident Tape",
     "kind": "Relic",
     "duration": "Persistent",
@@ -141,9 +147,10 @@
     "culture": "Russian-inspired",
     "sub_area": "Closed City",
     "set": "Closed City Relic Set",
-    "set_count": "6 of 6",
+    "set_count": "6 of 7",
     "name": "Karpova's Black Key",
     "kind": "Relic",
+    "tarot_mapping": "The Hierophant",
     "duration": "Persistent",
     "effect": "Your Leader and Common each gain +1 MOVE. Once each turn, one of them may move through 1 placed object or allied occupied tile, but must end on an empty tile.",
     "role": "Karpova's private access key to doors not listed on any map. It replaces the Light-Burn Diagram as the coveted access relic for this set.",
@@ -154,11 +161,46 @@
       "sealed service routes",
       "permission as power"
     ],
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/closed-city-karpovas-black-key-the-hierophant-relic-art-v2.png",
+      "assets/relics/closed-city-karpovas-black-key-the-hierophant-relic-art.png",
+      "assets/relics/closed-city-karpovas-black-key-the-devil-relic-art.png"
+    ],
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus and access relic.",
       "Could become once per round if repeated route-breaking is too strong."
+    ]
+  },
+  {
+    "id": "r-karpovas-velvet-decanter",
+    "review_status": "draft_for_review",
+    "faction": "Russian-Inspired",
+    "culture": "Russian-inspired",
+    "sub_area": "Closed City",
+    "set": "Closed City Relic Set",
+    "set_count": "7 of 7",
+    "name": "Karpova's Velvet Decanter",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Draft effect pending. Should express comfort, private advantage, satisfaction, or elite resource control without becoming another deck-manipulation relic.",
+    "role": "A comfortable luxury object from Irina Vasilievna Karpova's private Closed City suite: crystal, velvet, dark red liquor, and privilege made tangible. The relic represents appetite, private satisfaction, and the disturbing comfort of having what others are denied.",
+    "mechanical_lane": "Luxury, resource advantage, morale denial, or reward-for-control lane to be balanced later.",
+    "tarot_mapping": "Nine of Cups",
+    "narrative_links": [
+      "Irina Vasilievna Karpova",
+      "private patronage",
+      "Closed City privilege",
+      "comfort as control"
+    ],
+    "asset_candidates": [
+      "assets/relics/closed-city-karpovas-velvet-decanter-nine-of-cups-relic-art.png"
+    ],
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "Completes Closed City's target of seven relics.",
+      "Nine of Cups relic: private satisfaction, indulgence, and wish fulfillment with a hidden cost.",
+      "Approved art has the decanter as focal object with exactly nine glasses/cup cues."
     ]
   }
 ]

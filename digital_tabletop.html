@@ -357,6 +357,20 @@
       background: #eab308;
     }
 
+    .status-badge.marked {
+      background: #a855f7;
+      color: #fff;
+    }
+
+    .status-badge.memory {
+      background: #22d3ee;
+    }
+
+    .status-badge.slow {
+      background: #94a3b8;
+      color: #fff;
+    }
+
     .board-object {
       position: absolute;
       right: 5px;
@@ -543,6 +557,37 @@
       font-size: 13px;
     }
 
+    .stat-bonus-controls {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .stat-bonus-control {
+      display: grid;
+      grid-template-columns: 28px 1fr 28px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .stat-bonus-control button {
+      height: 32px;
+      border: 0;
+      background: #f1f5f9;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .stat-bonus-control span {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
     .wide {
       grid-column: 1 / -1;
     }
@@ -717,7 +762,7 @@
         <aside class="turn-rail" aria-label="Turn controls and active relics">
           <div class="turn-card">
             <h2>Turn Start</h2>
-            <button class="btn" id="sideBtn">Side: Russian</button>
+            <button class="btn" id="sideBtn">Side: Closed City</button>
             <button class="btn primary turn-start" id="turnStartBtn">Next Side + Refresh AP + Draw</button>
             <div class="muted">Use this at the start of each turn. It flips to the next side first, then refreshes and draws for that side.</div>
           </div>
@@ -744,12 +789,12 @@
             <h3>Active Relics</h3>
             <div id="activeRelics" class="relic-stack">
               <div class="relic-card">
-                <p class="relic-title">Russian: none</p>
-                <div class="relic-effect muted">Russian player has no active relic.</div>
+              <p class="relic-title">Closed City: none</p>
+              <div class="relic-effect muted">Closed City player has no active relic.</div>
               </div>
               <div class="relic-card">
-                <p class="relic-title">Atlantean: none</p>
-                <div class="relic-effect muted">Atlantean player has no active relic.</div>
+              <p class="relic-title">Flood Survivors: none</p>
+              <div class="relic-effect muted">Flood Survivors player has no active relic.</div>
               </div>
             </div>
           </div>
@@ -788,8 +833,8 @@
           <li>Default attacks are vertical/horizontal line-of-sight.</li>
           <li>Movement, attack, ability, mount, and dismount each cost 1 action.</li>
           <li>Each character refreshes to 1 AP at the start of its side's turn.</li>
-          <li>Tiger Pounce is activated only while the Tiger is not mounted, and marks its next attack as +2 ATK after moving.</li>
-          <li>Use character indicators to track shields, temporary attack, movement, or Pounce reminders.</li>
+          <li>Use character indicators to track shields, temporary attack, movement, Memory, Marked, Slow, or other reminders.</li>
+          <li>Use stat bonus counters when a relic, event, or level permanently or temporarily changes HP, ATK, MOVE, or RANGE.</li>
           <li>Each player may have only 1 active relic.</li>
           <li>When drawing a relic with a relic already active, choose whether to replace it.</li>
           <li>Hero or Leader can mount an adjacent allied Mount as an action.</li>
@@ -807,42 +852,42 @@
 
   <script>
     const characterTemplates = [
-      { id: 'r-gymnast', faction: 'russian', side: 'Russian', name: 'Gymnast', type: 'Common', hp: 2, atk: 1, move: 3, range: 1, abbr: 'GY', ability1: 'Passive: Vault may move through 1 adjacent allied character during movement.', level2: '+1 MOVE and Vault may pass through any one occupied tile during movement. After Vaulting, this character may move 1 extra tile.', level3: 'Aurora Acrobat: +1 ATK and +1 MOVE. Once each turn after Vaulting, may make a 1-damage adjacent attack without spending AP.' },
-      { id: 'r-tiger', faction: 'russian', side: 'Russian', name: 'White Siberian Tiger', type: 'Mount', hp: 4, atk: 2, move: 4, range: 1, abbr: 'TG', ability1: 'Activated: Pounce is only available while this Tiger is not mounted. Mark its next attack after moving as +2 ATK. Movement and attack costs still apply.', level2: '+1 HP and +1 MOVE. Pounce also pushes the target 1 tile if possible.', level3: 'Aurora Predator: +1 ATK. When Pounce defeats a target, this character may move up to 2 tiles and refresh 1 character AP once per turn.' },
-      { id: 'r-sniper', faction: 'russian', side: 'Russian', name: 'Sniper', type: 'Warrior', hp: 3, atk: 2, move: 2, range: 4, abbr: 'SN', ability1: "Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn.", level2: '+1 RANGE. Piercing Shot ignores 1 shield or damage reduction, and may ignore one occupied allied tile for line-of-sight.', level3: 'Dead Lane: +1 ATK. Once per turn, after damaging an enemy at range 3 or farther, mark that enemy; the next allied attack against it deals +1 damage.' },
-      { id: 'r-general', faction: 'russian', side: 'Russian', name: 'Army General', type: 'Leader', hp: 5, atk: 1, move: 2, range: 1, abbr: 'LG', ability1: 'AP Ability: Command chooses an allied character within 2 tiles. That ally gains +1 ATK on its next attack this turn or may move 1 tile without spending an action.', level2: 'Command range becomes 3 and may target 2 allies. Each target chooses +1 ATK on its next attack or 1 free tile of movement.', level3: 'Tactical Mastery: +1 HP. Once per turn when a Commanded ally defeats an enemy or delivers a Spirit Ember, refresh 1 character AP on an allied character within 2 tiles.' },
-      { id: 'r-hero', faction: 'russian', side: 'Russian', name: 'Bogatyr Champion', type: 'Hero', hp: 6, atk: 2, move: 2, range: 1, abbr: 'RH', ability1: 'Passive: Stand Firm gives +1 maximum and current HP while this character is on or adjacent to the center tile.', level2: 'Heroic Guard: +2 maximum and current HP while on or adjacent to the center tile. Adjacent allies take -1 damage from attacks.', level3: 'Last Oath: +1 ATK and +2 maximum HP. The first time this character would be defeated, it remains at 2 HP and adjacent enemies take 1 damage.' },
-      { id: 'r-engineer', faction: 'russian', side: 'Russian', name: 'Winter Engineer', type: 'Specialist', hp: 3, atk: 1, move: 2, range: 1, abbr: 'WE', ability1: 'AP Ability: Barricade creates 1 barricade on an adjacent empty tile, or repairs an adjacent barricade or placed object by 1 HP. Barricades block movement and have 2 HP.', level2: 'Fortified Works: Barricades have 3 HP. When using Barricade, create or repair up to 2 adjacent barricades or placed objects.', level3: 'Frozen Redoubt: +1 HP. Once per turn, place a barricade or frost tile within 2 tiles. Allies adjacent to placed objects take -1 damage from ranged attacks.' },
-      { id: 'r-seer', faction: 'russian', side: 'Russian', name: 'Frost Seer', type: 'Mystic', hp: 3, atk: 1, move: 2, range: 3, abbr: 'FS', ability1: "AP Ability: Chill deals 1 damage at range 3. Target's MOVE is reduced by 1 and it cannot mount or dismount on its next turn.", level2: 'Winter Veil: Chill also gives one ally within 3 tiles a 1-damage shield. Shielded allies cannot be pushed this turn.', level3: 'Deep Freeze: +1 RANGE. Chill also prevents the target from using reaction or bonus movement effects next turn; if the target already has a slow marker, it cannot move next turn.' },
-      { id: 'a-attendant', faction: 'atlantean', side: 'Atlantean', name: 'Quartz Attendant', type: 'Common', hp: 2, atk: 1, move: 2, range: 1, abbr: 'QA', ability1: 'Passive: Synchronize gives +1 ATK while adjacent to another Atlantean.', level2: 'Shared Pulse: +1 HP. While adjacent to another Atlantean, gains +1 ATK and the first damage to one adjacent Atlantean each turn is reduced by 1.', level3: 'Collective Node: +1 HP. Counts as a pylon and as adjacent to Atlanteans within 2 tiles for Synchronize and relay effects.' },
-      { id: 'a-glider', faction: 'atlantean', side: 'Atlantean', name: 'Manta Glider', type: 'Mount', hp: 3, atk: 1, move: 4, range: 1, abbr: 'MG', ability1: 'Passive: Glide may move over occupied tiles but must end on an empty tile. If carrying a Hero or Leader, the mounted pair may also glide.', level2: '+1 MOVE. After moving over any character, this character\'s next attack this turn gains +1 ATK.', level3: 'Phase Current: +1 HP and +1 ATK. Once per turn, ignore terrain, barricades, and occupied tiles during movement; deal 1 damage to one enemy moved over.' },
-      { id: 'a-guard', faction: 'atlantean', side: 'Atlantean', name: 'Resonance Guard', type: 'Warrior', hp: 5, atk: 1, move: 2, range: 1, abbr: 'RG', ability1: 'Passive: Quartz Armor reduces ranged attack damage by 1.', level2: 'Redirect: +1 ATK. Once per turn, may take damage for an adjacent ally; reduce that redirected damage by 1.', level3: 'Resonant Bastion: Adjacent allies gain a 1-damage shield at the start of your turn. After this character reduces damage, deal 1 damage back if the attacker is within range 2.' },
-      { id: 'a-conductor', faction: 'atlantean', side: 'Atlantean', name: 'Divine Conductor', type: 'Leader', hp: 4, atk: 1, move: 2, range: 3, abbr: 'LC', ability1: "AP Ability: Link Mind chooses an ally within 3 tiles. Until end of turn, that ally may use the Conductor's RANGE for its ability if valid, and may ignore one allied character when checking line-of-sight.", level2: 'Link Mind may target 2 allies within 3 tiles. Linked allies may use the Conductor\'s RANGE and ignore one allied character for line-of-sight.', level3: 'Perfect Chord: +1 RANGE. Once per turn, when a linked ally defeats an enemy or delivers a Spirit Ember, refresh that ally\'s character AP.' },
-      { id: 'a-hero', faction: 'atlantean', side: 'Atlantean', name: 'Oracle Sovereign', type: 'Hero', hp: 5, atk: 1, move: 2, range: 3, abbr: 'AH', ability1: 'AP Ability: Foresight reveals the next shared relic/event card. You may place it on the bottom of the deck. Then give one adjacent ally a 1-damage shield.', level2: 'Spirit Mantle: At the start of your turn, this character and one adjacent ally each gain a 1-damage shield. Foresight may instead leave the revealed card on top.', level3: 'Collective Ascension: +1 HP and +1 RANGE. Once per match, all allies heal 2, gain a 1-damage shield, and gain +1 MOVE this turn.' },
-      { id: 'a-architect', faction: 'atlantean', side: 'Atlantean', name: 'Crystal Architect', type: 'Specialist', hp: 3, atk: 1, move: 2, range: 2, abbr: 'CA', ability1: 'AP Ability: Pylon places a quartz pylon on an adjacent empty tile, or moves an existing allied pylon 1 tile. Allies within 2 tiles of a pylon gain +1 RANGE on abilities.', level2: 'Pylon range becomes 2. Pylons have 2 HP, and allies within 2 tiles of a pylon gain +1 RANGE on attacks and abilities.', level3: 'Relay Gate: +1 HP. Once per turn, teleport an ally adjacent to a pylon to an empty tile adjacent to another pylon within 4 tiles, then give that ally a 1-damage shield.' },
-      { id: 'a-harmonic', faction: 'atlantean', side: 'Atlantean', name: 'Astral Harmonic', type: 'Mystic', hp: 3, atk: 1, move: 2, range: 3, abbr: 'AM', ability1: 'AP Ability: Resonance Shield shields an ally within 3 tiles for 1 damage prevention. If that ally is mounted, the shield prevents 2 damage instead.', level2: 'Harmonic Bind: Resonance Shield prevents 2 damage and the shielded ally cannot be pushed, pulled, or displaced this turn.', level3: 'Astral Echo: +1 RANGE. After shielding an ally, may deal 1 damage to an enemy within 2 tiles of that ally; the shielded ally may move 1 tile without spending AP.' }
+      { id: 'r-reactor-worker', faction: 'russian', side: 'Closed City', name: 'Reactor Worker', type: 'Common', hp: 2, atk: 1, move: 2, range: 1, abbr: 'RW', ability1: 'AP Ability: Service Route moves 1 adjacent Leak marker to an empty adjacent tile, removes 1 adjacent Leak marker, or repairs 1 adjacent placed object by 1 HP.', level2: 'Lower Corridors: +1 HP. Service Route may target within 2 tiles and may move, remove, or repair up to 2 different markers or placed objects.', level3: 'Open The Sealed Door: +1 MOVE. This character ignores Leak damage. Once per turn, after entering a Leak tile, remove that Leak marker and move 1 extra tile.' },
+      { id: 'r-vera-7', faction: 'russian', side: 'Closed City', name: 'VERA-7', type: 'Mount', hp: 4, atk: 1, move: 4, range: 1, abbr: 'V7', ability1: 'Passive: Sealed Route lets VERA-7 ignore Leak damage during movement. If carrying a Hero or Leader, the mounted pair also ignores Leak damage.', level2: 'No Map Confirms This Corridor: +1 MOVE. VERA-7 may move through one placed object or allied occupied tile during movement, but must end on an empty tile.', level3: 'Passenger Signal Retained: +1 HP. Once per match after moving, VERA-7 may move 1 adjacent allied character 1 tile to an empty tile adjacent to VERA-7.' },
+      { id: 'r-yuri-volkov', faction: 'russian', side: 'Closed City', name: 'Major Yuri Volkov', type: 'Warrior', hp: 4, atk: 2, move: 2, range: 2, abbr: 'YV', ability1: 'AP Ability: Containment Shot deals 1 damage to an enemy within 3. If the target is adjacent to a Leak marker, also mark that enemy.', level2: 'Pressure-Sealed Armor: +1 HP. Yuri ignores the first Leak damage he would take each turn.', level3: 'Seal The Breach: +1 ATK. Once per match, after Yuri damages a marked enemy, remove Marked and that enemy cannot move on its next turn.' },
+      { id: 'r-mikhail-orlov', faction: 'russian', side: 'Closed City', name: 'Dr. Mikhail Orlov', type: 'Hero', hp: 5, atk: 1, move: 2, range: 3, abbr: 'MO', ability1: 'AP Ability: Reactor Leak places a Leak marker on an empty tile within 2. The first character to enter a Leak tile takes 1 damage, then remove that marker.', level2: 'Containment Pattern: +1 RANGE. Reactor Leak may place 2 Leak markers instead of 1. The markers must be on different empty tiles within range.', level3: 'Slumber: +1 HP. Once per match, remove Orlov from the board until your next turn. When he returns, place him on any empty tile within 2 of where he left. Then place 1 Leak marker on an adjacent empty tile.' },
+      { id: 'r-irina-karpova', faction: 'russian', side: 'Closed City', name: 'Irina Vasilievna Karpova', type: 'Leader', hp: 4, atk: 1, move: 2, range: 3, abbr: 'IK', ability1: 'AP Ability: Access Granted chooses an allied character within 3. That ally gains +1 ATK this turn and may ignore Leak damage during its next movement this turn.', level2: 'Private Favors: Access Granted may target 2 allies within 3. Each target gains +1 ATK this turn and may ignore Leak damage during its next movement this turn.', level3: 'The Door Was Always There: +1 HP. Once per match, choose up to 2 allied characters within 3. Each chosen ally may move 1 tile without spending AP.' },
+      { id: 'r-elena-morozova', faction: 'russian', side: 'Closed City', name: 'Dr. Elena Morozova', type: 'Specialist', hp: 3, atk: 1, move: 2, range: 3, abbr: 'EM', ability1: 'AP Ability: Dream Link chooses an ally within 3 tiles. Move one temporary combat marker between that ally and another allied character within 2 tiles. Spirit Ember cannot be moved this way.', level2: 'Signal Breach: Dream Link range becomes 4 and may move one temporary combat marker between any two characters within range. If a harmful marker is moved onto an enemy, give Elena a 1-damage shield. Spirit Ember cannot be moved this way.', level3: 'Missing In The Signal: +1 RANGE. Once per match, Elena may remove herself from the board until your next turn. When she returns, place her on any empty tile adjacent to an ally and move one temporary combat marker from any character within 4 tiles to any other character within 4 tiles. Spirit Ember cannot be moved this way.' },
+      { id: 'r-zoya-miranova', faction: 'russian', side: 'Closed City', name: 'Zoya Miranova', type: 'Mystic', hp: 3, atk: 1, move: 2, range: 3, abbr: 'ZM', ability1: 'AP Ability: Voice Under Static chooses an enemy within 3 tiles. Move that enemy 1 tile toward Zoya if the destination is empty.', level2: 'Subject Three: +1 RANGE. After Voice Under Static moves an enemy, mark that enemy. The next allied attack against it deals +1 damage, then remove Marked.', level3: 'Too Many Names: +1 HP. Once per match, after Voice Under Static moves an enemy, Zoya may use Voice Under Static again without spending AP.' },
+      { id: 'a-stone-line-laborer', faction: 'atlantean', side: 'Flood Survivors', name: 'Stone-Line Laborer', type: 'Common', hp: 2, atk: 1, move: 2, range: 1, abbr: 'SL', ability1: 'AP Ability: Stone Line places a Stone marker on an adjacent empty tile. Stone markers are placed objects with 1 HP that block movement.', level2: 'Causeway Crew: +1 HP. Stone Line may place up to 2 Stone markers on different adjacent empty tiles.', level3: 'Route To The Surface: +1 MOVE. This character may move through Stone markers. Once per turn after moving through a Stone marker, gain Shield.' },
+      { id: 'a-ahesu', faction: 'atlantean', side: 'Flood Survivors', name: 'Ahesu, the Stone-Current Serpent', type: 'Mount', hp: 4, atk: 1, move: 4, range: 1, abbr: 'AH', ability1: 'Passive: Stone-Current may move through allied Stone markers but must end on an empty tile. If carrying a Hero or Leader, the mounted pair may also use Stone-Current.', level2: 'Living Causeway: +1 MOVE. If Ahesu starts movement adjacent to a Stone marker, it may move through one occupied allied tile this movement.', level3: 'Old Route Opens: +1 HP. Once per match, if Ahesu starts adjacent to a Stone marker, move it to an empty tile adjacent to another allied Stone marker within 5 tiles.' },
+      { id: 'a-naia', faction: 'atlantean', side: 'Flood Survivors', name: 'Naia of the Black Sarcophagus', type: 'Warrior', hp: 4, atk: 2, move: 3, range: 1, abbr: 'NA', ability1: 'Passive: Tomb Sentinel reduces the first damage Naia takes each turn by 1 while she is adjacent to a placed object.', level2: "Sarcophagus Oath: +1 HP. While adjacent to a placed object, Naia's basic attacks mark damaged enemies. The next allied attack against a marked enemy deals +1 damage, then remove Marked.", level3: 'Open The Black Sarcophagus: +1 ATK. Once per match when Naia would be defeated, if she is adjacent to a placed object, she remains at 1 HP and every adjacent enemy becomes Marked.' },
+      { id: 'a-sahu-ren', faction: 'atlantean', side: 'Flood Survivors', name: 'Sahu-Ren, Last Memory-Keeper', type: 'Hero', hp: 5, atk: 1, move: 2, range: 3, abbr: 'SR', ability1: 'Passive: Living Archive gains 1 Memory marker, max 3, the first time each turn an ally within 2 tiles takes damage.', level2: 'Forbidden Testimony: +1 RANGE. Once per turn, remove 1 Memory marker from Sahu-Ren to give an ally within 3 tiles Shield or to mark an enemy within 3 tiles.', level3: 'Last Memory Released: +1 HP. Once per match, remove up to 3 Memory markers from Sahu-Ren. For each removed marker, heal 1 HP on an ally within 3 tiles or deal 1 damage to a marked enemy within 3 tiles.' },
+      { id: 'a-meret-anu', faction: 'atlantean', side: 'Flood Survivors', name: 'Queen Meret-Anu', type: 'Leader', hp: 4, atk: 1, move: 2, range: 3, abbr: 'MA', ability1: 'AP Ability: Memory Discipline chooses any allied character. Give that ally 1 Memory marker, max 1 per character. If Meret-Anu does not already have Memory, she also gains 1 Memory marker.', level2: 'Buried Tide Order: Memory Discipline may target 2 allied characters. If Meret-Anu does not already have Memory, she also gains 1 Memory marker.', level3: 'Tide-Sealed Archive: +1 HP. Once per match, allies with Memory markers cannot be defeated until the start of your next turn; if one would be defeated, remove its Memory and leave it at 1 HP.' },
+      { id: 'a-iset-nara', faction: 'atlantean', side: 'Flood Survivors', name: 'Iset-Nara, Architect of the Hidden Vault', type: 'Specialist', hp: 3, atk: 1, move: 2, range: 2, abbr: 'IN', ability1: 'AP Ability: Hidden Geometry chooses an adjacent Stone marker. Move that Stone marker up to 2 tiles to an empty tile, or give one ally adjacent to it +1 RANGE on its next AP ability this turn.', level2: 'Vault Surveyor: +1 RANGE. Hidden Geometry may choose a Stone marker within 2 tiles. After moving a Stone marker, one adjacent ally may move 1 tile without spending AP.', level3: 'The Hidden Vault Opens: +1 HP. Once per match, choose an empty tile adjacent to a Stone marker and place the Hidden Vault there. The Hidden Vault is a placed object with 3 HP. Allies adjacent to it gain Shield at the start of your turn.' },
+      { id: 'a-thalassa-nekh', faction: 'atlantean', side: 'Flood Survivors', name: 'Thalassa-Nekh', type: 'Mystic', hp: 3, atk: 1, move: 2, range: 3, abbr: 'TN', ability1: 'AP Ability: Black-Water Communion chooses an ally within 3 tiles. Give that ally 1 Memory marker, max 1 per character, or move 1 Memory marker from that ally to another ally within 2 tiles.', level2: "Drowned Judgment: +1 RANGE. When an ally within Thalassa-Nekh's RANGE removes a Memory marker to prevent damage, mark the attacker.", level3: 'The Drowned Seraph Takes Form: +1 HP. Once per match, Thalassa-Nekh becomes Seraph Form until your next turn. When an ally within range removes a Memory marker to prevent damage, prevent all damage from that attack instead and mark the attacker.' }
     ];
 
     const relicDeckBase = [
-      ['Winter Palace Standard', 'Russian Relic - Persistent', 'Your Hero and Leader each gain +1 maximum HP while this relic is active.'],
-      ['Iron Birch Talisman', 'Russian Relic - Persistent', 'Your Common and Warrior each gain +1 maximum HP while this relic is active.'],
-      ["General's War Map", 'Russian Relic - Persistent', 'Once each turn, one of your characters gains +1 RANGE on its next attack or ability.'],
-      ['Whiteout', 'Russian Event - 1 round', 'All ranged attacks and ranged abilities have -1 RANGE, minimum 1.'],
-      ['Frozen Center', 'Russian Event - 1 round', 'The center row and center tile count as frost. A character entering frost stops moving.'],
-      ['Rally From The Snow', 'Russian Event - Immediate', 'The active player heals 1 HP on one damaged character.'],
-      ['Long Winter March', 'Russian Event - 1 turn', "The active player's first movement action this turn gains +1 MOVE."],
-      ['Quartz Heart Core', 'Atlantean Relic - Persistent', 'Your shields prevent +1 additional damage while this relic is active.'],
-      ['Hall Of Shared Minds', 'Atlantean Relic - Persistent', 'Your adjacent characters gain +1 RANGE on abilities.'],
-      ['Tideglass Obelisk', 'Atlantean Relic - Persistent', 'Your characters adjacent to a placed object gain +1 RANGE on attacks and abilities.'],
-      ['Resonance Surge', 'Atlantean Event - 1 turn', "The active player's first ability this turn has +1 RANGE."],
-      ['Psychic Undertow', 'Atlantean Event - 1 turn', "The active player's first attack this turn may push or pull the target 1 tile."],
-      ['Crystal Tide', 'Atlantean Event - 1 turn', "The active player's characters have +1 RANGE on abilities this turn."],
-      ['Dream Of The Deep City', 'Atlantean Event - Immediate', 'Reveal the next shared relic/event card. The active player may leave it on top or place it on the bottom of the deck.']
+      ['Chintamani Fragment', 'Closed City Rare Relic - Persistent', 'Once each turn, you may reveal the top card of the shared relic/event deck. You may leave it on top or place it on the bottom.'],
+      ['Reactor Core Fragment', 'Closed City Relic - Persistent', 'Your Specialist and Mystic each gain +1 ATK. When one of them takes Leak damage, it gains +1 RANGE on its next AP ability this turn.'],
+      ["Karpova's Black Key", 'Closed City Relic - Persistent', 'Your Leader and Common each gain +1 MOVE. Once each turn, one of them may move through 1 placed object or allied occupied tile, but must end on an empty tile.'],
+      ['Signal Array Turns', 'Closed City Event - 1 turn', "The active player's first ranged attack or ranged AP ability this turn gains +1 RANGE if the acting character is adjacent to a placed object or Leak marker."],
+      ['Reactor Prayer', 'Closed City Event - 1 turn', 'Choose one of your characters. It takes 1 damage, then its next attack or AP ability this turn gains +1 ATK or +1 RANGE.'],
+      ['Closed City Incident', 'Closed City Event - Immediate', 'Place 2 Leak markers on different empty tiles within 2 of the center tile.'],
+      ['Seventeen Seconds', 'Closed City Event - 1 turn', "The active player's first movement action this turn may move through 1 occupied tile, placed object, or Leak marker, but must end on an empty tile."],
+      ['The Emerald Tablet', 'Flood Survivors Rare Relic - Persistent', 'Once each turn, after one of your characters gains Memory or starts movement adjacent to a placed object, choose one allied character within 2 tiles of a placed object. It gains Shield or +1 RANGE on its next AP ability this turn.'],
+      ['The Black Sarcophagus', 'Flood Survivors Relic - Persistent', 'Your Warrior and Hero each gain +1 maximum HP. Once each round, when an enemy adjacent to one of your placed objects attacks, Mark that enemy after the attack resolves.'],
+      ['Tide-Sealed Archive', 'Flood Survivors Relic - Persistent', 'Your Leader and Specialist each gain +1 RANGE on AP abilities. Once each turn, when an ally gains Memory, you may move that ally 1 tile. It must end on an empty tile.'],
+      ['The Causeway Breathes', 'Flood Survivors Event - 1 turn', "Place 1 allied Stone marker on an empty tile within 2 of the center tile. The active player's first movement action this turn may move through 1 placed object without taking effects from that object, but must end on an empty tile."],
+      ['Black Water Remembers', 'Flood Survivors Event - Immediate', 'Choose 1 allied character adjacent to a placed object. That character gains 1 Memory marker, max 1 per character. Then move that character 1 tile. It must end on an empty tile.'],
+      ['The Flood Reaches The Walls', 'Flood Survivors Event - Immediate', 'Each character on an outer edge tile becomes Marked until the end of the round.'],
+      ['The Drowned Seraph Speaks', 'Flood Survivors Event - 1 round', 'Choose your Mystic. Until the start of your next turn, the first enemy that damages your Mystic becomes Marked after the attack resolves. If your Mystic is Thalassa-Nekh, she also gains Shield.']
     ];
 
     const startingPositions = {
-      'a-attendant': [0, 0], 'a-glider': [0, 1], 'a-guard': [0, 2], 'a-hero': [0, 3], 'a-conductor': [0, 4], 'a-architect': [0, 5], 'a-harmonic': [0, 6],
-      'r-gymnast': [6, 0], 'r-tiger': [6, 1], 'r-sniper': [6, 2], 'r-hero': [6, 3], 'r-general': [6, 4], 'r-engineer': [6, 5], 'r-seer': [6, 6]
+      'a-stone-line-laborer': [0, 0], 'a-ahesu': [0, 1], 'a-naia': [0, 2], 'a-sahu-ren': [0, 3], 'a-meret-anu': [0, 4], 'a-iset-nara': [0, 5], 'a-thalassa-nekh': [0, 6],
+      'r-reactor-worker': [6, 0], 'r-vera-7': [6, 1], 'r-yuri-volkov': [6, 2], 'r-mikhail-orlov': [6, 3], 'r-irina-karpova': [6, 4], 'r-elena-morozova': [6, 5], 'r-zoya-miranova': [6, 6]
     };
 
     let pieces = [];
@@ -882,6 +927,7 @@
         defeated: false,
         mountedBy: null,
         mountedOn: null,
+        statBonuses: { hp: 0, atk: 0, move: 0, range: 0 },
         statuses: []
       }));
     }
@@ -937,11 +983,12 @@
     function effectiveMove(piece) {
       if (piece.mountedOn) return piece.move;
       const statusMoveBonus = hasStatus(piece, 'move') ? 1 : 0;
+      const trackedMoveBonus = piece.statBonuses?.move || 0;
       if (piece.mountedBy) {
         const mount = getPiece(piece.mountedBy);
-        return mount ? mount.move + statusMoveBonus : piece.move + statusMoveBonus;
+        return mount ? mount.move + statusMoveBonus + trackedMoveBonus : piece.move + statusMoveBonus + trackedMoveBonus;
       }
-      return piece.move + statusMoveBonus;
+      return piece.move + statusMoveBonus + trackedMoveBonus;
     }
 
     function hasStatus(piece, id) {
@@ -949,7 +996,26 @@
     }
 
     function effectiveAtk(piece) {
-      return piece.atk + (hasStatus(piece, 'pounce') ? 2 : 0) + (hasStatus(piece, 'attack') ? 1 : 0);
+      return piece.atk + (piece.statBonuses?.atk || 0) + (hasStatus(piece, 'pounce') ? 2 : 0) + (hasStatus(piece, 'attack') ? 1 : 0);
+    }
+
+    function effectiveRange(piece) {
+      return piece.range + (piece.statBonuses?.range || 0);
+    }
+
+    function trackedMaxHp(piece) {
+      return piece.maxHp + (piece.statBonuses?.hp || 0);
+    }
+
+    function statBonusSummary(piece) {
+      const bonuses = piece.statBonuses || {};
+      const parts = [
+        ['HP', bonuses.hp || 0],
+        ['ATK', bonuses.atk || 0],
+        ['MOVE', bonuses.move || 0],
+        ['RANGE', bonuses.range || 0]
+      ].filter(([, value]) => value !== 0);
+      return parts.length ? parts.map(([label, value]) => `${label} ${value > 0 ? '+' : ''}${value}`).join(', ') : 'No tracked stat bonuses';
     }
 
     function render() {
@@ -1097,7 +1163,7 @@
         const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
         if (tile && !pieceAt(row, col)) tile.classList.add('move');
       });
-      orthogonalTiles(piece.row, piece.col, piece.range).forEach(([row, col]) => {
+      orthogonalTiles(piece.row, piece.col, effectiveRange(piece)).forEach(([row, col]) => {
         const target = pieceAt(row, col);
         const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
         if (tile && target && target.faction !== piece.faction) tile.classList.add('attack');
@@ -1129,7 +1195,7 @@
       const statuses = piece.statuses.length
         ? piece.statuses.map(status => status.label).join(', ')
         : 'No indicators';
-      const pounceAvailable = piece.id === 'r-tiger' && !piece.mountedBy && !piece.mountedOn;
+      const statBonuses = statBonusSummary(piece);
       selectedCard.innerHTML = `
         <div class="card">
           <div class="card-header ${piece.faction}">
@@ -1137,15 +1203,16 @@
             <div class="card-meta">${piece.side} - ${piece.type} - ${coord(piece.row, piece.col)}</div>
           </div>
           <div class="stats">
-            <div class="stat">HP<strong>${piece.currentHp}/${piece.maxHp}</strong></div>
+            <div class="stat">HP<strong>${piece.currentHp}/${trackedMaxHp(piece)}</strong></div>
             <div class="stat">ATK<strong>${effectiveAtk(piece)}</strong></div>
             <div class="stat">MOVE<strong>${effectiveMove(piece)}</strong></div>
-            <div class="stat">RANGE<strong>${piece.range}</strong></div>
+            <div class="stat">RANGE<strong>${effectiveRange(piece)}</strong></div>
           </div>
           <div class="card-body">
             ${mount ? `<div class="ability-box"><strong>Mounted</strong>Riding ${mount.name}. Uses rider stats and Mount movement. If HP hits 0, both are defeated.</div>` : ''}
             ${rider ? `<div class="ability-box"><strong>Carrying</strong>This Mount is carrying ${rider.name} and cannot act separately.</div>` : ''}
             <div class="ability-box"><strong>Indicators</strong>${statuses}</div>
+            <div class="ability-box"><strong>Tracked Stat Bonuses</strong>${statBonuses}</div>
             <div class="ability-box"><strong>Level 1</strong>${piece.ability1}</div>
             <div class="ability-box"><strong>Level 2</strong>${piece.level2}</div>
             <div class="ability-box"><strong>Level 3</strong>${piece.level3}</div>
@@ -1154,14 +1221,23 @@
               <div class="counter"><button onclick="changeLevel(-1)">-</button><span>Level ${piece.level}</span><button onclick="changeLevel(1)">+</button></div>
               <button class="btn" onclick="toggleAp()">Toggle AP</button>
               <button class="btn" onclick="defeatSelected()">Defeat</button>
-              ${piece.id === 'r-tiger' ? `<button class="btn wide" onclick="activatePounce()" ${pounceAvailable ? '' : 'disabled'}>Activate Pounce (+2 ATK)</button>` : ''}
+              <div class="stat-bonus-controls wide">
+                <div class="stat-bonus-control"><button onclick="changeStatBonus('hp', -1)">-</button><span>MAX HP<br>${piece.statBonuses.hp >= 0 ? '+' : ''}${piece.statBonuses.hp}</span><button onclick="changeStatBonus('hp', 1)">+</button></div>
+                <div class="stat-bonus-control"><button onclick="changeStatBonus('atk', -1)">-</button><span>ATK<br>${piece.statBonuses.atk >= 0 ? '+' : ''}${piece.statBonuses.atk}</span><button onclick="changeStatBonus('atk', 1)">+</button></div>
+                <div class="stat-bonus-control"><button onclick="changeStatBonus('move', -1)">-</button><span>MOVE<br>${piece.statBonuses.move >= 0 ? '+' : ''}${piece.statBonuses.move}</span><button onclick="changeStatBonus('move', 1)">+</button></div>
+                <div class="stat-bonus-control"><button onclick="changeStatBonus('range', -1)">-</button><span>RANGE<br>${piece.statBonuses.range >= 0 ? '+' : ''}${piece.statBonuses.range}</span><button onclick="changeStatBonus('range', 1)">+</button></div>
+              </div>
               <div class="status-controls wide">
                 <button class="btn" onclick="toggleStatus('shield')">Shield</button>
                 <button class="btn" onclick="toggleStatus('attack')">+ATK</button>
                 <button class="btn" onclick="toggleStatus('move')">+MOVE</button>
+                <button class="btn" onclick="toggleStatus('marked')">Marked</button>
+                <button class="btn" onclick="toggleStatus('memory')">Memory</button>
+                <button class="btn" onclick="toggleStatus('slow')">Slow</button>
                 <button class="btn" onclick="toggleStatus('ember')">Ember</button>
               </div>
               <button class="btn wide" onclick="clearStatuses()">Clear Indicators</button>
+              <button class="btn wide" onclick="clearStatBonuses()">Clear Stat Bonuses</button>
               <button class="btn wide" onclick="mountOrDismount()">${piece.mountedBy ? 'Dismount' : 'Mount / Pair With Adjacent'}</button>
             </div>
           </div>
@@ -1171,8 +1247,29 @@
     window.changeHp = function(delta) {
       const piece = getPiece(selectedId);
       if (!piece) return;
-      piece.currentHp = Math.max(0, Math.min(piece.maxHp, piece.currentHp + delta));
+      piece.currentHp = Math.max(0, Math.min(trackedMaxHp(piece), piece.currentHp + delta));
       if (piece.currentHp === 0) defeatPiece(piece);
+      render();
+    };
+
+    window.changeStatBonus = function(stat, delta) {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      if (!piece.statBonuses) piece.statBonuses = { hp: 0, atk: 0, move: 0, range: 0 };
+      piece.statBonuses[stat] = Math.max(-9, Math.min(9, (piece.statBonuses[stat] || 0) + delta));
+      if (stat === 'hp') {
+        piece.currentHp = Math.min(piece.currentHp, trackedMaxHp(piece));
+      }
+      log(`${piece.name} ${stat.toUpperCase()} bonus is now ${piece.statBonuses[stat] >= 0 ? '+' : ''}${piece.statBonuses[stat]}.`);
+      render();
+    };
+
+    window.clearStatBonuses = function() {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      piece.statBonuses = { hp: 0, atk: 0, move: 0, range: 0 };
+      piece.currentHp = Math.min(piece.currentHp, trackedMaxHp(piece));
+      log(`${piece.name} stat bonuses cleared.`);
       render();
     };
 
@@ -1195,6 +1292,9 @@
       attack: { id: 'attack', mark: '+A', label: '+1 ATK' },
       move: { id: 'move', mark: '+M', label: '+1 MOVE' },
       pounce: { id: 'pounce', mark: 'PO', label: 'Pounce +2 ATK' },
+      marked: { id: 'marked', mark: 'MK', label: 'Marked' },
+      memory: { id: 'memory', mark: 'MY', label: 'Memory marker' },
+      slow: { id: 'slow', mark: 'SL', label: 'Slow / movement reduced' },
       ember: { id: 'ember', mark: 'EM', label: 'Spirit Ember' }
     };
 
@@ -1428,7 +1528,7 @@
     }
 
     function sideLabel(side) {
-      return side === 'russian' ? 'Russian' : 'Atlantean';
+      return side === 'russian' ? 'Closed City' : 'Flood Survivors';
     }
 
     function renderActiveSide() {
