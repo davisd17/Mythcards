@@ -4,6 +4,8 @@ Review status: draft for review
 
 Purpose: each major story area or sub-area can eventually become a complete physical tarot deck. The game cards may still function as characters, relics, and events, but the art direction should also map each piece to a tarot archetype so a collectible deck can be printed, sold, and used as a tarot deck.
 
+Companion guidebook content and the approved physical-card text boundary are defined in `data/cards/review_drafts/tarot_guidebook_content_standard.md`.
+
 ## Core Rule
 
 Each area tarot deck should contain exactly one representative artwork for each classic tarot archetype:
