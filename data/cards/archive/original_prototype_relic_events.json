@@ -1,0 +1,142 @@
+[
+  {
+    "id": "r-winter-palace-standard",
+    "faction": "Russian-Inspired",
+    "sub_area": "Winter Front",
+    "name": "Winter Palace Standard",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Hero and Leader each gain +1 maximum HP while this relic is active.",
+    "note": "Simple durability plan for important pieces."
+  },
+  {
+    "id": "r-iron-birch-talisman",
+    "faction": "Russian-Inspired",
+    "sub_area": "Far North",
+    "name": "Iron Birch Talisman",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Common and Warrior each gain +1 maximum HP while this relic is active.",
+    "note": "Makes the front line sturdier."
+  },
+  {
+    "id": "r-generals-war-map",
+    "faction": "Russian-Inspired",
+    "sub_area": "Winter Front",
+    "name": "General's War Map",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Once each turn, one of your characters gains +1 RANGE on its next attack or ability.",
+    "note": "Build around longer threat lines."
+  },
+  {
+    "id": "r-whiteout",
+    "faction": "Russian-Inspired",
+    "sub_area": "Far North / Winter Front",
+    "name": "Whiteout",
+    "kind": "Event",
+    "duration": "1 round",
+    "effect": "All ranged attacks and ranged abilities have -1 RANGE, minimum 1.",
+    "note": "Temporarily softens snipers, mystics, and leaders."
+  },
+  {
+    "id": "r-frozen-center",
+    "faction": "Russian-Inspired",
+    "sub_area": "Far North",
+    "name": "Frozen Center",
+    "kind": "Event",
+    "duration": "1 round",
+    "effect": "The center row and center tile count as frost. A character entering frost stops moving.",
+    "note": "Turns the 7x7 center lane into a slowdown zone."
+  },
+  {
+    "id": "r-rally-from-the-snow",
+    "faction": "Russian-Inspired",
+    "sub_area": "Winter Front",
+    "name": "Rally From The Snow",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "The active player heals 1 HP on one damaged character.",
+    "note": "Simple recovery for one key piece."
+  },
+  {
+    "id": "r-long-winter-march",
+    "faction": "Russian-Inspired",
+    "sub_area": "Winter Front",
+    "name": "Long Winter March",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "The active player's first movement action this turn gains +1 MOVE.",
+    "note": "Useful for Level 2 runs, Spirit Ember delivery, or repositioning."
+  },
+  {
+    "id": "a-quartz-heart-core",
+    "faction": "Atlantean",
+    "sub_area": "Crystal Dominion",
+    "name": "Quartz Heart Core",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your shields prevent +1 additional damage while this relic is active.",
+    "note": "Build around shield-heavy play."
+  },
+  {
+    "id": "a-hall-of-shared-minds",
+    "faction": "Atlantean",
+    "sub_area": "First Mind",
+    "name": "Hall Of Shared Minds",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your adjacent characters gain +1 RANGE on abilities.",
+    "note": "Rewards tight hive-mind formations."
+  },
+  {
+    "id": "a-tideglass-obelisk",
+    "faction": "Atlantean",
+    "sub_area": "Crystal Dominion",
+    "name": "Tideglass Obelisk",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your characters adjacent to a placed object gain +1 RANGE on attacks and abilities.",
+    "note": "Build around pylons, barricades, and board objects."
+  },
+  {
+    "id": "a-resonance-surge",
+    "faction": "Atlantean",
+    "sub_area": "First Mind / Crystal Dominion",
+    "name": "Resonance Surge",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "The active player's first ability this turn has +1 RANGE.",
+    "note": "Simple ability reach for one turn."
+  },
+  {
+    "id": "a-psychic-undertow",
+    "faction": "Atlantean",
+    "sub_area": "First Mind",
+    "name": "Psychic Undertow",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "The active player's first attack this turn may push or pull the target 1 tile.",
+    "note": "Adds one clear positioning choice."
+  },
+  {
+    "id": "a-crystal-tide",
+    "faction": "Atlantean",
+    "sub_area": "Crystal Dominion",
+    "name": "Crystal Tide",
+    "kind": "Event",
+    "duration": "1 turn",
+    "effect": "The active player's characters have +1 RANGE on abilities this turn.",
+    "note": "A full-turn ability range boost."
+  },
+  {
+    "id": "a-dream-of-the-deep-city",
+    "faction": "Atlantean",
+    "sub_area": "First Mind / Flood Survivors",
+    "name": "Dream Of The Deep City",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Reveal the next shared relic/event card. The active player may leave it on top or place it on the bottom of the deck.",
+    "note": "Lets the active player shape the next moment."
+  }
+]

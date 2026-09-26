@@ -1,0 +1,6 @@
+# Godot cache
+.godot/
+
+# Card data is copied in from ../data/cards by tools/sync_game_content.ps1 —
+# data/cards at the repo root is the single source of truth.
+/data/

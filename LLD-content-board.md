@@ -458,6 +458,19 @@ FR-082, FR-082A, FR-082B, NFR-016, and NFR-017 (future cultures/sub-areas, draft
 - **Per-level HP variation on placed objects (e.g., Crystal Architect's Level 2 "Pylons have 2 HP") is not modeled by `PlacedObjectDef.default_max_hp`.** `AbilitySystem` (a later LLD) will need to pass an explicit HP value into a variant of `place_object()` (or override `current_hp` after creation) rather than relying on the registry default — flagged here so that LLD doesn't have to rediscover the gap.
 - **No object-id equivalent to `ignore_ids` for line-of-sight exceptions.** `has_line_of_sight()`'s `ignore_ids` parameter (Section 3.6) only ever applies to character occupants (modeling Link Mind's exception). No current card grants a placed-object LOS exception, so this LLD doesn't add a parallel mechanism for objects — if one is ever needed, it's an additive parameter, not a redesign.
 
+## 9A. Implementation Notes (2026-09-26)
+
+The first implementation (`game/`) differs from this spec in these places:
+
+- **Project location:** the Godot project lives in `game/`, not the repo root, so the editor doesn't scan the LFS artwork. `tools/sync_game_content.ps1` copies `data/cards/**/*.json` into the gitignored `game/data/cards/`, so `res://data/cards/...` paths are unchanged.
+- **Prototype roster:** `characters.json` now holds the Closed City vs Flood Survivors roster, promoted from `review_drafts/`. It matches `relic_events.json` and the tabletop. The original 14 are archived in `data/cards/archive/`. Test cases C1, C2 and C5 use the new ids. **PRD Section 8 and the other LLDs still describe the original 14.**
+- **`Rare Relic` kind:** added to `GameEnums` (`RELIC_KINDS` / `EVENT_KINDS`) and to `RelicEventData.is_relic()`. It occupies the relic slot like `Relic`.
+- **`stone` placed object:** registered as blocks movement, blocks LOS, 1 HP (Stone-Line Laborer). Leak markers and the Hidden Vault aren't modeled yet. Leak is a tile marker, not a placed object, so it's for the ability-system step to decide where it lives.
+- **Review drafts:** `_load_review_drafts` sorts entries by shape. `kind` means relic/event, `type` means character (new `draft_characters` map), and object-shaped files (tarot mapping, story frameworks) are skipped as design documents.
+- **Relic/event lookup by faction:** `get_playable_relic_events_by_culture` became `get_playable_relic_events_by_faction`, because relic/event entries carry `faction` but no `culture`.
+- **Misuse errors:** `place_object()` on a non-empty tile and `get_edge_row()` with a bad side call `push_error` and return `""` / `-1` instead of asserting. GUT can assert on `push_error`; a failed `assert` halts the function in a way tests can't check. `ContentDB._ready()` still asserts on validation errors.
+- **Testable loader:** `load_all()` takes paths, and `add_character_entries()` / `add_relic_event_entries()` are public, so fixture tests (C3, C6, C6a) run against a fresh instance instead of the autoload.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |
