@@ -75,6 +75,7 @@ Recommended starting prototype:
 - Board size: 7x7, creating a single center tile and a tighter tactical space.
 - Units start on opposite sides.
 - Each side starts with one character of each type: Common, Mount, Warrior, Leader, Hero, Specialist, and Mystic.
+- Setup duplicates (decided, 2026-09-25): a player may not place two copies of the same character during setup. The same character appearing on the *opposing* side is fine — a mirror match is legal. Copies of a character may be created after setup by a future card or mode, so nothing should assume a character appears only once per side for a whole match.
 - Deployment (decided): each player places their own 7 characters (one of each type) onto their own back row — the row of 7 tiles closest to their side — before the match begins. Players choose their own arrangement within that row; there is no fixed formation. This resolves PRD-OQ-002 in favor of player choice over a designer-set formation.
 - Some spaces may later contain terrain, objectives, temples, relics, or civilization-specific structures.
 
@@ -220,6 +221,8 @@ First-pass balance assumptions:
 - `RANGE` is basic attack range in tiles.
 - Default movement pattern is orthogonal: vertical and horizontal movement only.
 - Default attack pattern is orthogonal line-of-sight: vertical and horizontal only.
+- An attack counts as **ranged** when the attacker and defender are more than 1 tile apart at the moment of the attack — not when the attacker merely has a high printed RANGE (decided 2026-09-25). A Sniper shooting an adjacent enemy is not making a ranged attack, so Quartz Armor and similar "reduces ranged damage" effects do not apply.
+- When a character carries more than one shield, the most recently applied shield is used up first (decided 2026-09-25).
 - Line-of-sight rule (decided): ranged attacks, and any ability that targets at range — including non-damage support/utility abilities such as Command, Resonance Shield, Foresight, and Pylon range boosts, not only damage-dealing abilities — cannot pass through an occupied tile — ally or enemy — unless the specific card or ability explicitly states it can. Divine Conductor's Link Mind is the first card to use this exception (its target may ignore one allied character when checking line-of-sight). This resolves PRD-OQ-011: line-of-sight applies by default to all ranged targeting, not just damage.
 - Placed objects and line-of-sight (decided, 2026-09-07): a tile holding a placed object (e.g., a barricade, a quartz pylon) blocks line-of-sight by default, the same as an occupied character tile, unless the specific card or object explicitly states otherwise. No current card grants an exception for its own placed object.
 - Diagonal, area, jump, teleport, or unusual patterns are special-case rules printed on characters, relics, events, or future cards.
@@ -241,7 +244,7 @@ Russian-inspired cards:
 | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
 | Gymnast | Common | 2 | 1 | 3 | 1 | Passive: Vault may move through 1 adjacent allied character during movement. | +1 MOVE and Vault may pass through any one occupied tile during movement. After Vaulting, this character may move 1 extra tile. | Aurora Acrobat: +1 ATK and +1 MOVE. Once each turn after Vaulting, may make a 1-damage adjacent attack without spending AP. |
 | White Siberian Tiger | Mount | 4 | 2 | 4 | 1 | Activated: Pounce may be activated only while the Tiger is not mounted. It marks the Tiger's next attack after moving as +2 ATK. Movement and attack costs are still paid normally by the available AP/action rules. | +1 HP and +1 MOVE. Pounce also pushes the target 1 tile if possible. | Aurora Predator: +1 ATK. When Pounce defeats a target, this character may move up to 2 tiles and refresh 1 character AP once per turn. |
-| Sniper | Warrior | 3 | 2 | 2 | 4 | Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn. | +1 RANGE. Piercing Shot ignores 1 shield or damage reduction, and may ignore one occupied allied tile for line-of-sight. | Dead Lane: +1 ATK. Once per turn, after damaging an enemy at range 3 or farther, mark that enemy; the next allied attack against it deals +1 damage. |
+| Sniper | Warrior | 3 | 2 | 2 | 4 | Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn. | +1 RANGE. Piercing Shot ignores 1 point of damage reduction, and may ignore one occupied allied tile for line-of-sight. | Dead Lane: +1 ATK. Once per turn, after damaging an enemy at range 3 or farther, mark that enemy; the next allied attack against it deals +1 damage. |
 | Army General | Leader | 5 | 1 | 2 | 1 | AP Ability: Command chooses an allied character within 2 tiles. That ally gains +1 ATK on its next attack this turn or may move 1 tile without spending an action. | Command range becomes 3 and may target 2 allies. Each target chooses +1 ATK on its next attack or 1 free tile of movement. | Tactical Mastery: +1 HP. Once per turn when a Commanded ally defeats an enemy or delivers a Spirit Ember, refresh 1 character AP on an allied character within 2 tiles. |
 | Bogatyr Champion | Hero | 6 | 2 | 2 | 1 | Passive: Stand Firm gives +1 maximum and current HP while this character is on or adjacent to the center tile. | Heroic Guard: +2 maximum and current HP while on or adjacent to the center tile. Adjacent allies take -1 damage from attacks. | Last Oath: +1 ATK and +2 maximum HP. The first time this character would be defeated, it remains at 2 HP and adjacent enemies take 1 damage. |
 | Winter Engineer | Specialist | 3 | 1 | 2 | 1 | AP Ability: Barricade creates 1 barricade on an adjacent empty tile, or repairs an adjacent barricade or placed object by 1 HP. Barricades block movement and have 2 HP. | Fortified Works: Barricades have 3 HP. When using Barricade, create or repair up to 2 adjacent barricades or placed objects. | Frozen Redoubt: +1 HP. Once per turn, place a barricade or frost tile within 2 tiles. Allies adjacent to placed objects take -1 damage from ranged attacks. |
@@ -253,7 +256,7 @@ Atlantean cards:
 | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
 | Quartz Attendant | Common | 2 | 1 | 2 | 1 | Passive: Synchronize gives +1 ATK while adjacent to another Atlantean. | Shared Pulse: +1 HP. While adjacent to another Atlantean, gains +1 ATK and the first damage to one adjacent Atlantean each turn is reduced by 1. | Collective Node: +1 HP. Counts as a pylon and as adjacent to Atlanteans within 2 tiles for Synchronize and relay effects. |
 | Manta Glider | Mount | 3 | 1 | 4 | 1 | Passive: Glide may move over occupied tiles but must end on an empty tile. If carrying a Hero or Leader, the mounted pair may also glide. | +1 MOVE. After moving over any character, this character's next attack this turn gains +1 ATK. | Phase Current: +1 HP and +1 ATK. Once per turn, ignore terrain, barricades, and occupied tiles during movement; deal 1 damage to one enemy moved over. |
-| Resonance Guard | Warrior | 5 | 1 | 2 | 1 | Passive: Quartz Armor reduces ranged attack damage by 1. | Redirect: +1 ATK. Once per turn, may take damage for an adjacent ally; reduce that redirected damage by 1. | Resonant Bastion: Adjacent allies gain a 1-damage shield at the start of your turn. After this character reduces damage, deal 1 damage back if the attacker is within range 2. |
+| Resonance Guard | Warrior | 5 | 1 | 2 | 1 | Passive: Quartz Armor reduces ranged attack damage by 1. | +1 ATK. Adjacent allies also have Quartz Armor. | Resonant Bastion: When a character with Quartz Armor is attacked, deal 1 damage to the attacker. |
 | Divine Conductor | Leader | 4 | 1 | 2 | 3 | AP Ability: Link Mind chooses an ally within 3 tiles. Until end of turn, that ally may use the Conductor's RANGE for its ability if valid, and may ignore one allied character when checking line-of-sight. | Link Mind may target 2 allies within 3 tiles. Linked allies may use the Conductor's RANGE and ignore one allied character for line-of-sight. | Perfect Chord: +1 RANGE. Once per turn, when a linked ally defeats an enemy or delivers a Spirit Ember, refresh that ally's character AP. |
 | Oracle Sovereign | Hero | 5 | 1 | 2 | 3 | AP Ability: Foresight reveals the next shared relic/event card. You may place it on the bottom of the deck. Then give one adjacent ally a 1-damage shield. | Spirit Mantle: At the start of your turn, this character and one adjacent ally each gain a 1-damage shield. Foresight may instead leave the revealed card on top. | Collective Ascension: +1 HP and +1 RANGE. Once per match, all allies heal 2, gain a 1-damage shield, and gain +1 MOVE this turn. |
 | Crystal Architect | Specialist | 3 | 1 | 2 | 2 | AP Ability: Pylon places a quartz pylon on an adjacent empty tile, or moves an existing allied pylon 1 tile. Allies within 2 tiles of a pylon gain +1 RANGE on abilities. | Pylon range becomes 2. Pylons have 2 HP, and allies within 2 tiles of a pylon gain +1 RANGE on attacks and abilities. | Relay Gate: +1 HP. Once per turn, teleport an ally adjacent to a pylon to an empty tile adjacent to another pylon within 4 tiles, then give that ally a 1-damage shield. |
@@ -406,6 +409,8 @@ Terminology (decided):
 
 Collection mechanic (decided, 2026-08-28): Spirit Ember pickup is automatic and immediate — when a character defeats an enemy character, the defeating character receives the Spirit Ember at that moment. No separate action, and no requirement to move onto the defeated character's tile, is needed to collect it. The character must still physically carry it to the center square while at Level 2 to trigger Level 3.
 
+Mounted pairs (decided, 2026-09-25): defeating a mounted pair defeats two characters — the rider and the Mount — and so releases **two** Spirit Embers, both to the defeating character. A character may therefore carry more than one Ember; reaching the center square at Level 2 spends one, and any surplus stays with the carrier. Worth tracking in paper tests as a possible over-reward for killing mounted pieces, since a second Ember currently has no second use.
+
 Open balance task: leveling should reliably be worth pursuing, not just theoretically available. Given the small 7-unit squads and instant-loss-on-Hero-capture, the risk of exposing a piece to reach the enemy edge (Level 2) or return to center with a Spirit Ember (Level 3) needs explicit playtesting to confirm the reward justifies the exposure — tune HP/ability power at Level 2/3, or the risk of the crossing itself, if early paper matches show players never attempt it.
 
 Design directive (decided, 2026-07-18): early paper-test feedback is that leveling feels hard to justify, so the risk of the crossing rarely feels worth it. Level 2 upgrades should read as an obvious, noticeable power spike, and Level 3 upgrades should be transformative: a significant stat jump, a new game-changing ability, or a real shift in how the character plays. The Section 8 character tables have received an initial revision pass to this standard and should be validated in paper tests.
@@ -441,7 +446,7 @@ Initial requirements:
 Recommended prototype turn structure:
 
 1. Start of turn effects resolve.
-2. The active player's AP pool refreshes: 2 AP on that player's first turn of the match, 4 AP on every turn after.
+2. The active player's AP pool refreshes: 4 AP, except on the match's very first turn, which is 2 AP for the player who goes first only (decided 2026-09-25).
 3. Each character's own AP stat refreshes (usually 1; higher for some characters or via effects).
 4. The active player draws 1 shared relic or event card for the turn.
 5. Player takes actions in any order, limited by both the player's remaining pool AP and the acting character's remaining character AP:
@@ -454,7 +459,7 @@ Recommended prototype turn structure:
 7. End of turn effects resolve.
 
 Recommendation:
-Because the pool (2 or 4 AP) is smaller than the full squad (7 characters), most turns will not see every character act — this is intentional. It forces the player to prioritize which pieces move or fight each turn rather than activating the whole board, and the smaller first-turn pool (2 AP vs. 4 AP afterward) is the prototype's mitigation for first-move advantage.
+Because the pool (2 or 4 AP) is smaller than the full squad (7 characters), most turns will not see every character act — this is intentional. It forces the player to prioritize which pieces move or fight each turn rather than activating the whole board, and the smaller opening pool is the prototype's mitigation for first-move advantage. That mitigation is paid by the player who goes first and by no one else (decided 2026-09-25): the second player's opening turn is a normal 4 AP, since taxing the player who does *not* have the first-move advantage would work against the rule's whole purpose.
 
 ## 12. Resources
 
@@ -468,7 +473,8 @@ Possible resource systems:
 | Hybrid action + mana | Flexible | More complex for new players |
 
 Prototype recommendation (decided):
-- The active player has a turn-level AP pool: 2 AP on their first turn of the match, 4 AP every turn after. Pool AP may be spent on any combination of the player's characters' actions.
+- The active player has a turn-level AP pool of 4 AP. The single exception is the match's first turn, which gives 2 AP — only to the player who takes it (decided 2026-09-25). Pool AP may be spent on any combination of the player's characters' actions.
+- Who goes first is fixed for now; a coin flip is planned (decided 2026-09-25). Nothing else in the rules depends on which player it is, since the reduced pool is tied to "the first turn of the match," not to a player.
 - Independently, each character has its own AP stat — usually 1, meaning that character can act at most once per turn regardless of the pool. Some characters or effects grant a higher character AP, letting that single character take multiple actions in one turn if the pool allows it.
 - Movement, attacking, and activating an ability each cost 1 pool AP, gated by the acting character having remaining character AP of its own.
 - Because the pool caps total actions per turn well below the squad size, not every character acts every turn — a deliberate tactical constraint, not an oversight.

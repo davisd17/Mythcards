@@ -34,7 +34,7 @@
     "type": "Warrior",
     "stats": [3, 2, 2, 4],
     "l1": "Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn.",
-    "l2": "+1 RANGE. Piercing Shot ignores 1 shield or damage reduction, and may ignore one occupied allied tile for line-of-sight.",
+    "l2": "+1 RANGE. Piercing Shot ignores 1 point of damage reduction, and may ignore one occupied allied tile for line-of-sight.",
     "l3": "Dead Lane: +1 ATK. Once per turn, after damaging an enemy at range 3 or farther, mark that enemy; the next allied attack against it deals +1 damage.",
     "role": "Lane control and long-range threat."
   },
@@ -125,8 +125,8 @@
     "type": "Warrior",
     "stats": [5, 1, 2, 1],
     "l1": "Passive: Quartz Armor reduces ranged attack damage by 1.",
-    "l2": "Redirect: +1 ATK. Once per turn, may take damage for an adjacent ally; reduce that redirected damage by 1.",
-    "l3": "Resonant Bastion: Adjacent allies gain a 1-damage shield at the start of your turn. After this character reduces damage, deal 1 damage back if the attacker is within range 2.",
+    "l2": "+1 ATK. Adjacent allies also have Quartz Armor.",
+    "l3": "Resonant Bastion: When a character with Quartz Armor is attacked, deal 1 damage to the attacker.",
     "role": "Protective frontline and anti-ranged anchor."
   },
   {

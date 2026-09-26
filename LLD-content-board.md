@@ -7,7 +7,7 @@
 | Source document(s) | HLD.md (v3, 2026-09-07), BRD.md (v3, resynced 2026-09-07), PRD.md (resynced 2026-09-07) |
 | Module/flow scope | Content Loader (`ContentDB` — HLD Section 4.1) and Board/Grid (`BoardModel` — HLD Section 4.2). First two modules in HLD Section 13's build order (steps 4–5). |
 | Target stack | Godot 4.7.x, GDScript |
-| Version | 2 (reworks `BoardTile`/placed-object design from a bare `blocks_movement` flag to an id + lookup-registry pattern; adds placed objects blocking line-of-sight by default per BR-011A; adopts GUT for unit testing; flags the `sub_area` single-value migration) |
+| Version | 3 (v2 reworked `BoardTile`/placed-object design to an id + lookup-registry pattern and added LOS blocking per BR-011A; v3 adds an `object_passable_predicate` parameter to `get_legal_moves` — Manta Glider's Phase Current (L3) needs to move through object-blocked tiles, which Section 9's own v2 note had flagged as unsupported until a real card needed it — surfaced while writing LLD-ability-system.md) |
 | Date | 2026-09-07 |
 | Status | Draft |
 | Prepared by | Drew Davis (solo developer/designer, acting as own PM) |
@@ -301,13 +301,19 @@ func is_center(pos: Vector2i) -> bool
     # pos == CENTER_TILE.
 
 func get_legal_moves(from: Vector2i, move_budget: int, pattern: String = "orthogonal",
-        passable_predicate: Callable = Callable()) -> Array[Vector2i]
+        passable_predicate: Callable = Callable(),
+        object_passable_predicate: Callable = Callable()) -> Array[Vector2i]
     # See Section 4.1 for the exact BFS algorithm. `passable_predicate`, if supplied, is
-    # `func(pos: Vector2i) -> bool` — true means "may move through this occupied tile but
-    # not stop on it" (models Vault/Glide-style abilities per BR-010; BoardModel has no
-    # knowledge of which ability this is, only the yes/no the caller supplies). Applies only
-    # to character-occupied tiles, not object-blocked ones — no current ability passes
-    # through placed objects (Section 4.1, step 4c).
+    # `func(pos: Vector2i) -> bool` — true means "may move through this character-occupied tile
+    # but not stop on it" (models Vault/Glide-style abilities per BR-010; BoardModel has no
+    # knowledge of which ability this is, only the yes/no the caller supplies).
+    # `object_passable_predicate` (v3 addition), same shape, applies to tiles blocked by a
+    # placed object whose registry def has `blocks_movement == true` — added for Manta
+    # Glider's Phase Current (L3, "ignore terrain, barricades, and occupied tiles during
+    # movement"), which this LLD's v2 Section 9 note had explicitly flagged as unsupported
+    # until a real card needed it. The two predicates are independent: a caller may supply
+    # either, both, or neither, since "pass through an ally" and "pass through a barricade"
+    # are unrelated capabilities that happen to both exist on Phase Current simultaneously.
 
 func has_line_of_sight(from: Vector2i, to: Vector2i, ignore_ids: Array[String] = []) -> bool
     # See Section 4.2. Returns false immediately if from/to don't share a row or column
@@ -340,7 +346,9 @@ Satisfies HLD Section 4.2 / BRD FR-010–FR-018A, BR-008, BR-009, BR-010, BR-011
       - If `is_occupied_by_character(next)` (a character, not an object):
         - If `passable_predicate.is_valid() and passable_predicate.call(next)`: mark `visited[next] = cost + 1`, add `next` to `frontier` (may continue through), **do not** add `next` to `result` (cannot stop here — BR-010/FR-014).
         - Else: dead end — do not visit further in this direction.
-      - Elif `get_placed_object(next) != null and PlacedObjectRegistry.get_def(get_placed_object(next).type_id).blocks_movement`: dead end — no ability in the current 14-card roster passes through placed objects, so there is no predicate override for this case yet (unlike the character case above).
+      - Elif `get_placed_object(next) != null and PlacedObjectRegistry.get_def(get_placed_object(next).type_id).blocks_movement`:
+        - If `object_passable_predicate.is_valid() and object_passable_predicate.call(next)` (v3 — Phase Current, LLD-ability-system.md): mark `visited[next] = cost + 1`, add `next` to `frontier` (may continue through), **do not** add `next` to `result` (same "pass but don't stop" rule as the character case).
+        - Else: dead end.
       - Else (empty, or an object present whose def has `blocks_movement == false`, e.g. a pylon): mark `visited[next] = cost + 1`, add to both `frontier` and `result` (a valid stop — a non-blocking object doesn't prevent standing on its tile, since no current card says otherwise).
 5. Return `result` (already deduplicated by the `visited` cost-gate).
 
@@ -438,12 +446,14 @@ FR-082, FR-082A, FR-082B, NFR-016, and NFR-017 (future cultures/sub-areas, draft
 | C14 | A barricade placed at `(3,4)` (`place_object`), no character present, attacker at `(3,3)`, target at `(3,5)` | `has_line_of_sight((3,3), (3,5))` called | Returns `false` | BR-011A |
 | C15 | A pylon placed at `(3,4)`, character at `(3,3)`, `move=2`, no predicate | `get_legal_moves()` called | `(3,4)` present in result (pylon doesn't block movement) but `has_line_of_sight((3,3),(3,5))` still returns `false` (pylon does block LOS) | BR-011A, FR-016 |
 | C16 | Empty tile at `(3,4)` | `place_object((3,4), "barricade", "p1")` called, then `place_object((3,4), "pylon", "p2")` called again on the same tile | Second call asserts (tile already occupied by an object) | Section 7 |
+| C17 | A barricade at `(3,4)`, character at `(3,3)`, `move=2`, `object_passable_predicate` returning `true` for `(3,4)` | `get_legal_moves()` called | `(3,4)` absent (can't stop on a blocking object even while passing it), `(3,5)` present (reachable by passing through) | BR-011A (v3) |
 
 ## 9. Open Implementation Questions
 
 - **`sub_area` single-value migration (content dependency, not code).** Per 2026-09-07 direction, every character will have exactly one `sub_area` going forward. Four committed `characters.json` entries currently hold a combined value: `r-hero` (Bogatyr Champion, `"Winter Front / Far North"`), `r-engineer` (Winter Engineer, `"Winter Front / Far North"`), `a-attendant` (Quartz Attendant, `"First Mind / Crystal Dominion"`), `a-harmonic` (Astral Harmonic, `"First Mind / Crystal Dominion"`). Picking which single sub-area each keeps is a content/narrative decision for the designer, not made in this LLD — `_validate()`'s new check (4.5.6) is written to fail against the current data specifically so this isn't silently dropped. See Next Steps, item 0.
 - **Movement pattern extensibility.** `GameEnums.MOVEMENT_PATTERNS` currently lists only `"orthogonal"` because no prototype card needs anything else (BR-010's diagonal/jump/teleport exceptions are all specific to cards not yet built in `AbilitySystem`). `get_legal_moves()`'s `pattern` parameter exists now so adding a second pattern later is a new `match` branch in Section 4.1, not a signature change — but no second pattern is implemented yet, by design (YAGNI).
 - **Board orientation convention (new decision made at this LLD tier, not previously specified).** Neither the BRD nor the HLD assigns a physical row to either player — deployment (BR-007A) only requires "each player's own back row," and leveling (BR-022) only requires "the opponent's edge," both of which are symmetric regardless of which row is which. This LLD fixes `PLAYER_A_EDGE_ROW := 0` and `PLAYER_B_EDGE_ROW := 6` purely as an internal coordinate convention with no gameplay effect — it does not change any rule, so it's decided here rather than escalated to an `hld-writer`/`brd-writer` patch. If that assumption is wrong (some future rule *does* care which physical side is which), that would be a real gameplay decision belonging in the BRD/PRD, not a fix to this LLD.
+- **(v3 patch note)** The v2 draft of this section stated "no current ability passes through placed objects... revisit if a future card needs one." Manta Glider's Phase Current (L3) is exactly that future card — resolved via the new `object_passable_predicate` parameter (Section 3.6, 4.1) rather than a redesign.
 - **Placed-object registry is code, not data.** Unlike characters and relic/events, `PlacedObjectRegistry` (3.4.1) is a hardcoded `match` in GDScript rather than a JSON file, because only two object types exist and neither is player-selectable content the way cards are. Worth revisiting if a future sub-area introduces enough object types that hand-editing GDScript for balance changes becomes the kind of friction `NFR-017` (easy rebalancing) is meant to avoid.
 - **Per-level HP variation on placed objects (e.g., Crystal Architect's Level 2 "Pylons have 2 HP") is not modeled by `PlacedObjectDef.default_max_hp`.** `AbilitySystem` (a later LLD) will need to pass an explicit HP value into a variant of `place_object()` (or override `current_hp` after creation) rather than relying on the registry default — flagged here so that LLD doesn't have to rediscover the gap.
 - **No object-id equivalent to `ignore_ids` for line-of-sight exceptions.** `has_line_of_sight()`'s `ignore_ids` parameter (Section 3.6) only ever applies to character occupants (modeling Link Mind's exception). No current card grants a placed-object LOS exception, so this LLD doesn't add a parallel mechanism for objects — if one is ever needed, it's an additive parameter, not a redesign.

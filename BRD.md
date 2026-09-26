@@ -5,8 +5,8 @@
 | Field | Value |
 | --- | --- |
 | Source document | PRD.md (current version, including the 2026-08-14 rule decisions: player-chosen back-row deployment, line-of-sight scope resolved for non-damage abilities, explicit mount/dismount AP cost, chess-checkmate-style Hero capture, and the 3-relic/4-event-per-player shared deck) |
-| Version | 3 (resync with the 2026-08-14 GitHub pull — Closed City narrative content, `data/cards/characters.json` / `relic_events.json` — plus new business-rule decisions from this session; supersedes the v1 BRD and the interrupted v2 draft) |
-| Date | 2026-08-14 |
+| Version | 4 (designer LLD review, 2026-09-25: ability classification and AP rules (BR-021A–C, FR-045I/J), combat resolution rules (BR-011B ranged definition, BR-011C shield order), setup-duplicate and mid-match copy rule (BR-005A), first-turn AP now global not per-player (BR-018/BR-018A), two Spirit Embers from a mounted-pair defeat (BR-023A), deck exhaustion (BR-028A), and revised Sniper/Resonance Guard card text in Section 12) |
+| Date | 2026-09-25 |
 | Status | Draft |
 | Prepared by | Drew Davis (solo developer/designer, acting as own PM) |
 
@@ -75,7 +75,7 @@ Each culture is designed around three future story sub-areas (21 character cards
 - 14 total shared relic/event cards: each player contributes 3 relics and 4 events from their own culture into one shared match deck (BR-027A) — see Section 13.
 - No fixed starting formation: each player deploys their own 7 characters onto their own back row, in an arrangement of their own choosing (BR-007A).
 - Three character levels per character; Level 2 via reaching the opponent's edge, Level 3 via Spirit Ember collection and center-square delivery.
-- Turn-level AP pool: 2 AP on a player's first turn, 4 AP every turn after; each character has its own AP stat (default 1).
+- Turn-level AP pool: 4 AP, except the match's first turn, which is 2 AP and only for the player who goes first (BR-018); each character has its own AP stat (default 1).
 - Movement, attack, ability, mount, and dismount actions, each costing 1 pool AP and 1 of the acting character's own AP (BR-020, BR-012).
 - Orthogonal movement and orthogonal line-of-sight attack as default patterns; line-of-sight blocking applies to all ranged targeting, including non-damage support/utility abilities (BR-011).
 - Hero capture (positional/checkmate-style: the Hero has no legal move at the end of its own controller's turn — BR-034) and army defeat victory conditions.
@@ -129,6 +129,7 @@ Each culture is designed around three future story sub-areas (21 character cards
 | BR-003 | Each side may field up to two copies of each non-common, non-unique type: Mount, Warrior, Specialist, Mystic (future squad-building modes beyond the fixed prototype squad). |
 | BR-004 | Common characters may be used in larger numbers if a future squad size requires filler units. |
 | BR-005 | Each side must field exactly one copy of each of its seven character type cards for the prototype — no duplicates, no omissions — on a 7x7 board. This is a firm rule for the prototype, not a recommendation. |
+| BR-005A | During the setup phase a player may not place two copies of the same character (decided 2026-09-25). The *opposing* player fielding the same character is allowed — a mirror match is legal, and each side's copy is a distinct piece. Copies of a character may, however, be created *after* the setup phase by a card or mode effect, so no rule or system may assume a character appears at most once per side for the whole match — only that it does so at setup. |
 
 ### 8.2 Setup And Placement
 
@@ -149,6 +150,13 @@ Each culture is designed around three future story sub-areas (21 character cards
 | BR-011 | Ranged attacks, and any ability that targets at range — including non-damage support/utility abilities such as Command, Resonance Shield, Foresight, and Pylon range boosts — cannot pass line-of-sight through an occupied tile (ally or enemy) unless the specific card or ability explicitly states an exception. This resolves PRD-OQ-011: the blocking rule applies uniformly, not only to damage-dealing effects. |
 | BR-011A | A tile holding a placed object (e.g., a barricade, a quartz pylon) also blocks line-of-sight by default, the same as an occupied character tile, unless the specific card or object explicitly states otherwise (decided 2026-09-07). No current card grants its own placed object a line-of-sight exception. |
 
+### 8.3A Combat Resolution
+
+| ID | Rule |
+| --- | --- |
+| BR-011B | An attack is **ranged** if the actual tile distance between attacker and defender is greater than 1 at the moment of the attack — i.e., the defender is not adjacent (decided 2026-09-25). This is independent of the attacker's printed RANGE: a Sniper (RANGE 4) striking an adjacent enemy is not making a ranged attack, so Quartz Armor and any other "reduces ranged damage" effect does not apply to it. |
+| BR-011C | When a character carries more than one shield, the **most recently applied shield is consumed first** (decided 2026-09-25). A longer-lived older shield therefore survives a partial hit that a newer one absorbs. |
+
 ### 8.4 Mounted Pair Rules
 
 | ID | Rule |
@@ -164,10 +172,19 @@ Each culture is designed around three future story sub-areas (21 character cards
 
 | ID | Rule |
 | --- | --- |
-| BR-018 | The active player's turn-level AP pool is 2 AP on their first turn of the match and 4 AP on every turn after. |
+| BR-018 | The turn-level AP pool is 4 AP, except on the match's very first turn, which is 2 AP. The reduced pool applies **only to the player who takes the first turn overall** (decided 2026-09-25) — the second player's opening turn is a normal 4 AP. The 2-AP turn exists purely to offset the advantage of moving first, so it is paid only by the player who has that advantage. |
+| BR-018A | Who takes the first turn is fixed for now (the first player object, "p1"). A coin flip is the planned replacement once turn order needs to be fair rather than conventional; nothing else in the rules depends on which player it is, since BR-018 keys off "the match's first turn," not off a player's identity. |
 | BR-019 | Each character has its own AP stat (default 1) capping how many actions that character can take per turn, regardless of remaining pool AP. |
 | BR-020 | Movement, attacking, activating an ability, mounting, and dismounting each cost 1 pool AP, gated by the acting character having remaining character AP. |
 | BR-021 | Because pool AP is smaller than full squad size, not every character is expected to act every turn — this is an intentional tactical constraint, not an oversight. The reduced 2-AP first turn is the prototype's mitigation for first-move advantage. |
+
+### 8.5A Ability Classification And Costs
+
+| ID | Rule |
+| --- | --- |
+| BR-021A | Every printed ability belongs to exactly one of four buckets, and the bucket is decided by **what causes the ability to happen**, never by how often it may be used (confirmed 2026-09-25): (1) **passive stat/rule modifier** — always on while its condition holds, no cost and no activation; (2) **activated (AP) ability** — the player spends AP to use it, and higher-level text that modifies it stays the same ability; (3) **reactive trigger** — fires because a game event occurred, and may offer the player a free follow-up action to place or target; (4) **standalone activated ability** — a new player-activated capability with no triggering event, added at a higher level alongside the character's original ability. |
+| BR-021B | "Once per turn" and "once per match" are usage limits layered on top of a bucket, not a bucket of their own. A limited ability still costs its normal AP — including once-per-match abilities — unless the card text explicitly states the effect is free (confirmed 2026-09-25). |
+| BR-021C | Card ability text is expected to change repeatedly during playtesting. Tunable values (damage, shield size, range, radius, use limits) should live in card content data so a balance change is a content edit, not a code change, and a rewritten ability should be re-classified into one of BR-021A's four buckets before it is implemented. |
 
 ### 8.6 Character Leveling
 
@@ -175,7 +192,7 @@ Each culture is designed around three future story sub-areas (21 character cards
 | --- | --- |
 | BR-022 | A Level 1 character reaches Level 2 by crossing to the opponent's board edge. |
 | BR-023 | A Level 2 character reaches Level 3 by collecting a Spirit Ember released by a defeated enemy, then reaching the center square. |
-| BR-023A | Spirit Ember pickup is automatic and immediate: when a character defeats an enemy character, the defeating character receives the Spirit Ember at that moment. No separate action, and no requirement to move onto the defeated character's tile, is needed. The carrier must still physically reach the center square while at Level 2 to trigger Level 3. |
+| BR-023A | Spirit Ember pickup is automatic and immediate: when a character defeats an enemy character, the defeating character receives the Spirit Ember at that moment. No separate action, and no requirement to move onto the defeated character's tile, is needed. The carrier must still physically reach the center square while at Level 2 to trigger Level 3. **Defeating a mounted pair defeats two characters and therefore yields two Spirit Embers** (decided 2026-09-25) — one for the rider, one for the Mount. A character may carry more than one Ember; reaching the center at Level 2 spends one. |
 | BR-024 | The mechanic and its name is `Spirit Ember` — a fragment of spirit/myth released by defeat within the convergence, not a body part. No darker body-part language (scalp/ear) may appear anywhere in the product. |
 | BR-025 | Level-ups are match-based and reset at the end of each match unless a future mode explicitly states otherwise. |
 | BR-026 | Level 2 upgrades must read as a clear, noticeable power spike (not a minor +1 tweak); Level 3 upgrades must be transformative — a significant stat jump and/or a game-changing new ability — without making a leveled character an automatic win condition. The Section 12 character inventory below reflects the revised card text meeting this standard; this is no longer a pending revision (see R-011). |
@@ -187,6 +204,7 @@ Each culture is designed around three future story sub-areas (21 character cards
 | BR-027 | Relic and event cards are mixed into one shared non-character deck used by both players. |
 | BR-027A | Deck construction: each player selects 3 relic cards and 4 event cards (7 cards total) from their own culture to contribute to the match's shared deck. The two players' contributions combine into one shared 14-card deck, shuffled together. In the 2-culture prototype, each culture's full relic/event set is exactly 3 relics and 4 events (Section 13), so each player's "selection" is simply their entire culture's set; this becomes a real pre-match choice once a larger relic/event pool exists. This resolves PRD-OQ-006 at 14 cards for the paper prototype. |
 | BR-028 | The active player draws one shared relic/event card each turn. |
+| BR-028A | If the shared deck runs out, no card is drawn for the rest of the match and play continues normally (decided 2026-09-25). There is no reshuffle. Deck exhaustion is addressed by growing the shared deck as the relic/event pool grows, not by recycling spent cards. |
 | BR-029 | Each player may have only one active relic at a time. |
 | BR-030 | When a player draws a relic while their relic slot is already full, they may choose to replace the active relic or discard/ignore the newly drawn relic. |
 | BR-031 | Relic replacement choices must be handled through in-game UI, not native/browser-style page-leave popups. |
@@ -275,7 +293,7 @@ Each culture is designed around three future story sub-areas (21 character cards
 | ID | Requirement | Priority |
 | --- | --- | --- |
 | FR-019 | The system shall alternate turns between players. | Must |
-| FR-020 | The system shall refresh the active player's pool AP at the start of their turn: 2 AP on their first turn of the match, 4 AP on every turn after. | Must |
+| FR-020 | The system shall refresh the active player's pool AP at the start of their turn: 2 AP on the match's first turn (which only the first player takes), 4 AP on every turn after (BR-018). | Must |
 | FR-020A | The system shall refresh each active character's own AP stat (default 1, higher via specific cards or effects) at the start of its controller's turn. | Must |
 | FR-021 | The system shall spend 1 pool AP and 1 of the acting character's AP when that character moves. | Must |
 | FR-022 | The system shall spend 1 pool AP and 1 of the acting character's AP when that character attacks. | Must |
@@ -298,7 +316,7 @@ Each culture is designed around three future story sub-areas (21 character cards
 | FR-033 | The system shall support shields and damage prevention. | Should |
 | FR-034 | The system shall support push, displacement, and movement-stopping effects. | Should |
 | FR-035 | The system shall support range modifiers. | Should |
-| FR-036 | The system shall support damage reduction and damage redirection. | Should |
+| FR-036 | The system shall support damage reduction and reflected (counter) damage. | Should |
 | FR-036A | The system shall support orthogonal line-of-sight attacks as the default attack pattern. | Must |
 | FR-036B | The system shall support special attack patterns, such as diagonal, area, or non-line attacks, when card rules define them. | Should |
 | FR-036C | The system shall block all ranged targeting — attacks and any AP ability that targets at range, whether damage-dealing or non-damage support/utility — from passing through an occupied tile (ally or enemy) unless the specific card or ability explicitly states an exception. This resolves PRD-OQ-011 and supersedes the former split Must/Should requirement pending that resolution. | Must |
@@ -318,7 +336,8 @@ Each culture is designed around three future story sub-areas (21 character cards
 | FR-044 | The system shall show ability range and legal targets before confirmation. | Must |
 | FR-045 | The system shall require confirmation before irreversible ability use. | Should |
 | FR-045A | The system shall support stronger utility abilities on low-ATK characters so low-attack pieces remain strategically useful. | Must |
-| FR-045I | The system shall distinguish passive abilities from AP-activated abilities in card text and UI. | Must |
+| FR-045I | The system shall distinguish the four ability buckets of BR-021A — passive, activated (AP), reactive trigger, and standalone activated — in card text and UI, so a player can tell what an ability costs and what makes it happen. | Must |
+| FR-045J | The system shall charge normal AP for a standalone activated ability regardless of a once-per-turn or once-per-match limit, unless the card text states the effect is free (BR-021B). | Must |
 
 ### 9.5A Mounted Pair System
 
@@ -338,7 +357,7 @@ Each culture is designed around three future story sub-areas (21 character cards
 | --- | --- | --- |
 | FR-046 | The system shall track each character's current level from 1 to 3. | Must |
 | FR-047 | The system shall detect when a character reaches the opponent's board edge. | Must |
-| FR-047A | The system shall track Spirit Ember possession as a status/counter on the carrying character, not as a separate placed board object. | Must |
+| FR-047A | The system shall track Spirit Ember possession as a status/counter on the carrying character, not as a separate placed board object. The counter must hold more than one Ember, since defeating a mounted pair grants two (BR-023A). | Must |
 | FR-048 | The system shall level up a character when it reaches the opponent's board edge (Level 2) or delivers a Spirit Ember to the center square (Level 3). | Must |
 | FR-049 | The system shall apply Level 2 and Level 3 upgrades to character rules. | Must |
 | FR-050 | The system shall prevent character levels from exceeding 3. | Must |
@@ -523,13 +542,18 @@ Each match record should, where feasible, also capture: match length, victory co
 
 Source of truth: `data/cards/characters.json`, which matches the current PRD Section 8 tables exactly. Level 2 upgrades read as a clear power spike and Level 3 upgrades are transformative, per BR-026 — this inventory reflects the revised (2026-07-18, resynced 2026-08-14) card text, not the earlier pending-revision placeholder.
 
+Two cards changed on 2026-09-25 during the LLD review, and the change is carried through `characters.json`, PRD Section 8, and the printable/tabletop card files:
+
+- **Sniper (L2)** — "ignores 1 shield or damage reduction" becomes "ignores 1 point of damage reduction." The old wording implied an attacker choice and an all-or-nothing effect; the rule is that exactly 1 point of reduction is ignored, so a defender with 2 points still applies 1, and shields are never affected.
+- **Resonance Guard (L2/L3)** — the L2 "Redirect" ability is removed entirely. L2 becomes "+1 ATK. Adjacent allies also have Quartz Armor." and L3 becomes "Resonant Bastion: When a character with Quartz Armor is attacked, deal 1 damage to the attacker." Redirect was the only ability in the roster requiring a mid-combat player decision (choosing to absorb a hit for an ally as it resolved), which needed a UI prompt and a combat-pipeline interception no other card justified. The replacement keeps the card's protective-anchor role using only a passive aura and one reactive trigger. Rulings: the reflect triggers on any attack (melee or ranged) against a character carrying Quartz Armor, does not require the damage to have been reduced, has no range limit, deals 1 damage once per attack, and cannot chain (reflect damage is not itself an attack). Flagged for playtesting: an L3 Guard turns every adjacent ally into a damage-dealing target, which is a real power spike per BR-026 but should be watched for making melee attacks into the Atlantean line feel pointless.
+
 ### 12.1 Russian-Inspired
 
 | Character | Type | HP | ATK | MOVE | RANGE | Level 1 Ability | Level 2 Upgrade | Level 3 Upgrade |
 | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
 | Gymnast | Common | 2 | 1 | 3 | 1 | Passive: Vault may move through 1 adjacent allied character during movement. | +1 MOVE and Vault may pass through any one occupied tile during movement. After Vaulting, this character may move 1 extra tile. | Aurora Acrobat: +1 ATK and +1 MOVE. Once each turn after Vaulting, may make a 1-damage adjacent attack without spending AP. |
 | White Siberian Tiger | Mount | 4 | 2 | 4 | 1 | Activated Pounce: only while not mounted. Marks its next attack after moving as +2 ATK. Movement and attack costs still apply. | +1 HP and +1 MOVE. Pounce also pushes the target 1 tile if possible. | Aurora Predator: +1 ATK. When Pounce defeats a target, this character may move up to 2 tiles and refresh 1 character AP once per turn. |
-| Sniper | Warrior | 3 | 2 | 2 | 4 | Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn. | +1 RANGE. Piercing Shot ignores 1 shield or damage reduction, and may ignore one occupied allied tile for line-of-sight. | Dead Lane: +1 ATK. Once per turn, after damaging an enemy at range 3 or farther, mark that enemy; the next allied attack against it deals +1 damage. |
+| Sniper | Warrior | 3 | 2 | 2 | 4 | Passive: Aim gives this character's basic attack +1 RANGE if it did not move this turn. | +1 RANGE. Piercing Shot ignores 1 point of damage reduction, and may ignore one occupied allied tile for line-of-sight. | Dead Lane: +1 ATK. Once per turn, after damaging an enemy at range 3 or farther, mark that enemy; the next allied attack against it deals +1 damage. |
 | Army General | Leader | 5 | 1 | 2 | 1 | AP Ability: Command chooses an allied character within 2 tiles. That ally gains +1 ATK on its next attack this turn or may move 1 tile without spending an action. | Command range becomes 3 and may target 2 allies. Each target chooses +1 ATK on its next attack or 1 free tile of movement. | Tactical Mastery: +1 HP. Once per turn when a Commanded ally defeats an enemy or delivers a Spirit Ember, refresh 1 character AP on an allied character within 2 tiles. |
 | Bogatyr Champion | Hero | 6 | 2 | 2 | 1 | Passive: Stand Firm gives +1 maximum and current HP while this character is on or adjacent to the center tile. | Heroic Guard: +2 maximum and current HP while on or adjacent to the center tile. Adjacent allies take -1 damage from attacks. | Last Oath: +1 ATK and +2 maximum HP. The first time this character would be defeated, it remains at 2 HP and adjacent enemies take 1 damage. |
 | Winter Engineer | Specialist | 3 | 1 | 2 | 1 | AP Ability: Barricade creates 1 barricade on an adjacent empty tile, or repairs an adjacent barricade or placed object by 1 HP. Barricades block movement and have 2 HP. | Fortified Works: Barricades have 3 HP. When using Barricade, create or repair up to 2 adjacent barricades or placed objects. | Frozen Redoubt: +1 HP. Once per turn, place a barricade or frost tile within 2 tiles. Allies adjacent to placed objects take -1 damage from ranged attacks. |
@@ -541,7 +565,7 @@ Source of truth: `data/cards/characters.json`, which matches the current PRD Sec
 | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
 | Quartz Attendant | Common | 2 | 1 | 2 | 1 | Passive: Synchronize gives +1 ATK while adjacent to another Atlantean. | Shared Pulse: +1 HP. While adjacent to another Atlantean, gains +1 ATK and the first damage to one adjacent Atlantean each turn is reduced by 1. | Collective Node: +1 HP. Counts as a pylon and as adjacent to Atlanteans within 2 tiles for Synchronize and relay effects. |
 | Manta Glider | Mount | 3 | 1 | 4 | 1 | Passive: Glide may move over occupied tiles but must end on an empty tile. If carrying a Hero or Leader, the mounted pair may also glide. | +1 MOVE. After moving over any character, this character's next attack this turn gains +1 ATK. | Phase Current: +1 HP and +1 ATK. Once per turn, ignore terrain, barricades, and occupied tiles during movement; deal 1 damage to one enemy moved over. |
-| Resonance Guard | Warrior | 5 | 1 | 2 | 1 | Passive: Quartz Armor reduces ranged attack damage by 1. | Redirect: +1 ATK. Once per turn, may take damage for an adjacent ally; reduce that redirected damage by 1. | Resonant Bastion: Adjacent allies gain a 1-damage shield at the start of your turn. After this character reduces damage, deal 1 damage back if the attacker is within range 2. |
+| Resonance Guard | Warrior | 5 | 1 | 2 | 1 | Passive: Quartz Armor reduces ranged attack damage by 1. | +1 ATK. Adjacent allies also have Quartz Armor. | Resonant Bastion: When a character with Quartz Armor is attacked, deal 1 damage to the attacker. |
 | Divine Conductor | Leader | 4 | 1 | 2 | 3 | AP Ability: Link Mind chooses an ally within 3 tiles. Until end of turn, that ally may use the Conductor's RANGE for its ability if valid, and may ignore one allied character for line-of-sight. | Link Mind may target 2 allies within 3 tiles. Linked allies may use the Conductor's RANGE and ignore one allied character for line-of-sight. | Perfect Chord: +1 RANGE. Once per turn, when a linked ally defeats an enemy or delivers a Spirit Ember, refresh that ally's character AP. |
 | Oracle Sovereign | Hero | 5 | 1 | 2 | 3 | AP Ability: Foresight reveals the next shared relic/event card. You may place it on the bottom of the deck. Then give one adjacent ally a 1-damage shield. | Spirit Mantle: At the start of your turn, this character and one adjacent ally each gain a 1-damage shield. Foresight may instead leave the revealed card on top. | Collective Ascension: +1 HP and +1 RANGE. Once per match, all allies heal 2, gain a 1-damage shield, and gain +1 MOVE this turn. |
 | Crystal Architect | Specialist | 3 | 1 | 2 | 2 | AP Ability: Pylon places a quartz pylon on an adjacent empty tile, or moves an existing allied pylon 1 tile. Allies within 2 tiles of a pylon gain +1 RANGE on abilities. | Pylon range becomes 2. Pylons have 2 HP, and allies within 2 tiles of a pylon gain +1 RANGE on attacks and abilities. | Relay Gate: +1 HP. Once per turn, teleport an ally adjacent to a pylon to an empty tile adjacent to another pylon within 4 tiles, then give that ally a 1-damage shield. |

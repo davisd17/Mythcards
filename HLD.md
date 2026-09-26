@@ -7,8 +7,8 @@
 | Source document(s) | BRD.md (v3, resynced 2026-08-28), PRD.md (resynced 2026-08-28) |
 | Scope tier | Digital Rules Prototype — PRD-MILESTONE-002 / BRD Section 9.12 (FR-085–FR-090A) |
 | Target stack | Godot 4.7.x (latest stable minor as of 2026-08; currently patch 4.7.2 — re-verify exact patch version at implementation time), GDScript |
-| Version | 3 (adds GUT as the chosen unit-test framework; reflects BR-011A — placed objects block line-of-sight by default) |
-| Date | 2026-09-07 |
+| Version | 4 (v3 added GUT and BR-011A; v4 — designer LLD review 2026-09-25: four-bucket ability classification and its AP rule in Section 4.6, `next-turn` status duration, `MatchState.first_player_id`, and `CharacterInstance.spirit_ember_count` as a count rather than a flag) |
+| Date | 2026-09-25 |
 | Status | Draft |
 | Prepared by | Drew Davis (solo developer/designer, acting as own PM) |
 
@@ -78,8 +78,19 @@ Attack targeting via RANGE and attack pattern, line-of-sight blocking applied un
 **Satisfies:** FR-028–FR-036C.
 
 ### 4.6 Ability System (`AbilitySystem`)
-Executes printed character abilities (passive / AP Ability / Activated, BR-013 timing labels), resolves once-per-turn/once-per-match limits, and reports legal targets/ranges to the UI before confirmation. Abilities are implemented individually (14 prototype abilities × 3 levels) but registered through one dispatch table keyed by ability ID from `CharacterData`, not a chain of hardcoded `if character.name == "..."` branches.
-**Satisfies:** FR-037–FR-045I.
+Executes printed character abilities, resolves once-per-turn/once-per-match limits, and reports legal targets/ranges to the UI before confirmation. Abilities are implemented individually (14 prototype abilities × 3 levels) but registered through one dispatch table keyed by ability ID from `CharacterData`, not a chain of hardcoded `if character.name == "..."` branches.
+
+Every ability belongs to exactly one of **four buckets** (BR-021A, confirmed 2026-09-25), and the bucket is decided by what *causes* the ability, never by how often it may be used:
+
+| Bucket | Cause | Cost |
+| --- | --- | --- |
+| Passive stat/rule modifier | Always on while its condition holds | None |
+| Activated (AP) ability | The player activates it | 1 pool AP + 1 character AP |
+| Reactive trigger | A game event fires it; may offer a free follow-up the player aims | None |
+| Standalone activated ability | The player activates it; a new capability added at a higher level | 1 pool AP + 1 character AP |
+
+"Once per turn" / "once per match" is a usage limit layered on top of a bucket, not a bucket of its own — and a limited ability still costs its normal AP unless the card says the effect is free (BR-021B, FR-045J). Card text is expected to churn during playtesting, so tunable values belong in card content data rather than handler code (BR-021C).
+**Satisfies:** FR-037–FR-045J.
 
 ### 4.7 Mounted Pair (`MountSystem`)
 Mount/dismount as AP-gated actions (BR-012, BR-017 — both cost 1 pool AP + 1 character AP), combined-tile representation, stat inheritance (rider HP/ATK/RANGE/level/abilities, Mount's MOVE/pattern), and defeat propagation (rider HP → 0 defeats both).
@@ -216,11 +227,11 @@ var review_status: String    # "" for playable cards; "draft_for_review" for BR-
 
 | Object | Key fields | Notes |
 | --- | --- | --- |
-| `MatchState` | `players: [PlayerState, PlayerState]`, `board: Array[BoardTile]` (49), `turn_number`, `active_player_id`, `shared_deck: Array[String]` (card IDs), `deck_seed: int`, `phase` | Single live-state root, held by `GameState` autoload. |
+| `MatchState` | `players: [PlayerState, PlayerState]`, `board: Array[BoardTile]` (49), `turn_number`, `active_player_id`, `first_player_id`, `shared_deck: Array[String]` (card IDs), `deck_seed: int`, `phase` | Single live-state root, held by `GameState` autoload. `first_player_id` records who took the match's first turn — fixed today, set by a coin flip later (BR-018A). |
 | `PlayerState` | `id`, `culture`, `characters: Array[CharacterInstance]` (7), `active_relic_id`, `pool_ap_remaining` | |
-| `CharacterInstance` | `data: CharacterData` (ref), `current_hp`, `level` (1–3), `position: Vector2i`, `character_ap_remaining`, `status_effects: Array[StatusEffect]`, `has_spirit_ember: bool`, `mounted_with_id`, `is_mounted_rider: bool` | Runtime state layered on top of static `CharacterData`. |
+| `CharacterInstance` | `data: CharacterData` (ref), `current_hp`, `level` (1–3), `position: Vector2i`, `character_ap_remaining`, `status_effects: Array[StatusEffect]`, `spirit_ember_count: int`, `mounted_with_id`, `is_mounted_rider: bool` | Runtime state layered on top of static `CharacterData`. `spirit_ember_count` is a count, not a flag (changed 2026-09-25): defeating a mounted pair defeats two characters and grants two Embers (BR-023A). |
 | `BoardTile` | `position: Vector2i`, `occupant_id`, `terrain_type`, `placed_object` (barricade/pylon/frost), `is_center: bool` | Owned by `BoardModel`. |
-| `StatusEffect` | `type` (Shield, TempAtk, TempMove, Pounce mark, Slow, Marked, …), `value`, `expires` (immediate / this-turn / this-round) | Generic enough to cover every prototype card's temporary effects without a new type per card. |
+| `StatusEffect` | `type` (Shield, TempAtk, TempMove, Pounce mark, Slow, Marked, …), `value`, `expires` (immediate / this-turn / this-round / next-turn) | Generic enough to cover every prototype card's temporary effects without a new type per card. `next-turn` (added 2026-09-25) means "in force through the holder's own next turn" — the duration Frost Seer's Chill and Deep Freeze need, which the other three could not express. |
 
 All IDs (`character_id`, `player_id`, `card_id`) are plain `String`/`int` values, never Node references — this keeps `MatchState` trivially serializable, which matters directly for the Section 9 save/load extension point.
 
