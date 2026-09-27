@@ -158,6 +158,22 @@ Unit tests use **GUT**. `AbilitySystem.apply_level_up_effects` is doubled/spied 
 - **Reliance on synchronous signal emission (Section 4.5 step 3).** If any future code connects one of `LevelingSystem`'s listened-to signals with `CONNECT_DEFERRED`, HLD Flow D step 3's same-frame chain (`_check_level_2` → `character_leveled_up` → `_check_level_3`) would break silently (the Level 3 check would run one frame late instead of not at all — low risk, but worth a code-comment warning at the actual `connect()` call site during implementation).
 - **No handling for a hypothetical "defeats own Ember-carrying ally" scenario** (friendly fire) — not possible with any current card, so not modeled; would need revisiting if a future card ever damages allies.
 
+## 9A. Implementation Notes (2026-09-26)
+
+The first implementation (`game/scripts/systems/leveling_system.gd`) differs from this spec in these places:
+
+- **Match isolation (new).** Each `LevelingSystem` records the `MatchState` it was built for. Its listeners do nothing unless that match is still the current one, and they always look characters up in their own match. `RulesEngine` rebuilds its systems lazily, so a listener from a finished match can still be connected when the next one starts. Character ids repeat across matches, so without this check the stale listener's `spirit_ember_picked_up`/`character_leveled_up` signals would be read as being about the new match's characters. A test covers this and was confirmed to fail with the check removed.
+- **Defeated characters never level** (both checks skip `defeated`).
+- **Wiring:** `RulesEngine` builds the `LevelingSystem` alongside its other systems, sharing its `AbilitySystem`. `use_systems()` leaves leveling off unless a `LevelingSystem` is passed, so dispatch tests aren't affected by incidental edge crossings.
+- **Level-ups currently change `level` only.** `AbilitySystem.apply_level_up_effects` is a no-op until the character handlers land (ability step). The call and its ordering (before `character_leveled_up`) are in place.
+- **Open question — non-move arrivals.** Level checks run only on `character_moved`, which only `RulesEngine`'s move action emits. A character that reaches the opponent's edge or the center some other way doesn't level up there:
+  - pushed by `CombatResolver.apply_push`,
+  - a Mount placed by dismount,
+  - a teleport or reposition from a future ability or event (e.g. Relay Gate, Exiles Walk Beneath Egypt).
+
+  Is "crossing to the opponent's edge" meant to include being moved there? If yes, those paths should emit `character_moved` or call a shared position-changed hook.
+- Tests use the Closed City / Flood Survivors roster. The integration suite (`test_match_flow.gd`) levels through real moves and kills.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

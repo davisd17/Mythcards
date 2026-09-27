@@ -109,6 +109,37 @@ func test_defeating_a_mounted_pair_defeats_both() -> void:
 	assert_false(Fixture.board().is_occupied_by_character(Vector2i(3, 3)))
 
 
+func test_moving_onto_the_opponents_edge_levels_up() -> void:
+	var worker := Fixture.put(Fixture.WORKER, Vector2i(0, 5))
+	assert_true(_act("move", Fixture.WORKER, {"to": Vector2i(0, 6)}).success)
+	assert_eq(worker.level, 2)
+	assert_signal_emitted_with_parameters(EventBus, "character_leveled_up", [Fixture.WORKER, 2])
+
+
+func test_kill_then_carry_the_ember_to_the_center_for_level_3() -> void:
+	var yuri := Fixture.put(YURI, Vector2i(3, 1))
+	yuri.level = 2
+	Fixture.put(LABORER, Vector2i(3, 2))   # HP 2, dies to one hit
+
+	assert_true(_act("attack", YURI, {"target_id": LABORER}).defeated)
+	assert_eq(yuri.spirit_ember_count, 1)
+
+	_pass_round()
+	assert_true(_act("move", YURI, {"to": Vector2i(3, 3)}).success)
+	assert_eq(yuri.level, 3)
+	assert_eq(yuri.spirit_ember_count, 0)
+	assert_signal_emitted_with_parameters(EventBus, "spirit_ember_delivered", [YURI])
+
+
+func test_levels_reset_in_a_new_match() -> void:
+	var worker := Fixture.put(Fixture.WORKER, Vector2i(0, 5))
+	_act("move", Fixture.WORKER, {"to": Vector2i(0, 6)})
+	assert_eq(worker.level, 2)
+	Fixture.teardown()
+	autofree(Fixture.start_match())
+	assert_eq(Fixture.character(Fixture.WORKER).level, 1)
+
+
 func test_shield_absorbs_a_real_attack() -> void:
 	Fixture.put(YURI, Vector2i(3, 2))
 	var naia := Fixture.put(NAIA, Vector2i(3, 3))

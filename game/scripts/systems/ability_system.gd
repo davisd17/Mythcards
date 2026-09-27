@@ -56,6 +56,11 @@ func intercept_lethal_damage(_defender: CharacterInstance, _combat: CombatResolv
 	return {"triggered": false}
 
 
+func apply_level_up_effects(_instance: CharacterInstance, _new_level: int) -> void:
+	# Per-card Level 2/3 stat and ability changes arrive with the character handlers.
+	pass
+
+
 func can_use_ability(_instance: CharacterInstance, _ability_id: String) -> bool:
 	return false
 

@@ -12,6 +12,7 @@ const CHARACTER_ACTIONS_WITH_AP: Array[String] = ["move", "attack", "ability", "
 var combat_resolver: Object = null
 var ability_system: Object = null
 var mount_system: Object = null
+var leveling_system: LevelingSystem = null   # reacts to EventBus; never called directly
 var _systems_for: MatchState = null
 
 
@@ -65,11 +66,13 @@ func get_legal_attack_target_ids(actor_id: String) -> Array[String]:
 	return result
 
 
-func use_systems(p_combat: Object, p_ability: Object, p_mount: Object) -> void:
-	# Test seam: pins collaborators for the current match.
+func use_systems(p_combat: Object, p_ability: Object, p_mount: Object,
+		p_leveling: LevelingSystem = null) -> void:
+	# Test seam: pins collaborators for the current match. Leveling is off unless passed.
 	combat_resolver = p_combat
 	ability_system = p_ability
 	mount_system = p_mount
+	leveling_system = p_leveling
 	_systems_for = GameState.match_state
 
 
@@ -276,6 +279,7 @@ func _ensure_systems() -> void:
 	ability_system = AbilitySystem.new(state.board)
 	mount_system = MountSystem.new(state.board)
 	combat_resolver = CombatResolver.new(state.board, ability_system, mount_system)
+	leveling_system = LevelingSystem.new(state.board, ability_system)
 
 
 func _board() -> BoardModel:
