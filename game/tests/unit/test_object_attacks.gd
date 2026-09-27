@@ -47,14 +47,24 @@ func test_partial_damage_leaves_the_object() -> void:
 	assert_eq(obj.current_hp, 1)
 
 
-func test_objects_without_hp_cannot_be_damaged() -> void:
-	# A Level 1 pylon has no printed HP.
-	Fixture.put(SNIPER, Vector2i(3, 1))
+func test_a_level_1_pylon_has_1_hp() -> void:
+	# Designer ruling 2026-09-27.
+	Fixture.put(GYMNAST, Vector2i(3, 2))
 	Fixture.board().place_object(Vector2i(3, 3), "pylon", "p2")
+	assert_eq(Fixture.board().get_placed_object(Vector2i(3, 3)).current_hp, 1)
+	assert_true(_act("attack", GYMNAST, {"target_pos": Vector2i(3, 3)}).destroyed)
+
+
+func test_objects_without_hp_cannot_be_damaged() -> void:
+	# No current object lacks HP; the rule stays for future indestructible objects.
+	Fixture.put(SNIPER, Vector2i(3, 1))
+	var obj := _barricade(Vector2i(3, 3))
+	obj.max_hp = 0
 	assert_eq(_act("attack", SNIPER, {"target_pos": Vector2i(3, 3)}).reason, "object can't be damaged")
 
 
 func test_own_objects_are_not_targets() -> void:
+	# Designer-confirmed 2026-09-27: not your own objects, unless a card says so.
 	Fixture.put(SNIPER, Vector2i(3, 1))
 	_barricade(Vector2i(3, 3), "p1")
 	assert_eq(_act("attack", SNIPER, {"target_pos": Vector2i(3, 3)}).reason, "cannot attack your own object")
@@ -75,7 +85,8 @@ func test_preview_lists_attackable_objects() -> void:
 	_barricade(Vector2i(3, 3))
 	_barricade(Vector2i(1, 1), "p1")
 	Fixture.board().place_object(Vector2i(5, 1), "pylon", "p2")
-	assert_eq(RulesEngine.get_legal_attack_object_tiles(SNIPER), [Vector2i(3, 3)] as Array[Vector2i])
+	assert_eq(RulesEngine.get_legal_attack_object_tiles(SNIPER), [Vector2i(3, 3), Vector2i(5, 1)] as Array[Vector2i],
+			"enemy barricade and pylon; not the own barricade")
 
 
 func test_an_object_attack_spends_next_attack_buffs() -> void:

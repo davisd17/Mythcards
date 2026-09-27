@@ -11,7 +11,7 @@ extends AbilityHandler
 
 const L3_ID := "a-architect_l3"
 const PYLON_REACH := [0, 1, 2, 2]   # by level
-const PYLON_HP := [0, 0, 2, 2]
+const PYLON_HP := [0, 1, 2, 2]   # L1 1 HP (designer ruling 2026-09-27), L2 "Pylons have 2 HP"
 const PYLON_AURA_RANGE := 2
 const PYLON_RANGE_BONUS := 1
 const RELAY_DISTANCE := 4
