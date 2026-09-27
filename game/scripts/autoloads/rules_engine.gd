@@ -153,6 +153,8 @@ func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary
 		return _fail("target already defeated")
 	if target.player_id == actor.player_id:
 		return _fail("cannot attack an ally")
+	if target.mounted_with_id != "" and not target.is_mounted_rider:
+		return _fail("mount is being ridden; attack the rider")   # BR-016: damage goes to the rider
 	if not get_legal_attack_target_ids(actor.instance_id).has(target_id):
 		# Same candidate tiles the legal set uses, so the reason is specific.
 		if _attack_candidate_tiles(actor).has(target.position):
@@ -271,9 +273,9 @@ func _ensure_systems() -> void:
 	if state == null or _systems_for == state:
 		return
 	_systems_for = state
-	combat_resolver = CombatResolver.new(state.board)
 	ability_system = AbilitySystem.new(state.board)
 	mount_system = MountSystem.new(state.board)
+	combat_resolver = CombatResolver.new(state.board, ability_system, mount_system)
 
 
 func _board() -> BoardModel:

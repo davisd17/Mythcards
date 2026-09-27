@@ -45,4 +45,5 @@ Needs the Godot 4.7.2 export templates in `%APPDATA%\Godot\export_templates\4.7.
 - [x] 5. `BoardModel`: legal moves, line of sight, range, placed objects, GUT-covered
 - [x] 6–7. Match state model, `SetupFlow` (culture pick, back-row deployment), `GameState`, `TurnManager` (AP refresh with the 2-AP opening turn, status-effect expiry, capture check before handoff), GUT-covered
 - [x] 8. `RulesEngine`: single action gate (move, attack, ability, mount, dismount, end turn, reactive bonus), legality previews for the UI, GUT-covered. Combat, mounting, and abilities are placeholders with the final signatures
-- [ ] 9. `CombatResolver` + `MountSystem`: next (LLD-combat-mount.md)
+- [x] 9. `CombatResolver` (marks, reduction, penetration, newest-first shields, lethal interception, defeat incl. mounted pairs, push) + `MountSystem` (mount, dismount, inherited MOVE), with an integration suite driving real matches through `RulesEngine`
+- [ ] 10. `AbilitySystem`, the 14 character abilities: next (LLD-ability-system.md, needs remapping to the Closed City / Flood Survivors roster)

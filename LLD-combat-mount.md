@@ -236,6 +236,19 @@ Unit tests use **GUT**. `AbilitySystem.get_passive_damage_reduction` is doubled 
 - **`AbilitySystem.get_passive_damage_reduction(defender, attacker, is_ranged)` forward-referenced contract** — LLD-05 must implement this exact signature; it needs to consider the defender's own passives (Quartz Armor) and nearby allies' aura passives (Bogatyr Champion L2, Winter Engineer L3) in one combined lookup, but that composition logic belongs entirely to `AbilitySystem`, not this LLD.
 - **`get_effective_movement_pattern` composing with a Mount-side pattern ability (e.g. Manta Glider's Glide) and the rider's own `AbilitySystem.get_movement_passable_predicate` query (LLD-rules-engine.md Section 4.2 step 2).** This LLD returns the Mount's pattern string only; whether a Mount's own pass-through ability (ridden or not) supplies the movement predicate is `AbilitySystem`'s composition responsibility in LLD-05 — flagged so that LLD doesn't have to rediscover this seam.
 
+## 9A. Implementation Notes (2026-09-26)
+
+The first implementation (`game/scripts/systems/combat_resolver.gd`, `mount_system.gd`) differs from this spec in these places:
+
+- **Section 4.1 steps 6–7 were missing** (the numbering jumps from 5 to 8). Filled as `shield_consumed = min(shield_total, after_reduction)` and `final_damage = after_reduction - shield_consumed`. **Please confirm** this was the intent.
+- **Mark ownership is checked in `CombatResolver`**, not via `AbilitySystem.is_ally_of_mark_source`. It's a plain lookup: the mark's `source_character_id` resolves to a character whose `player_id` matches the attacker's. **New rule, needs confirmation:** a mark with no source (applied by an event, e.g. The Flood Reaches The Walls) helps any attacker. The spec only covered character-applied marks.
+- **Wiring:** `CombatResolver.new(board, ability_system, mount_system)`. `RulesEngine` passes in the same `AbilitySystem`/`MountSystem` instances it uses itself, and defaults are built if they're omitted. `intercept_lethal_damage(defender, combat)` takes the resolver as its second argument, matching LLD-ability-system 3.3. The `AbilitySystem` placeholder gained the no-ability defaults for `get_conditional_atk_bonus`, `get_passive_damage_reduction`, `get_penetration`, and `intercept_lethal_damage`.
+- **Defeat sets `CharacterInstance.defeated`** on the defeated character and, through `handle_rider_defeated`, on its Mount (see LLD-rules-engine 9A). The Mount keeps its HP.
+- **`apply_push`** also moves a pushed rider's Mount (bookkeeping position). It stops at any tile `BoardModel.is_blocked_for_movement` reports, so a pylon doesn't stop a push. A `from_position` that isn't on an orthogonal line with the target triggers `push_error` and no movement.
+- **`get_effective_move_stat`** reads the Mount's `get_effective_move()`, so its own slows and bonuses count, not the raw `data.move` Section 3.2 names.
+- **RulesEngine follow-up:** attacking a ridden Mount by id now fails with `"mount is being ridden; attack the rider"` (BR-016). Before, it reported a misleading `"blocked line of sight"`, because the Mount's bookkeeping position is its rider's tile. The integration test caught this.
+- Tests use the Closed City / Flood Survivors roster, plus a new integration suite (`test_match_flow.gd`) driving real attacks, defeat, and mounting through `RulesEngine.request_action` only.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |
