@@ -172,6 +172,21 @@ Unit tests use **GUT**, instantiating `debug_panel.gd` directly (not the full sc
 - **Exact render layout/formatting (Section 4.3)** is left to implementation-time judgment as a cosmetic, not a rules, detail.
 - **No signal exists for "the shared deck's remaining card count" or similar meta-state** — not needed by any current display requirement (FR-084 lists board state/AP/HP/level/effects, not deck size), so not modeled.
 
+## 9A. Implementation Notes (2026-09-27)
+
+Implemented as a playable debug match: `scenes/debug_match.tscn` (the project's main scene), `scripts/ui/debug_panel.gd`, `debug_controller.gd`, `debug_board_view.gd`. Launch with `tools/play.ps1`. Tests: `tests/unit/test_debug_ui.gd`.
+
+- **State is read, not rebuilt from signals.** Section 4.2's signal-only bookkeeping can't stay correct: ability damage (Chill, Resonant Bastion's reflect, Astral Echo, Last Oath) emits no `attack_resolved`, so HP would drift. Statuses, placed objects, frost, and offered bonuses also have no signals. `DebugPanel.render(state, selected_id)` re-reads `MatchState` (read-only) after every event, so the bootstrap exception in Section 4.1 isn't needed. The **event log** half is built purely from `EventBus` signals, which still exercises the signal contract (the purpose of this LLD's pure-listener design).
+- **The panel is part of a playable scene.** Section 11 item 3 asks for a full match "through this panel alone", which a read-only panel can't provide. The debug match adds:
+  - a clickable board (select your character, then click a highlighted tile to move, an enemy to attack, or an orange object to attack it);
+  - End Turn / New Match / Panel buttons;
+  - a command line (`help`) for abilities, reactive bonuses, and deck choices. Character tokens can be ids, card ids, or the panel's two-letter tags, and JSON `[x, y]` pairs become tiles.
+
+  It's debug-grade, not the mobile HUD/BoardView (HLD 4.12).
+- **The panel shows** turn, pool AP, relics, pending deck choices with the exact `choose` command, active events, the global RANGE modifier, and each character's position, HP/effective max, effective ATK/MOVE/RANGE, AP, Embers, mount link, statuses, and offered bonuses. It also lists placed objects with HP, frost tiles, the selected character's card text for its current level, and the deck count and seed.
+- **Setup is automatic:** original 14, each back row in card order, p1 first. Player-chosen back-row placement (BR-007A) isn't in the debug scene yet. `SetupFlow.start_match(deck_seed)` now accepts a seed so a match can be replayed.
+- **Real clicks aren't covered by automated tests.** Headless Chrome didn't deliver synthetic input to the Godot web canvas (not even to a standard Button), and headless GUT doesn't route viewport input. Click *logic* is tested through `DebugController.click_tile` and a direct `_gui_input` call; confirm real mouse and touch input by hand.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

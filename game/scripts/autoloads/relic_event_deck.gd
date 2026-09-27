@@ -220,3 +220,12 @@ func _reset_for(state: MatchState) -> void:
 
 func _is_current() -> bool:
 	return _match != null and GameState.match_state == _match
+
+
+# Currently running duration events, for inspection (DebugPanel).
+func active_event_ids() -> Array[String]:
+	var result: Array[String] = []
+	if _is_current():
+		for id in _active.keys():
+			result.append(id)
+	return result

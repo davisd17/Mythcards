@@ -2,6 +2,24 @@
 
 Godot 4.7.2 project for PRD Milestone 002 (Digital Rules Prototype). Architecture: `HLD.md`; per-module specs: `LLD-*.md` at the repo root.
 
+## Play (debug match)
+
+```powershell
+tools/play.ps1
+```
+
+Opens a hotseat match of the original 14. Tap one of your characters, then a highlighted tile: green = move, red = attack an enemy, orange = attack an enemy object. Abilities, free bonuses, and drawn-card choices go through the command line (type `help`). For example:
+
+```
+ability FS {"target": "RG"}          Frost Seer chills the Resonance Guard
+ability WE {"target": [3, 4]}        Winter Engineer builds a barricade at (3,4)
+ability AG {"target": "SN", "choice": "move"}   General commands the Sniper to move
+bonus SN free_move {"to": [3, 2]}    take the offered free move
+choose {"keep_new": true}            keep a newly drawn relic
+```
+
+The panel under the board shows full state and a log; the deck seed is shown so a match can be replayed.
+
 ## Setup
 
 1. Install Godot 4.7.x (`winget install GodotEngine.GodotEngine`).
@@ -50,3 +68,5 @@ Needs the Godot 4.7.2 export templates in `%APPDATA%\Godot\export_templates\4.7.
 - [x] 11. `LevelingSystem`: Level 2 at the opponent's edge (moved, pushed, or placed there), Spirit Ember per defeat (two for a mounted pair), Level 3 at the center; per-card upgrade effects wait on step 10
 - [x] 12. `RelicEventDeck`: the original 14 relic/event cards (`data/cards/prototype_relic_events.json`), seeded shuffle, draw per turn, relic slot, event durations, choices via the `deck_choice` action
 - [x] 13. `VictoryChecker`: Hero capture at the end of its controller's turn, army defeat on the last defeat
+- [x] 14. Debug match (`scenes/debug_match.tscn`, main scene): clickable board, DebugPanel readout and log, command line; see LLD-debug-panel.md 9A
+- [ ] 15. TestBridge + Playwright: next

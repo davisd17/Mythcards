@@ -65,8 +65,9 @@ func is_player_ready(player_id: String) -> bool:
 	return player != null and player.characters.all(func(c: CharacterInstance) -> bool: return c.is_placed())
 
 
-func start_match() -> void:
-	# The UI only offers "start match" once both players are ready.
+func start_match(deck_seed: int = -1) -> void:
+	# The UI only offers "start match" once both players are ready. A deck_seed >= 0 fixes
+	# the relic/event shuffle (replays, tests); -1 picks one at random.
 	for id in GameEnums.PLAYER_IDS:
 		if not is_player_ready(id):
 			push_error("SetupFlow.start_match: player %s has not placed all characters" % id)
@@ -76,7 +77,8 @@ func start_match() -> void:
 	state.board = board
 	state.phase = "setup"
 	GameState.start_match(state)
-	RelicEventDeck.build_deck(state.players[0].culture, state.players[1].culture, randi())
+	RelicEventDeck.build_deck(state.players[0].culture, state.players[1].culture,
+			deck_seed if deck_seed >= 0 else randi())
 	state.first_player_id = "p1"   # a coin flip replaces this later (BR-018A)
 	TurnManager.start_turn(state.first_player_id)
 
