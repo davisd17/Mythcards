@@ -1,0 +1,54 @@
+class_name AbilitySystem
+extends RefCounted
+# Baseline for HLD build step 10: every query returns the no-ability default (orthogonal
+# movement, orthogonal-line attacks, no pass-through, no LOS exceptions, no range bonus),
+# and no character has a usable AP ability yet. The per-character handlers from
+# LLD-ability-system.md replace these answers without changing the signatures, which
+# are the contract RulesEngine calls (LLD-rules-engine.md Section 9).
+
+var board: BoardModel
+
+
+func _init(p_board: BoardModel) -> void:
+	board = p_board
+
+
+func get_movement_pattern(_instance: CharacterInstance) -> String:
+	return "orthogonal"
+
+
+func get_movement_passable_predicate(_instance: CharacterInstance) -> Callable:
+	return Callable()
+
+
+func get_movement_object_passable_predicate(_instance: CharacterInstance) -> Callable:
+	return Callable()
+
+
+func get_attack_pattern(_instance: CharacterInstance) -> String:
+	return "orthogonal_line"
+
+
+func get_line_of_sight_exceptions(_instance: CharacterInstance, _target_pos: Vector2i,
+		_board: BoardModel) -> Array[String]:
+	return []
+
+
+func get_conditional_range_bonus(_instance: CharacterInstance, _context: String) -> int:
+	return 0
+
+
+func can_use_ability(_instance: CharacterInstance, _ability_id: String) -> bool:
+	return false
+
+
+func get_legal_ability_targets(_instance: CharacterInstance, _ability_id: String) -> Array:
+	return []
+
+
+func execute_ability(_instance: CharacterInstance, _ability_id: String, _target) -> Dictionary:
+	return {"success": false, "reason": "abilities arrive in build step 10"}
+
+
+func execute_reactive_bonus(_instance: CharacterInstance, _tag: String, _payload: Dictionary) -> Dictionary:
+	return {"success": false, "reason": "abilities arrive in build step 10"}

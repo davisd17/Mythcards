@@ -260,6 +260,26 @@ Unit tests use **GUT**. Because `CombatResolver`, `AbilitySystem`, and `MountSys
 - **No undo/confirmation modeled.** FR-074/FR-045 ("Should") mention undo and irreversible-action confirmation. Not modeled by this LLD's `request_action` (which mutates immediately on success) — if added, it would sit in the presentation layer (confirm-before-calling `request_action`) rather than requiring a `RulesEngine` rollback capability, since every current action is a forward-only state change with no printed card requiring a reversal.
 - **No debounce/action-lock against duplicate rapid requests** (Section 7) — acceptable for a hotseat prototype with synchronous single-threaded input; would need revisiting for the future networked-PvP extension point (HLD Section 9) where request latency could create a race.
 
+## 9A. Implementation Notes (2026-09-26)
+
+The first implementation (`game/scripts/autoloads/rules_engine.gd`) differs from this spec in these places:
+
+- **Collaborators are per-match instances, not autoloads.** `RulesEngine` builds `CombatResolver`, `AbilitySystem`, and `MountSystem` (plain `class_name` classes, per HLD 5.1) for the current `MatchState` on first use. `use_systems()` is the test seam, and tests use small fake classes instead of GUT doubles.
+- **Placeholders until steps 9–10:**
+  - `AbilitySystem` returns the no-ability defaults (orthogonal movement, orthogonal-line attacks, no predicates or LOS exceptions, no range bonus) and reports no usable abilities.
+  - `MountSystem` implements the BR-014 movement queries. `mount()` and `dismount()` report "step 9".
+  - `CombatResolver.resolve_attack()` reports "step 9".
+  - All signatures match Section 9's contract.
+- **`CharacterInstance.defeated` (new field).** Defeated characters stay in their player's list and keep their stale `position`. A Mount defeated along with its rider keeps its HP, so HP alone can't identify a defeated piece. `RulesEngine` rejects actions by (`"character defeated"`) and against (`"target already defeated"`) defeated characters. **`CombatResolver._handle_defeat` (LLD-combat-mount 4.3) must set `defeated = true`** on both halves of a defeated pair.
+- **Added validation:**
+  - A Mount that is carrying a rider can't act on its own (`"carrying a rider"`, BR-015). Section 4.1 had no check for this.
+  - Attacking an ally fails with `"cannot attack an ally"`.
+  - A missing `to` fails with `"missing destination"`.
+- **A failed ability costs no AP.** If `AbilitySystem.execute_ability` returns `success: false` after validation passed, the action fails with that reason and nothing is spent. Section 4.4 spent AP unconditionally.
+- **Range with conditional bonus:** `get_effective_range(context, conditional_bonus)` takes `AbilitySystem.get_conditional_range_bonus(actor, context)` as a parameter, because `CharacterInstance` can't reach the `AbilitySystem` instance that `RulesEngine` owns. It stays one call, floored once.
+- **`EventBus.character_defeated`** now has LLD-combat-mount's three-parameter shape `(character_id, defeated_by_id, cause)`. HLD 5.3 listed one parameter.
+- Test cases use the Closed City / Flood Survivors roster (LLD-content-board.md 9A). C13, the full integration sequence, stays deferred until steps 9–10.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

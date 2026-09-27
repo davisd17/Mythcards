@@ -17,6 +17,9 @@ var position: Vector2i = UNPLACED
 var character_ap_remaining: int = 0
 var character_ap_max: int = 1
 var status_effects: Array[StatusEffect] = []
+var defeated: bool = false       # set by CombatResolver; a defeated character stays in its
+                                 # player's list (for army-defeat counting) but is off the board.
+                                 # HP alone can't tell: a Mount defeated with its rider keeps its HP.
 var spirit_ember_count: int = 0  # a mounted-pair kill grants two
 var mounted_with_id: String = "" # instance_id of the other half of a mounted pair
 var is_mounted_rider: bool = false
@@ -42,11 +45,12 @@ func get_effective_move() -> int:
 	return maxi(0, data.move + move_bonus + _sum_status("temp_move"))
 
 
-func get_effective_range(_context: String) -> int:
-	# _context: "attack" | "ability". Not yet read: the context-specific conditional
-	# bonuses (AbilitySystem) and MatchState's global modifier (relic/event deck) join
-	# this sum when those modules land. Floored at 1 (Whiteout's "minimum 1").
-	return maxi(1, data.range + range_bonus + _sum_status("temp_range"))
+func get_effective_range(_context: String, conditional_bonus: int = 0) -> int:
+	# _context: "attack" | "ability". conditional_bonus is AbilitySystem's live,
+	# context-specific term (e.g. Aim), passed in by RulesEngine, which owns the
+	# AbilitySystem instance. MatchState's global modifier joins this sum when the
+	# relic/event deck lands. Floored at 1 (Whiteout's "minimum 1").
+	return maxi(1, data.range + range_bonus + _sum_status("temp_range") + conditional_bonus)
 
 
 func has_status(type: String) -> bool:
