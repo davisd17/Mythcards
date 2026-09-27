@@ -17,6 +17,15 @@ tools/run_game_tests.ps1
 
 Syncs card data, imports the project, and runs the GUT suites in `tests/unit/` headless. The run fails if any test fails or any script has a parse error. GUT on its own would silently skip a broken test file.
 
+## Web build
+
+```powershell
+tools/export_web.ps1   # -> build/web/ (gitignored); add -Release for a release build
+tools/serve_web.ps1    # http://localhost:8060/
+```
+
+Needs the Godot 4.7.2 export templates in `%APPDATA%\Godot\export_templates\4.7.2.stable\`. Only the `web_*` and `windows_*_x86_64*` files are required, not the full 1.28 GB package. The `Web (test)` preset is single-threaded, so it needs no special server headers. It also carries the `test_bridge` feature tag, which switches on `TestBridge`. `import_etc2_astc` is enabled because mobile browsers need ETC2/ASTC textures, and the export refuses to run without it.
+
 ## Layout
 
 | Path | Contents |
@@ -31,7 +40,7 @@ Syncs card data, imports the project, and runs the GUT suites in `tests/unit/` h
 ## Build status (HLD Section 13)
 
 - [x] 1–2. Godot installed; autoloads scaffolded (all but `ContentDB` are empty stubs)
-- [~] 3. Web export preset defined (`Web (test)`, no threads, `test_bridge` feature tag); **not yet exported**, because export templates aren't installed
+- [x] 3. Web export verified 2026-09-26: exported, served locally, and booted in headless Chrome (WebGL 2, single-threaded, all 28 cards loaded, no console errors)
 - [x] 4. `ContentDB` + validation, GUT-covered
 - [x] 5. `BoardModel`: legal moves, line of sight, range, placed objects, GUT-covered
 - [ ] 6. `MatchState` / `SetupFlow`: next

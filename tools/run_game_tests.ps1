@@ -2,21 +2,11 @@
 # Exit code is nonzero if any test fails.
 #
 # Usage: tools/run_game_tests.ps1 [-Godot <path to Godot console exe>]
-# Falls back to $env:GODOT, then a godot*.exe on PATH, then the winget install location.
+# Godot lookup order is in tools/find_godot.ps1.
 param([string]$Godot = $env:GODOT)
 $ErrorActionPreference = 'Stop'
 
-if (-not $Godot) {
-    $cmd = Get-Command 'godot*console*', 'godot4', 'godot' -ErrorAction SilentlyContinue | Select-Object -First 1
-    if ($cmd) { $Godot = $cmd.Source }
-}
-if (-not $Godot) {
-    $wingetDir = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages'
-    $found = Get-ChildItem $wingetDir -Recurse -Filter 'Godot_v4*_console.exe' -ErrorAction SilentlyContinue |
-        Sort-Object Name -Descending | Select-Object -First 1
-    if ($found) { $Godot = $found.FullName }
-}
-if (-not $Godot) { throw 'Godot not found. Install Godot 4.7.x or pass -Godot <path>.' }
+$Godot = & (Join-Path $PSScriptRoot 'find_godot.ps1') $Godot
 
 $repo = Split-Path $PSScriptRoot -Parent
 $game = Join-Path $repo 'game'
