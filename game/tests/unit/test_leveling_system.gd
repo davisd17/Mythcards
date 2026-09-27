@@ -13,6 +13,8 @@ const CENTER := Vector2i(3, 3)
 
 
 class SpyAbility extends AbilitySystem:
+	func handler_for(_i) -> AbilityHandler:
+		return AbilityHandler.new()
 	var level_ups: Array = []
 	func apply_level_up_effects(instance, new_level) -> void:
 		level_ups.append([instance.instance_id, new_level])

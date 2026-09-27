@@ -9,7 +9,8 @@ var value: int = 0          # meaning depends on type (shield: prevention left; 
 var expires: String = ""    # one of GameEnums.STATUS_EXPIRY
 var applied_on_turn: int = -1  # MatchState.turn_number when applied; read by "this_round" clearing
 var ticks: int = 0             # holder's own turn-starts survived; read by "next_turn" clearing
-var source_character_id: String = ""  # instance_id of whoever applied it (debug/attribution only)
+var source_character_id: String = ""  # instance_id of whoever applied it (marks and links read this)
+var consume_on_attack: bool = false   # removed after its holder's next attack ("+1 ATK on its next attack")
 
 
 func _init(p_type: String = "", p_value: int = 0, p_expires: String = "this_turn", p_applied_on_turn: int = -1) -> void:

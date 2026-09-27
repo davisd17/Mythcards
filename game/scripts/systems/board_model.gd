@@ -90,6 +90,7 @@ func place_object(pos: Vector2i, type_id: String, owner_player_id: String) -> St
 	_next_object_id += 1
 	obj.type_id = type_id
 	obj.owner_player_id = owner_player_id
+	obj.max_hp = def.default_max_hp
 	obj.current_hp = def.default_max_hp
 	_objects[obj.id] = obj
 	tile.object_id = obj.id
@@ -121,42 +122,58 @@ func is_center(pos: Vector2i) -> bool:
 
 func get_legal_moves(from: Vector2i, move_budget: int, pattern: String = "orthogonal",
 		passable_predicate: Callable = Callable(),
-		object_passable_predicate: Callable = Callable()) -> Array[Vector2i]:
+		object_passable_predicate: Callable = Callable(),
+		max_passes: int = -1, ignore_terrain: bool = false) -> Array[Vector2i]:
 	# BFS (LLD 4.1). passable_predicate: may pass through (not stop on) a character-occupied
 	# tile. object_passable_predicate: same, for movement-blocking placed objects.
+	# max_passes caps character pass-throughs per path (Vault: 1); -1 = unlimited.
+	# Entering a frost tile ends the move there unless ignore_terrain (Phase Current).
 	var result: Array[Vector2i] = []
 	if pattern != "orthogonal":
 		push_error("BoardModel.get_legal_moves: unsupported pattern '%s'" % pattern)
 		return result
 
-	var visited := {from: 0}
-	var frontier: Array[Vector2i] = [from]
+	# Search state is (tile, passes used), so one path's pass doesn't use up another's.
+	var start := Vector3i(from.x, from.y, 0)
+	var visited := {start: 0}
+	var frontier: Array[Vector3i] = [start]
+	var found := {}
 	while not frontier.is_empty():
-		var current: Vector2i = frontier.pop_front()
-		var cost: int = visited[current]
+		var state: Vector3i = frontier.pop_front()
+		var cost: int = visited[state]
 		if cost >= move_budget:
 			continue
+		var current := Vector2i(state.x, state.y)
+		var passes := state.z
 		for dir in ORTHOGONAL_DIRECTIONS:
 			var next := current + dir
 			if not is_in_bounds(next):
 				continue
-			if visited.has(next) and visited[next] <= cost + 1:
-				continue
+			var next_passes := passes
+			var can_stop := true
 			if is_occupied_by_character(next):
-				if passable_predicate.is_valid() and passable_predicate.call(next):
-					visited[next] = cost + 1
-					frontier.append(next)
+				if not (passable_predicate.is_valid() and passable_predicate.call(next)):
+					continue
+				if max_passes >= 0 and passes >= max_passes:
+					continue
+				next_passes += 1
+				can_stop = false
+			else:
+				var def := _object_def_at(next)
+				if def != null and def.blocks_movement:
+					if not (object_passable_predicate.is_valid() and object_passable_predicate.call(next)):
+						continue
+					can_stop = false
+			var key := Vector3i(next.x, next.y, next_passes)
+			if visited.has(key) and visited[key] <= cost + 1:
 				continue
-			var def := _object_def_at(next)
-			if def != null and def.blocks_movement:
-				if object_passable_predicate.is_valid() and object_passable_predicate.call(next):
-					visited[next] = cost + 1
-					frontier.append(next)
-				continue
-			# Empty, or a non-blocking object (e.g. a pylon): a valid stop.
-			visited[next] = cost + 1
-			frontier.append(next)
-			result.append(next)
+			visited[key] = cost + 1
+			if can_stop and next != from and not found.has(next):
+				found[next] = true
+				result.append(next)
+			var stops_here := not ignore_terrain and get_tile(next).terrain_type == "frost"
+			if not stops_here:
+				frontier.append(key)
 	return result
 
 

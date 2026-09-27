@@ -150,8 +150,7 @@ func test_mounting_a_rider_on_the_edge_levels_the_mount() -> void:
 
 func test_being_pushed_onto_the_edge_levels_up() -> void:
 	var guard := Fixture.put(GUARD, Vector2i(3, 1))   # p2's opponent edge is row 0
-	RulesEngine.get_legal_move_tiles(GUARD)          # builds this match's systems
-	RulesEngine.combat_resolver.apply_push(guard, Vector2i(3, 2), 1)
+	RulesEngine.systems().combat.apply_push(guard, Vector2i(3, 2), 1)
 	assert_eq(guard.position, Vector2i(3, 0))
 	assert_eq(guard.level, 2)
 

@@ -32,20 +32,15 @@ func get_legal_move_tiles(actor_id: String) -> Array[Vector2i]:
 	if actor == null or not actor.is_placed():
 		return []
 	_ensure_systems()
-	var mover := actor
-	var budget: int
-	var pattern: String
-	if actor.is_mounted_rider:
-		# BR-014: the pair moves with the Mount's MOVE, pattern, and movement abilities.
-		mover = GameState.match_state.find_character(actor.mounted_with_id)
-		budget = mount_system.get_effective_move_stat(actor)
-		pattern = mount_system.get_effective_movement_pattern(actor)
-	else:
-		budget = actor.get_effective_move()
-		pattern = ability_system.get_movement_pattern(actor)
-	return _board().get_legal_moves(actor.position, budget, pattern,
-			ability_system.get_movement_passable_predicate(mover),
-			ability_system.get_movement_object_passable_predicate(mover))
+	var m := _movement(actor)
+	var tiles := _board().get_legal_moves(actor.position, m.budget, m.pattern,
+			ability_system.get_movement_passable_predicate(m.mover),
+			ability_system.get_movement_object_passable_predicate(m.mover),
+			ability_system.get_movement_max_passes(m.mover))
+	for extra in ability_system.get_bonus_move_tiles(m.mover, actor.position, m.budget):
+		if not tiles.has(extra):
+			tiles.append(extra)
+	return tiles
 
 
 func get_legal_attack_target_ids(actor_id: String) -> Array[String]:
@@ -66,6 +61,13 @@ func get_legal_attack_target_ids(actor_id: String) -> Array[String]:
 	return result
 
 
+func systems() -> Dictionary:
+	# The current match's collaborators, built on first use (tools, TestBridge, tests).
+	_ensure_systems()
+	return {"ability": ability_system, "combat": combat_resolver, "mount": mount_system,
+			"leveling": leveling_system}
+
+
 func use_systems(p_combat: Object, p_ability: Object, p_mount: Object,
 		p_leveling: LevelingSystem = null) -> void:
 	# Test seam: pins collaborators for the current match. Leveling is off unless passed.
@@ -74,6 +76,8 @@ func use_systems(p_combat: Object, p_ability: Object, p_mount: Object,
 	mount_system = p_mount
 	leveling_system = p_leveling
 	_systems_for = GameState.match_state
+	if p_ability is AbilitySystem and p_combat is CombatResolver:
+		p_ability.set_combat(p_combat)
 
 
 # --- Dispatch ----------------------------------------------------------------
@@ -136,6 +140,11 @@ func _handle_move(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 		return _fail("illegal move")
 	var board := _board()
 	var from := actor.position
+	# Whether this move needed a pass-through (Vault, Glide): "after vaulting" triggers
+	# read it. True when the destination isn't reachable without passing anything.
+	var m := _movement(actor)
+	actor.ability_uses_this_turn["last_move_required_pass"] = \
+			not board.get_legal_moves(from, m.budget, m.pattern).has(to)
 	board.clear_occupant(from)
 	board.set_occupant(to, actor.instance_id)
 	actor.position = to
@@ -172,10 +181,12 @@ func _handle_ability(actor: CharacterInstance, payload: Dictionary) -> Dictionar
 	var ability_id: String = str(payload.get("ability_id", ""))
 	if not ability_system.can_use_ability(actor, ability_id):
 		return _fail("ability unavailable")
-	var target = payload.get("target")
-	if not ability_system.get_legal_ability_targets(actor, ability_id).has(target):
-		return _fail("illegal ability target")
-	var ability_result: Dictionary = ability_system.execute_ability(actor, ability_id, target)
+	# The ability validates its whole payload: several carry choices or multiple targets
+	# (Command's +ATK or move, Foresight's keep-or-bottom), not just one target.
+	var invalid: String = ability_system.validate_ability(actor, ability_id, payload)
+	if invalid != "":
+		return _fail(invalid)
+	var ability_result: Dictionary = ability_system.execute_ability(actor, ability_id, payload)
 	if not ability_result.get("success", false):
 		# A validated ability that still failed spends nothing.
 		return _fail(str(ability_result.get("reason", "ability failed")))
@@ -249,6 +260,19 @@ func _spend_ap(actor: CharacterInstance) -> void:
 	EventBus.character_ap_changed.emit(actor.instance_id, actor.character_ap_remaining)
 
 
+func _movement(actor: CharacterInstance) -> Dictionary:
+	# Who supplies the movement rules, and with what budget and pattern. A mounted pair
+	# moves with the Mount's MOVE, pattern, and movement abilities (BR-014).
+	if actor.is_mounted_rider:
+		return {
+			"mover": GameState.match_state.find_character(actor.mounted_with_id),
+			"budget": mount_system.get_effective_move_stat(actor),
+			"pattern": mount_system.get_effective_movement_pattern(actor),
+		}
+	return {"mover": actor, "budget": actor.get_effective_move(),
+			"pattern": ability_system.get_movement_pattern(actor)}
+
+
 func _attack_candidate_tiles(actor: CharacterInstance) -> Array[Vector2i]:
 	# RANGE is always the rider's own, even when mounted (BR-014).
 	var attack_range := actor.get_effective_range("attack",
@@ -279,6 +303,7 @@ func _ensure_systems() -> void:
 	ability_system = AbilitySystem.new(state.board)
 	mount_system = MountSystem.new(state.board)
 	combat_resolver = CombatResolver.new(state.board, ability_system, mount_system)
+	ability_system.set_combat(combat_resolver)
 	leveling_system = LevelingSystem.new(state.board, ability_system)
 
 

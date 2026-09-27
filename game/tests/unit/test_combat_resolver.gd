@@ -12,6 +12,9 @@ const ATTENDANT := Fixture.ATTENDANT
 
 
 class FakeAbility extends AbilitySystem:
+	# Baseline rules only: these tests are about dispatch, not card text.
+	func handler_for(_i) -> AbilityHandler:
+		return AbilityHandler.new()
 	var reduction := 0
 	var ranged_only_reduction := false
 	var penetration := {"ignore_reduction": 0, "ignore_shield": 0}

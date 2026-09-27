@@ -23,6 +23,9 @@ class FakeCombat:
 
 
 class FakeAbility extends AbilitySystem:
+	# Baseline rules only: these tests are about dispatch, not card text.
+	func handler_for(_i) -> AbilityHandler:
+		return AbilityHandler.new()
 	var usable := true
 	var targets: Array = [Vector2i(3, 3)]
 	var executed: Array = []
@@ -32,8 +35,10 @@ class FakeAbility extends AbilitySystem:
 		return usable
 	func get_legal_ability_targets(_i, _id) -> Array:
 		return targets
-	func execute_ability(instance, ability_id, target) -> Dictionary:
-		executed.append([instance.instance_id, ability_id, target])
+	func validate_ability(_i, _id, payload) -> String:
+		return "" if targets.has(payload.get("target")) else "illegal ability target"
+	func execute_ability(instance, ability_id, payload) -> Dictionary:
+		executed.append([instance.instance_id, ability_id, payload.get("target")])
 		return execute_result
 	func execute_reactive_bonus(instance, tag, _payload) -> Dictionary:
 		bonus_calls.append([instance.instance_id, tag])

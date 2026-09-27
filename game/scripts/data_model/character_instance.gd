@@ -36,13 +36,13 @@ func is_placed() -> bool:
 
 func get_effective_atk() -> int:
 	# The only place combat/ability math reads ATK.
-	return data.atk + atk_bonus + _sum_status("temp_atk")
+	return data.atk + atk_bonus + sum_status("temp_atk")
 
 
 func get_effective_move() -> int:
 	# Unmounted movement only; a mounted pair uses the Mount's MOVE (MountSystem).
 	# Floored at 0: stacked slows can push the raw sum negative.
-	return maxi(0, data.move + move_bonus + _sum_status("temp_move"))
+	return maxi(0, data.move + move_bonus + sum_status("temp_move"))
 
 
 func get_effective_range(_context: String, conditional_bonus: int = 0) -> int:
@@ -50,14 +50,14 @@ func get_effective_range(_context: String, conditional_bonus: int = 0) -> int:
 	# context-specific term (e.g. Aim), passed in by RulesEngine, which owns the
 	# AbilitySystem instance. MatchState's global modifier joins this sum when the
 	# relic/event deck lands. Floored at 1 (Whiteout's "minimum 1").
-	return maxi(1, data.range + range_bonus + _sum_status("temp_range") + conditional_bonus)
+	return maxi(1, data.range + range_bonus + sum_status("temp_range") + conditional_bonus)
 
 
 func has_status(type: String) -> bool:
 	return status_effects.any(func(se: StatusEffect) -> bool: return se.type == type)
 
 
-func _sum_status(type: String) -> int:
+func sum_status(type: String) -> int:
 	var total := 0
 	for se in status_effects:
 		if se.type == type:

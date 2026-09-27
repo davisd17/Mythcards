@@ -106,6 +106,43 @@ func test_c17_object_passable_predicate_passes_through_barricade() -> void:
 	assert_true(moves.has(Vector2i(3, 5)))
 
 
+func test_max_passes_is_counted_per_path() -> void:
+	# Two allies in a column: one pass reaches past the first, not past both.
+	board.set_occupant(Vector2i(3, 3), "mover")
+	board.set_occupant(Vector2i(3, 4), "a")
+	board.set_occupant(Vector2i(3, 5), "b")
+	var always := func(_pos): return true
+	var moves := board.get_legal_moves(Vector2i(3, 3), 3, "orthogonal", always, Callable(), 1)
+	assert_false(moves.has(Vector2i(3, 6)), "would need two passes")
+	assert_true(moves.has(Vector2i(2, 5)), "one pass, then sideways")
+	assert_true(moves.has(Vector2i(4, 4)), "a different path's pass isn't used up")
+	var unlimited := board.get_legal_moves(Vector2i(3, 3), 3, "orthogonal", always)
+	assert_true(unlimited.has(Vector2i(3, 6)))
+
+
+func test_zero_max_passes_means_no_pass() -> void:
+	board.set_occupant(Vector2i(3, 3), "mover")
+	board.set_occupant(Vector2i(3, 4), "a")
+	var moves := board.get_legal_moves(Vector2i(3, 3), 2, "orthogonal", func(_p): return true, Callable(), 0)
+	assert_false(moves.has(Vector2i(3, 5)))
+
+
+func test_entering_frost_ends_the_move() -> void:
+	board.set_occupant(Vector2i(3, 3), "mover")
+	board.get_tile(Vector2i(3, 4)).terrain_type = "frost"
+	var moves := board.get_legal_moves(Vector2i(3, 3), 3)
+	assert_true(moves.has(Vector2i(3, 4)), "can stop on frost")
+	assert_false(moves.has(Vector2i(3, 5)), "can't continue through it")
+	assert_true(moves.has(Vector2i(4, 5)), "other routes still work")
+
+
+func test_ignore_terrain_crosses_frost() -> void:
+	board.set_occupant(Vector2i(3, 3), "mover")
+	board.get_tile(Vector2i(3, 4)).terrain_type = "frost"
+	var moves := board.get_legal_moves(Vector2i(3, 3), 3, "orthogonal", Callable(), Callable(), -1, true)
+	assert_true(moves.has(Vector2i(3, 6)))
+
+
 func test_unsupported_movement_pattern_errors() -> void:
 	assert_eq(board.get_legal_moves(Vector2i(3, 3), 2, "diagonal").size(), 0)
 	assert_push_error("diagonal")
