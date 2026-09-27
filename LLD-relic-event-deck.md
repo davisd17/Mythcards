@@ -273,6 +273,26 @@ Unit tests use **GUT**. `AbilitySystem`/`CombatResolver` aggregation call-sites 
 - **`relic_slot_changed`'s `card_id_or_null` (HLD Section 5.3) is never actually emitted as empty** by this LLD's design — no rule ever clears a relic slot to nothing (replacing always sets a new id). Flagged in case a future card explicitly removes a relic.
 - **`relic_drawn` fires for events too** (Section 6) despite its name — this is HLD's own signal naming, not something this LLD can rename without a signal-map patch; flagged for awareness, not changed.
 
+## 9A. Implementation Notes (2026-09-27)
+
+All 14 original cards are implemented (`game/scripts/systems/relic_events/`, deck in `autoloads/relic_event_deck.gd`) and tested (`test_relic_event_deck.gd`).
+
+**Designer rulings, 2026-09-27**
+- **The build plays the original 14.** They load from `data/cards/prototype_relic_events.json`, moved out of `archive/`. `relic_events.json` (Closed City / Flood Survivors) stays untouched as the printable and tabletop working set, and the game doesn't load it. `ContentDB.RELIC_EVENTS_PATH` points at the prototype file.
+- **Whiteout hits both players:** a `MatchState.global_range_modifier` of -1 for the round, applied to every character's attack and ability RANGE, floored at 1.
+- **Hall Of Shared Minds** gives +1 ability RANGE to your characters that are adjacent to another friendly character (a formation bonus).
+
+**Deviations from this spec**
+- **Durations don't tick on the turn they're drawn.** `TurnManager.start_turn` draws *before* emitting `turn_started`, so under Section 4.3 a "1 turn" event would have expired the instant it was drawn. Entries record `drawn_on_turn` and skip that turn's tick. Result: "1 turn" lasts the drawer's turn, and "1 round" lasts the drawer's turn plus the opponent's.
+- **Decisions are a `deck_choice` action in `RulesEngine`**, which the spec left to the presentation layer. A drawn card that needs a decision (keep or replace a relic, Rally's heal target, Dream's top or bottom) becomes a pending choice. The player must resolve it before any other action (`"resolve the drawn card first"`). Payloads: relic `{"keep_new": bool}`, Rally `{"target_id"}`, Dream `{"to_bottom": bool}`. Rally with nobody damaged resolves at once.
+- **Crystal Tide is abilities-only** (a player flag read by ability range). The spec's `temp_range` status would have extended attacks too.
+- **Player-level "first X this turn" effects are player flags** that `RulesEngine`/`AbilitySystem` read and spend: Long Winter March on the first move (+1 to its budget, including the preview and mounted pairs), Resonance Surge on the first ability, Psychic Undertow on the first attack. Undertow's choice is in the attack payload, `{"undertow": "push"|"pull"}`. An object attack still counts as the first attack. `CombatResolver.apply_pull` was added for Undertow; `no_push` blocks it too.
+- **General's War Map** is offered at each of the owner's turn starts as a player-level `generals_war_map` reactive bonus; the chosen character is the action's actor. It grants a `temp_range` +1 spent by that character's next attack or ability (the new `StatusEffect.consume_on_ability`).
+- **Quartz Heart Core's extra point is used after the shield itself.** A shielded defender's shields prevent 1 more, but the shield entry drains first, so a 1-point shield still breaks against 1 damage instead of lasting forever.
+- **Replacing a max-HP relic trims current HP** down to the new maximum.
+- **Frozen Center thaws only the tiles it froze.** Frost placed by Frozen Redoubt stays.
+- **Relic handlers receive the `AbilitySystem` (`sys`)**, the same convention as ability handlers, and the registry uses the real ids (Section 3.2's placeholders are superseded). Each player's contribution is read by faction (`Russian-Inspired`/`Atlantean`), because relic/event entries carry `faction`, not `culture`.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

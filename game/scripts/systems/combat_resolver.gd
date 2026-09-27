@@ -54,18 +54,21 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 			- int(penetration.get("ignore_reduction", 0)))
 	var after_reduction := maxi(0, marked_amount - reduction)
 
-	var shield_total := 0
+	var shield_entries := 0
 	for se in defender.status_effects:
 		if se.type == "shield":
-			shield_total += se.value
-	shield_total = maxi(0, shield_total - int(penetration.get("ignore_shield", 0)))
+			shield_entries += se.value
+	# Quartz Heart Core: a shielded defender's shields prevent 1 more. The extra point is
+	# used after the shield itself, so a 1-point shield still breaks against 1 damage.
+	var shield_bonus := RelicEventDeck.get_relic_shield_bonus(ability_system, defender) if shield_entries > 0 else 0
+	var shield_total := maxi(0, shield_entries + shield_bonus - int(penetration.get("ignore_shield", 0)))
 	var shield_consumed := mini(shield_total, after_reduction)
 	var final_damage := after_reduction - shield_consumed
 
 	# Marks are single use; shields drain newest-first (designer ruling 2026-09-25).
 	for se in used_marks:
 		defender.status_effects.erase(se)
-	_consume_shields(defender, shield_consumed)
+	_consume_shields(defender, mini(shield_entries, shield_consumed))
 
 	var would_be_hp := defender.current_hp - final_damage
 	if would_be_hp <= 0:
@@ -110,6 +113,36 @@ func apply_push(target: CharacterInstance, from_position: Vector2i, distance: in
 			if mount_char != null:
 				mount_char.position = cursor
 		EventBus.character_repositioned.emit(target.instance_id, from, cursor, "push")
+	return cursor
+
+
+func apply_pull(target: CharacterInstance, toward: Vector2i, distance: int) -> Vector2i:
+	# Moves target toward `toward` along their shared line, stopping before any
+	# obstruction (Psychic Undertow). "Can't be pushed, pulled, or displaced" (no_push)
+	# blocks it too. Emits character_repositioned only.
+	if target.has_status("no_push"):
+		return target.position
+	var delta := toward - target.position
+	if delta == Vector2i.ZERO or (delta.x != 0 and delta.y != 0):
+		push_error("CombatResolver.apply_pull: %s is not in an orthogonal line with %s" % [target.position, toward])
+		return target.position
+	var direction := Vector2i(signi(delta.x), signi(delta.y))
+	var cursor := target.position
+	for _step in distance:
+		var next := cursor + direction
+		if next == toward or not board.is_in_bounds(next) or board.is_blocked_for_movement(next):
+			break
+		cursor = next
+	if cursor != target.position:
+		var from := target.position
+		board.clear_occupant(from)
+		board.set_occupant(cursor, target.instance_id)
+		target.position = cursor
+		if target.is_mounted_rider:
+			var mount_char := _find(target.mounted_with_id)
+			if mount_char != null:
+				mount_char.position = cursor
+		EventBus.character_repositioned.emit(target.instance_id, from, cursor, "pull")
 	return cursor
 
 

@@ -113,7 +113,8 @@ func intercept_lethal_damage(defender: CharacterInstance, combat_resolver: Comba
 
 
 func get_effective_max_hp(instance: CharacterInstance) -> int:
-	return instance.base_max_hp + int(instance.ability_uses_this_match.get("_hp_bonus_applied", 0))
+	var conditional := int(instance.ability_uses_this_match.get("_hp_bonus_applied", 0))
+	return instance.base_max_hp + conditional + RelicEventDeck.get_relic_max_hp_bonus(self, instance)
 
 
 # --- Activated abilities (RulesEngine) --------------------------------------------
@@ -138,6 +139,8 @@ func execute_ability(instance: CharacterInstance, ability_id: String, payload: D
 func execute_reactive_bonus(instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
 	if tag == "free_move":
 		return _free_move(instance, payload)
+	if tag == "generals_war_map":
+		return _generals_war_map(instance)
 	return handler_for(instance).execute_reactive_bonus(self, instance, tag, payload)
 
 
@@ -454,6 +457,21 @@ func _spend_single_use_buffs(attacker: CharacterInstance) -> void:
 			attacker.status_effects.remove_at(i)
 
 
+# Called by RulesEngine after an ability succeeds ("next attack or ability" buffs).
+func spend_ability_buffs(instance: CharacterInstance) -> void:
+	for i in range(instance.status_effects.size() - 1, -1, -1):
+		if instance.status_effects[i].consume_on_ability:
+			instance.status_effects.remove_at(i)
+
+
+func _generals_war_map(instance: CharacterInstance) -> Dictionary:
+	# General's War Map relic: +1 RANGE on this character's next attack or ability.
+	_match.get_player(instance.player_id).player_flags_this_turn.erase("generals_war_map_available")
+	var se := add_status(instance, "temp_range", 1, "this_turn", null, true)
+	se.consume_on_ability = true
+	return {"success": true}
+
+
 func _free_move(instance: CharacterInstance, payload: Dictionary) -> Dictionary:
 	# Command / Astral Echo: move 1 tile without spending AP.
 	var to = payload.get("to")
@@ -468,8 +486,15 @@ func _range_parts(instance: CharacterInstance, context: String) -> Dictionary:
 	var bonus := handler_for(instance).get_conditional_range_bonus(self, instance, context)
 	for source in allies_of(instance):
 		bonus += handler_for(source).get_aura_range_bonus(self, source, instance, context)
+	bonus += RelicEventDeck.get_relic_range_bonus(self, instance, context)
+	bonus += _match.global_range_modifier   # Whiteout, both players
 	var override := 0
 	if context == "ability":
+		var flags: Dictionary = _match.get_player(instance.player_id).player_flags_this_turn
+		if flags.get("resonance_surge_pending", false):   # first ability this turn
+			bonus += 1
+		if flags.get("crystal_tide", false):
+			bonus += 1
 		for se in instance.status_effects:
 			if se.type == "range_override":
 				override = maxi(override, se.value)

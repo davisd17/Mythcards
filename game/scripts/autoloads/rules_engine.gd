@@ -4,7 +4,7 @@ extends Node
 # request_action(); nothing else mutates MatchState during a match.
 
 const ACTION_TYPES: Array[String] = ["move", "attack", "ability", "mount", "dismount", "end_turn",
-	"reactive_bonus"]
+	"reactive_bonus", "deck_choice"]
 const CHARACTER_ACTIONS_WITH_AP: Array[String] = ["move", "attack", "ability", "mount", "dismount"]
 
 # Per-match collaborators, built for the current MatchState on first use. Tests replace
@@ -103,6 +103,8 @@ func _dispatch(action_type: String, actor_id: String, payload: Dictionary) -> Di
 	_ensure_systems()
 	if action_type == "end_turn":
 		return _handle_end_turn(actor_id)
+	if action_type == "deck_choice":
+		return RelicEventDeck.resolve_choice(actor_id, payload)
 	var actor := GameState.match_state.find_character(actor_id)
 	match action_type:
 		"move":
@@ -125,7 +127,10 @@ func _validate_common(action_type: String, actor_id: String) -> String:
 	if not GameState.is_match_active():
 		return "match not active"
 	var state := GameState.match_state
-	if action_type == "end_turn":
+	# A drawn card waiting on a decision (keep a relic? heal whom?) comes first.
+	if action_type != "deck_choice" and RelicEventDeck.has_pending_choice(state.active_player_id):
+		return "resolve the drawn card first"
+	if action_type == "end_turn" or action_type == "deck_choice":
 		return "" if actor_id == state.active_player_id else "not your turn"
 	var actor := state.find_character(actor_id)
 	if actor == null:
@@ -166,11 +171,19 @@ func _handle_move(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 		GameState.match_state.find_character(actor.mounted_with_id).position = to
 	_spend_ap(actor)
 	actor.ability_uses_this_turn["moved"] = true   # shared "moved this turn" marker (e.g. Aim)
+	_flags(actor).erase("long_winter_march_pending")   # the first move used it
 	EventBus.character_moved.emit(actor.instance_id, from, to)
 	return {"success": true}
 
 
 func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
+	# Psychic Undertow: the first attack this turn may push or pull its target.
+	var undertow = payload.get("undertow")
+	if undertow != null:
+		if not _flags(actor).get("psychic_undertow_pending", false):
+			return _fail("no Psychic Undertow this turn")
+		if not ["push", "pull"].has(undertow):
+			return _fail("undertow must be push or pull")
 	if payload.has("target_pos"):
 		return _handle_object_attack(actor, payload.get("target_pos"))
 	var target_id: String = str(payload.get("target_id", ""))
@@ -192,6 +205,13 @@ func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary
 	# not be undone by the payment.
 	_spend_ap(actor)
 	var combat: Dictionary = combat_resolver.resolve_attack(actor, target)
+	if _flags(actor).get("psychic_undertow_pending", false):
+		_flags(actor).erase("psychic_undertow_pending")
+		if undertow != null and not target.defeated:
+			if undertow == "push":
+				combat_resolver.apply_push(target, actor.position, 1)
+			else:
+				combat_resolver.apply_pull(target, actor.position, 1)
 	return {"success": true, "damage": combat.get("damage", 0), "defeated": combat.get("defeated", false)}
 
 
@@ -204,6 +224,7 @@ func _handle_object_attack(actor: CharacterInstance, pos) -> Dictionary:
 		return _fail(reason)
 	_spend_ap(actor)
 	var hit: Dictionary = combat_resolver.resolve_object_attack(actor, pos)
+	_flags(actor).erase("psychic_undertow_pending")   # an object attack is still the first attack
 	return {"success": true, "damage": hit.damage, "destroyed": hit.destroyed}
 
 
@@ -238,6 +259,8 @@ func _handle_ability(actor: CharacterInstance, payload: Dictionary) -> Dictionar
 		# A validated ability that still failed costs nothing.
 		_refund_ap(actor)
 		return _fail(str(ability_result.get("reason", "ability failed")))
+	_flags(actor).erase("resonance_surge_pending")   # the first ability used it
+	ability_system.spend_ability_buffs(actor)
 	var result := ability_result.duplicate()
 	result.erase("reason")
 	result["success"] = true
@@ -291,7 +314,10 @@ func _handle_reactive_bonus(actor: CharacterInstance, payload: Dictionary) -> Di
 	if actor.has_status("no_reaction"):
 		return _fail("reactions disabled")
 	var flag := str(payload.get("tag", "")) + "_available"
-	if not actor.ability_uses_this_turn.get(flag, false) and not actor.ability_uses_this_match.get(flag, false):
+	# Offers live on the character, or on the player for relic grants (General's War Map).
+	var offered: bool = actor.ability_uses_this_turn.get(flag, false) \
+			or actor.ability_uses_this_match.get(flag, false) or _flags(actor).get(flag, false)
+	if not offered:
 		return _fail("no bonus action available")
 	return ability_system.execute_reactive_bonus(actor, str(payload.get("tag", "")), payload)
 
@@ -321,11 +347,20 @@ func _movement(actor: CharacterInstance) -> Dictionary:
 	if actor.is_mounted_rider:
 		return {
 			"mover": GameState.match_state.find_character(actor.mounted_with_id),
-			"budget": mount_system.get_effective_move_stat(actor),
+			"budget": mount_system.get_effective_move_stat(actor) + _march_bonus(actor),
 			"pattern": mount_system.get_effective_movement_pattern(actor),
 		}
-	return {"mover": actor, "budget": actor.get_effective_move(),
+	return {"mover": actor, "budget": actor.get_effective_move() + _march_bonus(actor),
 			"pattern": ability_system.get_movement_pattern(actor)}
+
+
+func _march_bonus(actor: CharacterInstance) -> int:
+	# Long Winter March: the first movement action this turn gains +1 MOVE.
+	return 1 if _flags(actor).get("long_winter_march_pending", false) else 0
+
+
+func _flags(actor: CharacterInstance) -> Dictionary:
+	return GameState.match_state.get_player(actor.player_id).player_flags_this_turn
 
 
 func _attack_candidate_tiles(actor: CharacterInstance) -> Array[Vector2i]:

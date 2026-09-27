@@ -48,5 +48,5 @@ Needs the Godot 4.7.2 export templates in `%APPDATA%\Godot\export_templates\4.7.
 - [x] 9. `CombatResolver` (marks, reduction, penetration, newest-first shields, lethal interception, defeat incl. mounted pairs, push) + `MountSystem` (mount, dismount, inherited MOVE), with an integration suite driving real matches through `RulesEngine`
 - [x] 10. `AbilitySystem` and all 14 original character abilities (Levels 1–3), one handler file per card in `scripts/systems/abilities/`; readings to confirm are in LLD-ability-system.md 9A
 - [x] 11. `LevelingSystem`: Level 2 at the opponent's edge (moved, pushed, or placed there), Spirit Ember per defeat (two for a mounted pair), Level 3 at the center; per-card upgrade effects wait on step 10
-- [ ] 12. `RelicEventDeck`: needs a decision on which relic/event set (current `relic_events.json` is the Closed City / Flood Survivors set)
+- [x] 12. `RelicEventDeck`: the original 14 relic/event cards (`data/cards/prototype_relic_events.json`), seeded shuffle, draw per turn, relic slot, event durations, choices via the `deck_choice` action
 - [x] 13. `VictoryChecker`: Hero capture at the end of its controller's turn, army defeat on the last defeat

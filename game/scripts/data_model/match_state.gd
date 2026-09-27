@@ -11,6 +11,7 @@ var next_instance_serial: int = 1      # for ids of characters created after set
 var shared_deck: Array[String] = []    # remaining relic/event draw order; owned by RelicEventDeck
 var deck_seed: int = 0
 var phase: String = ""                 # one of GameEnums.MATCH_PHASES
+var global_range_modifier: int = 0     # applies to every character's RANGE (Whiteout: -1)
 var winner_id: String = ""             # set by VictoryChecker
 var win_condition: String = ""         # one of GameEnums.WIN_CONDITIONS
 

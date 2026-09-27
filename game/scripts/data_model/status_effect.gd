@@ -11,6 +11,7 @@ var applied_on_turn: int = -1  # MatchState.turn_number when applied; read by "t
 var ticks: int = 0             # holder's own turn-starts survived; read by "next_turn" clearing
 var source_character_id: String = ""  # instance_id of whoever applied it (marks and links read this)
 var consume_on_attack: bool = false   # removed after its holder's next attack ("+1 ATK on its next attack")
+var consume_on_ability: bool = false  # removed after its holder's next ability (War Map: "next attack or ability")
 
 
 func _init(p_type: String = "", p_value: int = 0, p_expires: String = "this_turn", p_applied_on_turn: int = -1) -> void:

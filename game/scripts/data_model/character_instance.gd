@@ -48,8 +48,8 @@ func get_effective_move() -> int:
 func get_effective_range(_context: String, conditional_bonus: int = 0) -> int:
 	# _context: "attack" | "ability". conditional_bonus is AbilitySystem's live,
 	# context-specific term (e.g. Aim), passed in by RulesEngine, which owns the
-	# AbilitySystem instance. MatchState's global modifier joins this sum when the
-	# relic/event deck lands. Floored at 1 (Whiteout's "minimum 1").
+	# AbilitySystem instance. That term also carries relic bonuses and Whiteout's
+	# global modifier. Floored at 1 (Whiteout's "minimum 1").
 	return maxi(1, data.range + range_bonus + sum_status("temp_range") + conditional_bonus)
 
 

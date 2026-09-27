@@ -6,7 +6,9 @@ extends Node
 # (repo-root data/cards is the source of truth). See LLD-content-board.md.
 
 const CHARACTERS_PATH := "res://data/cards/characters.json"
-const RELIC_EVENTS_PATH := "res://data/cards/relic_events.json"
+# The build plays the original 14 relic/event cards (designer decision 2026-09-27).
+# relic_events.json is the Closed City / Flood Survivors working set, not loaded here.
+const RELIC_EVENTS_PATH := "res://data/cards/prototype_relic_events.json"
 const REVIEW_DRAFTS_DIR := "res://data/cards/review_drafts/"
 const DRAFT_STATUS := "draft_for_review"
 

@@ -3,7 +3,8 @@
 This folder is the start of the shared card data structure for collaborators.
 
 - `characters.json` is the source data for prototype character cards.
-- `relic_events.json` is the source data for prototype relic and event cards.
+- `relic_events.json` is the Closed City / Flood Survivors relic and event set (the working set for printables and the tabletop).
+- `prototype_relic_events.json` is the original 14 relic/event cards. **The Godot rules prototype plays this set** (designer decision 2026-09-27), because its cards have play specs in `LLD-relic-event-deck.md` and match the original 14 characters the build uses.
 - `review_drafts/` holds proposed cards that are ready for story/mechanic review but are not yet part of the playable prototype deck.
 - `review_drafts/tarot_guidebook_content_standard.md` defines the approved physical-card content boundary and companion guidebook format for all tarot decks.
 
