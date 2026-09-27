@@ -43,4 +43,5 @@ Needs the Godot 4.7.2 export templates in `%APPDATA%\Godot\export_templates\4.7.
 - [x] 3. Web export verified 2026-09-26: exported, served locally, and booted in headless Chrome (WebGL 2, single-threaded, all 28 cards loaded, no console errors)
 - [x] 4. `ContentDB` + validation, GUT-covered
 - [x] 5. `BoardModel`: legal moves, line of sight, range, placed objects, GUT-covered
-- [ ] 6. `MatchState` / `SetupFlow`: next
+- [x] 6–7. Match state model, `SetupFlow` (culture pick, back-row deployment), `GameState`, `TurnManager` (AP refresh with the 2-AP opening turn, status-effect expiry, capture check before handoff), GUT-covered
+- [ ] 8. `RulesEngine` move + attack: next (LLD-rules-engine.md)

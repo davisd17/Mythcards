@@ -445,6 +445,20 @@ Unit tests use **GUT** (HLD Section 4.13). Cases map to `tests/unit/test_setup_f
 - **`RelicEventDeck.draw_for(player_id)` and `VictoryChecker.check_hero_capture(player_id)` are forward references** to autoloads specced in LLD-07 and LLD-08 respectively. Per HLD Section 13 step 2, all autoloads are scaffolded as empty singletons before any module's real logic is built — this LLD's Next Steps (below) calls out that those two stub singletons need a no-op placeholder method matching these exact signatures from the start, so `TurnManager` doesn't crash calling into a not-yet-implemented module.
 - **Setup-time immobility warning (HLD-R-003/BRD R-012)** — a UX nicety, not modeled here. If added later, it would be an additional (non-mutating) query on `SetupFlow`, not a change to `place_character`'s validation.
 
+## 9A. Implementation Notes (2026-09-26)
+
+The first implementation (`game/`) differs from this spec in these places:
+
+- **Roster ids:** tests use the Closed City / Flood Survivors roster (e.g. `p1_r-mikhail-orlov` in place of `p1_r-hero`). See LLD-content-board.md 9A.
+- **`"this_round"` clearing** compares against the turn that is *starting* (post-increment), not the pre-increment `turn_number` Section 4.3's pseudocode reads. With the pre-increment value, an effect applied on turn 3 would survive until turn 7. The post-increment reading matches LLD-relic-event-deck.md 4.2's "1 round = 2 individual turns." **Open design question:** clearing runs only at the *owner's* turn start, so an effect an opponent applies still lingers through the opponent's next turn. Examples: a Slow is in force on the holder's turn (correct), but a Marked also stays up while the opponent attacks. Revisit if a card needs "until end of round" to end mid-turn-pair.
+- **Misuse errors call `push_error`, they don't assert:** `start_match()` before both players are ready, `select_culture()` with an unknown culture or player, and `get_other_player_id()` with a bad id all `push_error` and return without mutating anything. This is the same testability reason as LLD-content-board.md 9A.
+- **Placement check order:** `get_placement_error()` checks bounds before the back row, so an off-board tile reports "off the board", not "outside your back row". It adds two reasons, "choose a culture first" and "not one of your characters".
+- **Re-selecting a culture** also clears that player's earlier placements from the board. Section 7 says re-selection rebuilds the squad but didn't cover already-placed tiles.
+- **`get_effective_range()`** doesn't yet add `AbilitySystem.get_conditional_range_bonus()` or `MatchState.global_range_modifier`, because neither exists. Those terms join the sum when their modules land. The `context` parameter is accepted now.
+- **Test seams:** `TurnManager.victory_checker` / `relic_event_deck` default to the autoloads and can be replaced in tests (this is how C13 fakes a capture). The `VictoryChecker` and `RelicEventDeck` stubs carry no-op `check_hero_capture`, `build_deck`, and `draw_for` methods (Next Steps item 2).
+- **`character_ap_changed`** is emitted for each refreshed character at turn start, per HLD 5.3's signal map, which lists `TurnManager` as an emitter. Section 6 here omitted it.
+- **`SetupFlow.tscn`** isn't created yet. The script is a plain `Node` the presentation step attaches to its scene. `EventBus` now declares every signal in HLD 5.3.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |
