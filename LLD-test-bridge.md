@@ -181,6 +181,22 @@ Unit tests use **GUT**, run inside the editor/headless Godot — **not** a brows
 - **No push-based test notification mechanism** (Section 6) — Playwright must poll `mythcards_get_state()` rather than await an event. Acceptable for a synchronous, single-process hotseat prototype; would need revisiting if test scenarios ever require awaiting something slower than immediate (nothing in the current ruleset has async delay).
 - **Feature-tag gating (Section 3.1) assumes the Web export preset used for automated testing is configured with `mythcards_testbridge` as a Custom Feature** — a project-settings step, not code; flagged in Next Steps rather than assumed already done.
 
+## 9A. Implementation Notes (2026-09-27)
+
+Implemented in `game/scripts/autoloads/test_bridge.gd`, GUT-tested in `test_test_bridge.gd`, and driven by a Playwright suite in `e2e/` (run with `tools/run_e2e.ps1`: export, install, test). First run: 8/8 passing, including three full seeded matches played to a win.
+
+- **JavaScriptBridge API verified against Godot 4.7.2's own class reference** (`--doctool`): `create_callback(Callable) -> JavaScriptObject`, `get_interface(String)`, `eval(String, bool)`, matching Section 3.1's expected shape. The reference doesn't document whether a callback's return value reaches JS, so the bridge doesn't rely on it. Each Godot callback writes its JSON into `window.__mythcards_result`, and a small JS wrapper (`window.mythcards_get_state` etc.) returns that value. Callback objects are kept referenced so they aren't freed.
+- **Feature tag:** the Web preset's custom feature is now `mythcards_testbridge` (it was `test_bridge`). The bridge activates only when both `web` and that tag are present.
+- **Third hook, `window.mythcards_new_match(seed)`:** restarts the current scene's match with a fixed deck seed, so browser tests are deterministic. It calls `start_new_match(seed)` on the current scene, which is the debug match.
+- **State schema additions beyond Section 4.1:**
+  - per character: `max_hp` (effective) and `defeated`;
+  - top level: `deck_size`, `deck_seed`, `pending_choice` (`{kind, card_id}` or `{}`), `active_events`, `global_range_modifier`, `objects` (type, position, HP, owner), and `frost` tiles.
+
+  Tests need these to act correctly: whom Rally can heal, whether a choice is blocking, what the board holds.
+- **JSON parsing uses `JSON.new().parse()`**, which fails quietly, instead of `JSON.parse_string`, which logs an engine error on malformed input.
+- **`{"x", "y"}` conversion applies inside lists too**, e.g. Fortified Works' `targets`.
+- **The full-match test runs its bot loop inside the page** in a single `evaluate`, because each turn makes hundreds of bridge calls. Each turn the bot resolves any drawn-card choice, attacks the weakest enemy in range, or steps toward the nearest enemy, then ends the turn. Every turn it checks invariants: no two characters on one tile (except a mounted pair), no live character at 0 HP, no negative AP. The bot uses no abilities, so its results aren't balance data.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

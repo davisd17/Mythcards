@@ -33,6 +33,12 @@ The panel under the board shows full state and a log; the deck seed is shown so 
 tools/run_game_tests.ps1
 ```
 
+Browser tests (Playwright, through TestBridge's window hooks; needs Node.js):
+
+```powershell
+tools/run_e2e.ps1          # exports the Web build, installs e2e deps on first run, runs e2e/
+```
+
 Syncs card data, imports the project, and runs the GUT suites in `tests/unit/` headless. The run fails if any test fails or any script has a parse error. GUT on its own would silently skip a broken test file.
 
 ## Web build
@@ -69,4 +75,5 @@ Needs the Godot 4.7.2 export templates in `%APPDATA%\Godot\export_templates\4.7.
 - [x] 12. `RelicEventDeck`: the original 14 relic/event cards (`data/cards/prototype_relic_events.json`), seeded shuffle, draw per turn, relic slot, event durations, choices via the `deck_choice` action
 - [x] 13. `VictoryChecker`: Hero capture at the end of its controller's turn, army defeat on the last defeat
 - [x] 14. Debug match (`scenes/debug_match.tscn`, main scene): clickable board, DebugPanel readout and log, command line; see LLD-debug-panel.md 9A
-- [ ] 15. TestBridge + Playwright: next
+- [x] 15. `TestBridge` (`mythcards_get_state`, `mythcards_dispatch_action`, `mythcards_new_match`) and the Playwright suite in `e2e/`: bridge contract plus full seeded matches played to a win
+- [ ] 16. Presentation: mobile BoardView/HUD (LLD-presentation.md)
