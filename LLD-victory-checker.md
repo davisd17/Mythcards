@@ -122,6 +122,16 @@ Unit tests use **GUT**. `BoardModel`/`AbilitySystem`/`MountSystem` are doubled t
 
 - **No open questions specific to this module** — its logic is fully determined by BR-034/BR-034A/BR-035 and the already-established `get_legal_moves`/mount-aware-movement contracts from earlier LLDs. The only genuine risk (HLD-R-002: a drifted second movement-legality implementation) is explicitly avoided by Section 4.1 steps 5–7 mirroring `RulesEngine._handle_move` exactly.
 
+## 9A. Implementation Notes (2026-09-27)
+
+The first implementation (`game/scripts/autoloads/victory_checker.gd`) differs from this spec in these places:
+
+- **One movement-legality implementation, not a mirror.** Section 4.1 steps 5–7 re-derived the mounted/unmounted branch to "mirror" `RulesEngine._handle_move`. Instead, the checker calls `RulesEngine.get_legal_move_tiles(hero.instance_id)`, the exact query the move action validates against. The two paths can't drift (HLD-R-002), and pass-through abilities and status effects added later apply to both automatically.
+- **Defeat is read from `CharacterInstance.defeated`, not `current_hp <= 0`.** A Mount defeated along with its rider keeps its HP (LLD-rules-engine 9A), so an HP test would never count that Mount toward army defeat.
+- **An unplaced Hero is skipped** (setup or test arrangements). In a real match a Hero is always placed until defeated.
+- **Tests use the real board** instead of doubles for `BoardModel`/`MountSystem`, because a trapped or free Hero is easy to arrange on a 7x7 grid. The integration suite (`test_match_flow.gd`) covers losing by ending a turn with a trapped Hero, freeing it just in time, and winning immediately on the last defeat. An opening-position test confirms no Hero is ever captured straight from setup.
+- **⚠ Balance flag — a Hero slowed to 0 MOVE is captured at the end of its own turn, even with open tiles next to it.** This is the literal BR-034 reading ("no legal move available"), and HLD-R-002 requires status effects to count. The concrete case: Frost Seer's **Deep Freeze** (L3) makes an already-slowed target "unable to move next turn." That's a `next_turn` effect, still active at the end of the Hero's next turn, so **Deep Freeze on a slowed Hero is an instant win.** Mounting avoids it, because a mounted pair uses the Mount's MOVE. **Please confirm this is intended.** If it isn't, one option is to count only *positional* blocking toward capture and ignore MOVE reductions. That's a rules change for BR-034.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

@@ -47,4 +47,6 @@ Needs the Godot 4.7.2 export templates in `%APPDATA%\Godot\export_templates\4.7.
 - [x] 8. `RulesEngine`: single action gate (move, attack, ability, mount, dismount, end turn, reactive bonus), legality previews for the UI, GUT-covered. Combat, mounting, and abilities are placeholders with the final signatures
 - [x] 9. `CombatResolver` (marks, reduction, penetration, newest-first shields, lethal interception, defeat incl. mounted pairs, push) + `MountSystem` (mount, dismount, inherited MOVE), with an integration suite driving real matches through `RulesEngine`
 - [ ] 10. `AbilitySystem`: the 14 original character abilities per LLD-ability-system.md: next
-- [x] 11. `LevelingSystem`: Level 2 at the opponent's edge, Spirit Ember per defeat (two for a mounted pair), Level 3 at the center; per-card upgrade effects wait on step 10
+- [x] 11. `LevelingSystem`: Level 2 at the opponent's edge (moved, pushed, or placed there), Spirit Ember per defeat (two for a mounted pair), Level 3 at the center; per-card upgrade effects wait on step 10
+- [ ] 12. `RelicEventDeck`: needs a decision on which relic/event set (current `relic_events.json` is the Closed City / Flood Survivors set)
+- [x] 13. `VictoryChecker`: Hero capture at the end of its controller's turn, army defeat on the last defeat

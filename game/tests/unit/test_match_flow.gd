@@ -165,6 +165,41 @@ func test_levels_reset_in_a_new_match() -> void:
 	assert_eq(Fixture.character(Fixture.GYMNAST).level, 1)
 
 
+func test_ending_a_turn_with_a_trapped_hero_loses() -> void:
+	TurnManager.victory_checker = null   # the real VictoryChecker
+	Fixture.put(Fixture.BOGATYR, Vector2i(0, 0))
+	Fixture.put(Fixture.GYMNAST, Vector2i(1, 0))
+	Fixture.put(GUARD, Vector2i(0, 1))
+	assert_true(_act("end_turn", "p1").success)
+	assert_eq(Fixture.state().phase, "ended")
+	assert_eq(Fixture.state().winner_id, "p2")
+	assert_eq(Fixture.state().active_player_id, "p1", "the turn never passed")
+	assert_signal_not_emitted(EventBus, "turn_ended")
+	assert_eq(_act("end_turn", "p1").reason, "match not active")
+
+
+func test_trapped_hero_is_fine_if_freed_before_turn_end() -> void:
+	TurnManager.victory_checker = null
+	Fixture.put(Fixture.BOGATYR, Vector2i(0, 0))
+	Fixture.put(Fixture.GYMNAST, Vector2i(1, 0))
+	Fixture.put(GUARD, Vector2i(0, 1))
+	assert_true(_act("move", Fixture.GYMNAST, {"to": Vector2i(2, 1)}).success)   # opens (1, 0)
+	assert_true(_act("end_turn", "p1").success)
+	assert_eq(Fixture.state().phase, "in_progress")
+	assert_eq(Fixture.state().active_player_id, "p2")
+
+
+func test_defeating_the_last_enemy_wins_immediately() -> void:
+	for c in Fixture.state().get_player("p2").characters:
+		if c.instance_id != ATTENDANT:
+			c.defeated = true
+	Fixture.put(SNIPER, Vector2i(3, 1))
+	Fixture.put(ATTENDANT, Vector2i(3, 3))   # HP 2
+	assert_true(_act("attack", SNIPER, {"target_id": ATTENDANT}).defeated)
+	assert_signal_emitted_with_parameters(EventBus, "match_ended", ["p1", "army_defeat"])
+	assert_eq(_act("move", Fixture.GYMNAST, {"to": Vector2i(0, 1)}).reason, "match not active")
+
+
 func test_shield_absorbs_a_real_attack() -> void:
 	Fixture.put(SNIPER, Vector2i(3, 2))
 	var guard := Fixture.put(GUARD, Vector2i(3, 3))
