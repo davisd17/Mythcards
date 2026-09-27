@@ -520,6 +520,35 @@ This module surfaced more genuine ambiguities than any other so far, consistent 
 - *(Closed 2026-09-25)* `get_effective_move()`'s floor at `0` is now stated explicitly in LLD-match-setup.md.
 - **This LLD assumes `CombatResolver`'s `apply_damage`/`apply_push` accept being called directly by an `AbilityHandler` outside of the normal `RulesEngine → CombatResolver` path** (Chill's direct damage, Last Oath's counter-damage, Phase Current's move-over damage, Astral Echo's follow-up damage) — already anticipated and allowed by LLD-combat-mount.md Section 3.1's own doc comment ("used by `resolve_attack()` above AND by `AbilitySystem`"), so no further patch needed, just confirming the usage matches that stated intent.
 
+## 9A. Implementation Notes (2026-09-27)
+
+All 14 original handlers are implemented (`game/scripts/systems/abilities/`) and tested through real `request_action` calls (`test_abilities_russian.gd`, `test_abilities_atlantean.gd`, `test_ability_system.gd`). The implementation differs from this spec in these places.
+
+**Architecture**
+- **Handlers receive the `AbilitySystem` (`sys`)** as their first argument, instead of `board`/`match_state`/`combat` separately. `sys` carries all three plus shared helpers (reach, line-of-sight targeting, statuses, free moves, pylon sources). `AbilitySystem` holds `CombatResolver` through a weak reference, because the two reference each other.
+- **Per-level stat bonuses are a `level_bonuses()` table in each handler.** The base class bakes them in, and a handler's `on_level_up` covers extras (fortifying existing barricades and pylons).
+- **The registry loads handler files by path.** An unknown id gets the no-effect base handler and a `push_error`.
+- **Listeners are match-scoped**, the same isolation as `LevelingSystem` (LLD-leveling 9A).
+- **Magnitudes are named constants at the top of each handler**, not yet in `characters.json`. Section 3.6 item 7 is still open, and should happen before the next balance pass.
+
+**Engine contract changes**
+- **Abilities validate their whole payload.** `RulesEngine` calls `validate_ability(actor, id, payload)` and `execute_ability(actor, id, payload)`. The Section 4.4 check "`target` is one of the legal targets" can't express Command's choice, two targets at Level 2, Foresight's keep-or-bottom, or Astral Echo's second target. `get_legal_ability_targets` remains as the UI preview.
+- **AP is paid before an attack or ability resolves**, and refunded if an ability then fails. Before this, an automatic AP refresh triggered mid-action (Perfect Chord) was immediately undone by the payment. A test caught it.
+- **Vault's one pass is a per-path limit** (`BoardModel.get_legal_moves(..., max_passes)`). The spec's shared counter inside the predicate would cap passes across *all* explored paths, not per path.
+- **Frost is implemented** (Section 5.6's flagged gap): entering a frost tile ends the move, and Phase Current ignores it.
+- **"Moved over a character" is judged by destination.** The engine knows where a piece ended, not its path, so a move counts as a pass when no pass-free route of the same budget reaches the destination (Section 4.2). If an equally short detour existed, it doesn't count, even if the player pictured going over. If that matters, a move could carry an explicit path.
+
+**Card readings that need a designer look**
+- **⚠ Tiger's Pounce.** Every character has 1 AP a turn, so the spec's "+2 ATK this turn" can never be used: Pounce, move, and attack would take three actions. Implemented per the PRD wording instead: Pounce leaves a mark that lasts until the Tiger's next attack made on a turn it has moved. In practice that means a Command free move followed by the attack, both in one turn.
+- **⚠ Phase Current performs the move itself**, for the same 1-AP reason. Its payload names the destination and, optionally, one enemy "moved over": any enemy whose detour fits the MOVE budget.
+- **Gymnast's Aurora Acrobat counts as an attack.** The card says "attack", so it emits `attack_resolved`, which means Resonant Bastion can reflect it.
+- **Command's free move and Astral Echo's free move share one `free_move` reactive bonus.** Astral Echo now grants a real 1-tile move, not the `temp_move` shortcut Section 5.14 settled for.
+- **Foresight at Level 1 always sends the card to the bottom**, following Section 5.12. The PRD's "*may* place it on the bottom" reads as optional, and Level 2's "may instead leave it on top" then unlocks the choice. Please confirm.
+- **Spirit Mantle** shields the Oracle automatically at turn start and offers the ally shield as a `spirit_mantle` reactive bonus. Turn start has no mid-flow prompt.
+- **Placed-object HP has no consumer yet.** Barricades and pylons track HP, but no rule lets anything damage an object. The Engineer repairs only its own side's objects. Frozen Redoubt's frost has no stated duration, so it's permanent.
+- **Pylon aura** requires a living Architect and applies to its allies, not the Architect itself. Pylon equivalence uses the recommended defaults (Section 5.8): a Collective Node counts for its own side only, and isn't an object.
+- **"Ally" excludes the character itself** for targeted abilities (Resonance Shield, Command, Link Mind, Relay Gate).
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

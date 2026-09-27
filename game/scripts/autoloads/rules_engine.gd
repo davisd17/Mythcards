@@ -172,8 +172,10 @@ func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary
 		if _attack_candidate_tiles(actor).has(target.position):
 			return _fail("blocked line of sight")
 		return _fail("out of range")
-	var combat: Dictionary = combat_resolver.resolve_attack(actor, target)
+	# Pay first: effects triggered by the attack (Perfect Chord) may refresh AP, and must
+	# not be undone by the payment.
 	_spend_ap(actor)
+	var combat: Dictionary = combat_resolver.resolve_attack(actor, target)
 	return {"success": true, "damage": combat.get("damage", 0), "defeated": combat.get("defeated", false)}
 
 
@@ -186,11 +188,12 @@ func _handle_ability(actor: CharacterInstance, payload: Dictionary) -> Dictionar
 	var invalid: String = ability_system.validate_ability(actor, ability_id, payload)
 	if invalid != "":
 		return _fail(invalid)
+	_spend_ap(actor)   # before the effect, for the same reason as attacks
 	var ability_result: Dictionary = ability_system.execute_ability(actor, ability_id, payload)
 	if not ability_result.get("success", false):
-		# A validated ability that still failed spends nothing.
+		# A validated ability that still failed costs nothing.
+		_refund_ap(actor)
 		return _fail(str(ability_result.get("reason", "ability failed")))
-	_spend_ap(actor)
 	var result := ability_result.duplicate()
 	result.erase("reason")
 	result["success"] = true
@@ -256,6 +259,14 @@ func _spend_ap(actor: CharacterInstance) -> void:
 	var player := GameState.match_state.get_player(actor.player_id)
 	player.pool_ap_remaining -= 1
 	actor.character_ap_remaining -= 1
+	EventBus.pool_ap_changed.emit(actor.player_id, player.pool_ap_remaining)
+	EventBus.character_ap_changed.emit(actor.instance_id, actor.character_ap_remaining)
+
+
+func _refund_ap(actor: CharacterInstance) -> void:
+	var player := GameState.match_state.get_player(actor.player_id)
+	player.pool_ap_remaining += 1
+	actor.character_ap_remaining += 1
 	EventBus.pool_ap_changed.emit(actor.player_id, player.pool_ap_remaining)
 	EventBus.character_ap_changed.emit(actor.instance_id, actor.character_ap_remaining)
 

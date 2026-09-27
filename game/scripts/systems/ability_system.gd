@@ -317,6 +317,10 @@ func reposition_character(instance: CharacterInstance, to: Vector2i, cause: Stri
 	board.clear_occupant(from)
 	board.set_occupant(to, instance.instance_id)
 	instance.position = to
+	if instance.is_mounted_rider:
+		var mount_char := _match.find_character(instance.mounted_with_id)
+		if mount_char != null:
+			mount_char.position = to
 	EventBus.character_repositioned.emit(instance.instance_id, from, to, cause)
 
 
