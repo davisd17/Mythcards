@@ -61,6 +61,20 @@ func get_legal_attack_target_ids(actor_id: String) -> Array[String]:
 	return result
 
 
+func get_legal_attack_object_tiles(actor_id: String) -> Array[Vector2i]:
+	# Non-mutating preview: enemy placed objects this character can attack. An object
+	# with no HP (e.g. a Level 1 pylon) can't be damaged, so it isn't a target.
+	var result: Array[Vector2i] = []
+	var actor := _find_live(actor_id)
+	if actor == null or not actor.is_placed():
+		return result
+	_ensure_systems()
+	for pos in _attack_candidate_tiles(actor):
+		if _object_attack_error(actor, pos) == "":
+			result.append(pos)
+	return result
+
+
 func systems() -> Dictionary:
 	# The current match's collaborators, built on first use (tools, TestBridge, tests).
 	_ensure_systems()
@@ -157,6 +171,8 @@ func _handle_move(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 
 
 func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
+	if payload.has("target_pos"):
+		return _handle_object_attack(actor, payload.get("target_pos"))
 	var target_id: String = str(payload.get("target_id", ""))
 	var target := GameState.match_state.find_character(target_id)
 	if target == null:
@@ -177,6 +193,34 @@ func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary
 	_spend_ap(actor)
 	var combat: Dictionary = combat_resolver.resolve_attack(actor, target)
 	return {"success": true, "damage": combat.get("damage", 0), "defeated": combat.get("defeated", false)}
+
+
+func _handle_object_attack(actor: CharacterInstance, pos) -> Dictionary:
+	# Payload {"target_pos": Vector2i}: a basic attack on a placed object.
+	if not pos is Vector2i:
+		return _fail("missing target")
+	var reason := _object_attack_error(actor, pos)
+	if reason != "":
+		return _fail(reason)
+	_spend_ap(actor)
+	var hit: Dictionary = combat_resolver.resolve_object_attack(actor, pos)
+	return {"success": true, "damage": hit.damage, "destroyed": hit.destroyed}
+
+
+func _object_attack_error(actor: CharacterInstance, pos: Vector2i) -> String:
+	var board := _board()
+	var obj := board.get_placed_object(pos)
+	if obj == null:
+		return "no object there"
+	if obj.owner_player_id == actor.player_id:
+		return "cannot attack your own object"
+	if obj.max_hp <= 0:
+		return "object can't be damaged"
+	if not _attack_candidate_tiles(actor).has(pos):
+		return "out of range"
+	if not board.has_line_of_sight(actor.position, pos, ability_system.get_line_of_sight_exceptions(actor, pos, board)):
+		return "blocked line of sight"
+	return ""
 
 
 func _handle_ability(actor: CharacterInstance, payload: Dictionary) -> Dictionary:

@@ -152,6 +152,18 @@ func test_level_2_glide_over_a_character_buffs_the_next_attack() -> void:
 	Fixture.board().place_object(Vector2i(4, 6), "barricade", "p1")
 	assert_true(_act("move", GLIDER, {"to": Vector2i(3, 4)}).success)
 	assert_eq(glider.sum_status("temp_atk"), 1)
+	# Designer ruling 2026-09-27: it lasts until the next attack, across turns, and
+	# gliding again first doesn't stack it.
+	_act("end_turn", "p2")
+	_act("end_turn", "p1")
+	assert_eq(glider.sum_status("temp_atk"), 1, "survives into the next turn")
+	assert_true(_act("move", GLIDER, {"to": Vector2i(3, 6)}).success)
+	_act("end_turn", "p2")
+	_act("end_turn", "p1")
+	assert_eq(glider.sum_status("temp_atk"), 1)
+	_put(GYMNAST, Vector2i(3, 5))
+	assert_eq(_act("attack", GLIDER, {"target_id": GYMNAST}).damage, 2, "ATK 1 + glide")
+	assert_eq(glider.sum_status("temp_atk"), 0, "spent")
 
 
 func test_level_2_glide_with_a_pass_free_route_earns_nothing() -> void:
@@ -299,19 +311,18 @@ func test_c20_foresight_sends_the_top_card_to_the_bottom() -> void:
 	Fixture.state().shared_deck = ["x", "y", "z"] as Array[String]
 	_put(ORACLE, Vector2i(3, 6))
 	var guard := _put(GUARD, Vector2i(3, 5))
-	var result := _ability(ORACLE, {"ally_id": GUARD})
+	var result := _ability(ORACLE, {"ally_id": GUARD, "to_bottom": true})
 	assert_eq(result.revealed, "x")
 	assert_eq(Fixture.state().shared_deck, ["y", "z", "x"] as Array[String])
 	assert_eq(guard.sum_status("shield"), 1)
 
 
-func test_foresight_keep_on_top_needs_level_2() -> void:
+func test_foresight_can_leave_the_card_on_top_at_level_1() -> void:
+	# Designer ruling 2026-09-27: sending it to the bottom is optional at every level.
 	_p2_turn()
 	Fixture.state().shared_deck = ["x", "y"] as Array[String]
-	var oracle := _put(ORACLE, Vector2i(3, 6))
-	assert_eq(_ability(ORACLE, {"keep_on_top": true}).reason, "keeping the card on top needs Level 2")
-	_level(ORACLE, 2)
-	assert_true(_ability(ORACLE, {"keep_on_top": true}).success)
+	_put(ORACLE, Vector2i(3, 6))
+	assert_eq(_ability(ORACLE).revealed, "x")
 	assert_eq(Fixture.state().shared_deck, ["x", "y"] as Array[String])
 
 

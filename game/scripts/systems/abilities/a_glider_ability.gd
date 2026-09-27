@@ -2,7 +2,8 @@ extends AbilityHandler
 # Manta Glider (Mount) — Glide / Phase Current (LLD-ability-system 5.9).
 # L1 Glide: may move over any number of occupied tiles, ending on an empty one. A Hero
 #    or Leader riding it glides too (a mounted pair uses the Mount's movement rules).
-# L2: +1 MOVE; after moving over a character, its next attack this turn gains +1 ATK.
+# L2: +1 MOVE; after moving over a character, its next attack gains +1 ATK (lasts until
+#    that attack, not just this turn — designer ruling 2026-09-27).
 # L3 Phase Current: +1 HP, +1 ATK. Standalone ability "a-glider_l3", once per turn: a
 #    move that ignores terrain, barricades, and occupied tiles, dealing 1 damage to one
 #    enemy moved over. The ability IS the move (1 AP covers both; every character has
@@ -23,8 +24,14 @@ func get_movement_passable_predicate(_sys, _instance: CharacterInstance) -> Call
 
 func on_character_moved(sys, instance: CharacterInstance, mover: CharacterInstance,
 		_from: Vector2i, _to: Vector2i, required_pass: bool) -> void:
-	if mover == instance and instance.level >= 2 and required_pass:
-		sys.add_status(instance, "temp_atk", GLIDE_ATK, "this_turn", instance, true)
+	if mover != instance or instance.level < 2 or not required_pass:
+		return
+	# Lasts until the Glider's next attack, even on a later turn (designer ruling
+	# 2026-09-27); gliding again before attacking doesn't stack it.
+	for se in instance.status_effects:
+		if se.type == "temp_atk" and se.expires == "until_used" and se.source_character_id == instance.instance_id:
+			return
+	sys.add_status(instance, "temp_atk", GLIDE_ATK, "until_used", instance, true)
 
 
 func ability_ids(instance: CharacterInstance) -> Array[String]:

@@ -128,6 +128,12 @@ func on_attack_resolved(_sys, _instance: CharacterInstance, _attacker: Character
 	pass
 
 
+# A basic attack on a placed object (no character target).
+func on_object_attacked(_sys, _instance: CharacterInstance, _attacker: CharacterInstance,
+		_pos: Vector2i, _destroyed: bool) -> void:
+	pass
+
+
 func on_character_defeated(_sys, _instance: CharacterInstance, _fallen: CharacterInstance,
 		_defeated_by: CharacterInstance) -> void:
 	pass

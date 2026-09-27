@@ -25,6 +25,21 @@ func resolve_attack(attacker: CharacterInstance, defender: CharacterInstance) ->
 	return result
 
 
+func resolve_object_attack(attacker: CharacterInstance, pos: Vector2i) -> Dictionary:
+	# A basic attack on a placed object (designer ruling 2026-09-27: attacks may target
+	# objects unless a card says otherwise). Objects have no shields or reduction; at
+	# 0 HP the object is removed, which also clears the movement/LOS block.
+	var obj := board.get_placed_object(pos)
+	var damage := attacker.get_effective_atk() + ability_system.get_conditional_atk_bonus(attacker)
+	obj.current_hp = maxi(0, obj.current_hp - damage)
+	var destroyed := obj.current_hp == 0
+	var object_type := obj.type_id
+	if destroyed:
+		board.remove_object(pos)
+	EventBus.object_attacked.emit(attacker.instance_id, pos, object_type, damage, destroyed)
+	return {"damage": damage, "destroyed": destroyed}
+
+
 func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base_amount: int,
 		is_ranged: bool) -> Dictionary:
 	# Shared by basic attacks and damaging abilities, so the pipeline exists once.

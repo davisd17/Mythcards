@@ -1,11 +1,12 @@
 extends AbilityHandler
 # Oracle Sovereign (Hero) — Foresight / Spirit Mantle / Collective Ascension (LLD 5.12).
-# L1 Foresight: reveal the next shared relic/event card and put it on the bottom of the
-#    deck; then one adjacent ally gains a 1-damage shield.
-#    Payload: {"ally_id": optional adjacent ally}.
+# L1 Foresight: reveal the next shared relic/event card; you may put it on the bottom
+#    of the deck (designer ruling 2026-09-27: optional at every level). Then one
+#    adjacent ally gains a 1-damage shield.
+#    Payload: {"to_bottom": bool, "ally_id": optional adjacent ally}.
 # L2 Spirit Mantle: at the start of your turn the Oracle gains a 1-damage shield, and
-#    may give one to an adjacent ally ("spirit_mantle" reactive bonus). Foresight may
-#    instead leave the card on top: payload {"keep_on_top": true}.
+#    may give one to an adjacent ally ("spirit_mantle" reactive bonus). (The printed
+#    L2 "may instead leave it on top" is already true at L1 under that ruling.)
 # L3 Collective Ascension: +1 HP, +1 RANGE. Standalone ability "a-hero_l3", once per
 #    match: every ally heals 2, gains a 1-damage shield, and +1 MOVE this turn.
 
@@ -38,8 +39,6 @@ func get_legal_targets(sys, instance: CharacterInstance, ability_id: String) -> 
 func validate(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> String:
 	if ability_id == L3_ID:
 		return ""
-	if payload.get("keep_on_top", false) and instance.level < 2:
-		return "keeping the card on top needs Level 2"
 	if payload.has("ally_id") and not _adjacent_allies(sys, instance).has(str(payload.ally_id)):
 		return "needs an adjacent ally"
 	return ""
@@ -56,7 +55,7 @@ func execute(sys, instance: CharacterInstance, ability_id: String, payload: Dict
 			sys.add_status(ally, "temp_move", ASCENSION_MOVE, "this_turn", instance)
 		return {"success": true}
 	var revealed := RelicEventDeck.peek_next()
-	if revealed != "" and not payload.get("keep_on_top", false):
+	if revealed != "" and payload.get("to_bottom", false):
 		RelicEventDeck.move_top_to_bottom()
 	if payload.has("ally_id"):
 		sys.add_status(sys.find(str(payload.ally_id)), "shield", FORESIGHT_SHIELD, "this_turn", instance)

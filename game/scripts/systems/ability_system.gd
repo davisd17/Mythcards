@@ -22,6 +22,7 @@ func _init(p_board: BoardModel) -> void:
 	EventBus.character_moved.connect(_on_character_moved)
 	EventBus.character_repositioned.connect(_on_character_repositioned)
 	EventBus.attack_resolved.connect(_on_attack_resolved)
+	EventBus.object_attacked.connect(_on_object_attacked)
 	EventBus.character_defeated.connect(_on_character_defeated)
 	EventBus.spirit_ember_delivered.connect(_on_spirit_ember_delivered)
 	EventBus.turn_started.connect(_on_turn_started)
@@ -402,10 +403,18 @@ func _on_attack_resolved(attacker_id: String, target_id: String, damage: int, de
 	for c in _all_characters():
 		if not c.defeated or c == target:
 			handler_for(c).on_attack_resolved(self, c, attacker, target, damage, defeated)
-	# Single-use attack buffs ("+1 ATK on its next attack") are spent by this attack.
-	for i in range(attacker.status_effects.size() - 1, -1, -1):
-		if attacker.status_effects[i].consume_on_attack:
-			attacker.status_effects.remove_at(i)
+	_spend_single_use_buffs(attacker)
+
+
+func _on_object_attacked(attacker_id: String, pos: Vector2i, _object_type: String, _damage: int, destroyed: bool) -> void:
+	if not _is_current():
+		return
+	var attacker := find(attacker_id)
+	if attacker == null:
+		return
+	for c in live_characters():
+		handler_for(c).on_object_attacked(self, c, attacker, pos, destroyed)
+	_spend_single_use_buffs(attacker)
 
 
 func _on_character_defeated(character_id: String, defeated_by_id: String, _cause: String) -> void:
@@ -437,6 +446,13 @@ func _on_turn_started(player_id: String) -> void:
 
 
 # --- Internals ------------------------------------------------------------------------
+
+# Single-use attack buffs ("+1 ATK on its next attack") are spent by any attack.
+func _spend_single_use_buffs(attacker: CharacterInstance) -> void:
+	for i in range(attacker.status_effects.size() - 1, -1, -1):
+		if attacker.status_effects[i].consume_on_attack:
+			attacker.status_effects.remove_at(i)
+
 
 func _free_move(instance: CharacterInstance, payload: Dictionary) -> Dictionary:
 	# Command / Astral Echo: move 1 tile without spending AP.

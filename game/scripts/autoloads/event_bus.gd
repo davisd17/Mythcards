@@ -17,6 +17,7 @@ signal character_moved(character_id: String, from: Vector2i, to: Vector2i)
 # cause: "push" | "mount" | "dismount" | ...
 signal character_repositioned(character_id: String, from: Vector2i, to: Vector2i, cause: String)
 signal attack_resolved(attacker_id: String, target_id: String, damage: int, defeated: bool)
+signal object_attacked(attacker_id: String, pos: Vector2i, object_type: String, damage: int, destroyed: bool)
 signal character_defeated(character_id: String, defeated_by_id: String, cause: String)  # cause: "direct" | "mount_propagation"
 
 signal character_leveled_up(character_id: String, new_level: int)

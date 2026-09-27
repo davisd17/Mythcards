@@ -44,6 +44,13 @@ func on_attack_resolved(sys, instance: CharacterInstance, attacker: CharacterIns
 		sys.offer_bonus(instance, "aurora_predator")
 
 
+func on_object_attacked(sys, instance: CharacterInstance, attacker: CharacterInstance,
+		_pos: Vector2i, _destroyed: bool) -> void:
+	# Pounce marks the next attack after moving, whatever it hits.
+	if attacker == instance and _pounce_ready(instance):
+		sys.remove_status(instance, "pounce_mark")
+
+
 func execute_reactive_bonus(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
 	if tag != "aurora_predator":
 		return super(sys, instance, tag, payload)
