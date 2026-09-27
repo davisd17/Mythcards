@@ -1,6 +1,6 @@
 extends GutTest
-# ContentDB — LLD-content-board.md Section 8, cases C1–C6a, updated for the
-# Closed City vs Flood Survivors prototype roster (2026-09-26).
+# ContentDB — LLD-content-board.md Section 8, cases C1–C6a, against the original
+# 14-card prototype roster (PRD Section 8).
 
 const ContentDBScript := preload("res://scripts/autoloads/content_db.gd")
 
@@ -39,19 +39,19 @@ func _valid_culture(culture: String, prefix: String) -> Array:
 func test_c1_loads_all_14_playable_characters() -> void:
 	_load_real_data()
 	assert_eq(db.characters.size(), 14)
-	var worker: CharacterData = db.get_character("r-reactor-worker")
-	assert_not_null(worker)
-	assert_eq(worker.hp, 2)
-	assert_eq(worker.atk, 1)
-	assert_eq(worker.move, 2)
-	assert_eq(worker.range, 1)
-	assert_eq(worker.char_name, "Reactor Worker")
+	var gymnast: CharacterData = db.get_character("r-gymnast")
+	assert_not_null(gymnast)
+	assert_eq(gymnast.hp, 2)
+	assert_eq(gymnast.atk, 1)
+	assert_eq(gymnast.move, 3)
+	assert_eq(gymnast.range, 1)
+	assert_eq(gymnast.char_name, "Gymnast")
 
 
 func test_c1_stats_map_in_hp_atk_move_range_order() -> void:
 	_load_real_data()
-	var naia: CharacterData = db.get_character("a-flood-survivor-naia")  # stats [4, 2, 3, 1]
-	assert_eq([naia.hp, naia.atk, naia.move, naia.range], [4, 2, 3, 1])
+	var sniper: CharacterData = db.get_character("r-sniper")  # stats [3, 2, 2, 4]
+	assert_eq([sniper.hp, sniper.atk, sniper.move, sniper.range], [3, 2, 2, 4])
 
 
 func test_c2_each_culture_has_one_of_each_type() -> void:
@@ -64,12 +64,20 @@ func test_c2_each_culture_has_one_of_each_type() -> void:
 			assert_eq(types.count(t), 1, "%s has exactly one %s" % [culture, t])
 
 
-func test_c2_prototype_matchup_is_closed_city_vs_flood_survivors() -> void:
+func test_c2_prototype_roster_is_the_original_14() -> void:
 	_load_real_data()
-	for c in db.get_characters_by_culture(RUSSIAN):
-		assert_eq(c.sub_area, "Closed City", c.id)
-	for c in db.get_characters_by_culture(ATLANTEAN):
-		assert_eq(c.sub_area, "Flood Survivors", c.id)
+	for id in ["r-gymnast", "r-tiger", "r-sniper", "r-general", "r-hero", "r-engineer", "r-seer",
+			"a-attendant", "a-glider", "a-guard", "a-conductor", "a-hero", "a-architect", "a-harmonic"]:
+		assert_not_null(db.get_character(id), id)
+
+
+func test_c6a_committed_sub_areas_are_single_values() -> void:
+	# The four formerly combined entries (LLD-content-board Section 9).
+	_load_real_data()
+	assert_eq(db.get_character("r-hero").sub_area, "Winter Front")
+	assert_eq(db.get_character("r-engineer").sub_area, "Winter Front")
+	assert_eq(db.get_character("a-attendant").sub_area, "First Mind")
+	assert_eq(db.get_character("a-harmonic").sub_area, "First Mind")
 
 
 func test_c4_loads_14_playable_relic_events_with_no_review_status() -> void:

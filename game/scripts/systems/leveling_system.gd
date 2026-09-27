@@ -18,6 +18,8 @@ func _init(p_board: BoardModel, p_ability_system: AbilitySystem) -> void:
 	ability_system = p_ability_system
 	_match = GameState.match_state
 	EventBus.character_moved.connect(_on_character_moved)
+	# Being pushed or placed onto the edge or center counts too (designer ruling 2026-09-27).
+	EventBus.character_repositioned.connect(_on_character_repositioned)
 	EventBus.character_defeated.connect(_on_character_defeated)
 	EventBus.character_leveled_up.connect(_on_character_leveled_up)
 
@@ -36,6 +38,10 @@ func _on_character_moved(character_id: String, _from: Vector2i, _to: Vector2i) -
 		if partner != null:
 			_check_level_2(partner)
 			_check_level_3(partner)
+
+
+func _on_character_repositioned(character_id: String, from: Vector2i, to: Vector2i, _cause: String) -> void:
+	_on_character_moved(character_id, from, to)
 
 
 func _on_character_defeated(_character_id: String, defeated_by_id: String, _cause: String) -> void:

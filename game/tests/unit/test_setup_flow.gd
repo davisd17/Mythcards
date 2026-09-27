@@ -5,8 +5,8 @@ const SetupFlowScript := preload("res://scripts/scenes/setup_flow.gd")
 
 const RUSSIAN := "Russian-inspired"
 const ATLANTEAN := "Atlantean"
-const ORLOV := "p1_r-mikhail-orlov"          # Closed City Hero
-const WORKER := "p1_r-reactor-worker"        # Closed City Common
+const BOGATYR := "p1_r-hero"         # Hero       HP 6 ATK 2 MOVE 2 RANGE 1
+const GYMNAST := "p1_r-gymnast"      # Common     HP 2 ATK 1 MOVE 3 RANGE 1
 
 var setup
 
@@ -55,14 +55,14 @@ func test_c1_select_culture_builds_one_of_each_type() -> void:
 
 func test_c1_squad_starts_at_level_1_full_hp_unplaced() -> void:
 	setup.select_culture("p1", RUSSIAN)
-	var orlov: CharacterInstance = setup.get_player("p1").find_character(ORLOV)
-	assert_not_null(orlov)
-	assert_eq(orlov.player_id, "p1")
-	assert_eq(orlov.level, 1)
-	assert_eq(orlov.current_hp, orlov.data.hp)
-	assert_eq(orlov.base_max_hp, orlov.data.hp)
-	assert_eq(orlov.character_ap_remaining, 1)
-	assert_false(orlov.is_placed())
+	var hero: CharacterInstance = setup.get_player("p1").find_character(BOGATYR)
+	assert_not_null(hero)
+	assert_eq(hero.player_id, "p1")
+	assert_eq(hero.level, 1)
+	assert_eq(hero.current_hp, hero.data.hp)
+	assert_eq(hero.base_max_hp, hero.data.hp)
+	assert_eq(hero.character_ap_remaining, 1)
+	assert_false(hero.is_placed())
 
 
 func test_unknown_culture_is_rejected() -> void:
@@ -74,14 +74,14 @@ func test_unknown_culture_is_rejected() -> void:
 func test_mirror_match_ids_do_not_collide() -> void:
 	setup.select_culture("p1", RUSSIAN)
 	setup.select_culture("p2", RUSSIAN)
-	assert_not_null(setup.get_player("p1").find_character(ORLOV))
-	assert_not_null(setup.get_player("p2").find_character("p2_r-mikhail-orlov"))
-	assert_null(setup.get_player("p2").find_character(ORLOV))
+	assert_not_null(setup.get_player("p1").find_character(BOGATYR))
+	assert_not_null(setup.get_player("p2").find_character("p2_r-hero"))
+	assert_null(setup.get_player("p2").find_character(BOGATYR))
 
 
 func test_reselecting_culture_clears_earlier_placements() -> void:
 	setup.select_culture("p1", RUSSIAN)
-	setup.place_character("p1", ORLOV, Vector2i(3, 0))
+	setup.place_character("p1", BOGATYR, Vector2i(3, 0))
 	setup.select_culture("p1", ATLANTEAN)
 	assert_false(setup.board.is_occupied_by_character(Vector2i(3, 0)))
 	assert_eq(setup.get_player("p1").culture, ATLANTEAN)
@@ -91,46 +91,46 @@ func test_reselecting_culture_clears_earlier_placements() -> void:
 
 func test_c2_place_on_own_back_row() -> void:
 	_select_both()
-	assert_true(setup.place_character("p1", ORLOV, Vector2i(3, 0)))
+	assert_true(setup.place_character("p1", BOGATYR, Vector2i(3, 0)))
 	assert_true(setup.board.is_occupied_by_character(Vector2i(3, 0)))
-	assert_eq(setup.get_player("p1").find_character(ORLOV).position, Vector2i(3, 0))
+	assert_eq(setup.get_player("p1").find_character(BOGATYR).position, Vector2i(3, 0))
 
 
 func test_c3_cannot_place_off_back_row() -> void:
 	_select_both()
-	assert_false(setup.place_character("p1", ORLOV, Vector2i(3, 3)))
-	assert_eq(setup.get_placement_error("p1", ORLOV, Vector2i(3, 3)), "outside your back row")
+	assert_false(setup.place_character("p1", BOGATYR, Vector2i(3, 3)))
+	assert_eq(setup.get_placement_error("p1", BOGATYR, Vector2i(3, 3)), "outside your back row")
 	assert_false(setup.board.is_occupied_by_character(Vector2i(3, 3)))
 
 
 func test_c3_cannot_place_on_opponents_back_row() -> void:
 	_select_both()
-	assert_false(setup.place_character("p1", ORLOV, Vector2i(3, 6)))
+	assert_false(setup.place_character("p1", BOGATYR, Vector2i(3, 6)))
 
 
 func test_c4_cannot_place_on_occupied_tile() -> void:
 	_select_both()
-	setup.place_character("p1", ORLOV, Vector2i(3, 0))
-	assert_false(setup.place_character("p1", WORKER, Vector2i(3, 0)))
-	assert_eq(setup.get_placement_error("p1", WORKER, Vector2i(3, 0)), "tile occupied")
+	setup.place_character("p1", BOGATYR, Vector2i(3, 0))
+	assert_false(setup.place_character("p1", GYMNAST, Vector2i(3, 0)))
+	assert_eq(setup.get_placement_error("p1", GYMNAST, Vector2i(3, 0)), "tile occupied")
 
 
 func test_cannot_place_same_character_twice() -> void:
 	_select_both()
-	setup.place_character("p1", ORLOV, Vector2i(3, 0))
-	assert_false(setup.place_character("p1", ORLOV, Vector2i(4, 0)))
-	assert_eq(setup.get_placement_error("p1", ORLOV, Vector2i(4, 0)), "already placed")
+	setup.place_character("p1", BOGATYR, Vector2i(3, 0))
+	assert_false(setup.place_character("p1", BOGATYR, Vector2i(4, 0)))
+	assert_eq(setup.get_placement_error("p1", BOGATYR, Vector2i(4, 0)), "already placed")
 
 
 func test_cannot_place_opponents_character() -> void:
 	_select_both()
-	assert_eq(setup.get_placement_error("p2", ORLOV, Vector2i(3, 6)), "not one of your characters")
+	assert_eq(setup.get_placement_error("p2", BOGATYR, Vector2i(3, 6)), "not one of your characters")
 
 
 func test_placement_errors_before_culture_and_off_board() -> void:
-	assert_eq(setup.get_placement_error("p1", ORLOV, Vector2i(3, 0)), "choose a culture first")
+	assert_eq(setup.get_placement_error("p1", BOGATYR, Vector2i(3, 0)), "choose a culture first")
 	setup.select_culture("p1", RUSSIAN)
-	assert_eq(setup.get_placement_error("p1", ORLOV, Vector2i(9, 0)), "off the board")
+	assert_eq(setup.get_placement_error("p1", BOGATYR, Vector2i(9, 0)), "off the board")
 
 
 func test_c5_not_ready_with_6_of_7_placed() -> void:
@@ -163,8 +163,8 @@ func test_c7_start_match_hands_state_to_game_state() -> void:
 	assert_eq(state.active_player_id, "p1")
 	assert_eq(state.turn_number, 1)
 	assert_eq(state.board, setup.board)
-	var orlov := state.find_character(ORLOV)
-	assert_eq(state.board.get_tile(orlov.position).occupant_id, ORLOV, "board and instance agree")
+	var hero := state.find_character(BOGATYR)
+	assert_eq(state.board.get_tile(hero.position).occupant_id, BOGATYR, "board and instance agree")
 	assert_eq(state.board.get_tile(Vector2i(0, 6)).occupant_id, state.players[1].characters[0].instance_id)
 
 
@@ -186,32 +186,32 @@ func test_match_state_lookups() -> void:
 	assert_null(state.get_player("p3"))
 	assert_eq(state.get_other_player_id("p1"), "p2")
 	assert_eq(state.get_other_player_id("p2"), "p1")
-	assert_eq(state.find_character("p2_a-flood-survivor-naia").data.char_name, "Naia of the Black Sarcophagus")
+	assert_eq(state.find_character("p2_a-guard").data.char_name, "Resonance Guard")
 	assert_null(state.find_character("nobody"))
 
 
 func test_mint_instance_id_is_unique_and_serial() -> void:
 	var state := MatchState.new()
-	var a := state.mint_instance_id("p1", "r-reactor-worker")
-	var b := state.mint_instance_id("p1", "r-reactor-worker")
-	assert_eq(a, "p1_r-reactor-worker#1")
-	assert_eq(b, "p1_r-reactor-worker#2")
+	var a := state.mint_instance_id("p1", "r-gymnast")
+	var b := state.mint_instance_id("p1", "r-gymnast")
+	assert_eq(a, "p1_r-gymnast#1")
+	assert_eq(b, "p1_r-gymnast#2")
 
 
 func test_effective_stats_include_bonuses_and_temp_effects() -> void:
 	setup.select_culture("p1", RUSSIAN)
-	var c: CharacterInstance = setup.get_player("p1").find_character(ORLOV)  # ATK 1, MOVE 2, RANGE 3
+	var c: CharacterInstance = setup.get_player("p1").find_character(BOGATYR)  # ATK 2, MOVE 2, RANGE 1
 	c.atk_bonus = 1
 	c.status_effects.append(StatusEffect.new("temp_atk", 2))
 	c.status_effects.append(StatusEffect.new("temp_range", 1))
-	assert_eq(c.get_effective_atk(), 4)
+	assert_eq(c.get_effective_atk(), 5)
 	assert_eq(c.get_effective_move(), 2)
-	assert_eq(c.get_effective_range("attack"), 4)
+	assert_eq(c.get_effective_range("attack"), 2)
 
 
 func test_effective_move_floors_at_0_and_range_at_1() -> void:
 	setup.select_culture("p1", RUSSIAN)
-	var c: CharacterInstance = setup.get_player("p1").find_character(ORLOV)
+	var c: CharacterInstance = setup.get_player("p1").find_character(BOGATYR)
 	c.status_effects.append(StatusEffect.new("temp_move", -10))
 	c.status_effects.append(StatusEffect.new("temp_range", -10))
 	assert_eq(c.get_effective_move(), 0)

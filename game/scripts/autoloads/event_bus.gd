@@ -12,6 +12,10 @@ signal character_ap_changed(character_id: String, remaining: int)
 signal action_requested(action_type: String, actor_id: String, payload: Dictionary)
 signal action_resolved(action_type: String, actor_id: String, result: Dictionary)
 signal character_moved(character_id: String, from: Vector2i, to: Vector2i)
+# A position change that is NOT the character's own move action (push, a Mount placed by
+# mount/dismount, later teleports). Kept separate so "after moving" abilities don't fire.
+# cause: "push" | "mount" | "dismount" | ...
+signal character_repositioned(character_id: String, from: Vector2i, to: Vector2i, cause: String)
 signal attack_resolved(attacker_id: String, target_id: String, damage: int, defeated: bool)
 signal character_defeated(character_id: String, defeated_by_id: String, cause: String)  # cause: "direct" | "mount_propagation"
 

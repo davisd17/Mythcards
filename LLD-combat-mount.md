@@ -247,7 +247,7 @@ The first implementation (`game/scripts/systems/combat_resolver.gd`, `mount_syst
 - **`apply_push`** also moves a pushed rider's Mount (bookkeeping position). It stops at any tile `BoardModel.is_blocked_for_movement` reports, so a pylon doesn't stop a push. A `from_position` that isn't on an orthogonal line with the target triggers `push_error` and no movement.
 - **`get_effective_move_stat`** reads the Mount's `get_effective_move()`, so its own slows and bonuses count, not the raw `data.move` Section 3.2 names.
 - **RulesEngine follow-up:** attacking a ridden Mount by id now fails with `"mount is being ridden; attack the rider"` (BR-016). Before, it reported a misleading `"blocked line of sight"`, because the Mount's bookkeeping position is its rider's tile. The integration test caught this.
-- Tests use the Closed City / Flood Survivors roster, plus a new integration suite (`test_match_flow.gd`) driving real attacks, defeat, and mounting through `RulesEngine.request_action` only.
+- Tests use the original 14, plus a new integration suite (`test_match_flow.gd`) driving real attacks, defeat, and mounting through `RulesEngine.request_action` only.
 
 ## 10. Traceability
 

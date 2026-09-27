@@ -4,15 +4,15 @@ extends GutTest
 
 const SetupFlowScript := preload("res://scripts/scenes/setup_flow.gd")
 
-# Closed City (p1)
-const WORKER := "p1_r-reactor-worker"   # Common  MOVE 2 RANGE 1
-const VERA := "p1_r-vera-7"             # Mount   MOVE 4
-const YURI := "p1_r-yuri-volkov"        # Warrior MOVE 2 RANGE 2
-const IRINA := "p1_r-irina-karpova"     # Leader  MOVE 2 RANGE 3
-const ORLOV := "p1_r-mikhail-orlov"     # Hero    MOVE 2 RANGE 3
-# Flood Survivors (p2)
-const NAIA := "p2_a-flood-survivor-naia"
-const LABORER := "p2_a-flood-survivor-stone-line-laborer"
+# Russian-inspired (p1)
+const GYMNAST := "p1_r-gymnast"      # Common     HP 2 ATK 1 MOVE 3 RANGE 1
+const TIGER := "p1_r-tiger"          # Mount      HP 4 ATK 2 MOVE 4 RANGE 1
+const SNIPER := "p1_r-sniper"        # Warrior    HP 3 ATK 2 MOVE 2 RANGE 4
+const GENERAL := "p1_r-general"      # Leader     HP 5 ATK 1 MOVE 2 RANGE 1
+const BOGATYR := "p1_r-hero"         # Hero       HP 6 ATK 2 MOVE 2 RANGE 1
+# Atlantean (p2)
+const GUARD := "p2_a-guard"          # Warrior    HP 5 ATK 1 MOVE 2 RANGE 1
+const ATTENDANT := "p2_a-attendant"  # Common     HP 2 ATK 1 MOVE 2 RANGE 1
 
 
 class FakeCombat:
@@ -143,26 +143,26 @@ func _act(action: String, actor: String, payload: Dictionary = {}) -> Dictionary
 # --- Move ----------------------------------------------------------------------
 
 func test_c1_move_updates_position_and_spends_ap() -> void:
-	var worker := _put(WORKER, Vector2i(3, 3))
-	var result := _act("move", WORKER, {"to": Vector2i(3, 5)})
+	var gymnast := _put(GYMNAST, Vector2i(3, 3))
+	var result := _act("move", GYMNAST, {"to": Vector2i(3, 5)})
 	assert_eq(result, {"success": true})
-	assert_eq(worker.position, Vector2i(3, 5))
+	assert_eq(gymnast.position, Vector2i(3, 5))
 	assert_true(_board().is_occupied_by_character(Vector2i(3, 5)))
 	assert_false(_board().is_occupied_by_character(Vector2i(3, 3)))
 	assert_eq(_state().get_player("p1").pool_ap_remaining, 3)
-	assert_eq(worker.character_ap_remaining, 0)
-	assert_true(worker.ability_uses_this_turn.get("moved", false))
-	assert_signal_emitted_with_parameters(EventBus, "character_moved", [WORKER, Vector2i(3, 3), Vector2i(3, 5)])
+	assert_eq(gymnast.character_ap_remaining, 0)
+	assert_true(gymnast.ability_uses_this_turn.get("moved", false))
+	assert_signal_emitted_with_parameters(EventBus, "character_moved", [GYMNAST, Vector2i(3, 3), Vector2i(3, 5)])
 
 
 func test_c0a_legal_move_preview_matches_board_and_mutates_nothing() -> void:
-	var worker := _put(WORKER, Vector2i(3, 3))
-	_put(YURI, Vector2i(3, 4))
-	var tiles := RulesEngine.get_legal_move_tiles(WORKER)
-	assert_eq(tiles, _board().get_legal_moves(Vector2i(3, 3), 2))
+	var gymnast := _put(GYMNAST, Vector2i(3, 3))
+	_put(SNIPER, Vector2i(3, 4))
+	var tiles := RulesEngine.get_legal_move_tiles(GYMNAST)
+	assert_eq(tiles, _board().get_legal_moves(Vector2i(3, 3), gymnast.get_effective_move()))
 	assert_false(tiles.has(Vector2i(3, 5)), "blocked by the ally")
-	assert_eq(worker.position, Vector2i(3, 3))
-	assert_eq(worker.character_ap_remaining, 1)
+	assert_eq(gymnast.position, Vector2i(3, 3))
+	assert_eq(gymnast.character_ap_remaining, 1)
 	assert_signal_not_emitted(EventBus, "action_requested")
 
 
@@ -171,65 +171,65 @@ func test_c0b_unknown_actor_has_no_moves() -> void:
 
 
 func test_c1a_mounted_rider_moves_with_mounts_move() -> void:
-	var irina := _put(IRINA, Vector2i(3, 1))    # Leader MOVE 2 riding VERA-7 (MOVE 4)
-	_mount_pair(IRINA, VERA)
-	assert_true(_act("move", IRINA, {"to": Vector2i(3, 5)}).success, "4 tiles is only reachable at the Mount's MOVE")
-	assert_eq(irina.position, Vector2i(3, 5))
-	assert_eq(_char(VERA).position, Vector2i(3, 5), "mount position kept in sync")
-	assert_eq(_char(VERA).character_ap_remaining, 1, "the Mount spends no AP")
+	var general := _put(GENERAL, Vector2i(3, 1))    # Leader MOVE 2 riding the Tiger (MOVE 4)
+	_mount_pair(GENERAL, TIGER)
+	assert_true(_act("move", GENERAL, {"to": Vector2i(3, 5)}).success, "4 tiles is only reachable at the Mount's MOVE")
+	assert_eq(general.position, Vector2i(3, 5))
+	assert_eq(_char(TIGER).position, Vector2i(3, 5), "mount position kept in sync")
+	assert_eq(_char(TIGER).character_ap_remaining, 1, "the Mount spends no AP")
 
 
 func test_c2_illegal_move_changes_nothing() -> void:
-	var worker := _put(WORKER, Vector2i(3, 3))
-	var result := _act("move", WORKER, {"to": Vector2i(3, 6)})   # 3 tiles, MOVE 2
+	var gymnast := _put(GYMNAST, Vector2i(3, 3))
+	var result := _act("move", GYMNAST, {"to": Vector2i(6, 6)})   # 6 tiles, MOVE 3
 	assert_eq(result, {"success": false, "reason": "illegal move"})
-	assert_eq(worker.position, Vector2i(3, 3))
-	assert_eq(worker.character_ap_remaining, 1)
+	assert_eq(gymnast.position, Vector2i(3, 3))
+	assert_eq(gymnast.character_ap_remaining, 1)
 	assert_eq(_state().get_player("p1").pool_ap_remaining, 4)
 
 
 func test_move_without_destination_fails() -> void:
-	_put(WORKER, Vector2i(3, 3))
-	assert_eq(_act("move", WORKER, {}).reason, "missing destination")
+	_put(GYMNAST, Vector2i(3, 3))
+	assert_eq(_act("move", GYMNAST, {}).reason, "missing destination")
 
 
 # --- Common validation -------------------------------------------------------
 
 func test_c3_not_your_turn() -> void:
-	_put(NAIA, Vector2i(3, 3))
-	assert_eq(_act("move", NAIA, {"to": Vector2i(3, 4)}), {"success": false, "reason": "not your turn"})
+	_put(GUARD, Vector2i(3, 3))
+	assert_eq(_act("move", GUARD, {"to": Vector2i(3, 4)}), {"success": false, "reason": "not your turn"})
 
 
 func test_c4_no_character_ap() -> void:
-	_put(WORKER, Vector2i(3, 3)).character_ap_remaining = 0
-	assert_eq(_act("move", WORKER, {"to": Vector2i(3, 4)}).reason, "no character AP remaining")
+	_put(GYMNAST, Vector2i(3, 3)).character_ap_remaining = 0
+	assert_eq(_act("move", GYMNAST, {"to": Vector2i(3, 4)}).reason, "no character AP remaining")
 
 
 func test_no_pool_ap() -> void:
-	_put(WORKER, Vector2i(3, 3))
+	_put(GYMNAST, Vector2i(3, 3))
 	_state().get_player("p1").pool_ap_remaining = 0
-	assert_eq(_act("move", WORKER, {"to": Vector2i(3, 4)}).reason, "no pool AP remaining")
+	assert_eq(_act("move", GYMNAST, {"to": Vector2i(3, 4)}).reason, "no pool AP remaining")
 
 
 func test_first_turn_2_ap_pool_allows_only_2_actions() -> void:
 	_state().get_player("p1").pool_ap_remaining = 2
-	_put(WORKER, Vector2i(1, 3))
-	_put(YURI, Vector2i(3, 3))
-	_put(ORLOV, Vector2i(5, 3))
-	assert_true(_act("move", WORKER, {"to": Vector2i(1, 4)}).success)
-	assert_true(_act("move", YURI, {"to": Vector2i(3, 4)}).success)
-	assert_eq(_act("move", ORLOV, {"to": Vector2i(5, 4)}).reason, "no pool AP remaining")
+	_put(GYMNAST, Vector2i(1, 3))
+	_put(SNIPER, Vector2i(3, 3))
+	_put(BOGATYR, Vector2i(5, 3))
+	assert_true(_act("move", GYMNAST, {"to": Vector2i(1, 4)}).success)
+	assert_true(_act("move", SNIPER, {"to": Vector2i(3, 4)}).success)
+	assert_eq(_act("move", BOGATYR, {"to": Vector2i(5, 4)}).reason, "no pool AP remaining")
 
 
 func test_mounted_mount_cannot_act_on_its_own() -> void:
-	_put(IRINA, Vector2i(3, 1))
-	_mount_pair(IRINA, VERA)
-	assert_eq(_act("move", VERA, {"to": Vector2i(3, 2)}).reason, "carrying a rider")
+	_put(GENERAL, Vector2i(3, 1))
+	_mount_pair(GENERAL, TIGER)
+	assert_eq(_act("move", TIGER, {"to": Vector2i(3, 2)}).reason, "carrying a rider")
 
 
 func test_defeated_character_cannot_act() -> void:
-	_put(WORKER, Vector2i(3, 3)).defeated = true
-	assert_eq(_act("move", WORKER, {"to": Vector2i(3, 4)}).reason, "character defeated")
+	_put(GYMNAST, Vector2i(3, 3)).defeated = true
+	assert_eq(_act("move", GYMNAST, {"to": Vector2i(3, 4)}).reason, "character defeated")
 
 
 func test_unknown_actor() -> void:
@@ -237,13 +237,13 @@ func test_unknown_actor() -> void:
 
 
 func test_no_actions_when_match_not_active() -> void:
-	_put(WORKER, Vector2i(3, 3))
+	_put(GYMNAST, Vector2i(3, 3))
 	_state().phase = "ended"
-	assert_eq(_act("move", WORKER, {"to": Vector2i(3, 4)}).reason, "match not active")
+	assert_eq(_act("move", GYMNAST, {"to": Vector2i(3, 4)}).reason, "match not active")
 
 
 func test_unknown_action_type_is_a_caller_error() -> void:
-	var result := _act("teleport", WORKER)
+	var result := _act("teleport", GYMNAST)
 	assert_eq(result.reason, "unknown action type")
 	assert_push_error("teleport")
 	assert_signal_not_emitted(EventBus, "action_requested")
@@ -251,189 +251,189 @@ func test_unknown_action_type_is_a_caller_error() -> void:
 
 
 func test_c11_requested_and_resolved_fire_once_on_success_and_failure() -> void:
-	_put(WORKER, Vector2i(3, 3))
-	_act("move", WORKER, {"to": Vector2i(3, 4)})
+	_put(GYMNAST, Vector2i(3, 3))
+	_act("move", GYMNAST, {"to": Vector2i(3, 4)})
 	assert_signal_emit_count(EventBus, "action_requested", 1)
 	assert_signal_emit_count(EventBus, "action_resolved", 1)
-	_act("move", WORKER, {"to": Vector2i(3, 5)})   # fails: no character AP left
+	_act("move", GYMNAST, {"to": Vector2i(3, 5)})   # fails: no character AP left
 	assert_signal_emit_count(EventBus, "action_requested", 2)
 	assert_signal_emit_count(EventBus, "action_resolved", 2)
 	assert_signal_emitted_with_parameters(EventBus, "action_resolved",
-			["move", WORKER, {"success": false, "reason": "no character AP remaining"}])
+			["move", GYMNAST, {"success": false, "reason": "no character AP remaining"}])
 
 
 # --- Attack --------------------------------------------------------------------
 
 func test_c0c_legal_attack_targets_are_enemies_in_range_with_los() -> void:
-	_put(YURI, Vector2i(3, 2))            # RANGE 2
-	_put(NAIA, Vector2i(3, 4))            # in range
-	_put(LABORER, Vector2i(1, 2))         # in range
-	_put(WORKER, Vector2i(4, 2))          # ally — never a target
-	_put("p2_a-flood-survivor-sahu-ren", Vector2i(3, 5))   # out of range
-	var ids := RulesEngine.get_legal_attack_target_ids(YURI)
+	_put(SNIPER, Vector2i(3, 2))            # RANGE 4
+	_put(GUARD, Vector2i(3, 4))            # in range
+	_put(ATTENDANT, Vector2i(1, 2))         # in range
+	_put(GYMNAST, Vector2i(4, 2))          # ally — never a target
+	_put("p2_a-hero", Vector2i(5, 4))       # off every line
+	var ids := RulesEngine.get_legal_attack_target_ids(SNIPER)
 	ids.sort()
-	assert_eq(ids, [NAIA, LABORER] as Array[String])   # sorted: "...naia" < "...stone-line-laborer"
+	assert_eq(ids, [ATTENDANT, GUARD] as Array[String])   # sorted
 
 
 func test_c5_attack_in_range_resolves_and_spends_ap() -> void:
-	var yuri := _put(YURI, Vector2i(3, 2))
-	_put(NAIA, Vector2i(3, 4))
-	var result := _act("attack", YURI, {"target_id": NAIA})
+	var sniper := _put(SNIPER, Vector2i(3, 2))
+	_put(GUARD, Vector2i(3, 4))
+	var result := _act("attack", SNIPER, {"target_id": GUARD})
 	assert_eq(result, {"success": true, "damage": 2, "defeated": false})
-	assert_eq(combat.calls, [[YURI, NAIA]])
-	assert_eq(yuri.character_ap_remaining, 0)
+	assert_eq(combat.calls, [[SNIPER, GUARD]])
+	assert_eq(sniper.character_ap_remaining, 0)
 	assert_eq(_state().get_player("p1").pool_ap_remaining, 3)
 
 
 func test_c6_out_of_range() -> void:
-	_put(YURI, Vector2i(3, 1))
-	_put(NAIA, Vector2i(3, 4))            # distance 3, RANGE 2
-	assert_eq(_act("attack", YURI, {"target_id": NAIA}), {"success": false, "reason": "out of range"})
+	_put(SNIPER, Vector2i(3, 0))
+	_put(GUARD, Vector2i(3, 5))            # distance 5, RANGE 4
+	assert_eq(_act("attack", SNIPER, {"target_id": GUARD}), {"success": false, "reason": "out of range"})
 	assert_eq(combat.calls, [])
 
 
 func test_c6_diagonal_is_out_of_range() -> void:
-	_put(YURI, Vector2i(3, 3))
-	_put(NAIA, Vector2i(4, 4))
-	assert_eq(_act("attack", YURI, {"target_id": NAIA}).reason, "out of range")
+	_put(SNIPER, Vector2i(3, 3))
+	_put(GUARD, Vector2i(4, 4))
+	assert_eq(_act("attack", SNIPER, {"target_id": GUARD}).reason, "out of range")
 
 
 func test_c7_blocked_line_of_sight() -> void:
-	_put(ORLOV, Vector2i(3, 1))           # RANGE 3
-	_put(WORKER, Vector2i(3, 2))          # ally in the lane
-	_put(NAIA, Vector2i(3, 4))
-	var result := _act("attack", ORLOV, {"target_id": NAIA})
+	_put(SNIPER, Vector2i(3, 1))            # RANGE 4
+	_put(GYMNAST, Vector2i(3, 2))          # ally in the lane
+	_put(GUARD, Vector2i(3, 4))
+	var result := _act("attack", SNIPER, {"target_id": GUARD})
 	assert_eq(result, {"success": false, "reason": "blocked line of sight"})
-	assert_eq(_char(ORLOV).character_ap_remaining, 1, "no AP spent")
+	assert_eq(_char(SNIPER).character_ap_remaining, 1, "no AP spent")
 
 
 func test_placed_object_blocks_attack_los() -> void:
-	_put(ORLOV, Vector2i(3, 1))
-	_board().place_object(Vector2i(3, 2), "stone", "p2")
-	_put(NAIA, Vector2i(3, 3))
-	assert_eq(_act("attack", ORLOV, {"target_id": NAIA}).reason, "blocked line of sight")
+	_put(SNIPER, Vector2i(3, 1))
+	_board().place_object(Vector2i(3, 2), "barricade", "p1")
+	_put(GUARD, Vector2i(3, 3))
+	assert_eq(_act("attack", SNIPER, {"target_id": GUARD}).reason, "blocked line of sight")
 
 
 func test_cannot_attack_an_ally() -> void:
-	_put(YURI, Vector2i(3, 2))
-	_put(WORKER, Vector2i(3, 3))
-	assert_eq(_act("attack", YURI, {"target_id": WORKER}).reason, "cannot attack an ally")
+	_put(SNIPER, Vector2i(3, 2))
+	_put(GYMNAST, Vector2i(3, 3))
+	assert_eq(_act("attack", SNIPER, {"target_id": GYMNAST}).reason, "cannot attack an ally")
 
 
 func test_attack_unknown_or_defeated_target() -> void:
-	_put(YURI, Vector2i(3, 2))
-	assert_eq(_act("attack", YURI, {"target_id": "nobody"}).reason, "unknown target")
-	_put(NAIA, Vector2i(3, 3)).defeated = true
-	assert_eq(_act("attack", YURI, {"target_id": NAIA}).reason, "target already defeated")
+	_put(SNIPER, Vector2i(3, 2))
+	assert_eq(_act("attack", SNIPER, {"target_id": "nobody"}).reason, "unknown target")
+	_put(GUARD, Vector2i(3, 3)).defeated = true
+	assert_eq(_act("attack", SNIPER, {"target_id": GUARD}).reason, "target already defeated")
 
 
 func test_attack_range_uses_temp_range_and_ability_bonus() -> void:
-	var yuri := _put(YURI, Vector2i(3, 1))   # RANGE 2
-	_put(NAIA, Vector2i(3, 4))               # distance 3
-	yuri.status_effects.append(StatusEffect.new("temp_range", 1))
-	assert_true(RulesEngine.get_legal_attack_target_ids(YURI).has(NAIA))
+	var hero := _put(BOGATYR, Vector2i(3, 1))   # RANGE 1
+	_put(GUARD, Vector2i(3, 3))               # distance 2
+	hero.status_effects.append(StatusEffect.new("temp_range", 1))
+	assert_true(RulesEngine.get_legal_attack_target_ids(BOGATYR).has(GUARD))
 
 
 # --- Ability -------------------------------------------------------------------
 
 func test_c8_ability_unavailable() -> void:
-	_put(ORLOV, Vector2i(3, 3))
+	_put(BOGATYR, Vector2i(3, 3))
 	ability.usable = false
-	assert_eq(_act("ability", ORLOV, {"ability_id": "r-mikhail-orlov", "target": Vector2i(3, 3)}).reason,
+	assert_eq(_act("ability", BOGATYR, {"ability_id": "r-hero", "target": Vector2i(3, 3)}).reason,
 			"ability unavailable")
 
 
 func test_baseline_ability_system_has_no_usable_abilities_yet() -> void:
 	RulesEngine.use_systems(combat, AbilitySystem.new(_board()), mounts)
-	_put(ORLOV, Vector2i(3, 3))
-	assert_eq(_act("ability", ORLOV, {"ability_id": "r-mikhail-orlov", "target": Vector2i(3, 4)}).reason,
+	_put(BOGATYR, Vector2i(3, 3))
+	assert_eq(_act("ability", BOGATYR, {"ability_id": "r-hero", "target": Vector2i(3, 4)}).reason,
 			"ability unavailable")
 
 
 func test_ability_success_spends_ap_and_merges_result() -> void:
-	var orlov := _put(ORLOV, Vector2i(3, 3))
-	var result := _act("ability", ORLOV, {"ability_id": "r-mikhail-orlov", "target": Vector2i(3, 3)})
+	var hero := _put(BOGATYR, Vector2i(3, 3))
+	var result := _act("ability", BOGATYR, {"ability_id": "r-hero", "target": Vector2i(3, 3)})
 	assert_eq(result, {"success": true, "placed": "obj_0"})
-	assert_eq(ability.executed, [[ORLOV, "r-mikhail-orlov", Vector2i(3, 3)]])
-	assert_eq(orlov.character_ap_remaining, 0)
+	assert_eq(ability.executed, [[BOGATYR, "r-hero", Vector2i(3, 3)]])
+	assert_eq(hero.character_ap_remaining, 0)
 
 
 func test_ability_illegal_target() -> void:
-	_put(ORLOV, Vector2i(3, 3))
-	assert_eq(_act("ability", ORLOV, {"ability_id": "r-mikhail-orlov", "target": Vector2i(0, 0)}).reason,
+	_put(BOGATYR, Vector2i(3, 3))
+	assert_eq(_act("ability", BOGATYR, {"ability_id": "r-hero", "target": Vector2i(0, 0)}).reason,
 			"illegal ability target")
 	assert_eq(ability.executed, [])
 
 
 func test_failed_ability_execution_spends_nothing() -> void:
-	var orlov := _put(ORLOV, Vector2i(3, 3))
+	var hero := _put(BOGATYR, Vector2i(3, 3))
 	ability.execute_result = {"success": false, "reason": "no empty tile"}
-	assert_eq(_act("ability", ORLOV, {"ability_id": "r-mikhail-orlov", "target": Vector2i(3, 3)}),
+	assert_eq(_act("ability", BOGATYR, {"ability_id": "r-hero", "target": Vector2i(3, 3)}),
 			{"success": false, "reason": "no empty tile"})
-	assert_eq(orlov.character_ap_remaining, 1)
+	assert_eq(hero.character_ap_remaining, 1)
 
 
 # --- Mount / dismount ----------------------------------------------------------
 
 func test_mount_adjacent_mount_calls_mount_system_and_spends_ap() -> void:
-	var irina := _put(IRINA, Vector2i(3, 3))
-	_put(VERA, Vector2i(3, 4))
-	assert_true(_act("mount", IRINA, {"mount_id": VERA}).success)
-	assert_eq(mounts.mounted, [[IRINA, VERA]])
-	assert_eq(irina.character_ap_remaining, 0)
+	var general := _put(GENERAL, Vector2i(3, 3))
+	_put(TIGER, Vector2i(3, 4))
+	assert_true(_act("mount", GENERAL, {"mount_id": TIGER}).success)
+	assert_eq(mounts.mounted, [[GENERAL, TIGER]])
+	assert_eq(general.character_ap_remaining, 0)
 
 
 func test_c9_mount_not_adjacent() -> void:
-	_put(IRINA, Vector2i(3, 3))
-	_put(VERA, Vector2i(3, 5))
-	assert_eq(_act("mount", IRINA, {"mount_id": VERA}).reason, "not adjacent")
+	_put(GENERAL, Vector2i(3, 3))
+	_put(TIGER, Vector2i(3, 5))
+	assert_eq(_act("mount", GENERAL, {"mount_id": TIGER}).reason, "not adjacent")
 	assert_eq(mounts.mounted, [])
 
 
 func test_mount_rules() -> void:
-	_put(WORKER, Vector2i(2, 3))
-	_put(IRINA, Vector2i(3, 3))
-	_put(VERA, Vector2i(3, 4))
-	_put("p2_a-flood-survivor-ahesu", Vector2i(4, 3))
-	assert_eq(_act("mount", WORKER, {"mount_id": VERA}).reason, "only a Hero or Leader may mount")
-	assert_eq(_act("mount", IRINA, {"mount_id": "p2_a-flood-survivor-ahesu"}).reason, "invalid mount target")
-	assert_eq(_act("mount", IRINA, {"mount_id": WORKER}).reason, "invalid mount target")
-	assert_eq(_act("mount", IRINA, {"mount_id": "nobody"}).reason, "unknown mount")
-	_char(IRINA).status_effects.append(StatusEffect.new("no_mount_dismount", 0, "next_turn"))
-	assert_eq(_act("mount", IRINA, {"mount_id": VERA}).reason, "cannot mount right now")
+	_put(GYMNAST, Vector2i(2, 3))
+	_put(GENERAL, Vector2i(3, 3))
+	_put(TIGER, Vector2i(3, 4))
+	_put("p2_a-glider", Vector2i(4, 3))
+	assert_eq(_act("mount", GYMNAST, {"mount_id": TIGER}).reason, "only a Hero or Leader may mount")
+	assert_eq(_act("mount", GENERAL, {"mount_id": "p2_a-glider"}).reason, "invalid mount target")
+	assert_eq(_act("mount", GENERAL, {"mount_id": GYMNAST}).reason, "invalid mount target")
+	assert_eq(_act("mount", GENERAL, {"mount_id": "nobody"}).reason, "unknown mount")
+	_char(GENERAL).status_effects.append(StatusEffect.new("no_mount_dismount", 0, "next_turn"))
+	assert_eq(_act("mount", GENERAL, {"mount_id": TIGER}).reason, "cannot mount right now")
 
 
 func test_already_mounted() -> void:
-	_put(IRINA, Vector2i(3, 3))
-	_put(ORLOV, Vector2i(2, 3))
-	_mount_pair(IRINA, VERA)
-	assert_eq(_act("mount", ORLOV, {"mount_id": VERA}).reason, "already mounted")
+	_put(GENERAL, Vector2i(3, 3))
+	_put(BOGATYR, Vector2i(2, 3))
+	_mount_pair(GENERAL, TIGER)
+	assert_eq(_act("mount", BOGATYR, {"mount_id": TIGER}).reason, "already mounted")
 
 
 func test_dismount_to_empty_adjacent_tile() -> void:
-	var irina := _put(IRINA, Vector2i(3, 3))
-	_mount_pair(IRINA, VERA)
-	assert_true(_act("dismount", IRINA, {"to": Vector2i(3, 4)}).success)
-	assert_eq(mounts.dismounted, [[IRINA, Vector2i(3, 4)]])
-	assert_eq(irina.character_ap_remaining, 0)
+	var general := _put(GENERAL, Vector2i(3, 3))
+	_mount_pair(GENERAL, TIGER)
+	assert_true(_act("dismount", GENERAL, {"to": Vector2i(3, 4)}).success)
+	assert_eq(mounts.dismounted, [[GENERAL, Vector2i(3, 4)]])
+	assert_eq(general.character_ap_remaining, 0)
 
 
 func test_c10_dismount_with_no_empty_adjacent_tile() -> void:
-	_put(IRINA, Vector2i(0, 0))
-	_mount_pair(IRINA, VERA)
-	_put(WORKER, Vector2i(1, 0))
-	_put(YURI, Vector2i(0, 1))
-	assert_eq(_act("dismount", IRINA, {"to": Vector2i(1, 0)}).reason, "no empty adjacent tile")
-	assert_eq(_act("dismount", IRINA, {"to": Vector2i(-1, 0)}).reason, "no empty adjacent tile")
+	_put(GENERAL, Vector2i(0, 0))
+	_mount_pair(GENERAL, TIGER)
+	_put(GYMNAST, Vector2i(1, 0))
+	_put(SNIPER, Vector2i(0, 1))
+	assert_eq(_act("dismount", GENERAL, {"to": Vector2i(1, 0)}).reason, "no empty adjacent tile")
+	assert_eq(_act("dismount", GENERAL, {"to": Vector2i(-1, 0)}).reason, "no empty adjacent tile")
 	assert_eq(mounts.dismounted, [])
 
 
 func test_dismount_rules() -> void:
-	_put(ORLOV, Vector2i(3, 3))
-	assert_eq(_act("dismount", ORLOV, {"to": Vector2i(3, 4)}).reason, "not mounted")
-	_put(IRINA, Vector2i(5, 3))
-	_mount_pair(IRINA, VERA)
-	assert_eq(_act("dismount", IRINA, {"to": Vector2i(5, 5)}).reason, "not adjacent")
+	_put(BOGATYR, Vector2i(3, 3))
+	assert_eq(_act("dismount", BOGATYR, {"to": Vector2i(3, 4)}).reason, "not mounted")
+	_put(GENERAL, Vector2i(5, 3))
+	_mount_pair(GENERAL, TIGER)
+	assert_eq(_act("dismount", GENERAL, {"to": Vector2i(5, 5)}).reason, "not adjacent")
 
 
 # --- End turn ------------------------------------------------------------------
@@ -452,29 +452,29 @@ func test_end_turn_only_by_active_player() -> void:
 # --- Reactive bonus ------------------------------------------------------------
 
 func test_c12a_reactive_bonus_is_free() -> void:
-	var worker := _put(WORKER, Vector2i(3, 3))
-	worker.ability_uses_this_turn["l3_bonus_available"] = true
-	var result := _act("reactive_bonus", WORKER, {"tag": "l3_bonus", "target_id": NAIA})
+	var gymnast := _put(GYMNAST, Vector2i(3, 3))
+	gymnast.ability_uses_this_turn["l3_bonus_available"] = true
+	var result := _act("reactive_bonus", GYMNAST, {"tag": "l3_bonus", "target_id": GUARD})
 	assert_true(result.success)
-	assert_eq(ability.bonus_calls, [[WORKER, "l3_bonus"]])
-	assert_eq(worker.character_ap_remaining, 1)
+	assert_eq(ability.bonus_calls, [[GYMNAST, "l3_bonus"]])
+	assert_eq(gymnast.character_ap_remaining, 1)
 	assert_eq(_state().get_player("p1").pool_ap_remaining, 4)
 
 
 func test_reactive_bonus_works_with_zero_ap() -> void:
-	var worker := _put(WORKER, Vector2i(3, 3))
-	worker.character_ap_remaining = 0
-	worker.ability_uses_this_match["l3_bonus_available"] = true
-	assert_true(_act("reactive_bonus", WORKER, {"tag": "l3_bonus"}).success)
+	var gymnast := _put(GYMNAST, Vector2i(3, 3))
+	gymnast.character_ap_remaining = 0
+	gymnast.ability_uses_this_match["l3_bonus_available"] = true
+	assert_true(_act("reactive_bonus", GYMNAST, {"tag": "l3_bonus"}).success)
 
 
 func test_c12b_reactive_bonus_needs_an_offer() -> void:
-	_put(WORKER, Vector2i(3, 3))
-	assert_eq(_act("reactive_bonus", WORKER, {"tag": "l3_bonus"}).reason, "no bonus action available")
+	_put(GYMNAST, Vector2i(3, 3))
+	assert_eq(_act("reactive_bonus", GYMNAST, {"tag": "l3_bonus"}).reason, "no bonus action available")
 
 
 func test_reactive_bonus_blocked_by_no_reaction() -> void:
-	var worker := _put(WORKER, Vector2i(3, 3))
-	worker.ability_uses_this_turn["l3_bonus_available"] = true
-	worker.status_effects.append(StatusEffect.new("no_reaction", 0, "next_turn"))
-	assert_eq(_act("reactive_bonus", WORKER, {"tag": "l3_bonus"}).reason, "reactions disabled")
+	var gymnast := _put(GYMNAST, Vector2i(3, 3))
+	gymnast.ability_uses_this_turn["l3_bonus_available"] = true
+	gymnast.status_effects.append(StatusEffect.new("no_reaction", 0, "next_turn"))
+	assert_eq(_act("reactive_bonus", GYMNAST, {"tag": "l3_bonus"}).reason, "reactions disabled")

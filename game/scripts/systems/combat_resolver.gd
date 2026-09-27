@@ -70,7 +70,8 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 
 func apply_push(target: CharacterInstance, from_position: Vector2i, distance: int) -> Vector2i:
 	# Moves target directly away from from_position, stopping at the first obstruction.
-	# A partial or zero push is valid ("if possible"). Emits nothing.
+	# A partial or zero push is valid ("if possible"). Emits character_repositioned only
+	# (so leveling sees the arrival); the pushing ability signals its own effect.
 	if target.has_status("no_push"):
 		return target.position
 	var delta := target.position - from_position
@@ -85,13 +86,15 @@ func apply_push(target: CharacterInstance, from_position: Vector2i, distance: in
 			break
 		cursor = next
 	if cursor != target.position:
-		board.clear_occupant(target.position)
+		var from := target.position
+		board.clear_occupant(from)
 		board.set_occupant(cursor, target.instance_id)
 		target.position = cursor
 		if target.is_mounted_rider:
 			var mount_char := _find(target.mounted_with_id)
 			if mount_char != null:
 				mount_char.position = cursor
+		EventBus.character_repositioned.emit(target.instance_id, from, cursor, "push")
 	return cursor
 
 

@@ -278,7 +278,7 @@ The first implementation (`game/scripts/autoloads/rules_engine.gd`) differs from
 - **A failed ability costs no AP.** If `AbilitySystem.execute_ability` returns `success: false` after validation passed, the action fails with that reason and nothing is spent. Section 4.4 spent AP unconditionally.
 - **Range with conditional bonus:** `get_effective_range(context, conditional_bonus)` takes `AbilitySystem.get_conditional_range_bonus(actor, context)` as a parameter, because `CharacterInstance` can't reach the `AbilitySystem` instance that `RulesEngine` owns. It stays one call, floored once.
 - **`EventBus.character_defeated`** now has LLD-combat-mount's three-parameter shape `(character_id, defeated_by_id, cause)`. HLD 5.3 listed one parameter.
-- Test cases use the Closed City / Flood Survivors roster (LLD-content-board.md 9A). C13, the full integration sequence, stays deferred until steps 9–10.
+- Test cases use the original 14 (LLD-content-board.md 9A). C13, the full integration sequence, stays deferred until steps 9–10.
 
 ## 10. Traceability
 

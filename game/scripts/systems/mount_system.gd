@@ -16,8 +16,10 @@ func mount(rider: CharacterInstance, mount_char: CharacterInstance) -> void:
 	mount_char.mounted_with_id = rider.instance_id
 	rider.is_mounted_rider = true
 	mount_char.is_mounted_rider = false
-	board.clear_occupant(mount_char.position)
+	var from := mount_char.position
+	board.clear_occupant(from)
 	mount_char.position = rider.position
+	EventBus.character_repositioned.emit(mount_char.instance_id, from, rider.position, "mount")
 
 
 func dismount(rider: CharacterInstance, to: Vector2i) -> void:
@@ -26,11 +28,13 @@ func dismount(rider: CharacterInstance, to: Vector2i) -> void:
 	if mount_char == null:
 		push_error("MountSystem.dismount: %s has no resolvable mount" % rider.instance_id)
 		return
+	var from := mount_char.position
 	board.set_occupant(to, mount_char.instance_id)
 	mount_char.position = to
 	rider.mounted_with_id = ""
 	mount_char.mounted_with_id = ""
 	rider.is_mounted_rider = false
+	EventBus.character_repositioned.emit(mount_char.instance_id, from, to, "dismount")
 
 
 func get_effective_move_stat(rider: CharacterInstance) -> int:

@@ -449,7 +449,7 @@ Unit tests use **GUT** (HLD Section 4.13). Cases map to `tests/unit/test_setup_f
 
 The first implementation (`game/`) differs from this spec in these places:
 
-- **Roster ids:** tests use the Closed City / Flood Survivors roster (e.g. `p1_r-mikhail-orlov` in place of `p1_r-hero`). See LLD-content-board.md 9A.
+- **Roster ids:** tests use the original 14 (e.g. `p1_r-hero`). See LLD-content-board.md 9A.
 - **`"this_round"` clearing** compares against the turn that is *starting* (post-increment), not the pre-increment `turn_number` Section 4.3's pseudocode reads. With the pre-increment value, an effect applied on turn 3 would survive until turn 7. The post-increment reading matches LLD-relic-event-deck.md 4.2's "1 round = 2 individual turns." **Open design question:** clearing runs only at the *owner's* turn start, so an effect an opponent applies still lingers through the opponent's next turn. Examples: a Slow is in force on the holder's turn (correct), but a Marked also stays up while the opponent attacks. Revisit if a card needs "until end of round" to end mid-turn-pair.
 - **Misuse errors call `push_error`, they don't assert:** `start_match()` before both players are ready, `select_culture()` with an unknown culture or player, and `get_other_player_id()` with a bad id all `push_error` and return without mutating anything. This is the same testability reason as LLD-content-board.md 9A.
 - **Placement check order:** `get_placement_error()` checks bounds before the back row, so an off-board tile reports "off the board", not "outside your back row". It adds two reasons, "choose a culture first" and "not one of your characters".

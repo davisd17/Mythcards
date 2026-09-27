@@ -166,13 +166,8 @@ The first implementation (`game/scripts/systems/leveling_system.gd`) differs fro
 - **Defeated characters never level** (both checks skip `defeated`).
 - **Wiring:** `RulesEngine` builds the `LevelingSystem` alongside its other systems, sharing its `AbilitySystem`. `use_systems()` leaves leveling off unless a `LevelingSystem` is passed, so dispatch tests aren't affected by incidental edge crossings.
 - **Level-ups currently change `level` only.** `AbilitySystem.apply_level_up_effects` is a no-op until the character handlers land (ability step). The call and its ordering (before `character_leveled_up`) are in place.
-- **Open question — non-move arrivals.** Level checks run only on `character_moved`, which only `RulesEngine`'s move action emits. A character that reaches the opponent's edge or the center some other way doesn't level up there:
-  - pushed by `CombatResolver.apply_push`,
-  - a Mount placed by dismount,
-  - a teleport or reposition from a future ability or event (e.g. Relay Gate, Exiles Walk Beneath Egypt).
-
-  Is "crossing to the opponent's edge" meant to include being moved there? If yes, those paths should emit `character_moved` or call a shared position-changed hook.
-- Tests use the Closed City / Flood Survivors roster. The integration suite (`test_match_flow.gd`) levels through real moves and kills.
+- **Non-move arrivals level up too — designer ruling 2026-09-27.** Being pushed, placed, or teleported onto the opponent's edge or the center counts the same as moving there. Implemented as a separate `EventBus.character_repositioned(character_id, from, to, cause)` signal rather than reusing `character_moved`, so "after moving" abilities (Pounce, Vault follow-ups) don't fire from being pushed. It's emitted by `CombatResolver.apply_push` (`"push"`), `MountSystem.mount` (`"mount"`: the Mount lands on its rider's tile), and `MountSystem.dismount` (`"dismount"`). Future teleports and repositioning effects (e.g. Relay Gate) must emit it as well.
+- Tests use the original 14. The integration suite (`test_match_flow.gd`) levels through real moves, kills, pushes, mounting, and dismounting.
 
 ## 10. Traceability
 

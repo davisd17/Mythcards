@@ -2,8 +2,8 @@ extends GutTest
 # MountSystem — LLD-combat-mount.md Section 8, cases C9–C12, plus rider defeat.
 
 const Fixture := preload("res://tests/helpers/match_fixture.gd")
-const IRINA := Fixture.IRINA   # Leader MOVE 2
-const VERA := Fixture.VERA     # Mount  MOVE 4
+const GENERAL := Fixture.GENERAL   # Leader MOVE 2
+const TIGER := Fixture.TIGER     # Mount  MOVE 4
 
 var mounts: MountSystem
 
@@ -23,63 +23,74 @@ func _c(id: String) -> CharacterInstance:
 
 
 func test_c9_mount_shares_the_riders_tile() -> void:
-	var irina := Fixture.put(IRINA, Vector2i(3, 3))
-	var vera := Fixture.put(VERA, Vector2i(3, 4))
-	mounts.mount(irina, vera)
-	assert_eq(irina.mounted_with_id, VERA)
-	assert_eq(vera.mounted_with_id, IRINA)
-	assert_true(irina.is_mounted_rider)
-	assert_false(vera.is_mounted_rider)
+	var general := Fixture.put(GENERAL, Vector2i(3, 3))
+	var tiger := Fixture.put(TIGER, Vector2i(3, 4))
+	mounts.mount(general, tiger)
+	assert_eq(general.mounted_with_id, TIGER)
+	assert_eq(tiger.mounted_with_id, GENERAL)
+	assert_true(general.is_mounted_rider)
+	assert_false(tiger.is_mounted_rider)
 	assert_false(Fixture.board().is_occupied_by_character(Vector2i(3, 4)), "Mount's tile vacated")
-	assert_eq(Fixture.board().get_tile(Vector2i(3, 3)).occupant_id, IRINA)
-	assert_eq(vera.position, irina.position)
+	assert_eq(Fixture.board().get_tile(Vector2i(3, 3)).occupant_id, GENERAL)
+	assert_eq(tiger.position, general.position)
 
 
 func test_c10_dismount_places_mount_rider_stays() -> void:
-	var irina := Fixture.put(IRINA, Vector2i(3, 3))
-	var vera := Fixture.put(VERA, Vector2i(3, 4))
-	mounts.mount(irina, vera)
-	mounts.dismount(irina, Vector2i(2, 3))
-	assert_eq(vera.position, Vector2i(2, 3))
-	assert_eq(Fixture.board().get_tile(Vector2i(2, 3)).occupant_id, VERA)
-	assert_eq(irina.position, Vector2i(3, 3))
-	assert_eq(Fixture.board().get_tile(Vector2i(3, 3)).occupant_id, IRINA)
-	assert_eq(irina.mounted_with_id, "")
-	assert_eq(vera.mounted_with_id, "")
-	assert_false(irina.is_mounted_rider)
+	var general := Fixture.put(GENERAL, Vector2i(3, 3))
+	var tiger := Fixture.put(TIGER, Vector2i(3, 4))
+	mounts.mount(general, tiger)
+	mounts.dismount(general, Vector2i(2, 3))
+	assert_eq(tiger.position, Vector2i(2, 3))
+	assert_eq(Fixture.board().get_tile(Vector2i(2, 3)).occupant_id, TIGER)
+	assert_eq(general.position, Vector2i(3, 3))
+	assert_eq(Fixture.board().get_tile(Vector2i(3, 3)).occupant_id, GENERAL)
+	assert_eq(general.mounted_with_id, "")
+	assert_eq(tiger.mounted_with_id, "")
+	assert_false(general.is_mounted_rider)
+
+
+func test_mount_and_dismount_report_the_mounts_repositioning() -> void:
+	watch_signals(EventBus)
+	var general := Fixture.put(GENERAL, Vector2i(3, 3))
+	var tiger := Fixture.put(TIGER, Vector2i(3, 4))
+	mounts.mount(general, tiger)
+	assert_signal_emitted_with_parameters(EventBus, "character_repositioned", [TIGER, Vector2i(3, 4), Vector2i(3, 3), "mount"])
+	mounts.dismount(general, Vector2i(2, 3))
+	assert_signal_emitted_with_parameters(EventBus, "character_repositioned", [TIGER, Vector2i(3, 3), Vector2i(2, 3), "dismount"])
+	assert_signal_not_emitted(EventBus, "character_moved")
 
 
 func test_c11_mounted_rider_uses_mounts_move() -> void:
-	Fixture.put(IRINA, Vector2i(3, 3))
-	Fixture.mount_pair(IRINA, VERA)
-	assert_eq(mounts.get_effective_move_stat(_c(IRINA)), 4)
+	Fixture.put(GENERAL, Vector2i(3, 3))
+	Fixture.mount_pair(GENERAL, TIGER)
+	assert_eq(mounts.get_effective_move_stat(_c(GENERAL)), 4)
 
 
 func test_mount_move_includes_the_mounts_own_slow() -> void:
-	Fixture.put(IRINA, Vector2i(3, 3))
-	Fixture.mount_pair(IRINA, VERA)
-	_c(VERA).status_effects.append(StatusEffect.new("temp_move", -1))
-	assert_eq(mounts.get_effective_move_stat(_c(IRINA)), 3)
+	Fixture.put(GENERAL, Vector2i(3, 3))
+	Fixture.mount_pair(GENERAL, TIGER)
+	_c(TIGER).status_effects.append(StatusEffect.new("temp_move", -1))
+	assert_eq(mounts.get_effective_move_stat(_c(GENERAL)), 3)
 
 
 func test_c12_unmounted_uses_own_move() -> void:
-	Fixture.put(IRINA, Vector2i(3, 3))
-	assert_eq(mounts.get_effective_move_stat(_c(IRINA)), 2)
+	Fixture.put(GENERAL, Vector2i(3, 3))
+	assert_eq(mounts.get_effective_move_stat(_c(GENERAL)), 2)
 
 
 func test_handle_rider_defeated_returns_and_flags_the_mount() -> void:
-	Fixture.put(IRINA, Vector2i(3, 3))
-	Fixture.mount_pair(IRINA, VERA)
-	var fallen := mounts.handle_rider_defeated(_c(IRINA))
-	assert_eq(fallen, _c(VERA))
+	Fixture.put(GENERAL, Vector2i(3, 3))
+	Fixture.mount_pair(GENERAL, TIGER)
+	var fallen := mounts.handle_rider_defeated(_c(GENERAL))
+	assert_eq(fallen, _c(TIGER))
 	assert_true(fallen.defeated)
 	assert_eq(fallen.mounted_with_id, "")
-	assert_eq(_c(IRINA).mounted_with_id, "")
+	assert_eq(_c(GENERAL).mounted_with_id, "")
 
 
 func test_handle_rider_defeated_with_broken_link() -> void:
-	var irina := Fixture.put(IRINA, Vector2i(3, 3))
-	irina.is_mounted_rider = true
-	irina.mounted_with_id = "p1_nobody"
-	assert_null(mounts.handle_rider_defeated(irina))
+	var general := Fixture.put(GENERAL, Vector2i(3, 3))
+	general.is_mounted_rider = true
+	general.mounted_with_id = "p1_nobody"
+	assert_null(mounts.handle_rider_defeated(general))
 	assert_push_error("no resolvable mount")

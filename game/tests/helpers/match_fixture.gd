@@ -1,22 +1,22 @@
 extends RefCounted
-# Shared test setup: a real Closed City vs Flood Survivors match via SetupFlow, with
+# Shared test setup: a real Russian-inspired vs Atlantean match (original 14) via SetupFlow, with
 # the relic/event deck and victory checker stubbed out, plus board-arrangement helpers.
 # Not collected by GUT (no test_ prefix). Use: const Fixture := preload(...).
 
 const SetupFlowScript := preload("res://scripts/scenes/setup_flow.gd")
 
-# Closed City (p1)
-const WORKER := "p1_r-reactor-worker"   # Common  HP 2 ATK 1 MOVE 2 RANGE 1
-const VERA := "p1_r-vera-7"             # Mount   HP 4 ATK 1 MOVE 4 RANGE 1
-const YURI := "p1_r-yuri-volkov"        # Warrior HP 4 ATK 2 MOVE 2 RANGE 2
-const IRINA := "p1_r-irina-karpova"     # Leader  HP 4 ATK 1 MOVE 2 RANGE 3
-const ORLOV := "p1_r-mikhail-orlov"     # Hero    HP 5 ATK 1 MOVE 2 RANGE 3
-# Flood Survivors (p2)
-const NAIA := "p2_a-flood-survivor-naia"                  # Warrior HP 4 ATK 2 MOVE 3 RANGE 1
-const LABORER := "p2_a-flood-survivor-stone-line-laborer" # Common  HP 2
-const AHESU := "p2_a-flood-survivor-ahesu"                # Mount   HP 4 MOVE 4
-const MERET := "p2_a-flood-survivor-meret-anu"            # Leader  HP 4
-const SAHU := "p2_a-flood-survivor-sahu-ren"              # Hero    HP 5
+# Russian-inspired (p1)
+const GYMNAST := "p1_r-gymnast"      # Common     HP 2 ATK 1 MOVE 3 RANGE 1
+const TIGER := "p1_r-tiger"          # Mount      HP 4 ATK 2 MOVE 4 RANGE 1
+const SNIPER := "p1_r-sniper"        # Warrior    HP 3 ATK 2 MOVE 2 RANGE 4
+const GENERAL := "p1_r-general"      # Leader     HP 5 ATK 1 MOVE 2 RANGE 1
+const BOGATYR := "p1_r-hero"         # Hero       HP 6 ATK 2 MOVE 2 RANGE 1
+# Atlantean (p2)
+const GUARD := "p2_a-guard"          # Warrior    HP 5 ATK 1 MOVE 2 RANGE 1
+const ATTENDANT := "p2_a-attendant"  # Common     HP 2 ATK 1 MOVE 2 RANGE 1
+const GLIDER := "p2_a-glider"        # Mount      HP 3 ATK 1 MOVE 4 RANGE 1
+const CONDUCTOR := "p2_a-conductor"  # Leader     HP 4 ATK 1 MOVE 2 RANGE 3
+const ORACLE := "p2_a-hero"          # Hero       HP 5 ATK 1 MOVE 2 RANGE 3
 
 
 class NullDeck:
