@@ -68,8 +68,23 @@ static func _reach(sys, instance: CharacterInstance) -> int:
 	return sys.ability_reach(instance, instance.data.range)
 
 
+func ability_label(_instance: CharacterInstance, _ability_id: String) -> String:
+	return "Link Mind"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	var legal := get_legal_targets(sys, instance, ability_id)
+	if not payload.has("target"):
+		return target_step("target", "Link which ally?", legal)
+	if LINK_TARGETS[instance.level] < 2 or payload.has("target_2"):
+		return {}
+	return second_step("target_2", "Link a second ally?", legal, payload.target)
+
+
 static func _ids(payload: Dictionary) -> Array:
 	var raw: Array = payload.get("targets", [])
 	if raw.is_empty() and payload.has("target"):
 		raw = [payload.target]
+		if payload.get("target_2") != null:
+			raw.append(payload.target_2)
 	return raw.map(func(v): return str(v))

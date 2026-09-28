@@ -4,6 +4,7 @@ extends Node
 #   window.mythcards_get_state()             -> JSON string (serialize_state)
 #   window.mythcards_dispatch_action(json)   -> JSON string (dispatch_action)
 #   window.mythcards_new_match(seed)         -> JSON string (restart with a fixed deck seed)
+#   window.mythcards_ui()                    -> JSON string (ui_layout: where to click)
 # Live only in a Web export carrying the "mythcards_testbridge" custom feature tag, so the
 # hooks never ship in a normal build (HLD-R-008). serialize_state/dispatch_action are pure
 # and GUT-tested; the JS glue is covered by the Playwright suite in e2e/.
@@ -98,13 +99,32 @@ func dispatch_action(action_json: String) -> Dictionary:
 	return _to_json_safe(result)
 
 
-# Restarts through the current scene (the debug match) with a fixed deck seed.
+# Restarts through the current scene (the game screen or debug match) with a fixed deck seed.
 func new_match(deck_seed: int) -> Dictionary:
 	var scene := get_tree().current_scene
 	if scene == null or not scene.has_method("start_new_match"):
 		return {"success": false, "reason": "the current scene can't start a match"}
 	scene.start_new_match(deck_seed)
 	return {"success": true, "deck_seed": deck_seed}
+
+
+# Visible buttons and tile centers in window pixels, so browser tests can click like a
+# player. Empty when the current scene has no ui_snapshot (the debug match).
+func ui_layout() -> Dictionary:
+	var scene := get_tree().current_scene
+	if scene == null or not scene.has_method("ui_snapshot"):
+		return {}
+	var ui: Dictionary = scene.ui_snapshot()
+	var xf := get_viewport().get_final_transform()
+	for b in ui.buttons:
+		b.center = _px(xf * b.center)
+	for key in ui.tiles:
+		ui.tiles[key] = _px(xf * ui.tiles[key])
+	return ui
+
+
+static func _px(v: Vector2) -> Dictionary:
+	return {"x": roundi(v.x), "y": roundi(v.y)}
 
 
 # --- JS glue ---------------------------------------------------------------------------
@@ -114,12 +134,14 @@ func _register_js_callbacks() -> void:
 	_expose("__mythcards_get_state", func(_args): return JSON.stringify(serialize_state()))
 	_expose("__mythcards_dispatch_action", func(args): return JSON.stringify(dispatch_action(str(args[0]))))
 	_expose("__mythcards_new_match", func(args): return JSON.stringify(new_match(int(args[0]))))
+	_expose("__mythcards_ui", func(_args): return JSON.stringify(ui_layout()))
 	# The Godot callbacks store their answer in window.__mythcards_result; these wrappers
 	# return it, so JS gets a value whether or not a callback's own return reaches JS.
 	JavaScriptBridge.eval("""
 		window.mythcards_get_state = function () { window.__mythcards_get_state(); return window.__mythcards_result; };
 		window.mythcards_dispatch_action = function (json) { window.__mythcards_dispatch_action(json); return window.__mythcards_result; };
 		window.mythcards_new_match = function (seed) { window.__mythcards_new_match(seed); return window.__mythcards_result; };
+		window.mythcards_ui = function () { window.__mythcards_ui(); return window.__mythcards_result; };
 		window.mythcards_ready = true;
 	""", true)
 

@@ -111,6 +111,51 @@ func execute(_sys, _instance: CharacterInstance, _ability_id: String, _payload: 
 	return {"success": false, "reason": "no AP ability defined for this character"}
 
 
+# --- Targeting steps, for the tap-driven game screen ------------------------------
+# The game screen builds a payload one pick at a time. next_step returns the next thing
+# to pick given the picks so far, or {} when `payload` is ready to send. A step is
+# {key, prompt, pick: "tile"|"character"|"option", tiles | characters | options
+# ([{label, value}]), optional}. The screen stores the pick at payload[key], or null when
+# an optional step is skipped (so has(key) means "decided"); nulls are dropped before
+# the action is sent.
+
+func ability_label(_instance: CharacterInstance, _ability_id: String) -> String:
+	return "Ability"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	if payload.has("target"):
+		return {}
+	var legal := get_legal_targets(sys, instance, ability_id)
+	return {} if legal.is_empty() else target_step("target", "Choose a target.", legal)
+
+
+func bonus_label(tag: String) -> String:
+	return tag.capitalize()
+
+
+func bonus_step(_sys, _instance: CharacterInstance, _tag: String, _payload: Dictionary) -> Dictionary:
+	return {}
+
+
+# A tile or character pick, whichever `legal` holds.
+static func target_step(key: String, prompt: String, legal: Array, optional: bool = false) -> Dictionary:
+	var tiles := not legal.is_empty() and legal[0] is Vector2i
+	var step := {"key": key, "prompt": prompt, "pick": "tile" if tiles else "character", "optional": optional}
+	step["tiles" if tiles else "characters"] = legal
+	return step
+
+
+static func option_step(key: String, prompt: String, options: Array, optional: bool = false) -> Dictionary:
+	return {"key": key, "prompt": prompt, "pick": "option", "options": options, "optional": optional}
+
+
+# A second optional pick of the same kind (L2 "up to 2" abilities), or {} if none is left.
+static func second_step(key: String, prompt: String, legal: Array, first) -> Dictionary:
+	var rest := legal.filter(func(v): return v != first)
+	return {} if rest.is_empty() else target_step(key, prompt, rest, true)
+
+
 # --- Reactive triggers -----------------------------------------------------------
 
 # Every live character's handler hears these; check ids against `instance` yourself.

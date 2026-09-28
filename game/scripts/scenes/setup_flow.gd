@@ -60,6 +60,17 @@ func get_placement_error(player_id: String, instance_id: String, pos: Vector2i) 
 	return ""
 
 
+func unplace_character(player_id: String, instance_id: String) -> bool:
+	# Picks a placed character back up so the player can rearrange before the match.
+	var player := get_player(player_id)
+	var character := player.find_character(instance_id) if player != null else null
+	if character == null or not character.is_placed():
+		return false
+	board.clear_occupant(character.position)
+	character.position = CharacterInstance.UNPLACED
+	return true
+
+
 func is_player_ready(player_id: String) -> bool:
 	var player := get_player(player_id)
 	return player != null and player.characters.all(func(c: CharacterInstance) -> bool: return c.is_placed())

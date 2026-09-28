@@ -74,6 +74,55 @@ func get_legal_attack_object_tiles(actor_id: String) -> Array[Vector2i]:
 	return result
 
 
+func get_usable_ability_ids(actor_id: String) -> Array[String]:
+	# Abilities this character could start now (its card allows it; AP is checked on use).
+	var result: Array[String] = []
+	var actor := _find_live(actor_id)
+	if actor == null or not actor.is_placed():
+		return result
+	_ensure_systems()
+	for id in ability_system.handler_for(actor).ability_ids(actor):
+		if ability_system.can_use_ability(actor, id):
+			result.append(id)
+	return result
+
+
+func get_offered_bonus_tags(actor_id: String) -> Array[String]:
+	# Free actions currently offered to this character ("<tag>_available" flags).
+	var result: Array[String] = []
+	var actor := _find_live(actor_id)
+	if actor == null:
+		return result
+	for flags in [actor.ability_uses_this_turn, actor.ability_uses_this_match]:
+		for key in flags:
+			var tag := str(key).trim_suffix("_available")
+			if str(key).ends_with("_available") and flags[key] and not result.has(tag):
+				result.append(tag)
+	return result
+
+
+func get_legal_mount_ids(actor_id: String) -> Array[String]:
+	var result: Array[String] = []
+	var actor := _find_live(actor_id)
+	if actor == null:
+		return result
+	for c in GameState.match_state.get_player(actor.player_id).characters:
+		if not c.defeated and _mount_error(actor, c) == "":
+			result.append(c.instance_id)
+	return result
+
+
+func get_legal_dismount_tiles(actor_id: String) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	var actor := _find_live(actor_id)
+	if actor == null or not actor.is_mounted_rider:
+		return result
+	for dir in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+		if _dismount_error(actor, actor.position + dir) == "":
+			result.append(actor.position + dir)
+	return result
+
+
 func systems() -> Dictionary:
 	# The current match's collaborators, built on first use (tools, TestBridge, tests).
 	_ensure_systems()
@@ -280,39 +329,53 @@ func _handle_ability(actor: CharacterInstance, payload: Dictionary) -> Dictionar
 
 func _handle_mount(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 	var mount_char := GameState.match_state.find_character(str(payload.get("mount_id", "")))
-	if mount_char == null or mount_char.defeated:
-		return _fail("unknown mount")
-	if not ["Hero", "Leader"].has(actor.data.type):
-		return _fail("only a Hero or Leader may mount")
-	if mount_char.data.type != "Mount" or mount_char.player_id != actor.player_id:
-		return _fail("invalid mount target")
-	if actor.mounted_with_id != "" or mount_char.mounted_with_id != "":
-		return _fail("already mounted")
-	if not _is_orthogonally_adjacent(actor.position, mount_char.position):
-		return _fail("not adjacent")
-	if actor.has_status("no_mount_dismount"):
-		return _fail("cannot mount right now")
+	var error := _mount_error(actor, mount_char)
+	if error != "":
+		return _fail(error)
 	mount_system.mount(actor, mount_char)
 	_spend_ap(actor)
 	return {"success": true}
 
 
-func _handle_dismount(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
-	if not actor.is_mounted_rider or actor.mounted_with_id == "":
-		return _fail("not mounted")
-	var to = payload.get("to")
-	if not to is Vector2i:
-		return _fail("missing destination")
-	if not _is_orthogonally_adjacent(actor.position, to):
-		return _fail("not adjacent")
-	var board := _board()
-	if not board.is_in_bounds(to) or board.is_occupied_by_character(to) or board.get_placed_object(to) != null:
-		return _fail("no empty adjacent tile")
+func _mount_error(actor: CharacterInstance, mount_char: CharacterInstance) -> String:
+	if mount_char == null or mount_char.defeated:
+		return "unknown mount"
+	if not ["Hero", "Leader"].has(actor.data.type):
+		return "only a Hero or Leader may mount"
+	if mount_char.data.type != "Mount" or mount_char.player_id != actor.player_id:
+		return "invalid mount target"
+	if actor.mounted_with_id != "" or mount_char.mounted_with_id != "":
+		return "already mounted"
+	if not _is_orthogonally_adjacent(actor.position, mount_char.position):
+		return "not adjacent"
 	if actor.has_status("no_mount_dismount"):
-		return _fail("cannot dismount right now")
+		return "cannot mount right now"
+	return ""
+
+
+func _handle_dismount(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
+	var to = payload.get("to")
+	var error := _dismount_error(actor, to)
+	if error != "":
+		return _fail(error)
 	mount_system.dismount(actor, to)
 	_spend_ap(actor)
 	return {"success": true}
+
+
+func _dismount_error(actor: CharacterInstance, to) -> String:
+	if not actor.is_mounted_rider or actor.mounted_with_id == "":
+		return "not mounted"
+	if not to is Vector2i:
+		return "missing destination"
+	if not _is_orthogonally_adjacent(actor.position, to):
+		return "not adjacent"
+	var board := _board()
+	if not board.is_in_bounds(to) or board.is_occupied_by_character(to) or board.get_placed_object(to) != null:
+		return "no empty adjacent tile"
+	if actor.has_status("no_mount_dismount"):
+		return "cannot dismount right now"
+	return ""
 
 
 func _handle_end_turn(player_id: String) -> Dictionary:

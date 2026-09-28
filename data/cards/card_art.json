@@ -1,0 +1,17 @@
+{
+  "_note": "Card id -> art file (relative to the repo root) shown on the game screen. Picked from assets/ by the tarot assignments in review_drafts/tarot_area_mapping.json; where several versions exist, the newest was used. Cards not listed show a text card. tools/sync_game_content.ps1 copies downscaled versions into the game.",
+  "r-gymnast": "assets/characters/mila-vetrova-gymnast-page-of-wands-character-card-art.png",
+  "r-tiger": "assets/characters/buran-white-siberian-tiger-knight-of-wands-character-card-art.png",
+  "r-sniper": "assets/characters/irina-sokolova-sniper-queen-of-swords-character-card-art.png",
+  "r-general": "assets/characters/arkady-volkov-army-general-king-of-swords-character-card-art.png",
+  "r-hero": "assets/characters/ilya-voronin-bogatyr-champion-king-of-wands-character-card-art-v2.png",
+  "r-engineer": "assets/characters/yakov-antonov-winter-engineer-eight-of-pentacles-character-card-art-v2.png",
+  "r-seer": "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-character-card-art-v4.png",
+  "r-chintamani-fragment": "assets/relics/closed-city-chintamani-fragment-ace-of-pentacles-relic-art-corrected.png",
+  "r-reactor-core-fragment": "assets/relics/closed-city-reactor-core-fragment-king-of-pentacles-relic-art.png",
+  "r-karpovas-black-key": "assets/relics/closed-city-karpovas-black-key-the-hierophant-relic-art-v2.png",
+  "r-signal-array-turns": "assets/events/closed-city-signal-array-turns-eight-of-wands-event-art.png",
+  "r-reactor-prayer": "assets/events/closed-city-reactor-prayer-the-sun-event-art.png",
+  "r-closed-city-incident": "assets/events/closed-city-incident-the-tower-event-art.png",
+  "r-seventeen-seconds": "assets/events/closed-city-seventeen-seconds-wheel-of-fortune-event-art.png"
+}

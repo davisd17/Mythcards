@@ -2,7 +2,8 @@ extends AbilityHandler
 # Army General (Leader) — Command / Tactical Mastery (LLD-ability-system 5.4).
 # L1 Command: an ally within 2 gains +1 ATK on its next attack this turn, or may move
 #    1 tile without spending an action. Payload: {"target": id, "choice": "atk"|"move"}.
-# L2: range 3, up to 2 allies, each choosing. Payload: {"targets": [{"id", "choice"}, ...]}.
+# L2: range 3, up to 2 allies, each choosing. Payload: {"targets": [{"id", "choice"}, ...]},
+#    or flat as the game screen builds it: {"target", "choice", "target_2", "choice_2"}.
 # L3 Tactical Mastery: +1 HP; once per turn, when a Commanded ally defeats an enemy or
 #    delivers a Spirit Ember, refresh 1 character AP on an ally within 2 ("tactical_mastery").
 
@@ -10,6 +11,8 @@ const COMMAND_REACH := [0, 2, 3, 3]     # by level
 const COMMAND_TARGETS := [0, 1, 2, 2]
 const COMMAND_ATK := 1
 const TACTICAL_MASTERY_REACH := 2
+const CHOICES := [{"label": "+1 ATK on its next attack", "value": "atk"},
+		{"label": "Move 1 tile for free", "value": "move"}]
 
 
 func level_bonuses() -> Dictionary:
@@ -82,10 +85,42 @@ func _maybe_offer_tactical_mastery(sys, instance: CharacterInstance, actor: Char
 		sys.offer_bonus(instance, "tactical_mastery")
 
 
+func ability_label(_instance: CharacterInstance, _ability_id: String) -> String:
+	return "Command"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	var legal := get_legal_targets(sys, instance, ability_id)
+	if not payload.has("target"):
+		return target_step("target", "Command which ally?", legal)
+	if not payload.has("choice"):
+		return option_step("choice", "The ally gains:", CHOICES)
+	if COMMAND_TARGETS[instance.level] < 2:
+		return {}
+	if not payload.has("target_2"):
+		return second_step("target_2", "Command a second ally?", legal, payload.target)
+	if payload.target_2 != null and not payload.has("choice_2"):
+		return option_step("choice_2", "The second ally gains:", CHOICES)
+	return {}
+
+
+func bonus_label(tag: String) -> String:
+	return "Tactical Mastery" if tag == "tactical_mastery" else super(tag)
+
+
+func bonus_step(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
+	if tag != "tactical_mastery" or payload.has("target_id"):
+		return {}
+	return target_step("target_id", "Refresh 1 AP on which ally?",
+			sys.characters_in_reach(instance, instance.position, TACTICAL_MASTERY_REACH, true))
+
+
 static func _orders(payload: Dictionary) -> Array:
 	var raw: Array = payload.get("targets", [])
 	if raw.is_empty() and payload.has("target"):
 		raw = [{"id": payload.target, "choice": payload.get("choice", "")}]
+		if payload.get("target_2") != null:
+			raw.append({"id": payload.target_2, "choice": payload.get("choice_2", "")})
 	var result := []
 	for entry in raw:
 		if entry is Dictionary:

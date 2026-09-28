@@ -1,4 +1,5 @@
-# Opens the debug match in a desktop window for playtesting (hotseat, original 14).
+# Opens the game screen in a desktop window for playtesting (hotseat; the debug match is
+# under Menu > Debug view).
 # Syncs card data first so edits in data/cards are picked up.
 #
 # Usage: tools/play.ps1 [-Godot <path>]

@@ -260,6 +260,31 @@ Unit tests use **GUT**, testing `BoardView`'s tap-to-action-request translation 
 - **`[NEED]` Relic-choice prompt trigger (Section 4.5)** infers "a choice is pending" from two signals rather than a dedicated one — flagged as a candidate for a future signal addition if this proves unreliable.
 - **This is the only LLD in the series with no `[NEED]` items requiring a patch to an earlier module** — every gap here is a UI/interaction-design decision, not a rules-engine gap, which is expected: by build step 16, every rules-affecting contract (movement, combat, abilities, leveling, deck, victory) was already nailed down by the ten LLDs before it.
 
+## 9A. Implementation Notes (2026-09-27)
+
+Built as HLD step 16 after the first hands-on playtest. **Designer ruling: the game must be fully tap-driven, with no typed commands, and drawn relic/event cards must be shown.** `scenes/game.tscn` is now the main scene; the debug match stays reachable from the Menu ("Debug view"), and it links back.
+
+**Structure (deviates from Section 2's node-per-tile scenes)**
+- `GameController` (`scripts/ui/game_controller.gd`, RefCounted) holds all tap logic and is what the tests drive (`test_game_controller.gd`). `GameScreen` (`game_screen.gd`) only lays out and redraws; `GameBoardView` draws the whole board in one Control; `CardView` shows one card.
+- Section 4.1's mode-switch question is resolved by not having modes. With a character selected, legal moves (dots) and attack targets (crosshair rings) show together, and a tap on either acts. Abilities, free bonus actions, and mount/dismount are buttons.
+- Everything with more than one pick runs as a **flow**: one pick at a time from `AbilityHandler.next_step` (tile, character, or option button; optional picks get a Skip button), sent when complete. Drawn-card choices and relic powers use the same flow, built from `RelicEventDeck.choice_spec`/`power_spec`. A drawn card's choice can't be cancelled; an ability flow can.
+- Highlights pair color with shape (NFR-024): move = green dot, attack = red crosshair, pick = gold corner brackets.
+- Player 1's back row is at the bottom of the board.
+
+**Setup:** player-chosen back-row deployment (BR-007A). The first unplaced character is pre-picked; tap a highlighted back-row tile to place it. Tapping a placed character picks it back up (`SetupFlow.unplace_character`). "Auto-place the rest" fills the row in card order. "Done placing" is in the top bar and hands over to Player 2, then starts the match.
+
+**Cards:** tapping any character shows its card: live stats, AP, statuses, and all three level texts with the current one marked. Every drawn relic or event pops up full size, with who drew it and whether it needs a choice. Relic and event chips under the top bar reopen active cards. Art comes from `data/cards/card_art.json`: `tools/sync_game_content.ps1` writes 400px JPEG copies to `game/data/card_art/<id>.art`, read as raw bytes so Godot doesn't import them. Cards without art show a text card that switches to art once one is mapped. Art is mapped for the 7 Russian characters and the 7 Closed City cards; the art picks follow `tarot_area_mapping.json`, using the newest version where there are several. `[NEED: designer to confirm the art picks]`
+
+**Engine additions for the screen (no rule changes)**
+- `AbilityHandler.next_step` / `ability_label` / `bonus_step` / `bonus_label`, overridden per character (LLD-ability-system 9A).
+- `RulesEngine.get_usable_ability_ids`, `get_offered_bonus_tags`, `get_legal_mount_ids`, `get_legal_dismount_tiles`. The last two share `_mount_error`/`_dismount_error` with the real handlers, so a preview can't disagree with the action.
+
+**Glyphs:** the default web font lacks symbols such as ✦ ● ⊘, which rendered as boxes in the first browser screenshots. The screen now uses plain text and drawn shapes only.
+
+**Known gap:** Foresight's top-or-bottom choice names the revealed card before the ability is sent, so in hotseat a player could look and then cancel. Acceptable for paper-prototype playtests; moving it to a post-use pending choice (like Chintamani's) would close it.
+
+**Tests:** `test_game_controller.gd` (taps, flows, setup), `test_game_screen.gd` (builds, popups, a seeded match through the whole deck answered by taps), and `e2e/tests/screen.spec.ts`. That spec plays in the browser by real mouse clicks at positions reported by TestBridge's `mythcards_ui()`: deploy, answer the drawn card, move, end the turn, and use an ability.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

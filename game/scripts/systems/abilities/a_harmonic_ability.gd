@@ -55,3 +55,17 @@ func execute(sys, instance: CharacterInstance, _ability_id: String, payload: Dic
 			result["damage"] = hit.damage
 			result["defeated"] = hit.defeated
 	return result
+
+
+func ability_label(_instance: CharacterInstance, _ability_id: String) -> String:
+	return "Resonance Shield"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	if not payload.has("target"):
+		return target_step("target", "Shield which ally?", get_legal_targets(sys, instance, ability_id))
+	if instance.level < 3 or payload.has("echo_target_id"):
+		return {}
+	var ally: CharacterInstance = sys.find(str(payload.target))
+	var enemies: Array = sys.characters_in_reach(ally, ally.position, ECHO_REACH, false)
+	return {} if enemies.is_empty() else target_step("echo_target_id", "Astral Echo: 1 damage to which enemy?", enemies, true)

@@ -78,3 +78,16 @@ func _moved_over(sys, instance: CharacterInstance, to: Vector2i) -> Array[String
 		if c != null and c.player_id != instance.player_id:
 			result.append(c.instance_id)
 	return result
+
+
+func ability_label(_instance: CharacterInstance, _ability_id: String) -> String:
+	return "Phase Current"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	if not payload.has("to"):
+		return target_step("to", "Phase Current: move to which tile?", get_legal_targets(sys, instance, ability_id))
+	if payload.has("over_id"):
+		return {}
+	var over := _moved_over(sys, instance, payload.to)
+	return {} if over.is_empty() else target_step("over_id", "Deal 1 damage to which enemy you passed?", over, true)

@@ -81,6 +81,35 @@ func execute_reactive_bonus(sys, instance: CharacterInstance, tag: String, paylo
 	return {"success": true}
 
 
+func ability_label(_instance: CharacterInstance, ability_id: String) -> String:
+	return "Collective Ascension" if ability_id == L3_ID else "Foresight"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	if ability_id == L3_ID:
+		return {}
+	var next := RelicEventDeck.peek_next()
+	if next != "" and not payload.has("to_bottom"):
+		var card := ContentDB.get_relic_event(next)
+		var title: String = card.card_name if card != null else next
+		return option_step("to_bottom", "Foresight reveals: %s." % title,
+				[{"label": "Leave it on top", "value": false}, {"label": "Put it on the bottom", "value": true}])
+	if payload.has("ally_id"):
+		return {}
+	var allies := _adjacent_allies(sys, instance)
+	return {} if allies.is_empty() else target_step("ally_id", "Shield which adjacent ally?", allies, true)
+
+
+func bonus_label(tag: String) -> String:
+	return "Spirit Mantle" if tag == "spirit_mantle" else super(tag)
+
+
+func bonus_step(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
+	if tag != "spirit_mantle" or payload.has("target_id"):
+		return {}
+	return target_step("target_id", "Spirit Mantle: shield which adjacent ally?", _adjacent_allies(sys, instance))
+
+
 static func _adjacent_allies(sys, instance: CharacterInstance) -> Array[String]:
 	var result: Array[String] = []
 	for ally in sys.allies_of(instance):

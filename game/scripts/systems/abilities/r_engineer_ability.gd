@@ -117,8 +117,30 @@ func _own_barricades(sys, instance: CharacterInstance) -> Array:
 	return result
 
 
+func ability_label(_instance: CharacterInstance, ability_id: String) -> String:
+	return "Frozen Redoubt" if ability_id == L3_ID else "Barricade"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	var legal := get_legal_targets(sys, instance, ability_id)
+	if not payload.has("target"):
+		var prompt := "Place on which tile (within 2)?" if ability_id == L3_ID \
+				else "Build or repair on which adjacent tile?"
+		return target_step("target", prompt, legal)
+	if ability_id == L3_ID:
+		if payload.has("kind"):
+			return {}
+		return option_step("kind", "Place a:", [{"label": "Barricade", "value": "barricade"},
+				{"label": "Frost tile", "value": "frost"}])
+	if BARRICADE_TILES[instance.level] < 2 or payload.has("target_2"):
+		return {}
+	return second_step("target_2", "Build or repair a second tile?", legal, payload.target)
+
+
 static func _tiles(payload: Dictionary) -> Array:
 	var raw: Array = payload.get("targets", [])
 	if raw.is_empty() and payload.get("target") is Vector2i:
 		raw = [payload.target]
+		if payload.get("target_2") is Vector2i:
+			raw.append(payload.target_2)
 	return raw.filter(func(p): return p is Vector2i)

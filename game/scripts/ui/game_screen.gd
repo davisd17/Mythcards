@@ -1,0 +1,440 @@
+extends Control
+# The game screen (HLD build step 16, LLD-presentation.md): a local hotseat match that is
+# played entirely by tapping. Portrait, mobile-first. From top to bottom: turn and AP,
+# relic and event chips, the board, the prompt bar (what to pick next, with option
+# buttons), then the inspected card beside the action buttons. Drawn relic and event
+# cards pop up full size. All game logic lives in GameController and the engine.
+
+const DEBUG_SCENE := "res://scenes/debug_match.tscn"
+const BUTTON_FONT := 20
+const BUTTON_HEIGHT := 56.0
+const SIDE_BUTTON_WIDTH := 280.0
+
+var controller := GameController.new()
+
+var _turn_label := Label.new()
+var _ap_label := Label.new()
+var _chips := HFlowContainer.new()
+var _board := GameBoardView.new()
+var _prompt := Label.new()
+var _options := HFlowContainer.new()
+var _card := CardView.new(true)
+var _primary: Button               # "Done placing" in setup, "End turn" in the match
+var _side := HFlowContainer.new()   # action buttons; two per row when the card is hidden
+var _popup := Control.new()
+var _popup_card := CardView.new()
+var _popup_note := Label.new()
+var _popup_queue: Array[String] = []   # card ids waiting to be shown, oldest first
+var _menu := PanelContainer.new()
+var _game_over := Control.new()
+var _game_over_label := Label.new()
+
+
+func _ready() -> void:
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	var background := ColorRect.new()
+	background.color = Color("#141310")
+	background.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(background)
+
+	var root := VBoxContainer.new()
+	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.add_theme_constant_override("separation", 6)
+	add_child(root)
+
+	var top := HBoxContainer.new()
+	_turn_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_turn_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_turn_label.add_theme_font_size_override("font_size", 24)
+	_turn_label.add_theme_color_override("font_color", Color("#f3e3b5"))
+	top.add_child(_turn_label)
+	_ap_label.add_theme_font_size_override("font_size", 24)
+	_ap_label.add_theme_color_override("font_color", Color("#9fe0f5"))
+	top.add_child(_ap_label)
+	_primary = _button("End turn", _on_primary, false)
+	_primary.custom_minimum_size.x = 170
+	_accent(_primary)
+	top.add_child(_primary)
+	top.add_child(_button("Menu", _toggle_menu, false))
+	root.add_child(_margin(top))
+
+	_chips.add_theme_constant_override("h_separation", 6)
+	_chips.add_theme_constant_override("v_separation", 6)
+	root.add_child(_margin(_chips))
+
+	_board.controller = controller
+	_board.custom_minimum_size = Vector2(0, 560)
+	_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_board.size_flags_stretch_ratio = 2.2
+	_board.tile_tapped.connect(func(pos): controller.tap_tile(pos); _refresh())
+	root.add_child(_board)
+
+	var prompt_box := VBoxContainer.new()
+	_prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_prompt.add_theme_font_size_override("font_size", 20)
+	_prompt.add_theme_color_override("font_color", Color("#f3e3b5"))
+	prompt_box.add_child(_prompt)
+	_options.add_theme_constant_override("h_separation", 6)
+	_options.add_theme_constant_override("v_separation", 6)
+	prompt_box.add_child(_options)
+	root.add_child(_margin(prompt_box))
+
+	var bottom := HBoxContainer.new()
+	bottom.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bottom.add_theme_constant_override("separation", 8)
+	var card_scroll := ScrollContainer.new()
+	card_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card_scroll.size_flags_stretch_ratio = 1.4
+	card_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card_scroll.add_child(_card)
+	bottom.add_child(card_scroll)
+	var side_scroll := ScrollContainer.new()
+	side_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	side_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_side.add_theme_constant_override("h_separation", 6)
+	_side.add_theme_constant_override("v_separation", 6)
+	side_scroll.add_child(_side)
+	bottom.add_child(side_scroll)
+	root.add_child(_margin(bottom))
+
+	_build_popup()
+	_build_menu()
+	_build_game_over()
+
+	EventBus.relic_drawn.connect(_on_card_drawn)
+	EventBus.match_ended.connect(func(_w, _c): _refresh())
+	for s in ["action_resolved", "turn_started", "relic_slot_changed", "character_defeated"]:
+		EventBus.connect(s, func(_a = null, _b = null, _c = null): _refresh.call_deferred())
+	new_match()
+
+
+func _exit_tree() -> void:
+	# The SetupFlow node lives outside the tree until the match starts.
+	if controller.setup != null:
+		controller.setup.free()
+		controller.setup = null
+
+
+# TestBridge's restart hook: both back rows in card order, then a fixed deck seed.
+func start_new_match(deck_seed: int = -1) -> void:
+	new_match()
+	for i in 2:
+		controller.auto_place()
+		controller.confirm_placement(deck_seed)
+	_refresh()
+
+
+# Where things are on screen, for TestBridge's click-driven browser tests: visible buttons
+# and every tile's center, in this viewport's coordinates.
+func ui_snapshot() -> Dictionary:
+	var buttons := []
+	for b in find_children("*", "Button", true, false):
+		if b.is_visible_in_tree() and not b.is_queued_for_deletion():
+			buttons.append({"text": b.text, "center": b.get_global_rect().get_center(), "disabled": b.disabled})
+	var tiles := {}
+	for y in BoardModel.BOARD_SIZE:
+		for x in BoardModel.BOARD_SIZE:
+			tiles["%d,%d" % [x, y]] = _board.get_global_transform() * _board.tile_rect(Vector2i(x, y)).get_center()
+	return {"buttons": buttons, "tiles": tiles, "prompt": _prompt.text, "popup": _popup.visible,
+			"setup": controller.in_setup()}
+
+
+func new_match() -> void:
+	_popup_queue.clear()
+	_popup.visible = false
+	_menu.visible = false
+	controller.begin_setup()
+	_refresh()
+
+
+# --- Rendering -------------------------------------------------------------------------
+
+func _refresh() -> void:
+	controller.sync()
+	_board.queue_redraw()
+	_refresh_header()
+	_refresh_prompt()
+	_refresh_side()
+	_refresh_card()
+	var state := GameState.match_state
+	_game_over.visible = state != null and state.phase == "ended" and controller.setup == null
+	if _game_over.visible:
+		var how := "Hero capture" if state.win_condition == "hero_capture" else "Army defeat"
+		_game_over_label.text = "%s wins by %s." % [_player_name(state.winner_id), how]
+
+
+func _refresh_header() -> void:
+	for child in _chips.get_children():
+		child.queue_free()
+	if controller.in_setup():
+		_turn_label.text = "Setup · %s" % _player_name(controller.placing_player)
+		_ap_label.text = ""
+		_primary.text = "Done placing"
+		_primary.disabled = not controller.placement_done()
+		_primary.visible = true
+		return
+	_primary.text = "End turn"
+	_primary.disabled = not controller.flow.is_empty()
+	_primary.visible = GameState.is_match_active()
+	var state := GameState.match_state
+	if state == null:
+		return
+	_turn_label.text = "Turn %d · %s" % [state.turn_number, _player_name(state.active_player_id)]
+	var player := state.get_player(state.active_player_id)
+	_ap_label.text = "AP %d/%d" % [player.pool_ap_remaining, player.pool_ap_max]
+	for p in state.players:
+		var label := "%s relic: %s" % [_short_name(p.id), _card_name(p.active_relic_id) if p.active_relic_id != "" else "none"]
+		var chip := _chip(label, PLAYER_COLORS[p.id])
+		if p.active_relic_id != "":
+			var id := p.active_relic_id
+			chip.pressed.connect(func(): _show_card(id, "%s's active relic." % _player_name(p.id)))
+		_chips.add_child(chip)
+	for card_id in RelicEventDeck.active_event_ids():
+		var chip := _chip("Event: " + _card_name(card_id), Color("#5b4a2e"))
+		chip.pressed.connect(func(): _show_card(card_id, "This event is in effect."))
+		_chips.add_child(chip)
+	_chips.add_child(_chip("Deck: %d" % state.shared_deck.size(), Color("#333333")))
+
+
+func _refresh_prompt() -> void:
+	for child in _options.get_children():
+		child.queue_free()
+	var step := controller.current_step()
+	if not step.is_empty():
+		var prompt: String = step.get("prompt", "")
+		if step.pick == "tile" or step.pick == "character":
+			var count: int = step.get("tiles", step.get("characters", [])).size()
+			prompt += "  Tap a highlighted %s." % ("tile" if step.pick == "tile" else "character") \
+					if count > 0 else "  Nothing can be chosen."
+		_prompt.text = prompt
+		for i in step.get("options", []).size():
+			var index: int = i
+			_options.add_child(_button(step.options[i].label, func(): controller.press_option(index); _refresh()))
+		if step.get("optional", false):
+			_options.add_child(_button("Skip", func(): controller.skip(); _refresh()))
+		if controller.can_cancel():
+			_options.add_child(_button("Cancel", func(): controller.cancel(); _refresh()))
+		return
+	if controller.message != "":
+		_prompt.text = controller.message
+	elif controller.in_setup():
+		_prompt.text = "Pick a character on the right, then tap a highlighted tile on your back row. Tap a placed character to pick it up again."
+	elif controller.selected_id != "":
+		_prompt.text = "Dots: move there. Red rings: attack. Or use a button on the right."
+	else:
+		_prompt.text = "Tap one of your characters. Tap any character to read its card."
+
+
+func _refresh_side() -> void:
+	for child in _side.get_children():
+		child.queue_free()
+	if controller.in_setup():
+		if not controller.tray().is_empty():
+			_side.add_child(_button("Auto-place the rest", func(): controller.auto_place(); _refresh()))
+		for c in controller.tray():
+			var id := c.instance_id
+			var b := _button(c.data.char_name, func(): controller.pick_from_tray(id); _refresh())
+			if id == controller.placing_id:
+				b.modulate = Color("#ffe14d")
+			_side.add_child(b)
+		return
+	if GameState.match_state == null or not GameState.is_match_active():
+		return
+	for action in controller.actions():
+		var kind: String = action.kind
+		var id: String = action.id
+		var b := _button(action.label, func(): controller.start_action(kind, id); _refresh())
+		b.disabled = not action.enabled
+		_side.add_child(b)
+	var relic := controller.relic_power_label()
+	if relic != "":
+		_side.add_child(_button(relic, func(): controller.use_relic(); _refresh()))
+
+
+func _refresh_card() -> void:
+	var id := controller.inspect_id
+	if id == "":
+		id = controller.selected_id
+	var c := controller.find(id)
+	_card.visible = c != null
+	if c != null:
+		_card.show_character(c.data, c)
+
+
+# --- Drawn-card popup --------------------------------------------------------------------
+
+func _build_popup() -> void:
+	_popup.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_popup.visible = false
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.75)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_popup.add_child(dim)
+	var box := VBoxContainer.new()
+	box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_theme_constant_override("separation", 10)
+	_popup_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_popup_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_popup_note.add_theme_font_size_override("font_size", 22)
+	_popup_note.add_theme_color_override("font_color", Color("#f3e3b5"))
+	box.add_child(_margin(_popup_note, 40))
+	box.add_child(_margin(_popup_card, 60))
+	box.add_child(_margin(_accent(_button("Continue", _next_popup)), 60))
+	_popup.add_child(box)
+	add_child(_popup)
+
+
+func _on_card_drawn(player_id: String, card_id: String) -> void:
+	var card := ContentDB.get_relic_event(card_id)
+	var kind := card.kind.to_lower() if card != null else "card"
+	var article := "an" if kind.begins_with("e") else "a"
+	_popup_queue.append("%s|%s drew %s %s." % [card_id, _player_name(player_id), article, kind])
+	if not _popup.visible:
+		_next_popup()
+
+
+func _show_card(card_id: String, note: String) -> void:
+	_popup_queue.push_front("%s|%s" % [card_id, note])
+	_next_popup()
+
+
+func _next_popup() -> void:
+	if _popup_queue.is_empty():
+		_popup.visible = false
+		_refresh()
+		return
+	var entry: String = _popup_queue.pop_front()
+	var parts := entry.split("|", true, 1)
+	_popup_card.show_relic_event(parts[0])
+	var note := parts[1]
+	if RelicEventDeck.has_pending_choice(GameState.match_state.active_player_id) and _popup_queue.is_empty():
+		note += " It needs a choice: answer it below the board."
+	_popup_note.text = note
+	_popup.visible = true
+
+
+# --- Menu and game over --------------------------------------------------------------------
+
+func _build_menu() -> void:
+	_menu.visible = false
+	_menu.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	_menu.offset_left = -270
+	_menu.offset_right = -10
+	_menu.offset_top = 60
+	var box := VBoxContainer.new()
+	box.custom_minimum_size = Vector2(240, 0)
+	box.add_child(_button("New match", new_match))
+	box.add_child(_button("Debug view", func(): get_tree().change_scene_to_file(DEBUG_SCENE)))
+	box.add_child(_button("Close", _toggle_menu))
+	_menu.add_child(box)
+	add_child(_menu)
+
+
+func _on_primary() -> void:
+	if controller.in_setup():
+		controller.confirm_placement()
+	else:
+		controller.end_turn()
+	_refresh()
+
+
+func _toggle_menu() -> void:
+	_menu.visible = not _menu.visible
+
+
+func _build_game_over() -> void:
+	_game_over.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_game_over.visible = false
+	_game_over.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var box := VBoxContainer.new()
+	box.set_anchors_preset(Control.PRESET_CENTER)
+	box.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	box.grow_vertical = Control.GROW_DIRECTION_BOTH
+	var panel := PanelContainer.new()
+	var inner := VBoxContainer.new()
+	_game_over_label.add_theme_font_size_override("font_size", 32)
+	_game_over_label.add_theme_color_override("font_color", Color("#f3e3b5"))
+	_game_over_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	inner.add_child(_game_over_label)
+	inner.add_child(_button("New match", new_match))
+	panel.add_child(inner)
+	box.add_child(panel)
+	_game_over.add_child(box)
+	add_child(_game_over)
+
+
+# --- Helpers ---------------------------------------------------------------------------------
+
+const PLAYER_COLORS := {"p1": Color("#8c2f39"), "p2": Color("#1f6f8b")}
+
+
+func _button(text: String, on_press: Callable, wide: bool = true) -> Button:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, BUTTON_HEIGHT)
+	b.add_theme_font_size_override("font_size", BUTTON_FONT)
+	if wide:
+		b.custom_minimum_size.x = SIDE_BUTTON_WIDTH
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	b.pressed.connect(on_press)
+	return b
+
+
+# Gold, for the one button that moves the game on.
+func _accent(b: Button) -> Button:
+	var colors := {"normal": "#c9a45c", "hover": "#d6b36c", "pressed": "#a8883f", "focus": "#c9a45c", "disabled": "#4d4535"}
+	for state in colors:
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color(colors[state])
+		style.set_corner_radius_all(8)
+		style.set_content_margin_all(8)
+		b.add_theme_stylebox_override(state, style)
+	b.add_theme_color_override("font_color", Color("#1a1916"))
+	b.add_theme_color_override("font_hover_color", Color("#1a1916"))
+	b.add_theme_color_override("font_pressed_color", Color("#1a1916"))
+	return b
+
+
+func _chip(text: String, color: Color) -> Button:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, 44)
+	b.add_theme_font_size_override("font_size", 16)
+	var style := StyleBoxFlat.new()
+	style.bg_color = color
+	style.set_corner_radius_all(12)
+	style.set_content_margin_all(8)
+	b.add_theme_stylebox_override("normal", style)
+	return b
+
+
+func _margin(child: Control, side: int = 10) -> MarginContainer:
+	var m := MarginContainer.new()
+	m.add_theme_constant_override("margin_left", side)
+	m.add_theme_constant_override("margin_right", side)
+	m.size_flags_vertical = child.size_flags_vertical
+	m.size_flags_stretch_ratio = child.size_flags_stretch_ratio
+	m.add_child(child)
+	return m
+
+
+static func _player_name(player_id: String) -> String:
+	var culture := ""
+	var state := GameState.match_state
+	if state != null and state.get_player(player_id) != null:
+		culture = state.get_player(player_id).culture
+	var n := "Player 1" if player_id == "p1" else "Player 2"
+	return "%s (%s)" % [n, culture] if culture != "" else n
+
+
+static func _short_name(player_id: String) -> String:
+	return "P1" if player_id == "p1" else "P2"
+
+
+static func _card_name(card_id: String) -> String:
+	var card := ContentDB.get_relic_event(card_id)
+	return card.card_name if card != null else card_id

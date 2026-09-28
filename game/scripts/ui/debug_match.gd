@@ -26,7 +26,8 @@ func _ready() -> void:
 	_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_status.add_theme_font_size_override("font_size", 20)
 	bar.add_child(_status)
-	for spec in [["End turn", _on_end_turn], ["New match", start_new_match], ["Panel", _toggle_panel]]:
+	for spec in [["End turn", _on_end_turn], ["New match", start_new_match], ["Panel", _toggle_panel],
+			["Game view", _open_game_view]]:
 		var button := Button.new()
 		button.text = spec[0]
 		button.custom_minimum_size = Vector2(0, 44)
@@ -57,6 +58,10 @@ func _ready() -> void:
 	for s in ["action_resolved", "turn_started", "match_ended", "relic_slot_changed"]:
 		EventBus.connect(s, func(_a = null, _b = null, _c = null): _refresh())
 	start_new_match()
+
+
+func _open_game_view() -> void:
+	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
 
 # Starts a fresh match: original 14, each back row in card order, p1 first.

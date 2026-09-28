@@ -60,3 +60,17 @@ func execute_reactive_bonus(sys, instance: CharacterInstance, tag: String, paylo
 	var result: Dictionary = sys.combat().apply_damage(instance, target, AURORA_ACROBAT_DAMAGE, false)
 	EventBus.attack_resolved.emit(instance.instance_id, target.instance_id, result.damage, result.defeated)
 	return {"success": true, "damage": result.damage, "defeated": result.defeated}
+
+
+func bonus_label(tag: String) -> String:
+	return "Aurora Acrobat strike" if tag == "aurora_acrobat" else super(tag)
+
+
+func bonus_step(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
+	if tag != "aurora_acrobat" or payload.has("target_id"):
+		return {}
+	var enemies: Array[String] = []
+	for enemy in sys.enemies_of(instance):
+		if sys.is_adjacent(enemy.position, instance.position):
+			enemies.append(enemy.instance_id)
+	return target_step("target_id", "Deal 1 damage to which adjacent enemy?", enemies)

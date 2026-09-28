@@ -66,5 +66,20 @@ func execute_reactive_bonus(sys, instance: CharacterInstance, tag: String, paylo
 	return {"success": true}
 
 
+func ability_label(_instance: CharacterInstance, _ability_id: String) -> String:
+	return "Pounce"
+
+
+func bonus_label(tag: String) -> String:
+	return "Aurora Predator" if tag == "aurora_predator" else super(tag)
+
+
+func bonus_step(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
+	if tag != "aurora_predator" or payload.has("to"):
+		return {}
+	var tiles: Array = sys.moves_for(instance, AURORA_PREDATOR_MOVE)
+	return {} if tiles.is_empty() else target_step("to", "Move up to 2 tiles (and refresh 1 AP)?", tiles, true)
+
+
 static func _pounce_ready(instance: CharacterInstance) -> bool:
 	return instance.has_status("pounce_mark") and instance.ability_uses_this_turn.get("moved", false)

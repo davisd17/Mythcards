@@ -193,6 +193,26 @@ func execute_reactive_bonus(instance: CharacterInstance, tag: String, payload: D
 	return handler_for(instance).execute_reactive_bonus(self, instance, tag, payload)
 
 
+# --- Targeting steps for the game screen (AbilityHandler.next_step) -------------------
+
+func ability_label(instance: CharacterInstance, ability_id: String) -> String:
+	return handler_for(instance).ability_label(instance, ability_id)
+
+
+func ability_step(instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	return handler_for(instance).next_step(self, instance, ability_id, payload)
+
+
+func bonus_label(instance: CharacterInstance, tag: String) -> String:
+	return "Free move" if tag == "free_move" else handler_for(instance).bonus_label(tag)
+
+
+func bonus_step(instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
+	if tag == "free_move":
+		return {} if payload.has("to") else AbilityHandler.target_step("to", "Move 1 tile.", moves_for(instance, 1))
+	return handler_for(instance).bonus_step(self, instance, tag, payload)
+
+
 # --- Level-up (LevelingSystem) -----------------------------------------------------
 
 func apply_level_up_effects(instance: CharacterInstance, new_level: int) -> void:

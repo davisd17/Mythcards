@@ -103,6 +103,49 @@ func execute(sys, instance: CharacterInstance, ability_id: String, payload: Dict
 	return {"success": true}
 
 
+func ability_label(_instance: CharacterInstance, ability_id: String) -> String:
+	return "Relay Gate" if ability_id == L3_ID else "Pylon"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	if ability_id == L3_ID:
+		if not payload.has("target"):
+			return target_step("target", "Teleport which ally (next to a pylon)?", get_legal_targets(sys, instance, ability_id))
+		if payload.has("to"):
+			return {}
+		return target_step("to", "Teleport it to which tile?", _relay_destinations(sys, instance, sys.find(str(payload.target))))
+	var movable := _movable_pylons(sys, instance)
+	if not movable.is_empty() and not payload.has("mode"):
+		return option_step("mode", "Pylon:", [{"label": "Place a new pylon", "value": "place"},
+				{"label": "Move one of your pylons 1 tile", "value": "move"}])
+	if payload.get("mode") == "move":
+		if not payload.has("move_from"):
+			return target_step("move_from", "Move which pylon?", movable)
+		if payload.has("target"):
+			return {}
+		return target_step("target", "Move it to which tile?", _empty_neighbors(sys, payload.move_from))
+	if payload.has("target"):
+		return {}
+	return target_step("target", "Place the pylon on which tile?", _placement_tiles(sys, instance))
+
+
+# Own pylon objects with an empty tile next to them.
+func _movable_pylons(sys, instance: CharacterInstance) -> Array:
+	var result := []
+	for y in BoardModel.BOARD_SIZE:
+		for x in BoardModel.BOARD_SIZE:
+			var pos := Vector2i(x, y)
+			var obj: PlacedObjectInstance = sys.board.get_placed_object(pos)
+			if obj != null and obj.type_id == "pylon" and obj.owner_player_id == instance.player_id \
+					and not _empty_neighbors(sys, pos).is_empty():
+				result.append(pos)
+	return result
+
+
+static func _empty_neighbors(sys, pos: Vector2i) -> Array:
+	return sys.neighbors(pos).filter(func(n): return sys.is_empty_tile(n))
+
+
 func _placement_tiles(sys, instance: CharacterInstance) -> Array:
 	var reach: int = PYLON_REACH[instance.level]
 	var tiles: Array = sys.neighbors(instance.position) if reach == 1 \

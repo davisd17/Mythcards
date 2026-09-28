@@ -196,6 +196,8 @@ Implemented in `game/scripts/autoloads/test_bridge.gd`, GUT-tested in `test_test
 - **JSON parsing uses `JSON.new().parse()`**, which fails quietly, instead of `JSON.parse_string`, which logs an engine error on malformed input.
 - **`{"x", "y"}` conversion applies inside lists too**, e.g. Fortified Works' `targets`.
 - **The full-match test runs its bot loop inside the page** in a single `evaluate`, because each turn makes hundreds of bridge calls. Each turn the bot resolves any drawn-card choice, attacks the weakest enemy in range, or steps toward the nearest enemy, then ends the turn. Every turn it checks invariants: no two characters on one tile (except a mounted pair), no live character at 0 HP, no negative AP. The bot uses no abilities, so its results aren't balance data.
+- **`window.mythcards_ui()`** (added with the game screen, 2026-09-27) returns where the visible buttons (text, center, disabled) and all 49 tile centers are, in window pixels, plus the prompt text and whether a card popup is open. Browser tests use it to click like a player; it changes nothing. It is empty when the current scene has no `ui_snapshot()` (the debug match).
+- **`mythcards_new_match(seed)` restarts through the game screen** now that it is the main scene: both back rows in card order, the same deployment as the debug match.
 
 ## 10. Traceability
 

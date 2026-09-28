@@ -59,5 +59,18 @@ func execute(sys, instance: CharacterInstance, _ability_id: String, payload: Dic
 	return {"success": true, "damage": hit.damage, "defeated": hit.defeated}
 
 
+func ability_label(_instance: CharacterInstance, _ability_id: String) -> String:
+	return "Chill"
+
+
+func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
+	if not payload.has("target"):
+		return target_step("target", "Chill which enemy?", get_legal_targets(sys, instance, ability_id))
+	if instance.level < 2 or payload.has("ally_id"):
+		return {}
+	var allies := _veil_targets(sys, instance)
+	return {} if allies.is_empty() else target_step("ally_id", "Winter Veil: shield which ally?", allies, true)
+
+
 func _veil_targets(sys, instance: CharacterInstance) -> Array[String]:
 	return sys.characters_in_reach(instance, instance.position, sys.ability_reach(instance, WINTER_VEIL_REACH), true)
