@@ -182,7 +182,7 @@ func test_trapped_hero_is_fine_if_freed_before_turn_end() -> void:
 	Fixture.put(Fixture.BOGATYR, Vector2i(0, 0))
 	Fixture.put(Fixture.GYMNAST, Vector2i(1, 0))
 	Fixture.put(GUARD, Vector2i(0, 1))
-	assert_true(_act("move", Fixture.GYMNAST, {"to": Vector2i(2, 1)}).success)   # opens (1, 0)
+	assert_true(_act("move", Fixture.GYMNAST, {"to": Vector2i(1, 1)}).success)   # opens (1, 0)
 	assert_true(_act("end_turn", "p1").success)
 	assert_eq(Fixture.state().phase, "in_progress")
 	assert_eq(Fixture.state().active_player_id, "p2")

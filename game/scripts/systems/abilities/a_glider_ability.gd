@@ -70,14 +70,11 @@ func execute(sys, instance: CharacterInstance, _ability_id: String, payload: Dic
 	return result
 
 
-# Enemies the Glider can pass over on its way to `to`. With everything passable, a
-# route through a tile exists exactly when the detour fits the MOVE budget.
+# Enemies on the tiles the Glider crosses on its straight line to `to`.
 func _moved_over(sys, instance: CharacterInstance, to: Vector2i) -> Array[String]:
 	var result: Array[String] = []
-	var budget := instance.get_effective_move()
-	for enemy in sys.enemies_of(instance):
-		if enemy.position == to:
-			continue
-		if sys.distance(instance.position, enemy.position) + sys.distance(enemy.position, to) <= budget:
-			result.append(enemy.instance_id)
+	for pos in BoardModel.tiles_between(instance.position, to):
+		var c: CharacterInstance = sys.occupant(pos)
+		if c != null and c.player_id != instance.player_id:
+			result.append(c.instance_id)
 	return result

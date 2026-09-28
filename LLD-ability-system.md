@@ -536,7 +536,7 @@ All 14 original handlers are implemented (`game/scripts/systems/abilities/`) and
 - **AP is paid before an attack or ability resolves**, and refunded if an ability then fails. Before this, an automatic AP refresh triggered mid-action (Perfect Chord) was immediately undone by the payment. A test caught it.
 - **Vault's one pass is a per-path limit** (`BoardModel.get_legal_moves(..., max_passes)`). The spec's shared counter inside the predicate would cap passes across *all* explored paths, not per path.
 - **Frost is implemented** (Section 5.6's flagged gap): entering a frost tile ends the move, and Phase Current ignores it.
-- **"Moved over a character" is judged by destination.** The engine knows where a piece ended, not its path, so a move counts as a pass when no pass-free route of the same budget reaches the destination (Section 4.2). If an equally short detour existed, it doesn't count, even if the player pictured going over. If that matters, a move could carry an explicit path.
+- **"Moved over a character" is exact.** With straight-line movement (designer ruling 2026-09-27), the tiles a move crosses are known: `BoardModel.tiles_between`. A move counts as passing a character exactly when one stands on a crossed tile. This affects Vault follow-ups, Glide's L2 buff, and Phase Current's "enemy moved over".
 - **Glider L2 buff lasts until its next attack (designer ruling 2026-09-27)**, not just the turn it glided. Gliding again before attacking doesn't stack it (`expires = "until_used"`, spent by the attack).
 
 **Card readings that need a designer look**

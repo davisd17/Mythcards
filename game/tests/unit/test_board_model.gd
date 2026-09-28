@@ -41,15 +41,16 @@ func test_invalid_edge_row_side_errors() -> void:
 
 # --- get_legal_moves ---------------------------------------------------------
 
-func test_c7_open_board_move_2_reaches_12_orthogonal_tiles() -> void:
+func test_c7_open_board_move_2_is_straight_lines_only() -> void:
+	# Designer ruling 2026-09-27: one direction, no turning (so no "diagonal" tiles).
 	board.set_occupant(Vector2i(3, 3), "mover")
 	var moves := board.get_legal_moves(Vector2i(3, 3), 2)
 	var expected := [
-		Vector2i(3, 1), Vector2i(2, 2), Vector2i(3, 2), Vector2i(4, 2),
-		Vector2i(1, 3), Vector2i(2, 3), Vector2i(4, 3), Vector2i(5, 3),
-		Vector2i(2, 4), Vector2i(3, 4), Vector2i(4, 4), Vector2i(3, 5),
+		Vector2i(3, 1), Vector2i(3, 2), Vector2i(1, 3), Vector2i(2, 3),
+		Vector2i(4, 3), Vector2i(5, 3), Vector2i(3, 4), Vector2i(3, 5),
 	]
 	assert_eq(_sorted(moves), _sorted(expected))
+	assert_false(moves.has(Vector2i(4, 4)), "turning a corner isn't a move")
 
 
 func test_c7_move_budget_zero_has_no_moves() -> void:
@@ -106,16 +107,16 @@ func test_c17_object_passable_predicate_passes_through_barricade() -> void:
 	assert_true(moves.has(Vector2i(3, 5)))
 
 
-func test_max_passes_is_counted_per_path() -> void:
+func test_max_passes_is_counted_per_line() -> void:
 	# Two allies in a column: one pass reaches past the first, not past both.
 	board.set_occupant(Vector2i(3, 3), "mover")
 	board.set_occupant(Vector2i(3, 4), "a")
 	board.set_occupant(Vector2i(3, 5), "b")
+	board.set_occupant(Vector2i(4, 3), "c")
 	var always := func(_pos): return true
 	var moves := board.get_legal_moves(Vector2i(3, 3), 3, "orthogonal", always, Callable(), 1)
 	assert_false(moves.has(Vector2i(3, 6)), "would need two passes")
-	assert_true(moves.has(Vector2i(2, 5)), "one pass, then sideways")
-	assert_true(moves.has(Vector2i(4, 4)), "a different path's pass isn't used up")
+	assert_true(moves.has(Vector2i(5, 3)), "another direction has its own pass")
 	var unlimited := board.get_legal_moves(Vector2i(3, 3), 3, "orthogonal", always)
 	assert_true(unlimited.has(Vector2i(3, 6)))
 
@@ -133,7 +134,7 @@ func test_entering_frost_ends_the_move() -> void:
 	var moves := board.get_legal_moves(Vector2i(3, 3), 3)
 	assert_true(moves.has(Vector2i(3, 4)), "can stop on frost")
 	assert_false(moves.has(Vector2i(3, 5)), "can't continue through it")
-	assert_true(moves.has(Vector2i(4, 5)), "other routes still work")
+	assert_true(moves.has(Vector2i(5, 3)), "other directions still work")
 
 
 func test_ignore_terrain_crosses_frost() -> void:

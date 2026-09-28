@@ -146,10 +146,6 @@ func test_level_2_glide_over_a_character_buffs_the_next_attack() -> void:
 	var glider := _put(GLIDER, Vector2i(3, 6))
 	_level(GLIDER, 2)
 	_put(GYMNAST, Vector2i(3, 5))
-	# Walled in, so the only way out is over the Gymnast. The engine knows destinations,
-	# not paths: a move counts as "over a character" when no pass-free route reaches it.
-	Fixture.board().place_object(Vector2i(2, 6), "barricade", "p1")
-	Fixture.board().place_object(Vector2i(4, 6), "barricade", "p1")
 	assert_true(_act("move", GLIDER, {"to": Vector2i(3, 4)}).success)
 	assert_eq(glider.sum_status("temp_atk"), 1)
 	# Designer ruling 2026-09-27: it lasts until the next attack, across turns, and
@@ -166,13 +162,13 @@ func test_level_2_glide_over_a_character_buffs_the_next_attack() -> void:
 	assert_eq(glider.sum_status("temp_atk"), 0, "spent")
 
 
-func test_level_2_glide_with_a_pass_free_route_earns_nothing() -> void:
+func test_level_2_glide_over_nobody_earns_nothing() -> void:
 	_p2_turn()
 	var glider := _put(GLIDER, Vector2i(3, 6))
 	_level(GLIDER, 2)
 	_put(GYMNAST, Vector2i(3, 5))
-	assert_true(_act("move", GLIDER, {"to": Vector2i(3, 4)}).success)
-	assert_eq(glider.sum_status("temp_atk"), 0, "could have gone around")
+	assert_true(_act("move", GLIDER, {"to": Vector2i(1, 6)}).success)
+	assert_eq(glider.sum_status("temp_atk"), 0, "nobody on the line it crossed")
 
 
 func test_phase_current_moves_through_everything_and_hits_one_enemy() -> void:

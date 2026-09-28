@@ -124,56 +124,49 @@ func get_legal_moves(from: Vector2i, move_budget: int, pattern: String = "orthog
 		passable_predicate: Callable = Callable(),
 		object_passable_predicate: Callable = Callable(),
 		max_passes: int = -1, ignore_terrain: bool = false) -> Array[Vector2i]:
-	# BFS (LLD 4.1). passable_predicate: may pass through (not stop on) a character-occupied
-	# tile. object_passable_predicate: same, for movement-blocking placed objects.
-	# max_passes caps character pass-throughs per path (Vault: 1); -1 = unlimited.
-	# Entering a frost tile ends the move there unless ignore_terrain (Phase Current).
+	# Straight-line movement (designer ruling 2026-09-27): up to move_budget tiles in ONE of
+	# the four directions, no turning. passable_predicate: may pass through (not stop on) a
+	# character-occupied tile; object_passable_predicate: same for movement-blocking
+	# objects. max_passes caps character pass-throughs along the line (Vault: 1); -1 =
+	# unlimited. Entering frost ends the line there unless ignore_terrain (Phase Current).
 	var result: Array[Vector2i] = []
 	if pattern != "orthogonal":
 		push_error("BoardModel.get_legal_moves: unsupported pattern '%s'" % pattern)
 		return result
+	for dir in ORTHOGONAL_DIRECTIONS:
+		var cursor := from
+		var passes := 0
+		for _step in move_budget:
+			cursor += dir
+			if not is_in_bounds(cursor):
+				break
+			if is_occupied_by_character(cursor):
+				var may_pass: bool = passable_predicate.is_valid() and passable_predicate.call(cursor)
+				if not may_pass or (max_passes >= 0 and passes >= max_passes):
+					break
+				passes += 1
+				continue   # can pass, can't stop
+			var def := _object_def_at(cursor)
+			if def != null and def.blocks_movement:
+				if not (object_passable_predicate.is_valid() and object_passable_predicate.call(cursor)):
+					break
+				continue
+			result.append(cursor)
+			if not ignore_terrain and get_tile(cursor).terrain_type == "frost":
+				break
+	return result
 
-	# Search state is (tile, passes used), so one path's pass doesn't use up another's.
-	var start := Vector3i(from.x, from.y, 0)
-	var visited := {start: 0}
-	var frontier: Array[Vector3i] = [start]
-	var found := {}
-	while not frontier.is_empty():
-		var state: Vector3i = frontier.pop_front()
-		var cost: int = visited[state]
-		if cost >= move_budget:
-			continue
-		var current := Vector2i(state.x, state.y)
-		var passes := state.z
-		for dir in ORTHOGONAL_DIRECTIONS:
-			var next := current + dir
-			if not is_in_bounds(next):
-				continue
-			var next_passes := passes
-			var can_stop := true
-			if is_occupied_by_character(next):
-				if not (passable_predicate.is_valid() and passable_predicate.call(next)):
-					continue
-				if max_passes >= 0 and passes >= max_passes:
-					continue
-				next_passes += 1
-				can_stop = false
-			else:
-				var def := _object_def_at(next)
-				if def != null and def.blocks_movement:
-					if not (object_passable_predicate.is_valid() and object_passable_predicate.call(next)):
-						continue
-					can_stop = false
-			var key := Vector3i(next.x, next.y, next_passes)
-			if visited.has(key) and visited[key] <= cost + 1:
-				continue
-			visited[key] = cost + 1
-			if can_stop and next != from and not found.has(next):
-				found[next] = true
-				result.append(next)
-			var stops_here := not ignore_terrain and get_tile(next).terrain_type == "frost"
-			if not stops_here:
-				frontier.append(key)
+
+# The tiles strictly between two points on a straight line ([] if not on one line).
+static func tiles_between(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	if from == to or (from.x != to.x and from.y != to.y):
+		return result
+	var step := Vector2i(signi(to.x - from.x), signi(to.y - from.y))
+	var cursor := from + step
+	while cursor != to:
+		result.append(cursor)
+		cursor += step
 	return result
 
 
