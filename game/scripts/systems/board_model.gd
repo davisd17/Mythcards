@@ -127,7 +127,7 @@ func get_legal_moves(from: Vector2i, move_budget: int, pattern: String = "orthog
 	# Straight-line movement (designer ruling 2026-09-27): up to move_budget tiles in ONE of
 	# the four directions, no turning. passable_predicate: may pass through (not stop on) a
 	# character-occupied tile; object_passable_predicate: same for movement-blocking
-	# objects. max_passes caps character pass-throughs along the line (Vault: 1); -1 =
+	# objects. max_passes caps pass-throughs (characters and objects) along the line; -1 =
 	# unlimited. Entering frost ends the line there unless ignore_terrain (Phase Current).
 	var result: Array[Vector2i] = []
 	if pattern != "orthogonal":
@@ -148,8 +148,10 @@ func get_legal_moves(from: Vector2i, move_budget: int, pattern: String = "orthog
 				continue   # can pass, can't stop
 			var def := _object_def_at(cursor)
 			if def != null and def.blocks_movement:
-				if not (object_passable_predicate.is_valid() and object_passable_predicate.call(cursor)):
+				var may_pass_object: bool = object_passable_predicate.is_valid() and object_passable_predicate.call(cursor)
+				if not may_pass_object or (max_passes >= 0 and passes >= max_passes):
 					break
+				passes += 1
 				continue
 			result.append(cursor)
 			if not ignore_terrain and get_tile(cursor).terrain_type == "frost":

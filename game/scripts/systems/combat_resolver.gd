@@ -64,11 +64,17 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 	var shield_total := maxi(0, shield_entries + shield_bonus - int(penetration.get("ignore_shield", 0)))
 	var shield_consumed := mini(shield_total, after_reduction)
 	var final_damage := after_reduction - shield_consumed
+	# Memory (designer ruling 2026-09-27): spent automatically to prevent 1 damage, after shields.
+	var memory_spent := final_damage > 0 and defender.has_status("memory")
+	if memory_spent:
+		final_damage -= 1
 
 	# Marks are single use; shields drain newest-first (designer ruling 2026-09-25).
 	for se in used_marks:
 		defender.status_effects.erase(se)
 	_consume_shields(defender, mini(shield_entries, shield_consumed))
+	if memory_spent:
+		ability_system.remove_status(defender, "memory")
 
 	var would_be_hp := defender.current_hp - final_damage
 	if would_be_hp <= 0:
@@ -114,6 +120,13 @@ func apply_push(target: CharacterInstance, from_position: Vector2i, distance: in
 				mount_char.position = cursor
 		EventBus.character_repositioned.emit(target.instance_id, from, cursor, "push")
 	return cursor
+
+
+func apply_hazard_damage(target: CharacterInstance, amount: int) -> Dictionary:
+	# Damage from the board or a card rather than a character (Leak, Reactor Prayer). It
+	# still runs the normal pipeline (shields, Memory, Last Oath). With no attacker, a
+	# defeat is credited to the target itself, so no enemy gains a Spirit Ember from it.
+	return apply_damage(target, target, amount, false)
 
 
 func apply_pull(target: CharacterInstance, toward: Vector2i, distance: int) -> Vector2i:

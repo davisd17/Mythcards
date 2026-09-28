@@ -66,7 +66,8 @@ func serialize_state() -> Dictionary:
 						"current_hp": obj.current_hp, "max_hp": obj.max_hp, "owner": obj.owner_player_id})
 			if state.board.get_tile(Vector2i(x, y)).terrain_type == "frost":
 				frost.append(_pos(Vector2i(x, y)))
-	var pending := RelicEventDeck.get_pending_choice(state.active_player_id)
+	var choice := RelicEventDeck.choice_spec(state.active_player_id)
+	var power := RelicEventDeck.power_spec(state.active_player_id)
 	return {
 		"phase": state.phase,
 		"turn_number": state.turn_number,
@@ -76,7 +77,8 @@ func serialize_state() -> Dictionary:
 		"players": players,
 		"deck_size": state.shared_deck.size(),
 		"deck_seed": state.deck_seed,
-		"pending_choice": {"kind": pending.kind, "card_id": pending.card_id} if not pending.is_empty() else {},
+		"pending_choice": _to_json_safe(choice),
+		"relic_power": _to_json_safe(power),
 		"active_events": RelicEventDeck.active_event_ids(),
 		"global_range_modifier": state.global_range_modifier,
 		"objects": objects,

@@ -32,14 +32,16 @@ func test_c1_state_matches_the_schema() -> void:
 func test_state_includes_objects_frost_and_pending_choice() -> void:
 	Fixture.board().place_object(Vector2i(2, 2), "barricade", "p1")
 	Fixture.board().get_tile(Vector2i(4, 4)).terrain_type = "frost"
-	Fixture.state().get_player("p1").active_relic_id = "r-iron-birch-talisman"
-	Fixture.state().shared_deck = ["r-winter-palace-standard"] as Array[String]
+	Fixture.state().get_player("p1").active_relic_id = "r-reactor-core-fragment"
+	Fixture.state().shared_deck = ["r-karpovas-black-key"] as Array[String]
 	TurnManager.relic_event_deck = null
 	RelicEventDeck.draw_for("p1")
 	var s := TestBridge.serialize_state()
 	assert_eq(s.objects, [{"type": "barricade", "position": {"x": 2, "y": 2}, "current_hp": 2, "max_hp": 2, "owner": "p1"}])
 	assert_eq(s.frost, [{"x": 4, "y": 4}])
-	assert_eq(s.pending_choice, {"kind": "relic", "card_id": "r-winter-palace-standard"})
+	assert_eq(s.pending_choice.kind, "relic")
+	assert_eq(s.pending_choice.card_id, "r-karpovas-black-key")
+	assert_eq(s.pending_choice.options.size(), 2)
 
 
 func test_c2_no_match_gives_the_empty_shape() -> void:

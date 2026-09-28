@@ -76,7 +76,7 @@ func run_command(line: String) -> String:
 			var choice = _json(parts[1] if parts.size() > 1 else "{}")
 			if not choice is Dictionary:
 				return "choose needs a JSON object, e.g. choose {\"keep_new\": true}"
-			return _report(RulesEngine.request_action("deck_choice", state.active_player_id, choice))
+			return _report(RulesEngine.request_action("deck_choice", state.active_player_id, _convert(choice)))
 	if parts.size() < 2:
 		return HELP
 	var actor := resolve_character(parts[1], state.active_player_id)

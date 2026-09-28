@@ -65,6 +65,56 @@ func get_bonus_move_tiles(instance: CharacterInstance, from: Vector2i, budget: i
 	return handler_for(instance).get_bonus_move_tiles(self, instance, from, budget)
 
 
+# Extra MOVE from relics (Karpova's Black Key: Leader and Common +1).
+func get_move_bonus(instance: CharacterInstance) -> int:
+	return RelicEventDeck.get_relic_move_bonus(self, instance)
+
+
+# The rules one move uses: the mover's own pass-through abilities, plus any one-pass
+# "move through" grant from a card (Seventeen Seconds, The Causeway Breathes, Karpova's
+# Black Key). `actor` is who acts (a rider, for a mounted pair); `mover` supplies the
+# movement abilities. Returns {pass_char, pass_obj, max_passes, grants}.
+func movement_rules(mover: CharacterInstance, actor: CharacterInstance = null) -> Dictionary:
+	if actor == null:
+		actor = mover
+	var pass_char := get_movement_passable_predicate(mover)
+	var pass_obj := get_movement_object_passable_predicate(mover)
+	var max_passes := get_movement_max_passes(mover)
+	if not pass_char.is_valid() and not pass_obj.is_valid():
+		max_passes = 0
+	var grants := movement_grants(actor)
+	if grants.is_empty():
+		return {"pass_char": pass_char, "pass_obj": pass_obj, "max_passes": max_passes, "grants": grants}
+	var own_char := pass_char
+	var own_obj := pass_obj
+	var any_character := grants.has("seventeen_seconds")
+	var allies := grants.has("black_key")
+	var player_id := actor.player_id
+	pass_char = func(pos: Vector2i) -> bool:
+		if own_char.is_valid() and own_char.call(pos):
+			return true
+		var c := occupant(pos)
+		return any_character or (allies and c != null and c.player_id == player_id)
+	pass_obj = func(_pos: Vector2i) -> bool: return true   # every grant lets you pass an object
+	if max_passes >= 0:
+		max_passes += 1   # the grant is one extra pass
+	return {"pass_char": pass_char, "pass_obj": pass_obj, "max_passes": max_passes, "grants": grants}
+
+
+# Which one-pass "move through" grants apply to this character's next move.
+func movement_grants(actor: CharacterInstance) -> Array[String]:
+	var grants: Array[String] = []
+	var flags: Dictionary = _match.get_player(actor.player_id).player_flags_this_turn
+	if flags.get("seventeen_seconds_pending", false):
+		grants.append("seventeen_seconds")
+	if flags.get("causeway_pending", false):
+		grants.append("causeway")
+	if RelicEventDeck.has_relic(actor.player_id, "r-karpovas-black-key") \
+			and ["Leader", "Common"].has(actor.data.type) and not flags.get("black_key_used", false):
+		grants.append("black_key")
+	return grants
+
+
 # --- Attack queries (RulesEngine, CombatResolver) --------------------------------
 
 func get_attack_pattern(_instance: CharacterInstance) -> String:
@@ -87,7 +137,8 @@ func get_penetration(instance: CharacterInstance) -> Dictionary:
 
 
 func get_conditional_atk_bonus(instance: CharacterInstance) -> int:
-	return handler_for(instance).get_conditional_atk_bonus(self, instance)
+	return handler_for(instance).get_conditional_atk_bonus(self, instance) \
+			+ RelicEventDeck.get_relic_atk_bonus(self, instance)
 
 
 func get_conditional_range_bonus(instance: CharacterInstance, context: String) -> int:
@@ -139,8 +190,6 @@ func execute_ability(instance: CharacterInstance, ability_id: String, payload: D
 func execute_reactive_bonus(instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
 	if tag == "free_move":
 		return _free_move(instance, payload)
-	if tag == "generals_war_map":
-		return _generals_war_map(instance)
 	return handler_for(instance).execute_reactive_bonus(self, instance, tag, payload)
 
 
@@ -328,11 +377,48 @@ func reposition_character(instance: CharacterInstance, to: Vector2i, cause: Stri
 	EventBus.character_repositioned.emit(instance.instance_id, from, to, cause)
 
 
-# Legal destinations for a move of `budget` tiles with the character's own movement rules.
+# Legal destinations for a move of `budget` tiles with the character's movement rules.
 func moves_for(instance: CharacterInstance, budget: int) -> Array[Vector2i]:
+	var rules := movement_rules(instance)
 	return board.get_legal_moves(instance.position, budget, "orthogonal",
-			get_movement_passable_predicate(instance), get_movement_object_passable_predicate(instance),
-			get_movement_max_passes(instance))
+			rules.pass_char, rules.pass_obj, rules.max_passes)
+
+
+# Gives a Memory marker (max 1 per character). Returns whether one was gained.
+func give_memory(target: CharacterInstance) -> bool:
+	if target == null or target.defeated or target.has_status("memory"):
+		return false
+	add_status(target, "memory", 1, "until_used")
+	EventBus.memory_gained.emit(target.instance_id)
+	return true
+
+
+func has_leak(pos: Vector2i) -> bool:
+	var tile := board.get_tile(pos)
+	return tile != null and tile.leak
+
+
+# A Leak can go on an empty tile with no Leak already (designer ruling 2026-09-27).
+func can_place_leak(pos: Vector2i) -> bool:
+	return is_empty_tile(pos) and not has_leak(pos)
+
+
+# The first character to enter a Leak tile takes 1 damage and the Leak is removed
+# (designer ruling 2026-09-27). Seventeen Seconds lets one move cross one Leak safely.
+func _enter_tiles(c: CharacterInstance, tiles: Array[Vector2i]) -> void:
+	for pos in tiles:
+		if c.defeated:
+			return
+		if not has_leak(pos):
+			continue
+		if c.ability_uses_this_turn.get("ignore_leak_once", false):
+			c.ability_uses_this_turn.erase("ignore_leak_once")
+			continue
+		board.get_tile(pos).leak = false
+		EventBus.leak_triggered.emit(c.instance_id, pos)
+		var combat_resolver := combat()
+		if combat_resolver != null:
+			combat_resolver.apply_hazard_damage(c, 1)
 
 
 # Pylon-equivalence (LLD 5.8 joint pass, recommended defaults): a tile is a pylon source
@@ -382,9 +468,12 @@ func _on_character_moved(character_id: String, from: Vector2i, to: Vector2i) -> 
 	for c in live_characters():
 		if not c.defeated:
 			handler_for(c).on_character_moved(self, c, mover, from, to, required_pass)
+	var entered := BoardModel.tiles_between(from, to)
+	entered.append(to)
+	_enter_tiles(mover, entered)
 
 
-func _on_character_repositioned(character_id: String, _from: Vector2i, _to: Vector2i, _cause: String) -> void:
+func _on_character_repositioned(character_id: String, from: Vector2i, to: Vector2i, cause: String) -> void:
 	if not _is_current():
 		return
 	var moved := find(character_id)
@@ -394,6 +483,12 @@ func _on_character_repositioned(character_id: String, _from: Vector2i, _to: Vect
 	for c in live_characters():
 		if not c.defeated:
 			handler_for(c).on_character_repositioned(self, c, moved)
+	# A push or pull crosses the tiles on its line; a teleport or placement only lands.
+	var entered: Array[Vector2i] = []
+	if ["push", "pull"].has(cause):
+		entered = BoardModel.tiles_between(from, to)
+	entered.append(to)
+	_enter_tiles(moved, entered)
 
 
 func _on_attack_resolved(attacker_id: String, target_id: String, damage: int, defeated: bool) -> void:
@@ -464,14 +559,6 @@ func spend_ability_buffs(instance: CharacterInstance) -> void:
 			instance.status_effects.remove_at(i)
 
 
-func _generals_war_map(instance: CharacterInstance) -> Dictionary:
-	# General's War Map relic: +1 RANGE on this character's next attack or ability.
-	_match.get_player(instance.player_id).player_flags_this_turn.erase("generals_war_map_available")
-	var se := add_status(instance, "temp_range", 1, "this_turn", null, true)
-	se.consume_on_ability = true
-	return {"success": true}
-
-
 func _free_move(instance: CharacterInstance, payload: Dictionary) -> Dictionary:
 	# Command / Astral Echo: move 1 tile without spending AP.
 	var to = payload.get("to")
@@ -487,18 +574,26 @@ func _range_parts(instance: CharacterInstance, context: String) -> Dictionary:
 	for source in allies_of(instance):
 		bonus += handler_for(source).get_aura_range_bonus(self, source, instance, context)
 	bonus += RelicEventDeck.get_relic_range_bonus(self, instance, context)
-	bonus += _match.global_range_modifier   # Whiteout, both players
+	bonus += _match.global_range_modifier
+	# Signal Array Turns: the first ranged attack or ability this turn gets +1 RANGE when
+	# the actor stands next to a placed object or a Leak marker.
+	var flags: Dictionary = _match.get_player(instance.player_id).player_flags_this_turn
+	if flags.get("signal_array_pending", false) and _next_to_object_or_leak(instance.position):
+		bonus += 1
 	var override := 0
 	if context == "ability":
-		var flags: Dictionary = _match.get_player(instance.player_id).player_flags_this_turn
-		if flags.get("resonance_surge_pending", false):   # first ability this turn
-			bonus += 1
-		if flags.get("crystal_tide", false):
-			bonus += 1
+		bonus += instance.sum_status("temp_ability_range")   # "+1 RANGE on its next AP ability"
 		for se in instance.status_effects:
 			if se.type == "range_override":
 				override = maxi(override, se.value)
 	return {"bonus": bonus, "override": override}
+
+
+func _next_to_object_or_leak(pos: Vector2i) -> bool:
+	for n in neighbors(pos):
+		if board.get_placed_object(n) != null or has_leak(n):
+			return true
+	return false
 
 
 func _all_characters() -> Array[CharacterInstance]:

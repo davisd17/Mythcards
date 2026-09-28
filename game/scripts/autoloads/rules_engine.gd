@@ -4,7 +4,7 @@ extends Node
 # request_action(); nothing else mutates MatchState during a match.
 
 const ACTION_TYPES: Array[String] = ["move", "attack", "ability", "mount", "dismount", "end_turn",
-	"reactive_bonus", "deck_choice"]
+	"reactive_bonus", "deck_choice", "use_relic"]
 const CHARACTER_ACTIONS_WITH_AP: Array[String] = ["move", "attack", "ability", "mount", "dismount"]
 
 # Per-match collaborators, built for the current MatchState on first use. Tests replace
@@ -33,10 +33,9 @@ func get_legal_move_tiles(actor_id: String) -> Array[Vector2i]:
 		return []
 	_ensure_systems()
 	var m := _movement(actor)
+	var rules: Dictionary = ability_system.movement_rules(m.mover, actor)
 	var tiles := _board().get_legal_moves(actor.position, m.budget, m.pattern,
-			ability_system.get_movement_passable_predicate(m.mover),
-			ability_system.get_movement_object_passable_predicate(m.mover),
-			ability_system.get_movement_max_passes(m.mover))
+			rules.pass_char, rules.pass_obj, rules.max_passes)
 	for extra in ability_system.get_bonus_move_tiles(m.mover, actor.position, m.budget):
 		if not tiles.has(extra):
 			tiles.append(extra)
@@ -105,6 +104,8 @@ func _dispatch(action_type: String, actor_id: String, payload: Dictionary) -> Di
 		return _handle_end_turn(actor_id)
 	if action_type == "deck_choice":
 		return RelicEventDeck.resolve_choice(actor_id, payload)
+	if action_type == "use_relic":
+		return RelicEventDeck.use_relic(actor_id, payload)
 	var actor := GameState.match_state.find_character(actor_id)
 	match action_type:
 		"move":
@@ -130,7 +131,7 @@ func _validate_common(action_type: String, actor_id: String) -> String:
 	# A drawn card waiting on a decision (keep a relic? heal whom?) comes first.
 	if action_type != "deck_choice" and RelicEventDeck.has_pending_choice(state.active_player_id):
 		return "resolve the drawn card first"
-	if action_type == "end_turn" or action_type == "deck_choice":
+	if ["end_turn", "deck_choice", "use_relic"].has(action_type):
 		return "" if actor_id == state.active_player_id else "not your turn"
 	var actor := state.find_character(actor_id)
 	if actor == null:
@@ -171,19 +172,33 @@ func _handle_move(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 		GameState.match_state.find_character(actor.mounted_with_id).position = to
 	_spend_ap(actor)
 	actor.ability_uses_this_turn["moved"] = true   # shared "moved this turn" marker (e.g. Aim)
-	_flags(actor).erase("long_winter_march_pending")   # the first move used it
+	var grants := _spend_movement_grants(actor, from, to, m)
+	if grants.has("seventeen_seconds"):
+		actor.ability_uses_this_turn["ignore_leak_once"] = true   # "move through ... a Leak marker"
 	EventBus.character_moved.emit(actor.instance_id, from, to)
+	actor.ability_uses_this_turn.erase("ignore_leak_once")
 	return {"success": true}
 
 
+# Card grants for "the first movement action this turn" are spent by that move
+# (Seventeen Seconds, The Causeway Breathes). Karpova's Black Key (once per turn) is
+# spent only if this move needed it. Returns the grants that were active.
+func _spend_movement_grants(actor: CharacterInstance, from: Vector2i, to: Vector2i, m: Dictionary) -> Array[String]:
+	var grants: Array[String] = ability_system.movement_grants(actor)
+	var flags := _flags(actor)
+	flags.erase("seventeen_seconds_pending")
+	flags.erase("causeway_pending")
+	if grants.has("black_key") and not grants.has("seventeen_seconds") and not grants.has("causeway"):
+		var own: Array[Vector2i] = _board().get_legal_moves(from, m.budget, m.pattern,
+				ability_system.get_movement_passable_predicate(m.mover),
+				ability_system.get_movement_object_passable_predicate(m.mover),
+				ability_system.get_movement_max_passes(m.mover))
+		if not own.has(to):
+			flags["black_key_used"] = true
+	return grants
+
+
 func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
-	# Psychic Undertow: the first attack this turn may push or pull its target.
-	var undertow = payload.get("undertow")
-	if undertow != null:
-		if not _flags(actor).get("psychic_undertow_pending", false):
-			return _fail("no Psychic Undertow this turn")
-		if not ["push", "pull"].has(undertow):
-			return _fail("undertow must be push or pull")
 	if payload.has("target_pos"):
 		return _handle_object_attack(actor, payload.get("target_pos"))
 	var target_id: String = str(payload.get("target_id", ""))
@@ -205,13 +220,8 @@ func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary
 	# not be undone by the payment.
 	_spend_ap(actor)
 	var combat: Dictionary = combat_resolver.resolve_attack(actor, target)
-	if _flags(actor).get("psychic_undertow_pending", false):
-		_flags(actor).erase("psychic_undertow_pending")
-		if undertow != null and not target.defeated:
-			if undertow == "push":
-				combat_resolver.apply_push(target, actor.position, 1)
-			else:
-				combat_resolver.apply_pull(target, actor.position, 1)
+	if CombatResolver._distance(actor.position, target.position) > 1:
+		_flags(actor).erase("signal_array_pending")   # the first ranged attack used it
 	return {"success": true, "damage": combat.get("damage", 0), "defeated": combat.get("defeated", false)}
 
 
@@ -224,7 +234,8 @@ func _handle_object_attack(actor: CharacterInstance, pos) -> Dictionary:
 		return _fail(reason)
 	_spend_ap(actor)
 	var hit: Dictionary = combat_resolver.resolve_object_attack(actor, pos)
-	_flags(actor).erase("psychic_undertow_pending")   # an object attack is still the first attack
+	if CombatResolver._distance(actor.position, pos) > 1:
+		_flags(actor).erase("signal_array_pending")
 	return {"success": true, "damage": hit.damage, "destroyed": hit.destroyed}
 
 
@@ -259,7 +270,7 @@ func _handle_ability(actor: CharacterInstance, payload: Dictionary) -> Dictionar
 		# A validated ability that still failed costs nothing.
 		_refund_ap(actor)
 		return _fail(str(ability_result.get("reason", "ability failed")))
-	_flags(actor).erase("resonance_surge_pending")   # the first ability used it
+	_flags(actor).erase("signal_array_pending")   # the first ranged ability used it
 	ability_system.spend_ability_buffs(actor)
 	var result := ability_result.duplicate()
 	result.erase("reason")
@@ -347,16 +358,11 @@ func _movement(actor: CharacterInstance) -> Dictionary:
 	if actor.is_mounted_rider:
 		return {
 			"mover": GameState.match_state.find_character(actor.mounted_with_id),
-			"budget": mount_system.get_effective_move_stat(actor) + _march_bonus(actor),
+			"budget": mount_system.get_effective_move_stat(actor),
 			"pattern": mount_system.get_effective_movement_pattern(actor),
 		}
-	return {"mover": actor, "budget": actor.get_effective_move() + _march_bonus(actor),
+	return {"mover": actor, "budget": actor.get_effective_move() + ability_system.get_move_bonus(actor),
 			"pattern": ability_system.get_movement_pattern(actor)}
-
-
-func _march_bonus(actor: CharacterInstance) -> int:
-	# Long Winter March: the first movement action this turn gains +1 MOVE.
-	return 1 if _flags(actor).get("long_winter_march_pending", false) else 0
 
 
 func _flags(actor: CharacterInstance) -> Dictionary:

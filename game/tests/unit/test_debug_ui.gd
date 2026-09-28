@@ -64,12 +64,12 @@ func test_render_shows_defeat_objects_frost_and_offers() -> void:
 
 
 func test_render_shows_pending_choice_and_selected_card_text() -> void:
-	Fixture.state().get_player("p1").active_relic_id = "r-iron-birch-talisman"
-	Fixture.state().shared_deck = ["r-winter-palace-standard"] as Array[String]
+	Fixture.state().get_player("p1").active_relic_id = "r-reactor-core-fragment"
+	Fixture.state().shared_deck = ["r-karpovas-black-key"] as Array[String]
 	RelicEventDeck.draw_for("p1")
 	Fixture.put(SNIPER, Vector2i(3, 1))
 	var text := DebugPanel.render(Fixture.state(), SNIPER)
-	assert_string_contains(text, "Choose: Winter Palace Standard")
+	assert_string_contains(text, "Choose (Karpova's Black Key)")
 	assert_string_contains(text, "L1: Passive: Aim")
 
 
@@ -157,8 +157,8 @@ func test_command_attack_object_and_bonus() -> void:
 
 
 func test_command_choose_and_end() -> void:
-	Fixture.state().get_player("p1").active_relic_id = "r-iron-birch-talisman"
-	Fixture.state().shared_deck = ["r-winter-palace-standard"] as Array[String]
+	Fixture.state().get_player("p1").active_relic_id = "r-reactor-core-fragment"
+	Fixture.state().shared_deck = ["r-karpovas-black-key"] as Array[String]
 	RelicEventDeck.draw_for("p1")
 	assert_eq(controller.run_command("end"), "✗ resolve the drawn card first")
 	assert_eq(controller.run_command("choose {\"keep_new\": true}"), "OK")
@@ -191,21 +191,28 @@ func test_debug_match_scene_plays_through_the_whole_deck() -> void:
 	assert_eq(state.deck_seed, 42)
 	var turns := 0
 	while turns < 20 and state.phase == "in_progress":
-		var pending := RelicEventDeck.get_pending_choice(state.active_player_id)
-		if not pending.is_empty():
-			var choice := {"keep_new": true} if pending.kind == "relic" else {"to_bottom": false}
-			if pending.card_id == "r-rally-from-the-snow":
-				choice = {"target_id": _any_damaged(state.active_player_id)}
-			assert_eq(scene.controller.run_command("choose " + JSON.stringify(choice)), "OK", pending.card_id)
+		if RelicEventDeck.has_pending_choice(state.active_player_id):
+			var spec := RelicEventDeck.choice_spec(state.active_player_id)
+			var result := RulesEngine.request_action("deck_choice", state.active_player_id, _first_choice(spec))
+			assert_true(result.success, "%s %s" % [spec, result])
 		assert_eq(scene.controller.run_command("end"), "OK", "turn %d" % state.turn_number)
 		turns += 1
 	assert_eq(state.shared_deck.size(), 0, "every card drawn")
 	assert_eq(state.phase, "in_progress")
 
 
-func _any_damaged(player_id: String) -> String:
-	var sys: AbilitySystem = RulesEngine.systems().ability
-	for c in GameState.match_state.get_player(player_id).characters:
-		if not c.defeated and c.current_hp < sys.get_effective_max_hp(c):
-			return c.instance_id
-	return ""
+# The first legal answer a choice_spec offers, as a deck_choice payload.
+func _first_choice(spec: Dictionary) -> Dictionary:
+	var choice: Dictionary = {}
+	if not spec.get("options", []).is_empty():
+		choice.merge(spec.options[0].payload)
+	match spec.pick:
+		"tiles":
+			choice["tiles"] = spec.tiles.slice(0, spec.count)
+		"character":
+			choice["target_id"] = spec.characters[0]
+		"character_tile":
+			var id: String = spec.characters[0]
+			choice["target_id"] = id
+			choice["to"] = spec.tiles_by_character[id][0]
+	return choice

@@ -46,12 +46,15 @@ function playMatch({ maxTurns }: { maxTurns: number }) {
   };
 
   const resolveChoice = (s: any) => {
-    const pending = s.pending_choice;
-    if (!pending || !pending.kind) return;
-    let payload: object = pending.kind === 'relic' ? { keep_new: true } : { to_bottom: false };
-    if (pending.card_id === 'r-rally-from-the-snow') {
-      const hurt = live(s.players[s.active_player_id]).find((c: any) => c.current_hp < c.max_hp);
-      payload = { target_id: hurt.instance_id };
+    // Same as firstChoice in mythcards.ts, repeated because this code runs inside the page.
+    const spec = s.pending_choice;
+    if (!spec || !spec.pick) return;
+    const payload: any = { ...(spec.options?.[0]?.payload ?? {}) };
+    if (spec.pick === 'tiles') payload.tiles = spec.tiles.slice(0, spec.count);
+    if (spec.pick === 'character') payload.target_id = spec.characters[0];
+    if (spec.pick === 'character_tile') {
+      payload.target_id = spec.characters[0];
+      payload.to = spec.tiles_by_character[spec.characters[0]][0];
     }
     const r = act('deck_choice', s.active_player_id, payload);
     if (!r.success) violations.push(`turn ${s.turn_number}: choice failed: ${r.reason}`);

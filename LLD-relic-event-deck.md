@@ -278,7 +278,7 @@ Unit tests use **GUT**. `AbilitySystem`/`CombatResolver` aggregation call-sites 
 All 14 original cards are implemented (`game/scripts/systems/relic_events/`, deck in `autoloads/relic_event_deck.gd`) and tested (`test_relic_event_deck.gd`).
 
 **Designer rulings, 2026-09-27**
-- **The build plays the original 14.** They load from `data/cards/prototype_relic_events.json`, moved out of `archive/`. `relic_events.json` (Closed City / Flood Survivors) stays untouched as the printable and tabletop working set, and the game doesn't load it. `ContentDB.RELIC_EVENTS_PATH` points at the prototype file.
+- **The build plays the original 14.** *(Superseded the same day; see 9B.)* They load from `data/cards/prototype_relic_events.json`, moved out of `archive/`. `relic_events.json` (Closed City / Flood Survivors) stays untouched as the printable and tabletop working set, and the game doesn't load it. `ContentDB.RELIC_EVENTS_PATH` points at the prototype file.
 - **Whiteout hits both players:** a `MatchState.global_range_modifier` of -1 for the round, applied to every character's attack and ability RANGE, floored at 1.
 - **Hall Of Shared Minds** gives +1 ability RANGE to your characters that are adjacent to another friendly character (a formation bonus).
 
@@ -292,6 +292,32 @@ All 14 original cards are implemented (`game/scripts/systems/relic_events/`, dec
 - **Replacing a max-HP relic trims current HP** down to the new maximum.
 - **Frozen Center thaws only the tiles it froze.** Frost placed by Frozen Redoubt stays.
 - **Relic handlers receive the `AbilitySystem` (`sys`)**, the same convention as ability handlers, and the registry uses the real ids (Section 3.2's placeholders are superseded). Each player's contribution is read by faction (`Russian-Inspired`/`Atlantean`), because relic/event entries carry `faction`, not `culture`.
+
+## 9B. The Closed City / Flood Survivors Set (2026-09-27, later the same day)
+
+**Designer ruling after the first hands-on playtest: the game plays `data/cards/relic_events.json`.** This supersedes the "build plays the original 14" bullet in 9A. `ContentDB.RELIC_EVENTS_PATH` now points at `relic_events.json`; `prototype_relic_events.json` stays in `data/cards/` but is no longer loaded. The original 14 handlers were removed. The 9A notes on duration ticking, `deck_choice`, player flags, and Quartz Heart-style shield order still describe the deck's machinery. Sections 5.1–5.4 describe cards the game no longer plays.
+
+Each card has one handler in `game/scripts/systems/relic_events/`, and its header comment restates the card text and payload. Tests are in `test_relic_event_deck.gd` (one or more per card).
+
+**Markers the set needs (designer rulings)**
+- **Leak** is a tile marker (`BoardTile.leak`), not an object. The first character to enter the tile takes 1 hazard damage, and the marker is removed. Entering covers passing through on a straight-line move, a push or pull path, and landing there. Leaks don't block movement or line of sight.
+- **Memory** is a status (`"memory"`, max 1). It's spent automatically to prevent 1 damage *after* shields; it's kept if shields absorb everything. `EventBus.memory_gained` fires when it's given.
+- **Stone** is a placed object with 1 HP. Like every object, it blocks movement and line of sight.
+
+**New machinery**
+- **Choice specs.** Every pending choice and relic power describes itself: `RelicEventDeck.choice_spec(player)` / `power_spec(player)` return `{prompt, pick, options, tiles, count, characters, tiles_by_character}`, with `pick` one of `"option"`, `"tiles"`, `"character"`, `"character_tile"`. Each option carries `{label, payload}`. The UI and the test bots build `deck_choice` / `use_relic` payloads from the spec alone, with no per-card code. TestBridge exposes both specs as `pending_choice` and `relic_power`.
+- **`use_relic` action** triggers a relic's "once each turn" power (Chintamani, Emerald Tablet). A power that needs a follow-up decision (Chintamani's top or bottom) becomes a pending choice.
+- **Movement grants.** Black Key, Seventeen Seconds, and Causeway each add one pass to a move (`AbilitySystem.movement_rules` / `movement_grants`). `RulesEngine` spends a grant only when a move actually uses it: Black Key once each turn, the two events on the first move.
+- **Deck event forwarding.** Active relics and running events hear `attack_resolved`, `object_attacked`, `character_moved`, `memory_gained`, and `leak_triggered`. The forwarder does nothing when no card is in play, so it never builds a match's rules systems by itself.
+
+**Interpretation calls (confirm or correct in playtest)**
+- **Reactor Core Fragment:** the +1 RANGE after Leak damage applies to that character's next AP ability this turn.
+- **Seventeen Seconds:** its pass also crosses a Leak without triggering it, and the Leak stays on the board.
+- **Signal Array Turns:** the flag is spent on the first ranged attack (distance > 1), object attack, or ability, even when that action didn't qualify for the bonus.
+- **The Drowned Seraph Speaks:** the Mystic is chosen automatically because each side fields one. The Thalassa-Nekh Shield clause is inert until that character exists in the build.
+- **The Flood Reaches The Walls:** Marks every character on an outer edge tile, both sides. Any attacker benefits.
+- **Tide-Sealed Archive:** its 1-tile move is offered as that ally's free move.
+- **Black Water Remembers:** if nobody is eligible, the card resolves at once with no effect.
 
 ## 10. Traceability
 

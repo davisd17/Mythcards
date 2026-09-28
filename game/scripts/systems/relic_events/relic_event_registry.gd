@@ -1,23 +1,23 @@
 class_name RelicEventRegistry
-# Card id -> handler script (LLD-relic-event-deck.md 3.2), using the real ids from
-# data/cards/prototype_relic_events.json.
+# Card id -> handler script (LLD-relic-event-deck.md 3.2), using the ids in
+# data/cards/relic_events.json (Closed City + Flood Survivors; designer choice 2026-09-27).
 
 const HANDLER_DIR := "res://scripts/systems/relic_events/"
 const HANDLERS := {
-	"r-winter-palace-standard": "r_winter_palace_standard.gd",
-	"r-iron-birch-talisman": "r_iron_birch_talisman.gd",
-	"r-generals-war-map": "r_generals_war_map.gd",
-	"r-whiteout": "r_whiteout.gd",
-	"r-frozen-center": "r_frozen_center.gd",
-	"r-rally-from-the-snow": "r_rally_from_the_snow.gd",
-	"r-long-winter-march": "r_long_winter_march.gd",
-	"a-quartz-heart-core": "a_quartz_heart_core.gd",
-	"a-hall-of-shared-minds": "a_hall_of_shared_minds.gd",
-	"a-tideglass-obelisk": "a_tideglass_obelisk.gd",
-	"a-resonance-surge": "a_resonance_surge.gd",
-	"a-psychic-undertow": "a_psychic_undertow.gd",
-	"a-crystal-tide": "a_crystal_tide.gd",
-	"a-dream-of-the-deep-city": "a_dream_of_the_deep_city.gd",
+	"r-chintamani-fragment": "r_chintamani_fragment.gd",
+	"r-reactor-core-fragment": "r_reactor_core_fragment.gd",
+	"r-karpovas-black-key": "r_karpovas_black_key.gd",
+	"r-signal-array-turns": "r_signal_array_turns.gd",
+	"r-reactor-prayer": "r_reactor_prayer.gd",
+	"r-closed-city-incident": "r_closed_city_incident.gd",
+	"r-seventeen-seconds": "r_seventeen_seconds.gd",
+	"a-flood-survivor-emerald-tablet": "a_emerald_tablet.gd",
+	"a-flood-survivor-black-sarcophagus": "a_black_sarcophagus.gd",
+	"a-flood-survivor-tide-sealed-archive": "a_tide_sealed_archive.gd",
+	"a-flood-survivor-the-causeway-breathes": "a_the_causeway_breathes.gd",
+	"a-flood-survivor-black-water-remembers": "a_black_water_remembers.gd",
+	"a-flood-survivor-the-flood-reaches-the-walls": "a_the_flood_reaches_the_walls.gd",
+	"a-flood-survivor-the-drowned-seraph-speaks": "a_the_drowned_seraph_speaks.gd",
 }
 
 

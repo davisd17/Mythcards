@@ -57,10 +57,9 @@ static func render(state: MatchState, selected_id: String = "") -> String:
 	else:
 		lines.append("[b]Turn %d — %s to act[/b]   deck %d left (seed %d)" % [
 				state.turn_number, state.active_player_id, state.shared_deck.size(), state.deck_seed])
-	var pending := RelicEventDeck.get_pending_choice(state.active_player_id)
-	if not pending.is_empty():
-		lines.append("[color=orange]Choose: %s — command: choose %s[/color]" % [
-				_card_name(pending.card_id), _choice_hint(pending)])
+	var spec := RelicEventDeck.choice_spec(state.active_player_id)
+	if not spec.is_empty():
+		lines.append("[color=orange]Choose (%s): %s[/color]" % [_card_name(spec.card_id), spec.prompt])
 	var events: Array[String] = []
 	for id in RelicEventDeck.active_event_ids():
 		events.append(_card_name(id))
@@ -147,17 +146,6 @@ static func _flag_text(flags: Dictionary) -> String:
 		if str(key).ends_with("_available") and flags[key]:
 			offers.append(str(key).trim_suffix("_available"))
 	return "" if offers.is_empty() else "  [color=cyan]bonus: %s[/color]" % ", ".join(offers)
-
-
-static func _choice_hint(pending: Dictionary) -> String:
-	if pending.kind == "relic":
-		return "{\"keep_new\": true|false}"
-	match pending.card_id:
-		"r-rally-from-the-snow":
-			return "{\"target_id\": \"<damaged ally>\"}"
-		"a-dream-of-the-deep-city":
-			return "{\"to_bottom\": true|false}  (next: %s)" % _card_name(pending.get("revealed", ""))
-	return "{...}"
 
 
 static func _card_name(card_id: String) -> String:

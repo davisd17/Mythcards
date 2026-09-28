@@ -24,18 +24,25 @@ export async function act(page: Page, action_type: string, actor_id: string, pay
   return page.evaluate((j) => JSON.parse((window as any).mythcards_dispatch_action(j)), json);
 }
 
-// Resolves a waiting drawn-card choice with a simple default, if there is one.
+// The first legal answer a pending choice's spec offers (see RelicEventDeck.choice_spec).
+export function firstChoice(spec: any): object {
+  const payload: any = { ...(spec.options?.[0]?.payload ?? {}) };
+  if (spec.pick === 'tiles') payload.tiles = spec.tiles.slice(0, spec.count);
+  if (spec.pick === 'character') payload.target_id = spec.characters[0];
+  if (spec.pick === 'character_tile') {
+    payload.target_id = spec.characters[0];
+    payload.to = spec.tiles_by_character[spec.characters[0]][0];
+  }
+  return payload;
+}
+
+// Resolves a waiting drawn-card choice with its first legal answer, if there is one.
 export async function resolvePending(page: Page): Promise<void> {
   const s = await state(page);
-  const pending = s.pending_choice;
-  if (!pending || !pending.kind) return;
+  const spec = s.pending_choice;
+  if (!spec || !spec.pick) return;
   const player = s.active_player_id;
-  let payload: object = pending.kind === 'relic' ? { keep_new: true } : { to_bottom: false };
-  if (pending.card_id === 'r-rally-from-the-snow') {
-    const hurt = s.players[player].characters.find((c: any) => !c.defeated && c.current_hp < c.max_hp);
-    payload = { target_id: hurt.instance_id };
-  }
-  const r = await act(page, 'deck_choice', player, payload);
+  const r = await act(page, 'deck_choice', player, firstChoice(spec));
   expect(r.success, JSON.stringify(r)).toBe(true);
 }
 
