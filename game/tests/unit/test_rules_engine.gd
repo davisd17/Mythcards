@@ -181,7 +181,8 @@ func test_c1a_mounted_rider_moves_with_mounts_move() -> void:
 	assert_true(_act("move", GENERAL, {"to": Vector2i(3, 5)}).success, "4 tiles is only reachable at the Mount's MOVE")
 	assert_eq(general.position, Vector2i(3, 5))
 	assert_eq(_char(TIGER).position, Vector2i(3, 5), "mount position kept in sync")
-	assert_eq(_char(TIGER).character_ap_remaining, 1, "the Mount spends no AP")
+	assert_eq(_char(TIGER).character_ap_remaining, 0, "a mounted pair moves on the Mount's AP (ruling 2026-09-28)")
+	assert_eq(general.character_ap_remaining, 1, "the rider keeps its AP for an attack or ability")
 
 
 func test_c2_illegal_move_changes_nothing() -> void:

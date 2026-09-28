@@ -159,6 +159,17 @@ func get_passive_damage_reduction(defender: CharacterInstance, attacker: Charact
 	return total
 
 
+# Names of the characters whose passives reduced this damage (for the screen).
+func damage_reduction_sources(defender: CharacterInstance, attacker: CharacterInstance, is_ranged: bool) -> Array[String]:
+	var names: Array[String] = []
+	if handler_for(defender).get_own_damage_reduction(self, defender, attacker, is_ranged) > 0:
+		names.append(defender.data.char_name)
+	for source in allies_of(defender):
+		if handler_for(source).get_aura_damage_reduction(self, source, defender, attacker, is_ranged) > 0:
+			names.append(source.data.char_name)
+	return names
+
+
 func intercept_lethal_damage(defender: CharacterInstance, combat_resolver: CombatResolver) -> Dictionary:
 	return handler_for(defender).intercept_lethal_damage(self, defender, combat_resolver)
 

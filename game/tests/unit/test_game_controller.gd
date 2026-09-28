@@ -314,3 +314,18 @@ func test_setup_cannot_confirm_an_incomplete_row() -> void:
 	gc.confirm_placement()
 	assert_eq(gc.placing_player, "p1")
 	assert_eq(gc.message, "Place all 7 characters first.")
+
+
+func test_an_attack_explains_reduced_damage() -> void:
+	# Playtest 2026-09-28: a Sniper's 2 ATK taking 1 life looked like a bug. It was the
+	# Resonance Guard's Quartz Armor; the screen now says so.
+	Fixture.put(SNIPER, Vector2i(3, 0))
+	Fixture.put(GUARD, Vector2i(3, 3))
+	gc.tap_tile(Vector2i(3, 0))
+	gc.tap_tile(Vector2i(3, 3))
+	assert_eq(gc.message, "Sniper hit Resonance Guard for 1 (ATK 2, -1 Resonance Guard's armor).")
+	Fixture.put(CONDUCTOR, Vector2i(0, 3))
+	Fixture.put(GYMNAST, Vector2i(0, 2))
+	gc.tap_tile(Vector2i(0, 2))
+	gc.tap_tile(Vector2i(0, 3))
+	assert_eq(gc.message, "Gymnast hit Divine Conductor for 1.", "nothing to explain")

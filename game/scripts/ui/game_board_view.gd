@@ -122,7 +122,7 @@ func _draw_character(font: Font, c: CharacterInstance, h: Dictionary) -> void:
 	var radius := px * 0.4
 	var color: Color = PLAYER_COLORS.get(c.player_id, Color.GRAY)
 	var spent: bool = GameState.match_state != null and c.player_id == GameState.match_state.active_player_id \
-			and c.character_ap_remaining <= 0
+			and c.character_ap_remaining <= 0 and _mount_ap(c) <= 0
 	draw_circle(center, radius, color.darkened(0.45) if spent else color)
 	if c.is_mounted_rider:
 		draw_arc(center, radius - 3.0, 0.0, TAU, 32, Color("#f3e3b5"), 2.0)
@@ -157,6 +157,14 @@ func _draw_character(font: Font, c: CharacterInstance, h: Dictionary) -> void:
 		var strip := Rect2(rect.position + Vector2(0, px * 0.78), Vector2(px, px * 0.22))
 		draw_rect(strip, Color(0, 0, 0, 0.55))
 		_text(font, " ".join(shorts), strip, px * 0.16, Color("#9fe0f5"))
+
+
+# A rider's pair can still move on its Mount's AP (ruling 2026-09-28).
+func _mount_ap(c: CharacterInstance) -> int:
+	if not c.is_mounted_rider or GameState.match_state == null:
+		return 0
+	var mount_char := GameState.match_state.find_character(c.mounted_with_id)
+	return mount_char.character_ap_remaining if mount_char != null else 0
 
 
 func _badge(font: Font, at: Vector2, text: String, color: Color, px: float) -> void:

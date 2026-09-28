@@ -69,17 +69,20 @@ func test_mount_ride_dismount_sequence() -> void:
 	var general := Fixture.put(GENERAL, Vector2i(3, 1))
 	var tiger := Fixture.put(TIGER, Vector2i(3, 2))
 
+	Fixture.state().get_player("p1").pool_ap_remaining = 4
+	# Designer ruling 2026-09-28: the rider climbs onto the Mount's square, mounting spends
+	# the rider's AP, and the pair then moves on the Mount's AP in the same turn.
 	assert_true(_act("mount", GENERAL, {"mount_id": TIGER}).success)
 	assert_true(general.is_mounted_rider)
-	assert_false(Fixture.board().is_occupied_by_character(Vector2i(3, 2)))
-	assert_eq(_act("move", GENERAL, {"to": Vector2i(3, 3)}).reason, "no character AP remaining",
-			"mounting used Irina's action this turn")
+	assert_eq(general.position, Vector2i(3, 2))
+	assert_false(Fixture.board().is_occupied_by_character(Vector2i(3, 1)))
+	assert_eq(general.character_ap_remaining, 0)
 	assert_eq(_act("move", TIGER, {"to": Vector2i(3, 3)}).reason, "carrying a rider")
-
-	_pass_round()
-	assert_true(RulesEngine.get_legal_move_tiles(GENERAL).has(Vector2i(3, 5)), "4 tiles at the Mount's MOVE")
+	assert_true(RulesEngine.get_legal_move_tiles(GENERAL).has(Vector2i(3, 5)), "3 tiles, within the Mount's MOVE 4")
 	assert_true(_act("move", GENERAL, {"to": Vector2i(3, 5)}).success)
 	assert_eq(tiger.position, Vector2i(3, 5))
+	assert_eq(tiger.character_ap_remaining, 0, "the move spent the Mount's AP")
+	assert_eq(_act("move", GENERAL, {"to": Vector2i(3, 6)}).reason, "the Mount has no AP left")
 
 	_pass_round()
 	assert_true(_act("dismount", GENERAL, {"to": Vector2i(2, 5)}).success)
@@ -91,9 +94,9 @@ func test_mount_ride_dismount_sequence() -> void:
 
 
 func test_defeating_a_mounted_pair_defeats_both() -> void:
-	var general := Fixture.put(GENERAL, Vector2i(3, 3))
+	var general := Fixture.put(GENERAL, Vector2i(3, 2))
 	general.current_hp = 2   # arranged: every Atlantean has ATK 1
-	Fixture.put(TIGER, Vector2i(3, 2))
+	Fixture.put(TIGER, Vector2i(3, 3))   # the pair ends up here, next to the Guard
 	Fixture.put(GUARD, Vector2i(3, 4))
 	_act("mount", GENERAL, {"mount_id": TIGER})
 	_act("end_turn", "p1")
@@ -141,11 +144,13 @@ func test_dismounting_onto_the_opponents_edge_levels_the_mount() -> void:
 	assert_eq(general.level, 1, "the rider stayed on row 5")
 
 
-func test_mounting_a_rider_on_the_edge_levels_the_mount() -> void:
-	Fixture.put(GENERAL, Vector2i(3, 6))
-	Fixture.put(TIGER, Vector2i(3, 5))
+func test_mounting_a_mount_on_the_edge_levels_the_rider() -> void:
+	# The rider climbs onto the Mount's square (ruling 2026-09-28), so it arrives there.
+	var general := Fixture.put(GENERAL, Vector2i(3, 5))
+	Fixture.put(TIGER, Vector2i(3, 6))
 	assert_true(_act("mount", GENERAL, {"mount_id": TIGER}).success)
-	assert_eq(_c(TIGER).level, 2)
+	assert_eq(general.position, Vector2i(3, 6))
+	assert_eq(general.level, 2)
 
 
 func test_being_pushed_onto_the_edge_levels_up() -> void:

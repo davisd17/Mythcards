@@ -7,6 +7,10 @@ extends RefCounted
 var board: BoardModel
 var ability_system: AbilitySystem
 var mount_system: MountSystem
+# How the last basic attack's damage came out, for the screen to explain it (playtest
+# 2026-09-28): {atk, reduced, reduced_by: [names], shielded, memory}.
+var last_attack_breakdown: Dictionary = {}
+var _last_breakdown: Dictionary = {}
 
 
 func _init(p_board: BoardModel, p_ability_system: AbilitySystem = null, p_mount_system: MountSystem = null) -> void:
@@ -21,6 +25,8 @@ func resolve_attack(attacker: CharacterInstance, defender: CharacterInstance) ->
 	var base_amount := attacker.get_effective_atk() + ability_system.get_conditional_atk_bonus(attacker)
 	var is_ranged := _distance(attacker.position, defender.position) > 1
 	var result := apply_damage(attacker, defender, base_amount, is_ranged)
+	# Kept before attack_resolved, whose reactions (Resonant Bastion) may deal damage too.
+	last_attack_breakdown = _last_breakdown
 	EventBus.attack_resolved.emit(attacker.instance_id, defender.instance_id, result.damage, result.defeated)
 	return result
 
@@ -85,6 +91,12 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 			defender.current_hp = 0
 	else:
 		defender.current_hp = would_be_hp
+
+	var reduced_by: Array[String] = []
+	if marked_amount > after_reduction:
+		reduced_by = ability_system.damage_reduction_sources(defender, attacker, is_ranged)
+	_last_breakdown = {"atk": marked_amount, "reduced": marked_amount - after_reduction, "reduced_by": reduced_by,
+			"shielded": shield_consumed, "memory": memory_spent}
 
 	var defeated := defender.current_hp <= 0
 	if defeated:

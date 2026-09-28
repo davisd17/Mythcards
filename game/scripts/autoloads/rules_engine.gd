@@ -194,7 +194,9 @@ func _validate_common(action_type: String, actor_id: String) -> String:
 	if CHARACTER_ACTIONS_WITH_AP.has(action_type):
 		if state.get_player(actor.player_id).pool_ap_remaining < 1:
 			return "no pool AP remaining"
-		if actor.character_ap_remaining < 1:
+		if ap_payer(actor, action_type).character_ap_remaining < 1:
+			if actor.is_mounted_rider and action_type == "move":
+				return "the Mount has no AP left"
 			return "no character AP remaining"
 	return ""
 
@@ -219,7 +221,7 @@ func _handle_move(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 	actor.position = to
 	if actor.is_mounted_rider:
 		GameState.match_state.find_character(actor.mounted_with_id).position = to
-	_spend_ap(actor)
+	_spend_ap(ap_payer(actor, "move"))
 	actor.ability_uses_this_turn["moved"] = true   # shared "moved this turn" marker (e.g. Aim)
 	var grants := _spend_movement_grants(actor, from, to, m)
 	if grants.has("seventeen_seconds"):
@@ -397,6 +399,17 @@ func _handle_reactive_bonus(actor: CharacterInstance, payload: Dictionary) -> Di
 
 
 # --- Helpers -----------------------------------------------------------------
+
+# Whose character AP an action spends. A mounted pair moves on the Mount's AP; the
+# rider's own AP covers mounting, attacks, abilities, and dismounting (designer ruling
+# 2026-09-28: movement is separate, so the pair can move after mounting).
+func ap_payer(actor: CharacterInstance, action_type: String) -> CharacterInstance:
+	if action_type == "move" and actor.is_mounted_rider:
+		var mount_char := GameState.match_state.find_character(actor.mounted_with_id)
+		if mount_char != null:
+			return mount_char
+	return actor
+
 
 func _spend_ap(actor: CharacterInstance) -> void:
 	# The only AP spend path (BR-020).

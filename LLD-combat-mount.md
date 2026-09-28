@@ -250,6 +250,12 @@ The first implementation (`game/scripts/systems/combat_resolver.gd`, `mount_syst
 - **Object attacks (designer ruling 2026-09-27):** `resolve_object_attack(attacker, pos)` applies the attacker's ATK (with conditional bonuses) to a placed object, removes it at 0 HP, and emits the new `object_attacked(attacker_id, pos, object_type, damage, destroyed)` signal. Objects have no shields or reduction. `RulesEngine` validates the target (payload `target_pos`); see LLD-ability-system 9A.
 - Tests use the original 14, plus a new integration suite (`test_match_flow.gd`) driving real attacks, defeat, and mounting through `RulesEngine.request_action` only.
 
+**Designer rulings, 2026-09-28 (from the game-screen playtest)**
+- **Mounting puts the pair on the Mount's square.** The rider climbs onto the Mount's tile, and the rider's old tile empties. This matches PRD Section 8 ("Mounting moves the Hero or Leader onto the Mount's tile"); the build had it backwards, with the Mount stepping onto the rider's tile. `character_repositioned` now reports the rider with cause `"mount"`, so a rider that climbs onto a Mount standing on the opponent's edge reaches Level 2.
+- **Mounting spends the rider's AP; moving the pair spends the Mount's AP** (`RulesEngine.ap_payer`). Both still cost 1 pool AP. "Movement is separate": a Hero or Leader can mount and then move in the same turn. Attacks, abilities, and dismounting stay on the rider's AP. `[NEED: playtest check]` A mounted pair can now take two actions a turn (a move on the Mount's AP plus an attack or ability on the rider's), which makes mounting stronger than before.
+
+**Damage explanation (not a rule change):** a Sniper's 2 ATK taking 1 life was reported as a bug. The engine is correct: the Resonance Guard's Quartz Armor takes 1 off ranged attacks (`test_sniper_damage.gd` checks every Atlantean at range and adjacent). The game screen now explains each basic attack, e.g. "Sniper hit Resonance Guard for 1 (ATK 2, -1 Resonance Guard's armor)", from `CombatResolver.last_attack_breakdown` (ATK, reduction and its sources, shield, Memory).
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

@@ -147,8 +147,11 @@ static func _status_text(instance: CharacterInstance) -> String:
 	parts.append("AP %d/%d" % [instance.character_ap_remaining, instance.character_ap_max])
 	if instance.spirit_ember_count > 0:
 		parts.append("Spirit Ember ×%d" % instance.spirit_ember_count)
-	if instance.is_mounted_rider:
-		parts.append("mounted")
+	if instance.is_mounted_rider and GameState.match_state != null:
+		var mount_char := GameState.match_state.find_character(instance.mounted_with_id)
+		if mount_char != null:
+			parts.append("riding %s (move AP %d/%d)" % [mount_char.data.char_name,
+					mount_char.character_ap_remaining, mount_char.character_ap_max])
 	for se in instance.status_effects:
 		parts.append(GameBoardView.status_name(se))
 	return "[color=#9fd3e6]%s[/color]" % " · ".join(parts)

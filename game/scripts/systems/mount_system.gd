@@ -11,15 +11,17 @@ func _init(p_board: BoardModel) -> void:
 
 
 func mount(rider: CharacterInstance, mount_char: CharacterInstance) -> void:
-	# BR-012/BR-013: the pair shares the rider's tile; the Mount's tile empties.
+	# BR-012/BR-013: the rider climbs onto the Mount's tile and the pair stays there
+	# (designer ruling 2026-09-28, matching PRD Section 8); the rider's tile empties.
 	rider.mounted_with_id = mount_char.instance_id
 	mount_char.mounted_with_id = rider.instance_id
 	rider.is_mounted_rider = true
 	mount_char.is_mounted_rider = false
-	var from := mount_char.position
+	var from := rider.position
 	board.clear_occupant(from)
-	mount_char.position = rider.position
-	EventBus.character_repositioned.emit(mount_char.instance_id, from, rider.position, "mount")
+	board.set_occupant(mount_char.position, rider.instance_id)
+	rider.position = mount_char.position
+	EventBus.character_repositioned.emit(rider.instance_id, from, rider.position, "mount")
 
 
 func dismount(rider: CharacterInstance, to: Vector2i) -> void:

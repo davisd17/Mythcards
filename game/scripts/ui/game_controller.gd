@@ -412,9 +412,32 @@ func _send(action: String, actor: String, payload: Dictionary) -> void:
 	var result := RulesEngine.request_action(action, actor, payload)
 	if not result.get("success", false):
 		message = str(result.get("reason", "That didn't work.")).capitalize() + "."
+	elif action == "attack" and payload.has("target_id"):
+		message = describe_attack(find(actor), find(payload.target_id), result,
+				RulesEngine.systems().combat.last_attack_breakdown)
 	if _selected() == null:
 		selected_id = ""
 	_start_pending_choice()
+
+
+# "Sniper hit Resonance Guard for 1 (ATK 2, -1 Resonance Guard's armor)." Says why a hit
+# did less than the attacker's ATK, so reductions never look like a bug.
+static func describe_attack(attacker: CharacterInstance, target: CharacterInstance, result: Dictionary,
+		b: Dictionary) -> String:
+	var text := "%s hit %s for %d" % [attacker.data.char_name, target.data.char_name, result.get("damage", 0)]
+	var parts: Array[String] = []
+	if int(b.get("reduced", 0)) > 0:
+		var who: Array = b.get("reduced_by", [])
+		parts.append("-%d %s" % [b.reduced, ("%s's armor" % " and ".join(who)) if not who.is_empty() else "damage reduction"])
+	if int(b.get("shielded", 0)) > 0:
+		parts.append("-%d shield" % b.shielded)
+	if b.get("memory", false):
+		parts.append("-1 Memory")
+	if not parts.is_empty():
+		text += " (ATK %d, %s)" % [b.get("atk", 0), ", ".join(parts)]
+	if result.get("defeated", false):
+		text += " and defeated it"
+	return text + "."
 
 
 # Catches up with actions sent around the screen (TestBridge): drops a card flow that was
