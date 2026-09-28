@@ -233,6 +233,7 @@ First-pass balance assumptions:
 Mounted character rules:
 - A Hero or Leader may mount an allied Mount character as an action if adjacent to that Mount, and only if both the player's pool AP and that Hero or Leader's own character AP are available — mounting costs 1 pool AP and 1 character AP like any other action (see Section 12).
 - Mounting moves the Hero or Leader onto the Mount's tile. They occupy the same space as one combined mounted pair.
+- Mounted pair AP (decided, 2026-09-28): moving a mounted pair spends 1 pool AP and the Mount's character AP, not the rider's. Mounting, attacks, abilities, and dismounting spend the rider's character AP. Movement is separate from mounting, so a Hero or Leader can mount and then move in the same turn. Track in paper tests: a mounted pair can now take two actions per turn (a move plus an attack or ability), which may make mounting too strong.
 - A mounted pair uses the Hero or Leader's HP, ATK, RANGE, level, and abilities, but uses the Mount's MOVE and movement pattern.
 - The Mount cannot take separate actions while mounted.
 - Damage is applied to the mounted Hero or Leader's HP. When that HP reaches 0, both the rider and Mount are defeated.
