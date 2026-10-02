@@ -9,11 +9,11 @@
     "set_count": "1 of 8",
     "name": "The Causeway Breathes",
     "kind": "Event",
-    "duration": "1 turn",
-    "effect": "Place 1 allied Stone marker on an empty tile within 2 of the center tile. The active player's first movement action this turn may move through 1 placed object without taking effects from that object, but must end on an empty tile.",
+    "duration": "Immediate",
+    "effect": "Place 2 allied Stone markers on different empty tiles within 2 tiles of the center.",
     "flavor": "The road was drowned, not dead.",
     "role": "The drowned ley-road wakes because something buried has begun calling through it.",
-    "mechanical_lane": "Stone marker placement and temporary route movement.",
+    "mechanical_lane": "Immediate Stone placement that creates a visible section of the awakened causeway.",
     "narrative": {
       "arc_phase": "The Routes Wake",
       "summary": "A submerged basalt causeway shifts for the first time in centuries. The survivors know this is not a miracle. It is a warning.",
@@ -39,10 +39,10 @@
     "name": "Black Water Remembers",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Choose 1 allied character adjacent to a placed object. That character gains 1 Memory marker, max 1 per character. Then move that character 1 tile. It must end on an empty tile.",
+    "effect": "Choose a character on or adjacent to the center tile. Give it 1 Memory marker.",
     "flavor": "The water gives back what the queens edited out.",
     "role": "Floodwater reflects the truth of what happened during the fall of Atlantis.",
-    "mechanical_lane": "Memory as protection and small repositioning.",
+    "mechanical_lane": "Immediate Memory placement focused on the center of the board.",
     "narrative": {
       "arc_phase": "Memory Rises",
       "summary": "A flooded tomb shaft turns black and reflective. Those who look into it do not see themselves. They see the moment the water came.",
@@ -96,7 +96,7 @@
     "name": "The Flood Reaches The Walls",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Each character on an outer edge tile becomes Marked until the end of the round.",
+    "effect": "Each character on an outer edge tile becomes Marked.",
     "flavor": "The sea always finds the edge first.",
     "role": "The old Flood returns at the limits of the board, making characters at the walls exposed and vulnerable.",
     "mechanical_lane": "Simple board-edge pressure.",
@@ -152,10 +152,10 @@
     "name": "The Drowned Seraph Speaks",
     "kind": "Event",
     "duration": "1 round",
-    "effect": "Choose your Mystic. Until the start of your next turn, the first enemy that damages your Mystic becomes Marked after the attack resolves. If your Mystic is Thalassa-Nekh, she also gains Shield.",
+    "effect": "The first enemy that damages your Mystic becomes Marked.",
     "flavor": "Everyone heard the judgment in their own oldest language.",
     "role": "The entity inside Thalassa-Nekh speaks a judgment no ruler can redact.",
-    "mechanical_lane": "Mystic-centered judgment and Thalassa-Nekh bonus.",
+    "mechanical_lane": "A simple one-round judgment against the first enemy to damage your Mystic.",
     "narrative": {
       "arc_phase": "Judgment",
       "summary": "The water speaks through a human mouth, and every listener remembers being guilty.",
@@ -167,7 +167,7 @@
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Should feel spiritual and unsettling rather than generic angelic intervention.",
       "Mystic-centered event by review direction.",
-      "Thalassa-Nekh gets a small bonus without making the event unusable for other Mystics."
+      "The effect applies to any Mystic without a character-specific bonus."
     ]
   },
   {

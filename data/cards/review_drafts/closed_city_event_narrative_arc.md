@@ -35,7 +35,7 @@ Flavor line: "The dish moved first. Then everyone began pretending it had not."
 
 Visual direction: snow-covered relay field, dish rotating against orders, green telemetry glow, a dead winter sky with a faint impossible coordinate implied but not written.
 
-Mechanical identity: infrastructure gives reach. The active player's first ranged attack or ranged AP ability gains +1 RANGE if adjacent to a placed object or Leak marker.
+Mechanical identity: signal relocation. If a placed object is on the board, move one of your characters to an empty tile adjacent to it, if possible.
 
 Asset: `assets/events/closed-city-signal-array-turns-event-art.png`
 
@@ -77,7 +77,7 @@ Flavor line: "The reactor did not ask for fuel. It asked for attention."
 
 Visual direction: reactor chamber, warning lights, radiation bloom shaped like a prayer diagram, workers silhouetted behind lead glass, sacred geometry hidden in technical readouts.
 
-Mechanical identity: painful boost. Choose one character; it takes 1 damage, then its next attack or AP ability this turn gains +1 ATK or +1 RANGE.
+Mechanical identity: painful acceleration. Choose one character; it takes 1 damage and gains +1 character AP this turn. The additional action still requires pool AP.
 
 Asset: `assets/events/closed-city-reactor-prayer-event-art.png`
 
@@ -123,7 +123,7 @@ Flavor line: "The map was accurate. The building was not."
 
 Visual direction: corridor split between reactor concrete, black water, snow, and Atlantean stone; figures moving through overlapping spaces; clock or instrument stopped at seventeen seconds without visible text.
 
-Mechanical identity: breach-route movement. The active player's first movement action may move through 1 occupied tile, placed object, or Leak marker, but must end on an empty tile.
+Mechanical identity: breach-route movement. This turn, each of your characters may move through 1 occupied tile or placed object, but must end on an empty tile.
 
 Asset: `assets/events/closed-city-seventeen-seconds-event-art.png`
 

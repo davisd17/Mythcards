@@ -10,10 +10,10 @@
     "name": "Signal Array Turns",
     "kind": "Event",
     "tarot_mapping": "Eight of Wands",
-    "duration": "1 turn",
-    "effect": "The active player's first ranged attack or ranged AP ability this turn gains +1 RANGE if the acting character is adjacent to a placed object or Leak marker.",
+    "duration": "Immediate",
+    "effect": "If there is a placed object on the board, move one of your characters to an empty tile adjacent to it, if possible.",
     "role": "Pre-breach omen. The cosmonaut relay dish moves without command and points at a coordinate no scheduled satellite should occupy.",
-    "mechanical_lane": "Turns Closed City infrastructure into signal reach without using deck viewing or deck manipulation.",
+    "mechanical_lane": "Turns a placed object into a signal beacon that can draw one of your characters across the board.",
     "narrative": {
       "arc_phase": "Before The Breach",
       "summary": "The first visible sign is outside in the snow, where the signal array turns toward an empty part of the sky.",
@@ -71,9 +71,9 @@
     "kind": "Event",
     "tarot_mapping": "The Sun",
     "duration": "1 turn",
-    "effect": "Choose one of your characters. It takes 1 damage, then its next attack or AP ability this turn gains +1 ATK or +1 RANGE.",
+    "effect": "Choose one of your characters. It takes 1 damage and gains +1 character AP this turn.",
     "role": "Radiation behaves like language. The reactor does not simply emit energy; it seems to ask for attention, pain, and interpretation.",
-    "mechanical_lane": "Clean risk/reward boost without deck manipulation.",
+    "mechanical_lane": "A character pays with health for a brief surge that lets it act one additional time, provided the player can also spend the required pool AP.",
     "narrative": {
       "arc_phase": "The Synchronization",
       "summary": "The instruments record radiation in repeating structures too intentional to dismiss. Orlov calls it noise. Elena calls it grammar. Karpova calls it leverage.",
@@ -84,7 +84,7 @@
       "assets/events/closed-city-reactor-prayer-event-art.png"
     ],
     "review_notes": [
-      "Draft event card, not yet added to the playable prototype shared relic/event deck.",
+      "Included in the playable prototype shared relic/event deck.",
       "Part of the clearly defined 9-card Closed City event set.",
       "May need testing on low-HP Commons."
     ]
@@ -131,9 +131,9 @@
     "kind": "Event",
     "tarot_mapping": "Wheel of Fortune",
     "duration": "1 turn",
-    "effect": "The active player's first movement action this turn may move through 1 occupied tile, placed object, or Leak marker, but must end on an empty tile.",
+    "effect": "This turn, each of your characters may move through 1 occupied tile or placed object, but must end on an empty tile.",
     "role": "For seventeen seconds, architecture loses its authority. Corridors overlap with dream routes, drowned streets, snowfields, and rooms that were never built.",
-    "mechanical_lane": "Temporary breach-route movement.",
+    "mechanical_lane": "For one turn, each character can use one breach route through an occupied tile or placed object.",
     "narrative": {
       "arc_phase": "The Incident",
       "summary": "Everyone inside the seventeen seconds remembers a different room. Some remember no room at all.",

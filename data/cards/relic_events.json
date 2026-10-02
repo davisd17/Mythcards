@@ -35,8 +35,8 @@
     "sub_area": "Closed City",
     "name": "Signal Array Turns",
     "kind": "Event",
-    "duration": "1 turn",
-    "effect": "The active player's first ranged attack or ranged AP ability this turn gains +1 RANGE if the acting character is adjacent to a placed object or Leak marker.",
+    "duration": "Immediate",
+    "effect": "If there is a placed object on the board, move one of your characters to an empty tile adjacent to it, if possible.",
     "note": "Closed City event."
   },
   {
@@ -46,7 +46,7 @@
     "name": "Reactor Prayer",
     "kind": "Event",
     "duration": "1 turn",
-    "effect": "Choose one of your characters. It takes 1 damage, then its next attack or AP ability this turn gains +1 ATK or +1 RANGE.",
+    "effect": "Choose one of your characters. It takes 1 damage and gains +1 character AP this turn.",
     "note": "Closed City event."
   },
   {
@@ -66,7 +66,7 @@
     "name": "Seventeen Seconds",
     "kind": "Event",
     "duration": "1 turn",
-    "effect": "The active player's first movement action this turn may move through 1 occupied tile, placed object, or Leak marker, but must end on an empty tile.",
+    "effect": "This turn, each of your characters may move through 1 occupied tile or placed object, but must end on an empty tile.",
     "note": "Closed City event."
   },
   {
@@ -105,8 +105,8 @@
     "sub_area": "Flood Survivors",
     "name": "The Causeway Breathes",
     "kind": "Event",
-    "duration": "1 turn",
-    "effect": "Place 1 allied Stone marker on an empty tile within 2 of the center tile. The active player's first movement action this turn may move through 1 placed object without taking effects from that object, but must end on an empty tile.",
+    "duration": "Immediate",
+    "effect": "Place 2 allied Stone markers on different empty tiles within 2 tiles of the center.",
     "note": "Flood Survivors event."
   },
   {
@@ -116,7 +116,7 @@
     "name": "Black Water Remembers",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Choose 1 allied character adjacent to a placed object. That character gains 1 Memory marker, max 1 per character. Then move that character 1 tile. It must end on an empty tile.",
+    "effect": "Choose a character on or adjacent to the center tile. Give it 1 Memory marker.",
     "note": "Flood Survivors event."
   },
   {
@@ -126,7 +126,7 @@
     "name": "The Flood Reaches The Walls",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Each character on an outer edge tile becomes Marked until the end of the round.",
+    "effect": "Each character on an outer edge tile becomes Marked.",
     "note": "Flood Survivors event."
   },
   {
@@ -136,7 +136,7 @@
     "name": "The Drowned Seraph Speaks",
     "kind": "Event",
     "duration": "1 round",
-    "effect": "Choose your Mystic. Until the start of your next turn, the first enemy that damages your Mystic becomes Marked after the attack resolves. If your Mystic is Thalassa-Nekh, she also gains Shield.",
+    "effect": "The first enemy that damages your Mystic becomes Marked.",
     "note": "Flood Survivors event."
   }
 ]

@@ -646,11 +646,11 @@ Detailed narrative sequence, flavor lines, visual direction, character pressure,
 
 | # | Card | Type | Narrative Function | Possible Mechanical Direction | Asset |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Signal Array Turns | Event | The cosmonaut relay dish moves without command. | First ranged attack or AP ability gains +1 RANGE if adjacent to a placed object or Leak marker. | `assets/events/closed-city-signal-array-turns-event-art.png` |
+| 1 | Signal Array Turns | Event | The cosmonaut relay dish moves without command. | If a placed object is on the board, move one of your characters to an empty tile adjacent to it. | `assets/events/closed-city-signal-array-turns-event-art.png` |
 | 2 | Dream Monitors Synchronize | Event | Elena's sleep-lab waveforms become shared sacred geometry. | Move a temporary combat marker from one character to another within range; exclude Spirit Ember. | `assets/events/closed-city-dream-monitors-synchronize-event-art.png` |
-| 3 | Reactor Prayer | Event | Radiation behaves like language or prayer. | Take 1 damage to gain +1 ATK or +1 RANGE on the next attack or AP ability this turn. | `assets/events/closed-city-reactor-prayer-event-art.png` |
+| 3 | Reactor Prayer | Event | Radiation behaves like language or prayer. | Choose one character; it takes 1 damage and gains +1 character AP this turn. | `assets/events/closed-city-reactor-prayer-event-art.png` |
 | 4 | Closed City Incident | Event | The reactor opens inward and realities overlap. | Place 2 Leak markers near the board center. | `assets/events/closed-city-incident-event-art.png` |
-| 5 | Seventeen Seconds | Event | Facility exists in multiple realities for seventeen seconds. | First movement action may pass through one occupied tile, object, or Leak marker. | `assets/events/closed-city-seventeen-seconds-event-art.png` |
+| 5 | Seventeen Seconds | Event | Facility exists in multiple realities for seventeen seconds. | This turn, each character may move through one occupied tile or placed object but must end on an empty tile. | `assets/events/closed-city-seventeen-seconds-event-art.png` |
 | 6 | Elena Missing In The Signal | Event | Elena disappears into the signal and becomes the personal wound at the center of the arc. | Move an ally near a Leak marker or placed object, then mark them as touched by the breach. | `assets/events/closed-city-elena-missing-in-the-signal-event-art.png` |
 | 7 | The First Card Appears | Event | The first MythCards artifact manifests near Orlov's coma bed. | Hero or adjacent ally gains +1 RANGE on its next attack or AP ability and may remove a harmful temporary combat marker. | `assets/events/closed-city-the-first-card-appears-event-art.png` |
 | 8 | Semyonov Orders Silence | Event | Official containment tries to bury the truth. | Temporarily prevents bonus AP gained from card effects. | TBD |
@@ -713,12 +713,12 @@ Structured draft data is captured in `data/cards/review_drafts/flood_survivor_ev
 
 | # | Card | Type | Narrative Function | Possible Mechanical Direction |
 | --- | --- | --- | --- | --- |
-| 1 | The Causeway Breathes | Event | A drowned ley-road wakes because something buried has begun calling through it. | Place one Stone marker near center and allow one movement through a placed object while ignoring that object's effect. |
-| 2 | Black Water Remembers | Event | Floodwater reflects the truth of what happened during the fall of Atlantis. | Give one ally near a placed object a Memory marker and move it 1 tile. |
+| 1 | The Causeway Breathes | Event | A drowned ley-road wakes because something buried has begun calling through it. | Place two allied Stone markers on different empty tiles near the center. |
+| 2 | Black Water Remembers | Event | Floodwater reflects the truth of what happened during the fall of Atlantis. | Give one character on or adjacent to the center tile a Memory marker. |
 | 3 | The Vault Chooses A Witness | Event | A sealed archive opens for one character and brands them with forbidden knowledge. | Single-character AP ability range boost with Marked cost; does not create a Vault marker. |
-| 4 | The Flood Reaches The Walls | Event | The old Flood returns at the board edges and exposes anyone at the walls. | Characters on outer edge tiles become Marked until the end of the round. |
+| 4 | The Flood Reaches The Walls | Event | The old Flood returns at the board edges and exposes anyone at the walls. | Each character on an outer edge tile becomes Marked. |
 | 5 | Ley Stones Align | Event | Ancient stones reveal geometry built to hide a crime. | Measure the first AP ability from an allied Stone marker or placed object. |
-| 6 | The Drowned Seraph Speaks | Event | Thalassa-Nekh's entity speaks a judgment no ruler can redact. | Mystic-centered retaliation; Thalassa-Nekh gains a Shield bonus. |
+| 6 | The Drowned Seraph Speaks | Event | Thalassa-Nekh's entity speaks a judgment no ruler can redact. | The first enemy that damages your Mystic becomes Marked. |
 | 7 | Tide-Sealed Archive Opens | Event | Meret-Anu's records reveal a controlled truth, but the full archive wants release. | Choose safe Shield or stronger Shield/+RANGE with Marked cost. |
 | 8 | Exiles Walk Beneath Egypt | Event | Survivors carry edited Atlantean memory into tomb geometry and later mystery traditions. | Reposition allies adjacent to placed objects. |
 
