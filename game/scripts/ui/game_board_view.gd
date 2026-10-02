@@ -8,19 +8,35 @@ extends Control
 
 signal tile_tapped(pos: Vector2i)
 
-const TILE := Color("#d9d4c7")
-const TILE_ALT := Color("#cbc5b5")
-const CENTER := Color("#e0b44c")
-const BACK_ROW := Color("#b9c6d2")
-const FROST := Color("#a8d8f0")
-const GRID := Color("#3b3a36")
-const MOVE := Color(0.15, 0.6, 0.25)
-const ATTACK := Color(0.85, 0.15, 0.15)
-const PICK := Color(0.95, 0.75, 0.1)
-const LEAK := Color(0.45, 0.85, 0.2)
-const SELECTED := Color("#ffe14d")
-const PLAYER_COLORS := {"p1": Color("#8c2f39"), "p2": Color("#1f6f8b")}
-const MARGIN := 6.0
+const TILE := Color("#29312f")
+const TILE_ALT := Color("#222927")
+const CENTER := Color("#59604a")
+const P1_BACK_ROW := Color("#3b2428")
+const P2_BACK_ROW := Color("#1d3438")
+const FROST := Color("#7898a0")
+const GRID := Color("#70736c")
+const MOVE := Color("#5ea776")
+const ATTACK := Color("#c95555")
+const PICK := Color("#d0ad59")
+const LEAK := Color("#7dbb64")
+const SELECTED := Color("#f1d379")
+const PLAYER_COLORS := {"p1": Color("#a9444c"), "p2": Color("#38919a")}
+const ROLE_COLORS := {
+	"Common": Color("#b7b8b1"), "Mount": Color("#8cc7b1"), "Warrior": Color("#c98a75"),
+	"Leader": Color("#ded6ba"), "Hero": Color("#d7b968"), "Specialist": Color("#98a6b2"),
+	"Mystic": Color("#a5a1c8"),
+}
+const ROLE_MARKS := {
+	"Common": "C", "Mount": "M", "Warrior": "W", "Leader": "L", "Hero": "H",
+	"Specialist": "S", "Mystic": "Y",
+}
+const PORTRAIT_FOCUS := {
+	"r-gymnast": 0.38, "r-tiger": 0.48, "r-sniper": 0.36, "r-general": 0.37,
+	"r-hero": 0.40, "r-engineer": 0.38, "r-seer": 0.36,
+	"a-attendant": 0.40, "a-glider": 0.50, "a-guard": 0.39, "a-conductor": 0.37,
+	"a-hero": 0.38, "a-architect": 0.38, "a-harmonic": 0.38,
+}
+const MARGIN := 18.0
 
 # Short badges for status effects, drawn on the token; full names show on the card.
 const STATUS := {
@@ -56,13 +72,17 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(Vector2.ZERO, size), Color("#1a1916"))
+	draw_rect(Rect2(Vector2.ZERO, size), Color("#0b0f0e"))
 	if controller == null or controller.board() == null:
 		return
 	var board := controller.board()
 	var font := ThemeDB.fallback_font
 	var px := tile_px()
 	var h := controller.highlights()
+	var board_rect := Rect2(_origin(), Vector2(px * BoardModel.BOARD_SIZE, px * BoardModel.BOARD_SIZE))
+	draw_rect(board_rect.grow(10.0), Color("#090c0b"))
+	draw_rect(board_rect.grow(7.0), Color("#909088"), false, 2.0)
+	draw_rect(board_rect.grow(3.0), Color("#3b403e"), false, 3.0)
 
 	for y in BoardModel.BOARD_SIZE:
 		for x in BoardModel.BOARD_SIZE:
@@ -70,19 +90,26 @@ func _draw() -> void:
 			var rect := tile_rect(pos)
 			var tile := board.get_tile(pos)
 			var color := TILE if (x + y) % 2 == 0 else TILE_ALT
-			if y == BoardModel.PLAYER_A_EDGE_ROW or y == BoardModel.PLAYER_B_EDGE_ROW:
-				color = BACK_ROW
+			if y == BoardModel.PLAYER_A_EDGE_ROW:
+				color = P1_BACK_ROW
+			elif y == BoardModel.PLAYER_B_EDGE_ROW:
+				color = P2_BACK_ROW
 			if tile.is_center:
 				color = CENTER
 			if tile.terrain_type == "frost":
 				color = FROST
 			draw_rect(rect, color)
-			draw_rect(rect, GRID, false, 2.0)
+			draw_rect(rect, GRID, false, 1.5)
+			var grain := Color(0.8, 0.82, 0.76, 0.055)
+			draw_line(rect.position + Vector2(px * 0.12, px * 0.82), rect.position + Vector2(px * 0.82, px * 0.12), grain, 1.0)
+			draw_line(rect.position + Vector2(px * 0.55, px * 0.94), rect.position + Vector2(px * 0.94, px * 0.55), grain, 1.0)
 			if tile.is_center:
 				var c := rect.get_center()
-				var r := px * 0.22
-				draw_colored_polygon(PackedVector2Array([c + Vector2(0, -r), c + Vector2(r, 0), c + Vector2(0, r), c + Vector2(-r, 0)]),
-						Color(1, 1, 1, 0.45))
+				var r := px * 0.29
+				draw_arc(c, r, 0.0, TAU, 32, Color("#cbb77a"), 2.0)
+				draw_arc(c, r * 0.58, 0.0, TAU, 24, Color("#a8c6b1"), 2.0)
+				for dir in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+					draw_line(c + dir * r * 0.2, c + dir * r, Color("#d0c392"), 2.0)
 			if tile.leak:
 				draw_circle(rect.get_center(), px * 0.3, Color(LEAK, 0.35))
 				draw_arc(rect.get_center(), px * 0.3, 0.0, TAU, 24, LEAK, 3.0)
@@ -119,27 +146,41 @@ func _draw_character(font: Font, c: CharacterInstance, h: Dictionary) -> void:
 	var rect := tile_rect(c.position)
 	var px := rect.size.x
 	var center := rect.get_center()
-	var radius := px * 0.4
 	var color: Color = PLAYER_COLORS.get(c.player_id, Color.GRAY)
+	var role_color: Color = ROLE_COLORS.get(c.data.type, Color("#b7b8b1"))
+	var portrait_rect := rect.grow(-px * 0.13)
 	var spent: bool = GameState.match_state != null and c.player_id == GameState.match_state.active_player_id \
 			and c.character_ap_remaining <= 0 and _mount_ap(c) <= 0
-	draw_circle(center, radius, color.darkened(0.45) if spent else color)
+	draw_rect(Rect2(portrait_rect.position + Vector2(px * 0.045, px * 0.055), portrait_rect.size), Color(0, 0, 0, 0.58))
+	var texture := CardView.art_for(c.data.id)
+	if texture != null:
+		_draw_cover_texture(texture, portrait_rect, float(PORTRAIT_FOCUS.get(c.data.id, 0.4)))
+	else:
+		draw_rect(portrait_rect, color.darkened(0.38))
+	draw_rect(portrait_rect, color, false, maxf(3.0, px * 0.045))
+	draw_rect(portrait_rect.grow(-px * 0.045), role_color, false, maxf(1.5, px * 0.018))
+	if spent:
+		draw_rect(portrait_rect.grow(-px * 0.055), Color(0, 0, 0, 0.48))
 	if c.is_mounted_rider:
-		draw_arc(center, radius - 3.0, 0.0, TAU, 32, Color("#f3e3b5"), 2.0)
+		draw_arc(center, px * 0.38, 0.0, TAU, 32, Color("#f3e3b5"), 3.0)
 	if c.instance_id == controller.selected_id or c.instance_id == controller.placing_id:
-		draw_arc(center, radius + 3.0, 0.0, TAU, 40, SELECTED, 4.0)
+		draw_rect(portrait_rect.grow(5.0), SELECTED, false, 4.0)
 	if h.attack_ids.has(c.instance_id):
 		_draw_crosshair(rect, ATTACK)
 	if h.pick_ids.has(c.instance_id):
 		_draw_brackets(rect, PICK)
 
+	var role_mark: String = ROLE_MARKS.get(c.data.type, "?")
+	_badge(font, portrait_rect.position + Vector2(px * 0.09, px * 0.09), role_mark, role_color, px)
 	var tag := DebugPanel.abbreviation(c.data)
-	_text(font, tag, Rect2(rect.position + Vector2(0, px * 0.12), Vector2(px, px * 0.4)), px * 0.28, Color.WHITE)
+	var name_strip := Rect2(portrait_rect.position + Vector2(0, portrait_rect.size.y * 0.64), Vector2(portrait_rect.size.x, portrait_rect.size.y * 0.36))
+	draw_rect(name_strip, Color(0.02, 0.025, 0.024, 0.84))
+	_text(font, tag, Rect2(name_strip.position, Vector2(name_strip.size.x, name_strip.size.y * 0.52)), px * 0.19, Color("#f2ede2"))
 	var hp_max := c.base_max_hp
 	if GameState.match_state != null:
 		hp_max = RulesEngine.systems().ability.get_effective_max_hp(c)
-	_text(font, "%d/%d" % [c.current_hp, hp_max], Rect2(rect.position + Vector2(0, px * 0.5), Vector2(px, px * 0.3)),
-			px * 0.19, Color("#f2f2f2"))
+	_text(font, "%d/%d HP" % [c.current_hp, hp_max], Rect2(name_strip.position + Vector2(0, name_strip.size.y * 0.45),
+			Vector2(name_strip.size.x, name_strip.size.y * 0.52)), px * 0.13, Color("#cbd9d4"))
 	# Level badge (top-left), Spirit Embers (top-right), statuses along the bottom.
 	if c.level > 1:
 		_badge(font, rect.position + Vector2(px * 0.16, px * 0.16), "L%d" % c.level, Color("#c9a45c"), px)
@@ -154,9 +195,17 @@ func _draw_character(font: Font, c: CharacterInstance, h: Dictionary) -> void:
 		if not shorts.has(short):
 			shorts.append(short)
 	if not shorts.is_empty():
-		var strip := Rect2(rect.position + Vector2(0, px * 0.78), Vector2(px, px * 0.22))
-		draw_rect(strip, Color(0, 0, 0, 0.55))
+		var strip := Rect2(rect.position + Vector2(0, px * 0.82), Vector2(px, px * 0.18))
+		draw_rect(strip, Color(0, 0, 0, 0.72))
 		_text(font, " ".join(shorts), strip, px * 0.16, Color("#9fe0f5"))
+
+
+func _draw_cover_texture(texture: Texture2D, target: Rect2, focus_y: float) -> void:
+	var source_size := texture.get_size()
+	var crop := minf(source_size.x, source_size.y)
+	var source_x := (source_size.x - crop) * 0.5
+	var source_y := clampf(source_size.y * focus_y - crop * 0.5, 0.0, source_size.y - crop)
+	draw_texture_rect_region(texture, target, Rect2(Vector2(source_x, source_y), Vector2(crop, crop)))
 
 
 # A rider's pair can still move on its Mount's AP (ruling 2026-09-28).

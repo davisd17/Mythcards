@@ -32,8 +32,9 @@ var _game_over_label := Label.new()
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	theme = _build_ui_theme()
 	var background := ColorRect.new()
-	background.color = Color("#141310")
+	background.color = Color("#0b0f0e")
 	background.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(background)
 
@@ -369,6 +370,43 @@ func _build_game_over() -> void:
 # --- Helpers ---------------------------------------------------------------------------------
 
 const PLAYER_COLORS := {"p1": Color("#8c2f39"), "p2": Color("#1f6f8b")}
+
+
+func _build_ui_theme() -> Theme:
+	var result := Theme.new()
+	result.default_font_size = 18
+	result.set_color("font_color", "Label", Color("#e9e5db"))
+	result.set_color("font_color", "Button", Color("#e9e5db"))
+	result.set_color("font_hover_color", "Button", Color.WHITE)
+	result.set_color("font_pressed_color", "Button", Color("#f3e3b5"))
+	result.set_color("font_disabled_color", "Button", Color("#777d79"))
+	result.set_stylebox("normal", "Button", _button_style("#222928", "#4b5552"))
+	result.set_stylebox("hover", "Button", _button_style("#303937", "#769080"))
+	result.set_stylebox("pressed", "Button", _button_style("#151a19", "#c9a45c"))
+	result.set_stylebox("focus", "Button", _button_style("#252d2b", "#c9a45c"))
+	result.set_stylebox("disabled", "Button", _button_style("#171b1a", "#303634"))
+	result.set_stylebox("panel", "PanelContainer", _panel_style())
+	return result
+
+
+func _button_style(fill: String, border: String) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(fill)
+	style.border_color = Color(border)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(6)
+	style.set_content_margin_all(8)
+	return style
+
+
+func _panel_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#171c1b")
+	style.border_color = Color("#3e4744")
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(6)
+	style.set_content_margin_all(8)
+	return style
 
 
 func _button(text: String, on_press: Callable, wide: bool = true) -> Button:

@@ -52,9 +52,9 @@ func test_deploying_starts_the_match_and_shows_the_drawn_card() -> void:
 	assert_false(screen._popup.visible)
 
 
-func test_card_art_loads_when_mapped_and_falls_back_otherwise() -> void:
+func test_character_art_loads_for_both_playable_cultures() -> void:
 	assert_not_null(CardView.art_for("r-seer"), "run tools/sync_game_content.ps1 if this fails")
-	assert_null(CardView.art_for("a-harmonic"))
+	assert_not_null(CardView.art_for("a-harmonic"), "run tools/sync_game_content.ps1 if this fails")
 
 
 func test_a_seeded_match_plays_through_the_whole_deck_by_taps() -> void:
