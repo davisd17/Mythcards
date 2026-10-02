@@ -242,24 +242,22 @@ func test_relic_replace_choice_uses_option_buttons() -> void:
 	assert_eq(Fixture.state().get_player("p1").active_relic_id, "r-karpovas-black-key")
 
 
-func test_character_choice_with_options() -> void:
+func test_reactor_prayer_character_choice() -> void:
 	var sniper := Fixture.put(SNIPER, Vector2i(3, 1))
 	_draw("r-reactor-prayer")
 	gc.tap_tile(Vector2i(3, 1))
-	assert_eq(gc.current_step().pick, "option")
-	gc.press_option(0)
 	assert_true(gc.flow.is_empty())
 	assert_eq(sniper.current_hp, 2)
+	assert_eq(sniper.character_ap_remaining, 2)
 
 
-func test_character_tile_choice() -> void:
+func test_black_water_character_choice() -> void:
 	gc.end_turn()
 	var guard := Fixture.put(GUARD, Vector2i(3, 3))
-	Fixture.board().place_object(Vector2i(3, 4), "stone", "p2")
 	_draw("a-flood-survivor-black-water-remembers", "p2")
 	gc.tap_tile(Vector2i(3, 3))
-	gc.tap_tile(Vector2i(2, 3))
-	assert_eq(guard.position, Vector2i(2, 3))
+	assert_true(gc.flow.is_empty())
+	assert_eq(guard.position, Vector2i(3, 3))
 	assert_true(guard.has_status("memory"))
 
 

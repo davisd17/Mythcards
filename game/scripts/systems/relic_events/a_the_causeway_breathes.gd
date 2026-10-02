@@ -1,31 +1,33 @@
 extends RelicEventHandler
-# The Causeway Breathes (Event, 1 turn): place 1 allied Stone marker on an empty tile
-# within 2 of the center tile. The active player's first movement action this turn may
-# move through 1 placed object without taking effects from that object, but must end on
-# an empty tile. Choice: {"tiles": [pos]}.
+# The Causeway Breathes (Event, Immediate): place 2 allied Stone markers on different
+# empty tiles within 2 of the center. Choice: {"tiles": [pos, pos]}.
 
 const REACH := 2
+const COUNT := 2
 
 
-func on_activate(sys, player_id: String) -> Dictionary:
-	sys.state().get_player(player_id).player_flags_this_turn["causeway_pending"] = true
+func resolve_immediate(sys, _player_id: String) -> Dictionary:
 	return {"needs_choice": true} if not _candidates(sys).is_empty() else {}
 
 
-func on_expire(sys, player_id: String, _data: Dictionary) -> void:
-	sys.state().get_player(player_id).player_flags_this_turn.erase("causeway_pending")
-
-
 func choice_spec(sys, _player_id: String, _pending: Dictionary) -> Dictionary:
-	return {"prompt": "The Causeway Breathes: place your Stone marker within 2 of the center.",
-			"pick": "tiles", "count": 1, "tiles": _candidates(sys)}
+	var tiles := _candidates(sys)
+	var count := mini(COUNT, tiles.size())
+	return {"prompt": "The Causeway Breathes: place %d allied Stone markers within 2 of the center." % count,
+			"pick": "tiles", "count": count, "tiles": tiles}
 
 
 func resolve_choice(sys, player_id: String, payload: Dictionary) -> Dictionary:
 	var tiles: Array = payload.get("tiles", [])
-	if tiles.size() != 1 or not _candidates(sys).has(tiles[0]):
-		return {"success": false, "reason": "choose an empty tile within 2 of the center"}
-	sys.board.place_object(tiles[0], "stone", player_id)
+	var candidates := _candidates(sys)
+	var needed := mini(COUNT, candidates.size())
+	if tiles.size() != needed:
+		return {"success": false, "reason": "choose %d tiles" % needed}
+	for pos in tiles:
+		if not candidates.has(pos) or tiles.count(pos) > 1:
+			return {"success": false, "reason": "choose different empty tiles within 2 of the center"}
+	for pos in tiles:
+		sys.board.place_object(pos, "stone", player_id)
 	return {"success": true}
 
 

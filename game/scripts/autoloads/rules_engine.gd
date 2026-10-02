@@ -224,22 +224,18 @@ func _handle_move(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 	_spend_ap(ap_payer(actor, "move"))
 	actor.ability_uses_this_turn["moved"] = true   # shared "moved this turn" marker (e.g. Aim)
 	var grants := _spend_movement_grants(actor, from, to, m)
-	if grants.has("seventeen_seconds"):
-		actor.ability_uses_this_turn["ignore_leak_once"] = true   # "move through ... a Leak marker"
 	EventBus.character_moved.emit(actor.instance_id, from, to)
-	actor.ability_uses_this_turn.erase("ignore_leak_once")
 	return {"success": true}
 
 
-# Card grants for "the first movement action this turn" are spent by that move
-# (Seventeen Seconds, The Causeway Breathes). Karpova's Black Key (once per turn) is
-# spent only if this move needed it. Returns the grants that were active.
+# Seventeen Seconds is spent separately by each character. Karpova's Black Key is spent
+# only if this move needed it. Returns the grants that were active.
 func _spend_movement_grants(actor: CharacterInstance, from: Vector2i, to: Vector2i, m: Dictionary) -> Array[String]:
 	var grants: Array[String] = ability_system.movement_grants(actor)
 	var flags := _flags(actor)
-	flags.erase("seventeen_seconds_pending")
-	flags.erase("causeway_pending")
-	if grants.has("black_key") and not grants.has("seventeen_seconds") and not grants.has("causeway"):
+	if grants.has("seventeen_seconds"):
+		actor.ability_uses_this_turn["seventeen_seconds_used"] = true
+	if grants.has("black_key") and not grants.has("seventeen_seconds"):
 		var own: Array[Vector2i] = _board().get_legal_moves(from, m.budget, m.pattern,
 				ability_system.get_movement_passable_predicate(m.mover),
 				ability_system.get_movement_object_passable_predicate(m.mover),
@@ -271,8 +267,6 @@ func _handle_attack(actor: CharacterInstance, payload: Dictionary) -> Dictionary
 	# not be undone by the payment.
 	_spend_ap(actor)
 	var combat: Dictionary = combat_resolver.resolve_attack(actor, target)
-	if CombatResolver._distance(actor.position, target.position) > 1:
-		_flags(actor).erase("signal_array_pending")   # the first ranged attack used it
 	return {"success": true, "damage": combat.get("damage", 0), "defeated": combat.get("defeated", false)}
 
 
@@ -285,8 +279,6 @@ func _handle_object_attack(actor: CharacterInstance, pos) -> Dictionary:
 		return _fail(reason)
 	_spend_ap(actor)
 	var hit: Dictionary = combat_resolver.resolve_object_attack(actor, pos)
-	if CombatResolver._distance(actor.position, pos) > 1:
-		_flags(actor).erase("signal_array_pending")
 	return {"success": true, "damage": hit.damage, "destroyed": hit.destroyed}
 
 
@@ -321,7 +313,6 @@ func _handle_ability(actor: CharacterInstance, payload: Dictionary) -> Dictionar
 		# A validated ability that still failed costs nothing.
 		_refund_ap(actor)
 		return _fail(str(ability_result.get("reason", "ability failed")))
-	_flags(actor).erase("signal_array_pending")   # the first ranged ability used it
 	ability_system.spend_ability_buffs(actor)
 	var result := ability_result.duplicate()
 	result.erase("reason")

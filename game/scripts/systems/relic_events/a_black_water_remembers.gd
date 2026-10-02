@@ -1,51 +1,31 @@
 extends RelicEventHandler
-# Black Water Remembers (Event, Immediate): choose 1 allied character adjacent to a placed
-# object. It gains 1 Memory marker (max 1 per character), then moves 1 tile, ending on an
-# empty tile. Choice: {"target_id": id, "to": pos} ("to" omitted if it can't move).
+# Black Water Remembers (Event, Immediate): choose a character on or adjacent to the
+# center tile. Give it 1 Memory marker. Choice: {"target_id": id}.
 
 
-func resolve_immediate(sys, player_id: String) -> Dictionary:
-	return {"needs_choice": true} if not _eligible(sys, player_id).is_empty() else {}
+func resolve_immediate(sys, _player_id: String) -> Dictionary:
+	return {"needs_choice": true} if not _eligible(sys).is_empty() else {}
 
 
-func choice_spec(sys, player_id: String, _pending: Dictionary) -> Dictionary:
-	var tiles_by := {}
-	for id in _eligible(sys, player_id):
-		tiles_by[id] = _steps(sys, sys.find(id))
-	return {"prompt": "Black Water Remembers: choose an ally next to a placed object; it gains Memory, then moves 1 tile.",
-			"pick": "character_tile", "characters": _eligible(sys, player_id), "tiles_by_character": tiles_by}
+func choice_spec(sys, _player_id: String, _pending: Dictionary) -> Dictionary:
+	return {"prompt": "Black Water Remembers: choose a character on or adjacent to the center tile; it gains Memory.",
+			"pick": "character", "characters": _eligible(sys)}
 
 
-func resolve_choice(sys, player_id: String, payload: Dictionary) -> Dictionary:
+func resolve_choice(sys, _player_id: String, payload: Dictionary) -> Dictionary:
 	var target_id := str(payload.get("target_id", ""))
-	if not _eligible(sys, player_id).has(target_id):
-		return {"success": false, "reason": "choose an ally next to a placed object"}
-	var target: CharacterInstance = sys.find(target_id)
-	var steps := _steps(sys, target)
-	var to = payload.get("to")
-	if not steps.is_empty() and not steps.has(to):
-		return {"success": false, "reason": "choose an empty tile next to it"}
-	sys.give_memory(target)
-	if to is Vector2i and not target.defeated:
-		sys.move_character(target, to)
+	if not _eligible(sys).has(target_id):
+		return {"success": false, "reason": "choose a character on or adjacent to the center tile"}
+	sys.give_memory(sys.find(target_id))
 	return {"success": true}
 
 
-func _eligible(sys, player_id: String) -> Array[String]:
+func _eligible(sys) -> Array[String]:
 	var result: Array[String] = []
-	for c in own_live(sys, player_id):
-		if c.mounted_with_id != "" and not c.is_mounted_rider:
-			continue
-		for n in sys.neighbors(c.position):
-			if sys.board.get_placed_object(n) != null:
-				result.append(c.instance_id)
-				break
-	return result
-
-
-func _steps(sys, c: CharacterInstance) -> Array[Vector2i]:
-	var result: Array[Vector2i] = []
-	for n in sys.neighbors(c.position):
-		if sys.is_empty_tile(n):
-			result.append(n)
+	var positions: Array[Vector2i] = [BoardModel.CENTER_TILE]
+	positions.append_array(sys.neighbors(BoardModel.CENTER_TILE))
+	for pos in positions:
+		var target = sys.occupant(pos)
+		if target != null and not target.has_status("memory"):
+			result.append(target.instance_id)
 	return result

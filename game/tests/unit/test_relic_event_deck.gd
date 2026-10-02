@@ -178,28 +178,27 @@ func test_karpovas_black_key_move_and_one_pass() -> void:
 
 # --- Closed City events -----------------------------------------------------------------
 
-func test_signal_array_turns_near_an_object_or_leak() -> void:
-	var sniper := Fixture.put(SNIPER, Vector2i(3, 0))
-	sniper.ability_uses_this_turn["moved"] = true             # no Aim: RANGE 4
+func test_signal_array_turns_moves_a_character_next_to_an_object() -> void:
+	var sniper := Fixture.put(SNIPER, Vector2i(0, 0))
+	Fixture.board().place_object(CENTER, "pylon", "p1")
 	_draw("r-signal-array-turns")
-	assert_eq(_range(sniper, "attack"), 4)
-	_leak(Vector2i(2, 0))
-	assert_eq(_range(sniper, "attack"), 5)
-	Fixture.put(CONDUCTOR, Vector2i(3, 5))
-	assert_true(_act("attack", SNIPER, {"target_id": CONDUCTOR}).success)
-	assert_eq(_range(sniper, "attack"), 4, "first ranged attack only")
+	var spec := RelicEventDeck.choice_spec("p1")
+	assert_eq(spec.pick, "character_tile")
+	assert_true(spec.characters.has(SNIPER))
+	assert_true(spec.tiles_by_character[SNIPER].has(Vector2i(3, 2)))
+	assert_true(_act("deck_choice", "p1", {"target_id": SNIPER, "to": Vector2i(3, 2)}).success)
+	assert_eq(sniper.position, Vector2i(3, 2))
 
 
-func test_reactor_prayer_hurts_then_boosts() -> void:
-	var sniper := Fixture.put(SNIPER, Vector2i(3, 1))          # HP 3 ATK 2
+func test_reactor_prayer_hurts_then_grants_character_ap() -> void:
+	var sniper := Fixture.put(SNIPER, Vector2i(3, 1))          # HP 3, 1 character AP
 	_draw("r-reactor-prayer")
 	var spec := RelicEventDeck.choice_spec("p1")
 	assert_eq(spec.pick, "character")
 	assert_true(spec.characters.has(SNIPER))
-	assert_true(_act("deck_choice", "p1", {"target_id": SNIPER, "boost": "atk"}).success)
+	assert_true(_act("deck_choice", "p1", {"target_id": SNIPER}).success)
 	assert_eq(sniper.current_hp, 2)
-	Fixture.put(CONDUCTOR, Vector2i(3, 3))
-	assert_eq(_act("attack", SNIPER, {"target_id": CONDUCTOR}).damage, 3)
+	assert_eq(sniper.character_ap_remaining, 2)
 
 
 func test_closed_city_incident_places_two_leaks() -> void:
@@ -216,23 +215,24 @@ func test_closed_city_incident_places_two_leaks() -> void:
 	assert_true(sys.has_leak(Vector2i(3, 2)))
 
 
-func test_seventeen_seconds_first_move_passes_one_thing() -> void:
+func test_seventeen_seconds_gives_each_character_one_pass() -> void:
 	Fixture.put(SNIPER, Vector2i(3, 0))                        # MOVE 2
 	Fixture.put(CONDUCTOR, Vector2i(3, 1))                     # an enemy in the way
-	_draw("r-seventeen-seconds")
-	assert_true(_act("move", SNIPER, {"to": Vector2i(3, 2)}).success, "through the enemy")
 	Fixture.put(GYMNAST, Vector2i(0, 3))
 	Fixture.put(GUARD, Vector2i(0, 4))
-	assert_false(RulesEngine.get_legal_move_tiles(GYMNAST).has(Vector2i(0, 5)), "first move only")
+	_draw("r-seventeen-seconds")
+	assert_true(_act("move", SNIPER, {"to": Vector2i(3, 2)}).success, "through the enemy")
+	assert_true(_act("move", GYMNAST, {"to": Vector2i(0, 5)}).success,
+			"a different character may also pass one occupied tile")
 
 
-func test_seventeen_seconds_crosses_a_leak_safely() -> void:
+func test_seventeen_seconds_does_not_protect_from_leaks() -> void:
 	var gymnast := Fixture.put(GYMNAST, Vector2i(3, 0))
 	_leak(Vector2i(3, 1))
 	_draw("r-seventeen-seconds")
 	_act("move", GYMNAST, {"to": Vector2i(3, 2)})
-	assert_eq(gymnast.current_hp, 2)
-	assert_true(sys.has_leak(Vector2i(3, 1)), "the Leak stays for someone else")
+	assert_eq(gymnast.current_hp, 1)
+	assert_false(sys.has_leak(Vector2i(3, 1)))
 
 
 # --- Flood Survivors relics ---------------------------------------------------------------
@@ -277,27 +277,26 @@ func test_the_causeway_breathes() -> void:
 	_draw("a-flood-survivor-the-causeway-breathes", "p2")
 	var spec := RelicEventDeck.choice_spec("p2")
 	assert_eq(spec.pick, "tiles")
-	assert_eq(spec.count, 1)
-	assert_true(_act("deck_choice", "p2", {"tiles": [CENTER]}).success)
-	var stone := Fixture.board().get_placed_object(CENTER)
-	assert_eq(stone.type_id, "stone")
-	assert_eq(stone.owner_player_id, "p2")
-	Fixture.put(GUARD, Vector2i(3, 4))
-	assert_true(RulesEngine.get_legal_move_tiles(GUARD).has(Vector2i(3, 2)), "first move passes the object")
+	assert_eq(spec.count, 2)
+	assert_true(_act("deck_choice", "p2", {"tiles": [CENTER, Vector2i(3, 2)]}).success)
+	for pos in [CENTER, Vector2i(3, 2)]:
+		var stone := Fixture.board().get_placed_object(pos)
+		assert_eq(stone.type_id, "stone")
+		assert_eq(stone.owner_player_id, "p2")
 
 
 func test_black_water_remembers() -> void:
 	_act("end_turn", "p1")
 	var guard := Fixture.put(GUARD, Vector2i(3, 3))
-	Fixture.board().place_object(Vector2i(3, 4), "stone", "p2")
+	var sniper := Fixture.put(SNIPER, Vector2i(3, 2))
 	_draw("a-flood-survivor-black-water-remembers", "p2")
 	var spec := RelicEventDeck.choice_spec("p2")
-	assert_eq(spec.pick, "character_tile")
-	assert_eq(spec.characters, [GUARD])
-	assert_true(spec.tiles_by_character[GUARD].has(Vector2i(2, 3)))
-	assert_true(_act("deck_choice", "p2", {"target_id": GUARD, "to": Vector2i(2, 3)}).success)
+	assert_eq(spec.pick, "character")
+	assert_true(spec.characters.has(GUARD))
+	assert_true(spec.characters.has(SNIPER), "either player's character may be chosen")
+	assert_true(_act("deck_choice", "p2", {"target_id": GUARD}).success)
 	assert_true(guard.has_status("memory"))
-	assert_eq(guard.position, Vector2i(2, 3))
+	assert_eq(guard.position, CENTER)
 
 
 func test_black_water_with_nobody_eligible_resolves_at_once() -> void:
@@ -313,6 +312,7 @@ func test_the_flood_reaches_the_walls() -> void:
 	assert_true(edge.has_status("marked"))
 	assert_true(enemy_edge.has_status("marked"), "every character on the edge")
 	assert_false(middle.has_status("marked"))
+	assert_eq(edge.status_effects.filter(func(se): return se.type == "marked")[0].expires, "until_used")
 
 
 func test_the_drowned_seraph_speaks() -> void:
@@ -324,5 +324,6 @@ func test_the_drowned_seraph_speaks() -> void:
 	var gymnast := Fixture.put(GYMNAST, Vector2i(3, 4))
 	_act("attack", SNIPER, {"target_id": HARMONIC})
 	assert_true(sniper.has_status("marked"), "the first enemy to damage the Mystic")
+	assert_eq(sniper.status_effects.filter(func(se): return se.type == "marked")[0].expires, "until_used")
 	_act("attack", GYMNAST, {"target_id": HARMONIC})
 	assert_false(gymnast.has_status("marked"), "only the first")

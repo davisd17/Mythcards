@@ -71,8 +71,8 @@ func get_move_bonus(instance: CharacterInstance) -> int:
 
 
 # The rules one move uses: the mover's own pass-through abilities, plus any one-pass
-# "move through" grant from a card (Seventeen Seconds, The Causeway Breathes, Karpova's
-# Black Key). `actor` is who acts (a rider, for a mounted pair); `mover` supplies the
+# "move through" grant from a card (Seventeen Seconds or Karpova's Black Key). `actor`
+# is who acts (a rider, for a mounted pair); `mover` supplies the
 # movement abilities. Returns {pass_char, pass_obj, max_passes, grants}.
 func movement_rules(mover: CharacterInstance, actor: CharacterInstance = null) -> Dictionary:
 	if actor == null:
@@ -105,10 +105,9 @@ func movement_rules(mover: CharacterInstance, actor: CharacterInstance = null) -
 func movement_grants(actor: CharacterInstance) -> Array[String]:
 	var grants: Array[String] = []
 	var flags: Dictionary = _match.get_player(actor.player_id).player_flags_this_turn
-	if flags.get("seventeen_seconds_pending", false):
+	if flags.get("seventeen_seconds_active", false) \
+			and not actor.ability_uses_this_turn.get("seventeen_seconds_used", false):
 		grants.append("seventeen_seconds")
-	if flags.get("causeway_pending", false):
-		grants.append("causeway")
 	if RelicEventDeck.has_relic(actor.player_id, "r-karpovas-black-key") \
 			and ["Leader", "Common"].has(actor.data.type) and not flags.get("black_key_used", false):
 		grants.append("black_key")
@@ -435,7 +434,7 @@ func can_place_leak(pos: Vector2i) -> bool:
 
 
 # The first character to enter a Leak tile takes 1 damage and the Leak is removed
-# (designer ruling 2026-09-27). Seventeen Seconds lets one move cross one Leak safely.
+# (designer ruling 2026-09-27).
 func _enter_tiles(c: CharacterInstance, tiles: Array[Vector2i]) -> void:
 	for pos in tiles:
 		if c.defeated:
@@ -606,11 +605,6 @@ func _range_parts(instance: CharacterInstance, context: String) -> Dictionary:
 		bonus += handler_for(source).get_aura_range_bonus(self, source, instance, context)
 	bonus += RelicEventDeck.get_relic_range_bonus(self, instance, context)
 	bonus += _match.global_range_modifier
-	# Signal Array Turns: the first ranged attack or ability this turn gets +1 RANGE when
-	# the actor stands next to a placed object or a Leak marker.
-	var flags: Dictionary = _match.get_player(instance.player_id).player_flags_this_turn
-	if flags.get("signal_array_pending", false) and _next_to_object_or_leak(instance.position):
-		bonus += 1
 	var override := 0
 	if context == "ability":
 		bonus += instance.sum_status("temp_ability_range")   # "+1 RANGE on its next AP ability"
@@ -618,13 +612,6 @@ func _range_parts(instance: CharacterInstance, context: String) -> Dictionary:
 			if se.type == "range_override":
 				override = maxi(override, se.value)
 	return {"bonus": bonus, "override": override}
-
-
-func _next_to_object_or_leak(pos: Vector2i) -> bool:
-	for n in neighbors(pos):
-		if board.get_placed_object(n) != null or has_leak(n):
-			return true
-	return false
 
 
 func _all_characters() -> Array[CharacterInstance]:
