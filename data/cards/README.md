@@ -8,6 +8,7 @@ This folder is the start of the shared card data structure for collaborators.
 - `card_art.json` maps card ids to art under `assets/` for the game screen. Cards not listed show a text card. `tools/sync_game_content.ps1` copies small versions into the game.
 - `review_drafts/` holds proposed cards that are ready for story/mechanic review but are not yet part of the playable prototype deck.
 - `review_drafts/tarot_guidebook_content_standard.md` defines the approved physical-card content boundary and companion guidebook format for all tarot decks.
+- `review_drafts/russian_tarot_guidebook.json` stores approved and in-review guidebook entries in canonical tarot order, including structured relationship and hidden-story threads.
 
 Editing guidance:
 - Keep IDs stable once referenced by code, art, or playtest notes.

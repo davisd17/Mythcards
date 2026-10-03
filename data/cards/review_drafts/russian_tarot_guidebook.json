@@ -1,0 +1,414 @@
+{
+  "review_status": "in_progress",
+  "deck": "MythCards Russian Tarot",
+  "entry_standard": "data/cards/review_drafts/tarot_guidebook_content_standard.md",
+  "canonical_mapping": "data/cards/review_drafts/tarot_area_mapping.json",
+  "entry_count_target": 78,
+  "entry_order": "canonical_tarot_order",
+  "entries": [
+    {
+      "tarot_number": "0",
+      "tarot_name": "The Fool",
+      "mythcards_name": "Nikolai Yegorov / Reactor Worker",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I step forward before I know the way.",
+      "upright_keywords": [
+        "Beginnings",
+        "Trust",
+        "Courage"
+      ],
+      "shadow_keywords": [
+        "Recklessness",
+        "Naivety",
+        "Escape"
+      ],
+      "narrative_heading": "Backstory",
+      "narrative": "Nikolai works beneath the Closed City, repairing machines whose true purpose no one will explain. When containment doors seal with workers still trapped below, he opens a forbidden service route, saving them while giving the breach another path into the city.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Machines tell the truth before men do.",
+      "relationships": [
+        {
+          "subject": "Nikolai's younger sister",
+          "dynamic": "His desire to get her transferred out of the Closed City makes every act of obedience feel like protection and every act of rebellion feel dangerously personal.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "The trapped reactor workers",
+          "dynamic": "Nikolai chooses solidarity with ordinary workers over the containment orders protecting scientists, officers, and the state project.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "who_opened_the_service_route",
+          "clue": "Nikolai remembers opening the forbidden route, but later evidence leaves open whether he acted alone or followed an invitation already waiting beyond the sealed door.",
+          "connects_to": [
+            "Karpova's Black Key",
+            "Closed City Incident",
+            "The First Card Appears"
+          ],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Nikolai is not a celebrated scientist, officer, or chosen mystic. He becomes the Fool because he is the first ordinary person to step beyond the sanctioned map. His choice begins in compassion, but he cannot know whether the open passage leads toward freedom or a greater catastrophe.",
+      "when_drawn": "Take the first necessary step, even if the entire road is not visible. Trust your purpose, but remain honest about the consequences you cannot yet see."
+    },
+    {
+      "tarot_number": "I",
+      "tarot_name": "The Magician",
+      "mythcards_name": "Dr. Mikhail Orlov",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I turn knowledge into deliberate action.",
+      "upright_keywords": ["Will", "Skill", "Manifestation"],
+      "shadow_keywords": ["Manipulation", "Control", "Self-Deception"],
+      "narrative_heading": "Backstory",
+      "narrative": "Mikhail combines reactor data, orbital signals, and Elena's dream research to explain the impossible. Their unresolved intimacy is strained by rivalry and betrayal, yet he still trusts her mind more than anyone else's. When the systems synchronize, he collapses and becomes the unconscious center of the convergence.",
+      "flavor_heading": "Quote",
+      "flavor_text": "The data is made of symbols.",
+      "relationships": [
+        {
+          "subject": "Dr. Elena Morozova",
+          "dynamic": "Their intellectual partnership carries unresolved tenderness, rivalry, and betrayal; Mikhail trusts Elena's mind even when he doubts her conclusions.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "orlov_shapes_the_convergence",
+          "clue": "While unconscious, Mikhail may be shaping the worlds he believes he is only witnessing.",
+          "connects_to": ["Closed City Incident", "The First Card Appears"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Mikhail embodies the Magician's ability to transform knowledge into power. His danger is believing that producing a result gives him the right to control it. While unconscious, he may also be shaping the worlds he believes he is only witnessing.",
+      "when_drawn": "Use the tools already within reach, but do not let mastery become an excuse to ignore the human cost."
+    },
+    {
+      "tarot_number": "II",
+      "tarot_name": "The High Priestess",
+      "mythcards_name": "Dr. Elena Morozova",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I trust what speaks beneath the surface.",
+      "upright_keywords": ["Intuition", "Mystery", "Inner Knowledge"],
+      "shadow_keywords": ["Secrecy", "Obsession", "Disconnection"],
+      "narrative_heading": "Backstory",
+      "narrative": "Elena discovers that separate test subjects are dreaming the same symbols and secretly routes their data into the signal archive. Mikhail challenges her conclusions, while Major Yuri Volkov hides a love for her that will eventually matter more to him than his orders. After Elena disappears, Yuri hears her voice inside the breach and cannot accept that it may no longer belong entirely to her.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Dreams are not private in a wounded world.",
+      "relationships": [
+        {
+          "subject": "Dr. Mikhail Orlov",
+          "dynamic": "Their intimate intellectual history is marked by tenderness, rivalry, and betrayal.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Major Yuri Volkov",
+          "dynamic": "Yuri's concealed love for Elena will eventually outweigh his containment orders.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "voice_inside_the_breach",
+          "clue": "After Elena disappears, her voice continues in the signal, but it may no longer belong entirely to her.",
+          "connects_to": ["Elena Missing In The Signal", "Subject 3 Wakes"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Elena guards the threshold between measurable science and hidden knowledge. Her secrecy draws Mikhail, Yuri, and the convergence toward her for different reasons, but even she may not know which presence answered first.",
+      "when_drawn": "Listen before acting, especially when loyalty and desire make the truth difficult to hear. What remains hidden may be protecting you, controlling you, or waiting for you to recognize it."
+    },
+    {
+      "tarot_number": "III",
+      "tarot_name": "The Empress",
+      "mythcards_name": "Irina Vasilievna Karpova",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I decide what deserves to grow.",
+      "upright_keywords": ["Abundance", "Influence", "Creation"],
+      "shadow_keywords": ["Possession", "Exploitation", "Control"],
+      "narrative_heading": "Backstory",
+      "narrative": "Irina Karpova built her fortune by recognizing dangerous ideas before anyone else understood their value. She shields Elena's research from officials who would bury it, then surrounds it with locks, favors, and people loyal only to her. Colonel Semyonov commands the Closed City, but Irina has invested in whatever comes after it.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Power is wasted on those who only know how to spend it.",
+      "relationships": [
+        {
+          "subject": "Dr. Elena Morozova",
+          "dynamic": "Irina's protection may conceal ambition, affection, or a desire to possess the one doorway she cannot purchase.",
+          "visibility": "hinted"
+        },
+        {
+          "subject": "Colonel Viktor Semyonov",
+          "dynamic": "Semyonov commands the facility, while Irina controls much of what it is allowed to become.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "Irina can offer protection, luxury, and the freedom to create, but nothing in her world is truly given away. Her fascination with Elena may be ambition, affection, or the desire to possess the one doorway she cannot purchase.",
+      "when_drawn": "Nurture what holds genuine promise, but read the terms before accepting shelter. The hand feeding your dream may already consider it theirs."
+    },
+    {
+      "tarot_number": "IV",
+      "tarot_name": "The Emperor",
+      "mythcards_name": "Colonel Viktor Semyonov",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I create order without becoming its prisoner.",
+      "upright_keywords": ["Authority", "Structure", "Discipline"],
+      "shadow_keywords": ["Tyranny", "Rigidity", "Fear"],
+      "narrative_heading": "Backstory",
+      "narrative": "Colonel Semyonov has spent his career containing threats the public must never learn exist. He considers Elena both a vital asset and a spreading contamination, while Major Yuri Volkov's attachment to her makes him dangerously unreliable. When the Closed City begins to fracture, Semyonov seals the exits with civilians still inside.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Mercy is a luxury containment cannot afford.",
+      "relationships": [
+        {
+          "subject": "Dr. Elena Morozova",
+          "dynamic": "Semyonov regards Elena as both an irreplaceable state asset and a contamination risk.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Major Yuri Volkov",
+          "dynamic": "Yuri's feelings for Elena make him unreliable in Semyonov's system of absolute command.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "Semyonov believes every disaster can be mastered through discipline, sacrifice, and a sufficiently strong door. His authority protects thousands, but each ruthless decision makes it harder to tell whether he is containing the breach or building the perfect world for it.",
+      "when_drawn": "Establish firm boundaries and accept the burden of leadership, but question any order that requires you to stop seeing the people trapped beneath it."
+    },
+    {
+      "tarot_number": "V",
+      "tarot_name": "The Hierophant",
+      "mythcards_name": "Karpova's Black Key",
+      "card_type": "Relic",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I decide which traditions deserve my obedience.",
+      "upright_keywords": ["Initiation", "Tradition", "Permission"],
+      "shadow_keywords": ["Conformity", "Gatekeeping", "Submission"],
+      "narrative_heading": "Legend",
+      "narrative": "Irina Karpova's key opens no ordinary lock. Presented at restricted checkpoints, it causes guards to step aside, files to become unclassified, and forbidden experiments to acquire official approval. Some claim the key predates Karpova and that she merely inherited her place within a much older order.",
+      "flavor_heading": "Inscription",
+      "flavor_text": "Authority opens what force cannot.",
+      "relationships": [
+        {
+          "subject": "Irina Vasilievna Karpova",
+          "dynamic": "The key makes Karpova the visible gatekeeper of a hidden institutional order that may predate her authority.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "older_order_behind_karpova",
+          "clue": "The key may have been inherited from an order older than the Closed City program.",
+          "connects_to": ["Irina Vasilievna Karpova", "The First Card Appears"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The Black Key represents entry through sanctioned power. It grants access to knowledge, but demands obedience to the institution guarding it. Possessing the key may open the inner chamber while quietly closing every path back out.",
+      "when_drawn": "Learn from tradition, but question who controls it."
+    },
+    {
+      "tarot_number": "VI",
+      "tarot_name": "The Lovers",
+      "mythcards_name": "Elena Missing In The Signal",
+      "card_type": "Event",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I choose with an open heart.",
+      "upright_keywords": ["Connection", "Choice", "Devotion"],
+      "shadow_keywords": ["Obsession", "Division", "Surrender"],
+      "narrative_heading": "Event",
+      "narrative": "After the synchronization, Elena's chair is empty, but her work keeps answering. Mikhail hears a mind hidden within the data. Yuri hears the woman he loves calling for rescue. Neither can prove the voice is truly hers, while Zoya may already know what waits on the other side.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "Her body was gone. Her work kept answering.",
+      "relationships": [
+        {
+          "subject": "Dr. Mikhail Orlov",
+          "dynamic": "Mikhail interprets the signal through intellect, guilt, and the fear that he has lost Elena.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Major Yuri Volkov",
+          "dynamic": "Yuri hears the woman he loves and wants rescue even when containment demands suspicion.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Zoya Miranova",
+          "dynamic": "Zoya may know where Elena went and what now shares her voice.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "is_the_signal_still_elena",
+          "clue": "The voice may be Elena, an altered Elena, or another presence using her emotional bonds as an invitation.",
+          "connects_to": ["Dr. Elena Morozova", "Major Yuri Volkov", "Subject 3 Wakes"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The Lovers appears where desire and choice become inseparable. Saving Elena could restore what was lost, release something wearing her voice, or reveal that she has chosen not to return.",
+      "when_drawn": "Choose what you love, but see it clearly."
+    },
+    {
+      "tarot_number": "VII",
+      "tarot_name": "The Chariot",
+      "mythcards_name": "Buran Breaks The Boundary",
+      "card_type": "Event",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I direct my strength toward the way forward.",
+      "upright_keywords": ["Willpower", "Momentum", "Victory"],
+      "shadow_keywords": ["Force", "Recklessness", "Lost Control"],
+      "narrative_heading": "Event",
+      "narrative": "When the aurora descends and the village boundary begins to split, Buran refuses every command except Vera's. She climbs into his harness, knots red ribbons through her hair, and drives the great white tiger toward the breach. They do not flee the entities gathering inside the light. They charge through before those shapes can become real.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "He was never tamed. He simply chose her direction.",
+      "relationships": [
+        {
+          "subject": "Vera Kargina and Buran",
+          "dynamic": "Their bond is based on earned trust rather than dominance; Buran accepts Vera's direction without surrendering his will.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "The Chariot is not strength alone, but strength given purpose. Vera and Buran prevail because neither dominates the other; speed, instinct, and human judgment move together.",
+      "when_drawn": "Choose your direction and commit to it."
+    },
+    {
+      "tarot_number": "VIII",
+      "tarot_name": "Strength",
+      "mythcards_name": "Major Yuri Volkov",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I master my fear without silencing my heart.",
+      "upright_keywords": ["Courage", "Restraint", "Compassion"],
+      "shadow_keywords": ["Suppression", "Possession", "Compromise"],
+      "narrative_heading": "Backstory",
+      "narrative": "Yuri was trained to contain anomalous beings and treat contaminated people as threats. Elena taught him that some presences beyond the breach may be intelligent rather than hostile, and he fell in love with both her conviction and its danger. He will refuse a direct order to kill her, then risk something worse when a captured entity begins speaking in her voice.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Containment is mercy when the door opens both ways.",
+      "relationships": [
+        {
+          "subject": "Dr. Elena Morozova",
+          "dynamic": "Yuri loves Elena and is drawn to her conviction that beings beyond the breach are not merely hostile.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "entity_uses_elenas_voice",
+          "clue": "Yuri will let a captured entity speak because it uses Elena's voice.",
+          "connects_to": ["Elena Missing In The Signal", "Subject 3 Wakes"],
+          "disclosure": "foreshadowed"
+        }
+      ],
+      "interpretation": "Yuri's strength lies in controlling the violence he could easily unleash. Yet love tests restraint as severely as anger: his desire to save Elena may become the very weakness the convergence needs.",
+      "when_drawn": "Meet fear with courage, not force."
+    },
+    {
+      "tarot_number": "IX",
+      "tarot_name": "The Hermit",
+      "mythcards_name": "Meteor Lantern",
+      "card_type": "Relic",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I carry the light I need.",
+      "upright_keywords": ["Wisdom", "Solitude", "Guidance"],
+      "shadow_keywords": ["Isolation", "Misdirection", "Withdrawal"],
+      "narrative_heading": "Legend",
+      "narrative": "The village's first path lantern was built around a shard of black meteor glass. Its flame reveals more than snow and stone: it shows whether a boundary remains intact, whether a trail is safe, and whether the aurora is lying. When the sky begins speaking with familiar voices, villagers trust the lantern instead.",
+      "flavor_heading": "Inscription",
+      "flavor_text": "Not every light intends to guide you home.",
+      "relationships": [],
+      "hidden_threads": [
+        {
+          "thread_id": "false_voices_in_the_aurora",
+          "clue": "The aurora can imitate familiar voices, but the meteor flame exposes its false guidance.",
+          "connects_to": ["The Meteor Wakes Under Snow", "Aurora Opens Like A Door"],
+          "disclosure": "revealed"
+        }
+      ],
+      "interpretation": "The Meteor Lantern offers no grand revelation. It casts one small circle of truth, asking its bearer to proceed alone and discover the next step before searching for the entire road.",
+      "when_drawn": "Be still and follow your inner light."
+    },
+    {
+      "tarot_number": "X",
+      "tarot_name": "Wheel Of Fortune",
+      "mythcards_name": "Seventeen Seconds",
+      "card_type": "Event",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I move with change instead of resisting it.",
+      "upright_keywords": ["Change", "Opportunity", "Turning Point"],
+      "shadow_keywords": ["Chaos", "Instability", "Helplessness"],
+      "narrative_heading": "Event",
+      "narrative": "For seventeen seconds, architecture loses its authority. Reactor corridors open into drowned streets, northern snowfields, and chambers built before history. Nikolai discovers a service route where none should exist, while VERA-7 follows a path rejected by every map. Those who hesitate remain trapped; those who move may emerge somewhere impossible.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The map was accurate. The building was not.",
+      "relationships": [
+        {
+          "subject": "Nikolai Yegorov and VERA-7",
+          "dynamic": "Both trust impossible routes during the brief overlap, allowing different forms of instinct to outrun official maps.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "three_eras_overlap",
+          "clue": "The overlapping corridors reveal drowned Atlantean streets, Far North snowfields, and chambers linked across time.",
+          "connects_to": ["Closed City Incident", "The First Card Appears", "Far North"],
+          "disclosure": "revealed"
+        }
+      ],
+      "interpretation": "The Wheel turns without asking who is ready. Disaster and opportunity arrive together, briefly rearranging every wall, rule, and possible future.",
+      "when_drawn": "Accept the change and seize its opening."
+    },
+    {
+      "tarot_number": "XI",
+      "tarot_name": "Justice",
+      "mythcards_name": "Marya Zima",
+      "card_type": "Character",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I face the truth and act with mercy.",
+      "upright_keywords": ["Truth", "Balance", "Accountability"],
+      "shadow_keywords": ["Judgment", "Bias", "Cruelty"],
+      "narrative_heading": "Backstory",
+      "narrative": "Marya Zima serves as a field nurse while generals measure the war in territory rather than lives. She treats wounds made by bullets and stranger injuries that seem to arrive from the future. Her hidden love for Stepan makes every triage decision personal, yet she refuses to save the familiar at the expense of the forgotten. Her field book and winter rites will eventually pass toward Nadia's bloodline.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Mercy is not softness. It is work.",
+      "relationships": [
+        {
+          "subject": "Private Stepan Kuznetsov",
+          "dynamic": "Marya and Stepan share a hidden love that makes every battlefield triage decision painfully personal.",
+          "visibility": "hinted"
+        },
+        {
+          "subject": "Nadia Belaya",
+          "dynamic": "Marya's field book and winter healing rites may become part of the inheritance that reaches Nadia's Far North story decades later.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "wounds_from_the_future",
+          "clue": "Some injuries Marya treats appear to have been caused by forces reaching backward from the future Closed City.",
+          "connects_to": ["Closed City Vision", "Nadia Belaya", "Meteor Contact To The North"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Marya embodies justice at its most human: deciding who can still be saved when time, medicine, and warmth are scarce. She knows that fairness without compassion is merely another form of cold.",
+      "when_drawn": "See clearly, then choose what is fair."
+    }
+  ]
+}

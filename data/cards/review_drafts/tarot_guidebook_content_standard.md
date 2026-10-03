@@ -36,7 +36,9 @@ Use this order for every guidebook entry:
 - Use exactly three upright and three shadow keywords unless a later deck-wide editorial decision changes the standard.
 - Treat `shadow` as the card's difficult, blocked, distorted, or reversed expression. Do not make every shadow meaning purely evil.
 - Keep the tarot interpretation grounded in both the traditional archetype and the actual MythCards narrative.
-- End with practical `When Drawn` guidance. It should advise the reader without pretending to guarantee an outcome.
+- Relationship information and hidden story clues should be woven naturally into the existing `Backstory`, interpretation, or `When Drawn` sections. Do not add visible `Relationships` or `Hidden Thread` headings to the guidebook entry.
+- In structured data, keep `relationships` and `hidden_threads` as separate arrays for continuity tracking even though they are not rendered as guidebook headings. Use an empty array when an entry has no relevant thread rather than inventing one.
+- End with practical, concise `When Drawn` guidance. Prefer one direct sentence and avoid explaining the entire card again.
 - Do not include game statistics or prototype mechanics in the guidebook entry.
 
 ## Card-Type Variations
@@ -78,7 +80,7 @@ Nadia finds Pavel dying in the northern snow and heals him with medicine, prayer
 **Quote:**  
 *"Hope is not a promise that you will be spared. It is the reason you rise after you are not."*
 
-Nadia embodies the Star's restoration after catastrophe. Her disappearance also reveals its shadow: hope can guide us, but idealizing its source may prevent us from seeing the real person behind it.
+Nadia embodies the Star's restoration after catastrophe. Pavel's gratitude begins as reverence, but she leaves before either can discover whether their bond belongs to love, fate, or the needs of the convergence. She also reached him too quickly for chance, though the guidebook does not yet reveal who showed her where he would fall.
 
 **When Drawn:**  
 Accept the hope being offered without turning its source into something perfect. Healing has begun, but you must choose what to build from it.
@@ -92,6 +94,8 @@ Before approving an entry, confirm:
 - the six keywords do not simply repeat the prose
 - the narrative creates curiosity rather than summarizing the entire plot
 - a character quote sounds like that individual character
+- relationship details are specific dynamics rather than generic statements that two characters know one another
+- hidden threads are woven into existing prose while the structured data identifies which later cards continue the clue
 - the interpretation clearly explains why this MythCards subject maps to this tarot archetype
 - `When Drawn` gives concise, useful guidance
 - no game rules or statistics have entered the guidebook copy
