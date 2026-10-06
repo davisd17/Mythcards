@@ -1,30 +1,16 @@
 {
-  "r-seer": [
-    {
-      "id": "default",
-      "name": "Field Seer",
-      "texture": "res://assets/figures/r-seer/default.png",
-      "included": true
-    },
-    {
-      "id": "aurora-rite",
-      "name": "Aurora Rite",
-      "texture": "res://assets/figures/r-seer/aurora-rite.png",
-      "included": false
-    }
-  ],
-  "a-harmonic": [
-    {
-      "id": "default",
-      "name": "Tide Vestments",
-      "texture": "res://assets/figures/a-harmonic/default.png",
-      "included": true
-    },
-    {
-      "id": "drowned-seraph",
-      "name": "Drowned Seraph",
-      "texture": "res://assets/figures/a-harmonic/drowned-seraph.png",
-      "included": false
-    }
-  ]
+  "r-gymnast": [{"id":"default","name":"Reactor Worker","texture":"res://assets/figures/r-gymnast/default.png","included":true}],
+  "r-tiger": [{"id":"default","name":"VERA-7","texture":"res://assets/figures/r-tiger/default.png","included":true}],
+  "r-sniper": [{"id":"default","name":"Major Yuri Volkov","texture":"res://assets/figures/r-sniper/default.png","included":true}],
+  "r-general": [{"id":"default","name":"Irina Vasilievna Karpova","texture":"res://assets/figures/r-general/default.png","included":true}],
+  "r-hero": [{"id":"default","name":"Dr. Mikhail Orlov","texture":"res://assets/figures/r-hero/default.png","included":true}],
+  "r-engineer": [{"id":"default","name":"Dr. Elena Morozova","texture":"res://assets/figures/r-engineer/default.png","included":true}],
+  "r-seer": [{"id":"default","name":"Zoya Miranova","texture":"res://assets/figures/r-seer/default.png","included":true}],
+  "a-attendant": [{"id":"default","name":"Stone-Line Laborer","texture":"res://assets/figures/a-attendant/default.png","included":true}],
+  "a-glider": [{"id":"default","name":"Ahesu, the Stone-Current Serpent","texture":"res://assets/figures/a-glider/default.png","included":true}],
+  "a-guard": [{"id":"default","name":"Naia of the Black Sarcophagus","texture":"res://assets/figures/a-guard/default.png","included":true}],
+  "a-conductor": [{"id":"default","name":"Queen Meret-Anu","texture":"res://assets/figures/a-conductor/default.png","included":true}],
+  "a-hero": [{"id":"default","name":"Sahu-Ren, Last Memory-Keeper","texture":"res://assets/figures/a-hero/default.png","included":true}],
+  "a-architect": [{"id":"default","name":"Iset-Nara","texture":"res://assets/figures/a-architect/default.png","included":true}],
+  "a-harmonic": [{"id":"default","name":"Thalassa-Nekh","texture":"res://assets/figures/a-harmonic/default.png","included":true}]
 }

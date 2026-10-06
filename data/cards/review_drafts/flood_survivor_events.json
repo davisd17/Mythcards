@@ -240,7 +240,7 @@
     "set_count": "8 of 8",
     "name": "Exiles Walk Beneath Egypt",
     "kind": "Event",
-    "tarot_mapping": "The World",
+    "tarot_mapping": "Six of Swords",
     "duration": "Immediate",
     "effect": "Move up to 2 allied characters that are adjacent to placed objects up to 1 tile each. They must end on empty tiles.",
     "flavor": "They did not rebuild Atlantis. They buried instructions for surviving it.",
@@ -253,10 +253,11 @@
     },
     "art_prompt": "A quiet line of Atlantean survivors moving through a torchlit tunnel beneath early Egyptian stonework, carrying tablets, burial cloths, and memory pearls.",
     "asset_candidates": [
+      "assets/events/flood-survivors-exiles-walk-beneath-egypt-six-of-swords-event-art.png",
       "assets/events/flood-survivors-exiles-walk-beneath-egypt-the-world-event-art-v2.png",
       "assets/events/flood-survivors-exiles-walk-beneath-egypt-the-world-event-art.png"
     ],
-    "art_direction_note": "The World event art uses the grounded near-photographic Flood Survivors style to show the full migration from drowned Atlantean black basalt into early Egyptian limestone. Meret-Anu leads with the Tide-Sealed Archive; Iset-Nara reads the route; Menka carries his masonry tool; Naia guards the transported Black Sarcophagus; Sahu-Ren carries memory; Thalassa walks beside black water; and Ahesu moves through the stone route with a rider. An oval passage, completed ley circle, and four human-lion-bull-eagle guardian carvings integrate the World symbolism, while a wrapped green tablet quietly foreshadows the Emerald Tablet tradition. The v2 asset is preferred because the cast actively shares the migration: Meret-Anu and Iset-Nara confer while walking, Menka and laborers haul the sarcophagus, Naia steadies it, Sahu-Ren supports an exhausted survivor, and Thalassa helps a child. Oblique warm light from Egypt and cool Atlantean backlight create depth, long shadows, and a stronger sense of passage.",
+    "art_direction_note": "Six of Swords event art uses the grounded near-photographic Flood Survivors style to show a difficult migration from drowned Atlantean black basalt into early Egyptian limestone. Meret-Anu and Iset-Nara confer while walking; Menka and laborers haul the Black Sarcophagus; Naia steadies and guards it; Sahu-Ren supports an exhausted survivor; Thalassa helps a child; and Ahesu carries supplies through the stone route. Cool Atlantean backlight and oblique warm Egyptian light establish passage between worlds. Exactly six ceremonial sword reliefs appear on six limestone columns along the forward route, integrating the Six of Swords symbolism into the architecture rather than arming the travelers. A wrapped green tablet quietly foreshadows the Emerald Tablet tradition.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Bridge card from Flood Survivors into Egyptian/Hermetic story material.",

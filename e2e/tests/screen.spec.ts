@@ -93,8 +93,8 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   const harmonic = character(s, 'p2_a-harmonic');
   const architect = character(s, 'p2_a-architect');
   await clickTile(page, harmonic.position.x, harmonic.position.y);
-  await clickButton(page, 'Outfit: Tide Vestments');
-  await page.screenshot({ path: 'test-results/screen-5-outfit.png' });
+  await expect(page.getByRole('button', { name: /^Outfit:/ })).toHaveCount(0);
+  await page.screenshot({ path: 'test-results/screen-5-full-roster.png' });
   await clickButton(page, 'Resonance Shield');
   expect((await ui(page)).prompt).toContain('Shield which ally?');
   await page.screenshot({ path: 'test-results/screen-6-ability-prompt.png' });

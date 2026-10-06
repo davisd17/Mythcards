@@ -31,26 +31,29 @@ def normalize_figure(image: Image.Image) -> Image.Image:
     return canvas
 
 
-def split_sheet(sheet_path: Path, character_id: str, outfit_ids: tuple[str, str]) -> None:
+def split_sheet(sheet_path: Path, character_ids: tuple[str, str]) -> None:
     sheet = Image.open(sheet_path).convert("RGBA")
     half_width = sheet.width // 2
     halves = (
         sheet.crop((0, 0, half_width, sheet.height)),
         sheet.crop((half_width, 0, sheet.width, sheet.height)),
     )
-    character_dir = OUTPUT_DIR / character_id
-    character_dir.mkdir(parents=True, exist_ok=True)
-    for half, outfit_id in zip(halves, outfit_ids):
-        output = character_dir / f"{outfit_id}.png"
+    for half, character_id in zip(halves, character_ids):
+        character_dir = OUTPUT_DIR / character_id
+        character_dir.mkdir(parents=True, exist_ok=True)
+        output = character_dir / "default.png"
         normalize_figure(half).save(output, optimize=True)
         print(output)
 
 
 def main() -> None:
-    if len(sys.argv) != 3:
-        raise SystemExit("usage: prepare_board_figures.py FROST_SEER_SHEET ASTRAL_HARMONIC_SHEET")
-    split_sheet(Path(sys.argv[1]), "r-seer", ("default", "aurora-rite"))
-    split_sheet(Path(sys.argv[2]), "a-harmonic", ("default", "drowned-seraph"))
+    args = sys.argv[1:]
+    if not args or len(args) % 3 != 0:
+        raise SystemExit(
+            "usage: prepare_board_figures.py SHEET LEFT_CHARACTER_ID RIGHT_CHARACTER_ID [...]"
+        )
+    for index in range(0, len(args), 3):
+        split_sheet(Path(args[index]), (args[index + 1], args[index + 2]))
 
 
 if __name__ == "__main__":

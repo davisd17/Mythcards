@@ -1304,12 +1304,14 @@
           "art_audit": "no_art_yet"
         },
         {
-          "tarot": "The World",
+          "tarot": "Six of Swords",
           "mythcards_card": "Exiles Walk Beneath Egypt",
           "card_type": "Event",
-          "reason": "The survivors carry the old world into the next one, completing one cycle and beginning another.",
+          "reason": "The survivors undertake a difficult passage away from catastrophe, carrying grief, knowledge, and dangerous relics toward uncertain safety beneath Egypt.",
           "status": "proposed",
-          "art_audit": "no_art_yet"
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/events/flood-survivors-exiles-walk-beneath-egypt-six-of-swords-event-art.png",
+          "art_note": "Grounded migration art shows the survivors actively sharing burdens as drowned Atlantis gives way to early Egyptian stone. Exactly six ceremonial sword reliefs are carved into six limestone columns along the route."
         },
         {
           "tarot": "Three of Pentacles",
