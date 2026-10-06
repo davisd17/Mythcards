@@ -249,6 +249,10 @@ func _refresh_side() -> void:
 		var b := _button(action.label, func(): controller.start_action(kind, id); _refresh())
 		b.disabled = not action.enabled
 		_side.add_child(b)
+	var selected := controller.find(controller.selected_id)
+	if selected != null and FigureCatalog.outfits(selected.data.id).size() > 1:
+		var label := "Outfit: %s" % _board.outfit_name(selected)
+		_side.add_child(_button(label, func(): _board.cycle_outfit(selected); _refresh()))
 	var relic := controller.relic_power_label()
 	if relic != "":
 		_side.add_child(_button(relic, func(): controller.use_relic(); _refresh()))

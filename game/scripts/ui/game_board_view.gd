@@ -49,6 +49,7 @@ const STATUS := {
 }
 
 var controller: GameController
+var outfit_by_instance_id: Dictionary = {}
 
 
 static func status_name(se: StatusEffect) -> String:
@@ -151,6 +152,11 @@ func _draw_character(font: Font, c: CharacterInstance, h: Dictionary) -> void:
 	var portrait_rect := rect.grow(-px * 0.13)
 	var spent: bool = GameState.match_state != null and c.player_id == GameState.match_state.active_player_id \
 			and c.character_ap_remaining <= 0 and _mount_ap(c) <= 0
+	var outfit_id := outfit_id_for(c)
+	var figure := FigureCatalog.texture_for(c.data.id, outfit_id)
+	if figure != null:
+		_draw_full_body_character(font, c, h, rect, figure, color, role_color, spent)
+		return
 	draw_rect(Rect2(portrait_rect.position + Vector2(px * 0.045, px * 0.055), portrait_rect.size), Color(0, 0, 0, 0.58))
 	var texture := CardView.art_for(c.data.id)
 	if texture != null:
@@ -206,6 +212,75 @@ func _draw_cover_texture(texture: Texture2D, target: Rect2, focus_y: float) -> v
 	var source_x := (source_size.x - crop) * 0.5
 	var source_y := clampf(source_size.y * focus_y - crop * 0.5, 0.0, source_size.y - crop)
 	draw_texture_rect_region(texture, target, Rect2(Vector2(source_x, source_y), Vector2(crop, crop)))
+
+
+func outfit_id_for(c: CharacterInstance) -> String:
+	return str(outfit_by_instance_id.get(c.instance_id, FigureCatalog.default_outfit_id(c.data.id)))
+
+
+func outfit_name(c: CharacterInstance) -> String:
+	return FigureCatalog.outfit_name(c.data.id, outfit_id_for(c))
+
+
+func cycle_outfit(c: CharacterInstance) -> void:
+	var next_id := FigureCatalog.next_outfit_id(c.data.id, outfit_id_for(c))
+	if next_id != "":
+		outfit_by_instance_id[c.instance_id] = next_id
+		queue_redraw()
+
+
+func _draw_full_body_character(font: Font, c: CharacterInstance, h: Dictionary, rect: Rect2,
+		texture: Texture2D, player_color: Color, role_color: Color, spent: bool) -> void:
+	var px := rect.size.x
+	var center := rect.get_center()
+	var target_height := px * 0.88
+	var target_width := target_height * texture.get_width() / texture.get_height()
+	var target := Rect2(Vector2(center.x - target_width * 0.5, rect.position.y + px * 0.035),
+			Vector2(target_width, target_height))
+
+	draw_set_transform(Vector2(center.x, rect.position.y + px * 0.82), 0.0, Vector2(1.0, 0.32))
+	draw_circle(Vector2.ZERO, px * 0.28, Color(0, 0, 0, 0.62))
+	draw_circle(Vector2.ZERO, px * 0.23, Color(player_color, 0.68), false, 3.0)
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	var modulate := Color(0.48, 0.5, 0.49, 0.88) if spent else Color.WHITE
+	draw_texture_rect(texture, target, false, modulate)
+
+	if c.is_mounted_rider:
+		draw_arc(center, px * 0.42, 0.0, TAU, 32, Color("#f3e3b5"), 2.0)
+	if c.instance_id == controller.selected_id or c.instance_id == controller.placing_id:
+		_draw_brackets(rect.grow(-2.0), SELECTED)
+	if h.attack_ids.has(c.instance_id):
+		_draw_crosshair(rect, ATTACK)
+	if h.pick_ids.has(c.instance_id):
+		_draw_brackets(rect, PICK)
+
+	var role_mark: String = ROLE_MARKS.get(c.data.type, "?")
+	_badge(font, rect.position + Vector2(px * 0.16, px * 0.16), role_mark, role_color, px)
+	if c.level > 1:
+		_badge(font, rect.position + Vector2(px * 0.84, px * 0.16), "L%d" % c.level, Color("#c9a45c"), px)
+	elif c.spirit_ember_count > 0:
+		var ember := "E" if c.spirit_ember_count == 1 else "E%d" % c.spirit_ember_count
+		_badge(font, rect.position + Vector2(px * 0.84, px * 0.16), ember, Color("#e07b39"), px)
+
+	var hp_max := c.base_max_hp
+	if GameState.match_state != null:
+		hp_max = RulesEngine.systems().ability.get_effective_max_hp(c)
+	var label := Rect2(rect.position + Vector2(px * 0.17, px * 0.72), Vector2(px * 0.66, px * 0.19))
+	draw_rect(label, Color(0.02, 0.025, 0.024, 0.86))
+	draw_rect(label, player_color, false, 2.0)
+	_text(font, "%s  %d/%d" % [DebugPanel.abbreviation(c.data), c.current_hp, hp_max], label, px * 0.13, Color("#f1ede3"))
+
+	var shorts: Array[String] = []
+	for se in c.status_effects:
+		var short: String = STATUS.get(se.type, [se.type.left(2).capitalize()])[0]
+		if se.type == "shield":
+			short += str(se.value)
+		if not shorts.has(short):
+			shorts.append(short)
+	if not shorts.is_empty():
+		var strip := Rect2(rect.position + Vector2(0, px * 0.86), Vector2(px, px * 0.14))
+		draw_rect(strip, Color(0, 0, 0, 0.76))
+		_text(font, " ".join(shorts), strip, px * 0.14, Color("#9fe0f5"))
 
 
 # A rider's pair can still move on its Mount's AP (ruling 2026-09-28).

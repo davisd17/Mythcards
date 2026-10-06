@@ -1,0 +1,30 @@
+{
+  "r-seer": [
+    {
+      "id": "default",
+      "name": "Field Seer",
+      "texture": "res://assets/figures/r-seer/default.png",
+      "included": true
+    },
+    {
+      "id": "aurora-rite",
+      "name": "Aurora Rite",
+      "texture": "res://assets/figures/r-seer/aurora-rite.png",
+      "included": false
+    }
+  ],
+  "a-harmonic": [
+    {
+      "id": "default",
+      "name": "Tide Vestments",
+      "texture": "res://assets/figures/a-harmonic/default.png",
+      "included": true
+    },
+    {
+      "id": "drowned-seraph",
+      "name": "Drowned Seraph",
+      "texture": "res://assets/figures/a-harmonic/drowned-seraph.png",
+      "included": false
+    }
+  ]
+}

@@ -674,9 +674,9 @@ These should be considered when expanding Russian/Closed City beyond the current
 
 | Type | Card | Story Role | Mechanical Identity |
 | --- | --- | --- | --- |
-| Common | Reactor Worker | Civilian/industrial survivor exposed to the breach. | Repair objects; remove leak markers; fragile utility. |
-| Mount | VERA-7 | Cosmonaut-program rover used as a remote-viewing anchor and hazardous-environment carrier. | Carries/rides, ignores hazards, signal movement, crosses locked or anomalous routes. |
-| Warrior | Major Yuri Volkov | Former cosmonaut candidate turned armored containment responder, emotionally bound to Elena Morozova. | Zone control, suppression, anti-being containment, breach response, anti-object or anti-hazard. |
+| Common | Reactor Worker | Civilian/industrial survivor exposed to the breach. | Ignores Leak damage, gains movement, and converts landing on a Leak into character AP at Level 3. |
+| Mount | VERA-7 | Cosmonaut-program rover used as a remote-viewing anchor and hazardous-environment carrier. | Slower protective mount; increases its rider's maximum HP, crosses blocked routes, and repositions nearby allies. |
+| Warrior | Major Yuri Volkov | Former cosmonaut candidate turned armored containment responder, emotionally bound to Elena Morozova. | Marks threats near Leaks, gains durability, and fires Containment Shot diagonally at Level 3. |
 | Leader | Irina Vasilievna Karpova | Wealthy and influential patron who funded Elena's dream work and may know more about the Convergence than she admits. | Orders, leverage, resource control, sacrifice for advantage, manipulation of relic/event access. |
 | Hero | Dr. Mikhail Orlov | Coma gate patient and symbolic center. | Reveal/manipulate events, risk through damage/status. |
 | Specialist | Dr. Elena Morozova | Consciousness researcher and missing emotional key. | Dream links, status transfer, prediction, relationship mechanics. |

@@ -9,6 +9,7 @@
     "set_count": "1 of 8",
     "name": "The Causeway Breathes",
     "kind": "Event",
+    "tarot_mapping": "Ace of Wands",
     "duration": "Immediate",
     "effect": "Place 2 allied Stone markers on different empty tiles within 2 tiles of the center.",
     "flavor": "The road was drowned, not dead.",
@@ -20,7 +21,11 @@
       "forbidden_truth": "The roads were not built only for evacuation; some were built to hide what Atlantis did before the Flood."
     },
     "art_prompt": "A black basalt causeway rising under shallow dark water inside a sealed Atlantean-Egyptian tunnel, one wet stone block glowing as if remembering a buried road.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/flood-survivors-the-causeway-breathes-ace-of-wands-event-art-v2.png",
+      "assets/events/flood-survivors-the-causeway-breathes-ace-of-wands-event-art.png"
+    ],
+    "art_direction_note": "Flood Survivors event art preserves the established drowned Atlantean-Egyptian realism. Menka, carrying the same heavy broad-headed masonry pick-hammer established on his character card, witnesses a monumental black-basalt causeway rising from dark water. One dominant gold-lit ley axis turns the road itself into the Ace of Wands; a distant crown-like gate, disturbed water, and pale growth emerging through the stone suggest dangerous new life without using a literal wand. The v2 asset is preferred because it corrects Menka's tool continuity.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Uses regular Stone markers rather than adding a separate Stone Route marker type.",
@@ -38,6 +43,7 @@
     "set_count": "2 of 8",
     "name": "Black Water Remembers",
     "kind": "Event",
+    "tarot_mapping": "The Moon",
     "duration": "Immediate",
     "effect": "Choose a character on or adjacent to the center tile. Give it 1 Memory marker.",
     "flavor": "The water gives back what the queens edited out.",
@@ -49,7 +55,11 @@
       "forbidden_truth": "Some survivors were saved because other survivors were deliberately sealed out."
     },
     "art_prompt": "A flooded tomb shaft reflecting screaming Atlantean streets instead of the character looking into it, with small memory lights rising from the black water.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/flood-survivors-black-water-remembers-the-moon-event-art-v2.png",
+      "assets/events/flood-survivors-black-water-remembers-the-moon-event-art.png"
+    ],
+    "art_direction_note": "The Moon event art keeps Sahu-Ren's established likeness in a grounded black-basalt tomb chamber while the drowning of Atlantis appears only inside a circular mirror-black pool. The reflected vision shows sealed gate pillars, abandoned citizens, a distant Queen Meret-Anu, a submerged path, and a deep-water creature, preserving uncertainty over whether the water reveals exact history, guilt, or manipulated memory. The v2 asset is preferred because it restores Sahu-Ren's looser curls and memory-marking continuity while making Meret-Anu's shell-fan crown, blue veil, complexion, and royal clothing more recognizable.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Leans into forbidden truth without making the card cancel itself out.",
@@ -66,6 +76,7 @@
     "set_count": "3 of 8",
     "name": "The Vault Chooses A Witness",
     "kind": "Event",
+    "tarot_mapping": "Judgement",
     "duration": "1 turn",
     "effect": "Choose 1 allied character adjacent to a placed object. It gains +1 RANGE on its next AP ability this turn, then becomes Marked until the end of the round.",
     "flavor": "It opened for the one person everyone hoped would stay ignorant.",
@@ -77,7 +88,11 @@
       "forbidden_truth": "The archive does not preserve the official version. It preserves the version someone died to hide."
     },
     "art_prompt": "A single figure lit by a narrow green-white line from a sealed stone vault, with carved Atlantean and Egyptian measurements waking around the doorway.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/flood-survivors-the-vault-chooses-a-witness-judgement-event-art-v2.png",
+      "assets/events/flood-survivors-the-vault-chooses-a-witness-judgement-event-art.png"
+    ],
+    "art_direction_note": "Judgement event art makes Naia the vault's chosen witness. Her established armor, shield, braids, and curved weapon remain recognizable, but the weapon is lowered as one green-white seam opens in the monumental basalt archive. Three tiers of memory testimony rise within the light, including a possible image of Naia's mother. Iset-Nara and Sahu-Ren remain behind Naia in shadow, able to understand the selection but unable to cross the threshold. The v2 asset is preferred because it follows Naia's character card with more grounded photographic skin, worn cloth and metal, darker tactile stone, believable water, and less illustrative memory light.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Represents a temporary vault opening without adding extra Vault markers.",
@@ -95,6 +110,7 @@
     "set_count": "4 of 8",
     "name": "The Flood Reaches The Walls",
     "kind": "Event",
+    "tarot_mapping": "The Tower",
     "duration": "Immediate",
     "effect": "Each character on an outer edge tile becomes Marked.",
     "flavor": "The sea always finds the edge first.",
@@ -106,7 +122,10 @@
       "forbidden_truth": "The Flood did not end; it only learned where the survivors were hiding."
     },
     "art_prompt": "Black floodwater breaking through the outer walls of a square stone chamber, driving figures inward toward a glowing center tile while edge stones vanish under the tide.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/flood-survivors-the-flood-reaches-the-walls-the-tower-event-art.png"
+    ],
+    "art_direction_note": "The Tower event art uses the grounded near-photographic Flood Survivors style. Iset-Nara directs survivors toward a raised central refuge while Menka braces a failing basalt support with his established short, heavy masonry pick-hammer. Black water replaces the traditional flames, pale force travels through structural cracks instead of lightning, two distant figures are cast from outer stairs, and a broken crown falls into the flood as all four boundary walls fail.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Replaces The Name Was Cut From Stone to give the Flood Survivor event set a direct flood-pressure card.",
@@ -123,6 +142,7 @@
     "set_count": "5 of 8",
     "name": "Ley Stones Align",
     "kind": "Event",
+    "tarot_mapping": "Seven of Swords",
     "duration": "1 turn",
     "effect": "Until end of turn, the active player's first AP ability may measure range from an allied Stone marker or allied placed object instead of from the acting character.",
     "flavor": "The stones were not pointing at stars. The stars were pointing at the crime.",
@@ -134,7 +154,11 @@
       "forbidden_truth": "The geometry was designed to preserve a secret, not a civilization."
     },
     "art_prompt": "A ring of wet basalt stones aligning with impossible star points above a submerged chamber, with an Atlantean measuring cord drawn through the water.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/flood-survivors-ley-stones-align-seven-of-swords-event-art-v2.png",
+      "assets/events/flood-survivors-ley-stones-align-seven-of-swords-event-art.png"
+    ],
+    "art_direction_note": "Seven of Swords event art uses exactly seven freestanding basalt ley stones: five connected by the concealed diversion geometry and two excluded from it. Iset-Nara measures the altered pattern while Sahu-Ren recognizes its memory, and one distant figure departs through a hidden passage. The stones evoke sword silhouettes without becoming literal weapons, while the grounded near-photographic Flood Survivors treatment keeps the discovery archaeological rather than decorative. The v2 asset is preferred because all five illuminated connected stones and both dark excluded stones are fully visible, spatially separated, and immediately countable.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Avoids deck viewing/manipulation and strengthens Flood Survivor object identity.",
@@ -151,6 +175,7 @@
     "set_count": "6 of 8",
     "name": "The Drowned Seraph Speaks",
     "kind": "Event",
+    "tarot_mapping": "Justice",
     "duration": "1 round",
     "effect": "The first enemy that damages your Mystic becomes Marked.",
     "flavor": "Everyone heard the judgment in their own oldest language.",
@@ -162,7 +187,10 @@
       "forbidden_truth": "The thing named holy by the survivors may not belong to them, and may not forgive them."
     },
     "art_prompt": "A human oracle silhouette in black water with vast translucent angelic geometry forming behind her, while kneeling listeners see their own guilt in the surface.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/flood-survivors-the-drowned-seraph-speaks-justice-event-art.png"
+    ],
+    "art_direction_note": "Justice event art keeps Thalassa-Nekh human, realistic, and visually dominant at the center of a black-water tribunal. Exactly two balanced ritual vessels flank her while one vertical blade-like ray divides the water. The Drowned Seraph appears as immense translucent watery geometry, intersecting wing-like planes, subtle eye apertures, and sacred measurements rather than a conventional feathered angel. Four kneeling listeners confront different guilty memories visible only in the water beneath them.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Should feel spiritual and unsettling rather than generic angelic intervention.",
@@ -180,6 +208,7 @@
     "set_count": "7 of 8",
     "name": "Tide-Sealed Archive Opens",
     "kind": "Event",
+    "tarot_mapping": "Four of Pentacles",
     "duration": "Immediate",
     "effect": "Choose one allied character. Give it Shield, or give it Shield and +1 RANGE on its next AP ability this turn, then Mark it until the end of the round.",
     "flavor": "The casket opened enough to help, not enough to confess.",
@@ -191,7 +220,10 @@
       "forbidden_truth": "Meret-Anu has protected her people by controlling which truths are allowed to survive."
     },
     "art_prompt": "A tide-sealed royal casket cracking open in Queen Meret-Anu's hands, releasing thin lines of water-light that form witness faces and erased records.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/flood-survivors-tide-sealed-archive-opens-four-of-pentacles-event-art.png"
+    ],
+    "art_direction_note": "Four of Pentacles event art keeps Queen Meret-Anu's established face, shell-fan crown, blue veil, white gown, black-gold mantle, and Tide-Sealed Archive casket in the grounded near-photographic Flood Survivors style. The casket opens only a narrow seam, releasing incomplete witness faces and erased records. Four primary archive seals structure the tarot symbolism: two on the casket and two in separate floor plates beneath her feet, expressing protection that has become possession.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Tide-Sealed Archive can also remain a relic; this event represents a temporary opening of that relic's records.",
@@ -208,6 +240,7 @@
     "set_count": "8 of 8",
     "name": "Exiles Walk Beneath Egypt",
     "kind": "Event",
+    "tarot_mapping": "The World",
     "duration": "Immediate",
     "effect": "Move up to 2 allied characters that are adjacent to placed objects up to 1 tile each. They must end on empty tiles.",
     "flavor": "They did not rebuild Atlantis. They buried instructions for surviving it.",
@@ -219,7 +252,11 @@
       "forbidden_truth": "Egypt and later mystery traditions may have inherited not a pure wisdom, but a carefully edited survivor record."
     },
     "art_prompt": "A quiet line of Atlantean survivors moving through a torchlit tunnel beneath early Egyptian stonework, carrying tablets, burial cloths, and memory pearls.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/events/flood-survivors-exiles-walk-beneath-egypt-the-world-event-art-v2.png",
+      "assets/events/flood-survivors-exiles-walk-beneath-egypt-the-world-event-art.png"
+    ],
+    "art_direction_note": "The World event art uses the grounded near-photographic Flood Survivors style to show the full migration from drowned Atlantean black basalt into early Egyptian limestone. Meret-Anu leads with the Tide-Sealed Archive; Iset-Nara reads the route; Menka carries his masonry tool; Naia guards the transported Black Sarcophagus; Sahu-Ren carries memory; Thalassa walks beside black water; and Ahesu moves through the stone route with a rider. An oval passage, completed ley circle, and four human-lion-bull-eagle guardian carvings integrate the World symbolism, while a wrapped green tablet quietly foreshadows the Emerald Tablet tradition. The v2 asset is preferred because the cast actively shares the migration: Meret-Anu and Iset-Nara confer while walking, Menka and laborers haul the sarcophagus, Naia steadies it, Sahu-Ren supports an exhausted survivor, and Thalassa helps a child. Oblique warm light from Egypt and cool Atlantean backlight create depth, long shadows, and a stronger sense of passage.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Bridge card from Flood Survivors into Egyptian/Hermetic story material.",

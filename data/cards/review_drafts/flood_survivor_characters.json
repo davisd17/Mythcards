@@ -55,7 +55,7 @@
     "stats": [4, 1, 4, 1],
     "l1": "Passive: Stone-Current may move through allied Stone markers but must end on an empty tile. If carrying a Hero or Leader, the mounted pair may also use Stone-Current.",
     "l2": "Living Causeway: +1 MOVE. If Ahesu starts movement adjacent to a Stone marker, it may move through one occupied allied tile this movement.",
-    "l3": "Old Route Opens: +1 HP. Once per match, if Ahesu starts adjacent to a Stone marker, move it to an empty tile adjacent to another allied Stone marker within 5 tiles.",
+    "l3": "The Deep Remembers Its Teeth: +2 ATK and +1 HP.",
     "role": "Named ley-line mount and subterranean transport creature that swims and slides through flooded stone routes.",
     "narrative": {
       "public_role": "Ley-line mount and subterranean transport creature.",
@@ -70,7 +70,7 @@
         "Some gates close because they remember mercy."
       ]
     },
-    "mechanical_identity": "Mount movement through flooded routes, ley-line travel, stone-current paths, and protected transport.",
+    "mechanical_identity": "Mount movement through flooded routes, ley-line travel, stone-current paths, protected transport, and a powerful Level 3 combat transformation.",
     "asset_candidates": {
       "character_card_art_preferred": "assets/characters/ahesu-the-stone-current-serpent-character-card-art-grounded.png",
       "character_card_art_alternate": "assets/characters/ahesu-the-stone-current-serpent-character-card-art.png",
@@ -78,7 +78,8 @@
     },
     "review_notes": [
       "Use the grounded card art as preferred because it reads as swimming/sliding through flooded stone routes rather than flying.",
-      "Level plan makes Ahesu the stone-route transport piece for Hero/Leader movement."
+      "Level plan makes Ahesu the stone-route transport piece for Hero/Leader movement.",
+      "Level 3 replaces route teleportation with a direct +2 ATK and +1 HP transformation."
     ]
   },
   {
@@ -95,7 +96,7 @@
     "stats": [4, 2, 3, 1],
     "l1": "Passive: Tomb Sentinel reduces the first damage Naia takes each turn by 1 while she is adjacent to a placed object.",
     "l2": "Sarcophagus Oath: +1 HP. While adjacent to a placed object, Naia's basic attacks mark damaged enemies. The next allied attack against a marked enemy deals +1 damage, then remove Marked.",
-    "l3": "Open The Black Sarcophagus: +1 ATK. Once per match when Naia would be defeated, if she is adjacent to a placed object, she remains at 1 HP and every adjacent enemy becomes Marked.",
+    "l3": "Open the Black Sarcophagus: +1 ATK. Once per match, when Naia would be defeated, she remains at 1 HP. If this leaves her adjacent to a placed object, choose 1 adjacent enemy; it becomes Marked.",
     "role": "Named Tomb Sentinel warrior who guards drowned vaults, bodies, bloodlines, and the truths the survivors fear.",
     "narrative": {
       "public_role": "Tomb Sentinel and warrior guardian of drowned vaults.",
@@ -181,8 +182,8 @@
     "unique": true,
     "stats": [5, 1, 2, 3],
     "l1": "Passive: Living Archive gains 1 Memory marker, max 3, the first time each turn an ally within 2 tiles takes damage.",
-    "l2": "Forbidden Testimony: +1 RANGE. Once per turn, remove 1 Memory marker from Sahu-Ren to give an ally within 3 tiles Shield or to mark an enemy within 3 tiles.",
-    "l3": "Last Memory Released: +1 HP. Once per match, remove up to 3 Memory markers from Sahu-Ren. For each removed marker, heal 1 HP on an ally within 3 tiles or deal 1 damage to a marked enemy within 3 tiles.",
+    "l2": "Forbidden Testimony: +1 RANGE. Once per turn, Sahu-Ren may remove 1 Memory marker to make an enemy within 3 tiles Marked.",
+    "l3": "Last Memory Released: +1 HP. Once per match, remove up to 3 Memory markers from Sahu-Ren. For each marker removed, deal 1 damage to a Marked enemy within 3 tiles.",
     "role": "Living archive and sacred witness who remembers the forbidden truths the Flood Survivors edited, entombed, or disciplined.",
     "narrative": {
       "public_role": "Sacred witness and living archive.",
@@ -220,8 +221,8 @@
     "type": "Specialist",
     "unique": true,
     "stats": [3, 1, 2, 2],
-    "l1": "AP Ability: Hidden Geometry chooses an adjacent Stone marker. Move that Stone marker up to 2 tiles to an empty tile, or give one ally adjacent to it +1 RANGE on its next AP ability this turn.",
-    "l2": "Vault Surveyor: +1 RANGE. Hidden Geometry may choose a Stone marker within 2 tiles. After moving a Stone marker, one adjacent ally may move 1 tile without spending AP.",
+    "l1": "AP Ability: Hidden Geometry chooses an adjacent placed object. Move it up to 2 tiles to an empty tile.",
+    "l2": "Vault Surveyor: +1 RANGE. Hidden Geometry may choose a placed object within 2 tiles.",
     "l3": "The Hidden Vault Opens: +1 HP. Once per match, choose an empty tile adjacent to a Stone marker and place the Hidden Vault there. The Hidden Vault is a placed object with 3 HP. Allies adjacent to it gain Shield at the start of your turn.",
     "role": "Sacred architect, ley-line surveyor, and vault engineer who builds hidden archives, false corridors, star shafts, and tomb structures.",
     "narrative": {
@@ -258,10 +259,10 @@
     "name": "Thalassa-Nekh, Vessel of the Drowned Seraph",
     "type": "Mystic",
     "unique": true,
-    "stats": [3, 1, 2, 3],
-    "l1": "AP Ability: Black-Water Communion chooses an ally within 3 tiles. Give that ally 1 Memory marker, max 1 per character, or move 1 Memory marker from that ally to another ally within 2 tiles.",
+    "stats": [4, 1, 2, 2],
+    "l1": "AP Ability: Black-Water Communion chooses an ally within 3 tiles. Give that ally 1 Memory marker, max 1 per character.",
     "l2": "Drowned Judgment: +1 RANGE. When an ally within Thalassa-Nekh's RANGE removes a Memory marker to prevent damage, mark the attacker.",
-    "l3": "The Drowned Seraph Takes Form: +1 HP. Once per match, Thalassa-Nekh becomes Seraph Form until your next turn. When an ally within range removes a Memory marker to prevent damage, prevent all damage from that attack instead and mark the attacker.",
+    "l3": "The Drowned Seraph Takes Form: +1 HP. Once per match, Thalassa-Nekh becomes Seraph Form. Seraph Form gives her +2 ATK and +1 RANGE.",
     "role": "Drowned oracle and vessel of a powerful angelic or spiritual entity taken on during a water-burial rite.",
     "narrative": {
       "public_role": "Drowned oracle and vessel of a spiritual entity.",
