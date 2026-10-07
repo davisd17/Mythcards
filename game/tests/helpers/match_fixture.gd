@@ -48,6 +48,23 @@ static func start_match() -> Node:
 	return setup
 
 
+# The playtest matchup (teams.json): Closed City (p1) vs Flood Survivors (p2), each back
+# row in team order, p1's first turn. Same stubs as start_match.
+static func start_teams_match() -> Node:
+	TurnManager.relic_event_deck = NullDeck.new()
+	TurnManager.victory_checker = NullChecker.new()
+	var setup: Node = SetupFlowScript.new()
+	setup.select_team("p1", "closed-city")
+	setup.select_team("p2", "flood-survivors")
+	for id in ["p1", "p2"]:
+		var x := 0
+		for c in setup.get_player(id).characters:
+			setup.place_character(id, c.instance_id, Vector2i(x, 0 if id == "p1" else 6))
+			x += 1
+	setup.start_match()
+	return setup
+
+
 static func teardown() -> void:
 	GameState.reset()
 	TurnManager.relic_event_deck = null

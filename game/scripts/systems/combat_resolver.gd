@@ -11,6 +11,7 @@ var mount_system: MountSystem
 # 2026-09-28): {atk, reduced, reduced_by: [names], shielded, memory}.
 var last_attack_breakdown: Dictionary = {}
 var _last_breakdown: Dictionary = {}
+var current_attacker: CharacterInstance = null
 
 
 func _init(p_board: BoardModel, p_ability_system: AbilitySystem = null, p_mount_system: MountSystem = null) -> void:
@@ -71,7 +72,8 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 	var shield_consumed := mini(shield_total, after_reduction)
 	var final_damage := after_reduction - shield_consumed
 	# Memory (designer ruling 2026-09-27): spent automatically to prevent 1 damage, after shields.
-	var memory_spent := final_damage > 0 and defender.has_status("memory")
+	var had_memory := defender.has_status("memory")
+	var memory_spent := final_damage > 0 and had_memory
 	if memory_spent:
 		final_damage -= 1
 
@@ -80,11 +82,13 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 		defender.status_effects.erase(se)
 	_consume_shields(defender, mini(shield_entries, shield_consumed))
 	if memory_spent:
-		ability_system.remove_status(defender, "memory")
+		ability_system.take_memory(defender, 1)
+		ability_system.notify_memory_spent(defender, attacker)
 
 	var would_be_hp := defender.current_hp - final_damage
 	if would_be_hp <= 0:
-		var intercept := ability_system.intercept_lethal_damage(defender, self)
+		current_attacker = attacker   # read by intercepts that react to who hit (Naia L3)
+		var intercept := ability_system.intercept_lethal_damage(defender, self, had_memory)
 		if intercept.get("triggered", false):
 			defender.current_hp = int(intercept.get("final_hp", 1))
 		else:
@@ -98,8 +102,11 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 	_last_breakdown = {"atk": marked_amount, "reduced": marked_amount - after_reduction, "reduced_by": reduced_by,
 			"shielded": shield_consumed, "memory": memory_spent}
 
+	if marked_amount > 0:
+		ability_system.notify_damaged(defender, attacker, marked_amount, final_damage)
+
 	var defeated := defender.current_hp <= 0
-	if defeated:
+	if defeated and not defender.defeated:
 		_handle_defeat(defender, attacker)
 	return {"damage": final_damage, "defeated": defeated}
 

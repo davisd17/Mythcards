@@ -188,6 +188,20 @@ Prototype squad composition:
 - For the first paper prototype, use 1 copy of each of the 7 character cards per side.
 - Current paper-test recommendation: use exactly one of each character type per side on a 7x7 board.
 
+Playtest roster (decided 2026-10-07): the next playtests use a full Closed City team against a full Flood Survivors team. The digital prototype plays this matchup by default; the original rosters below are hidden but kept, and will return.
+
+| Type | Closed City (Russian-inspired) | Flood Survivors (Atlantean) |
+| --- | --- | --- |
+| Common | Reactor Worker | Stone-Line Laborer |
+| Mount | VERA-7 | Ahesu, the Stone-Current Serpent |
+| Warrior | Major Yuri Volkov | Naia of the Black Sarcophagus |
+| Leader | Irina Vasilievna Karpova | Queen Meret-Anu |
+| Hero | Dr. Mikhail Orlov | Sahu-Ren, Last Memory-Keeper |
+| Specialist | Dr. Elena Morozova | Iset-Nara |
+| Mystic | Zoya Miranova | Thalassa-Nekh |
+
+Card text lives in `data/cards/review_drafts/closed_city_characters.json` and `flood_survivor_characters.json`; `data/cards/teams.json` names the teams. Rules decisions for these cards (2026-10-07): once-per-match Level 3 abilities cost 1 AP; Dr. Elena Morozova's Dream Link can move Memory markers; the Reactor Worker never triggers Leaks, and its Level 3 AP gain has no per-turn limit. Interpretations awaiting confirmation are listed in `LLD-closed-city-flood-roster.md`.
+
 Russian-inspired starting roster:
 
 | Type | Character | Initial Gameplay Idea |
@@ -652,7 +666,7 @@ The first playable prototype should prove the core game is fun before adding col
 - 2 playable cultures: Russian-inspired and Atlantean
 - 7 character types
 - 1 version of each type per culture
-- 14 total character cards
+- 14 total character cards (playtest matchup: Closed City vs Flood Survivors, see Section 8)
 - 14 shared relic/event cards (each player contributes 3 relics and 4 events from their own culture; see Section 9)
 - No fixed starting formation — each player deploys their 7 characters on their own back row in their own chosen arrangement
 - First-pass story framing around the Closed City accident and convergence dream

@@ -1,5 +1,5 @@
 extends Node
-# Match setup: culture selection and player-chosen back-row deployment (BR-007A),
+# Match setup: team (or culture) selection and player-chosen back-row deployment (BR-007A),
 # then hands a built MatchState to GameState (LLD-match-setup 3.6, 4.1).
 # Visuals belong to the presentation layer; the UI polls these query methods.
 
@@ -8,13 +8,28 @@ var _pending_players: Dictionary = {}   # String player_id -> PlayerState
 
 
 func select_culture(player_id: String, culture: String) -> void:
-	# Re-selecting before placing replaces the squad. Both players may pick the same
-	# culture (a mirror match); instance ids stay unique via the player prefix.
-	if not GameEnums.PLAYER_IDS.has(player_id):
-		push_error("SetupFlow.select_culture: unknown player '%s'" % player_id)
-		return
+	# The original 14 by culture (the engine tests' squads). Re-selecting before placing
+	# replaces the squad. Both players may pick the same culture (a mirror match);
+	# instance ids stay unique via the player prefix.
 	if ContentDB.get_characters_by_culture(culture).size() != GameEnums.CHARACTER_TYPES.size():
 		push_error("SetupFlow.select_culture: culture '%s' has no complete squad" % culture)
+		return
+	_set_squad(player_id, culture, "", ContentDB.get_characters_by_culture(culture))
+
+
+func select_team(player_id: String, team_id: String) -> void:
+	# A team from teams.json (LLD-closed-city-flood-roster.md 2), e.g. "closed-city".
+	var team := ContentDB.get_team(team_id)
+	var squad := ContentDB.get_team_characters(team_id)
+	if team.is_empty() or squad.size() != GameEnums.CHARACTER_TYPES.size():
+		push_error("SetupFlow.select_team: team '%s' has no complete squad" % team_id)
+		return
+	_set_squad(player_id, str(team.get("culture", "")), team_id, squad)
+
+
+func _set_squad(player_id: String, culture: String, team_id: String, cards: Array[CharacterData]) -> void:
+	if not GameEnums.PLAYER_IDS.has(player_id):
+		push_error("SetupFlow: unknown player '%s'" % player_id)
 		return
 	var previous: PlayerState = _pending_players.get(player_id)
 	if previous != null:
@@ -24,7 +39,8 @@ func select_culture(player_id: String, culture: String) -> void:
 	var player := PlayerState.new()
 	player.id = player_id
 	player.culture = culture
-	player.characters = _build_squad(player_id, culture)
+	player.team_id = team_id
+	player.characters = _build_squad(player_id, cards)
 	_pending_players[player_id] = player
 
 
@@ -94,9 +110,9 @@ func start_match(deck_seed: int = -1) -> void:
 	TurnManager.start_turn(state.first_player_id)
 
 
-func _build_squad(player_id: String, culture: String) -> Array[CharacterInstance]:
+func _build_squad(player_id: String, cards: Array[CharacterData]) -> Array[CharacterInstance]:
 	var squad: Array[CharacterInstance] = []
-	for data in ContentDB.get_characters_by_culture(culture):
+	for data in cards:
 		var c := CharacterInstance.new()
 		c.instance_id = "%s_%s" % [player_id, data.id]
 		c.data = data

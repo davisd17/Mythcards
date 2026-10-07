@@ -73,18 +73,20 @@ func get_move_bonus(instance: CharacterInstance) -> int:
 # The rules one move uses: the mover's own pass-through abilities, plus any one-pass
 # "move through" grant from a card (Seventeen Seconds or Karpova's Black Key). `actor`
 # is who acts (a rider, for a mounted pair); `mover` supplies the
-# movement abilities. Returns {pass_char, pass_obj, max_passes, grants}.
+# movement abilities. Returns {pass_char, pass_obj, max_passes, max_char_passes, grants}.
 func movement_rules(mover: CharacterInstance, actor: CharacterInstance = null) -> Dictionary:
 	if actor == null:
 		actor = mover
 	var pass_char := get_movement_passable_predicate(mover)
 	var pass_obj := get_movement_object_passable_predicate(mover)
 	var max_passes := get_movement_max_passes(mover)
+	var max_char_passes := handler_for(mover).get_movement_max_char_passes(self, mover)
 	if not pass_char.is_valid() and not pass_obj.is_valid():
 		max_passes = 0
 	var grants := movement_grants(actor)
 	if grants.is_empty():
-		return {"pass_char": pass_char, "pass_obj": pass_obj, "max_passes": max_passes, "grants": grants}
+		return {"pass_char": pass_char, "pass_obj": pass_obj, "max_passes": max_passes,
+				"max_char_passes": max_char_passes, "grants": grants}
 	var own_char := pass_char
 	var own_obj := pass_obj
 	var any_character := grants.has("seventeen_seconds")
@@ -98,7 +100,8 @@ func movement_rules(mover: CharacterInstance, actor: CharacterInstance = null) -
 	pass_obj = func(_pos: Vector2i) -> bool: return true   # every grant lets you pass an object
 	if max_passes >= 0:
 		max_passes += 1   # the grant is one extra pass
-	return {"pass_char": pass_char, "pass_obj": pass_obj, "max_passes": max_passes, "grants": grants}
+	return {"pass_char": pass_char, "pass_obj": pass_obj, "max_passes": max_passes,
+			"max_char_passes": max_char_passes, "grants": grants}
 
 
 # Which one-pass "move through" grants apply to this character's next move.
@@ -169,8 +172,31 @@ func damage_reduction_sources(defender: CharacterInstance, attacker: CharacterIn
 	return names
 
 
-func intercept_lethal_damage(defender: CharacterInstance, combat_resolver: CombatResolver) -> Dictionary:
-	return handler_for(defender).intercept_lethal_damage(self, defender, combat_resolver)
+func intercept_lethal_damage(defender: CharacterInstance, combat_resolver: CombatResolver,
+		had_memory: bool = false) -> Dictionary:
+	var own := handler_for(defender).intercept_lethal_damage(self, defender, combat_resolver)
+	if own.get("triggered", false):
+		return own
+	# Tide-Sealed Archive (Meret-Anu L3): until the start of her player's next turn, a
+	# teammate that had Memory when hit loses it instead of being defeated.
+	if had_memory and _match.get_player(defender.player_id).player_flags_this_turn.get("tide_sealed", false):
+		take_memory(defender, 99)
+		return {"triggered": true, "final_hp": 1}
+	return own
+
+
+# After every damage instance (CombatResolver), so passives can react.
+func notify_damaged(damaged: CharacterInstance, attacker: CharacterInstance, incoming: int, final: int) -> void:
+	var listeners := live_characters()
+	if not listeners.has(damaged):
+		listeners.append(damaged)
+	for c in listeners:
+		handler_for(c).on_character_damaged(self, c, damaged, attacker, incoming, final)
+
+
+func notify_memory_spent(holder: CharacterInstance, attacker: CharacterInstance) -> void:
+	for c in live_characters():
+		handler_for(c).on_memory_spent(self, c, holder, attacker)
 
 
 func get_effective_max_hp(instance: CharacterInstance) -> int:
@@ -200,6 +226,8 @@ func execute_ability(instance: CharacterInstance, ability_id: String, payload: D
 func execute_reactive_bonus(instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
 	if tag == "free_move":
 		return _free_move(instance, payload)
+	if tag == "return":
+		return _return_to_board(instance, payload)
 	return handler_for(instance).execute_reactive_bonus(self, instance, tag, payload)
 
 
@@ -214,12 +242,22 @@ func ability_step(instance: CharacterInstance, ability_id: String, payload: Dict
 
 
 func bonus_label(instance: CharacterInstance, tag: String) -> String:
-	return "Free move" if tag == "free_move" else handler_for(instance).bonus_label(tag)
+	match tag:
+		"free_move":
+			return "Free move"
+		"return":
+			return "Return to the board"
+	return handler_for(instance).bonus_label(tag)
 
 
 func bonus_step(instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
 	if tag == "free_move":
 		return {} if payload.has("to") else AbilityHandler.target_step("to", "Move 1 tile.", moves_for(instance, 1))
+	if tag == "return":
+		if not payload.has("to"):
+			return AbilityHandler.target_step("to", "%s returns to the board: choose a tile." % instance.data.char_name,
+					return_tiles(instance))
+		return handler_for(instance).return_step(self, instance, payload)
 	return handler_for(instance).bonus_step(self, instance, tag, payload)
 
 
@@ -412,16 +450,114 @@ func reposition_character(instance: CharacterInstance, to: Vector2i, cause: Stri
 func moves_for(instance: CharacterInstance, budget: int) -> Array[Vector2i]:
 	var rules := movement_rules(instance)
 	return board.get_legal_moves(instance.position, budget, "orthogonal",
-			rules.pass_char, rules.pass_obj, rules.max_passes)
+			rules.pass_char, rules.pass_obj, rules.max_passes, false, rules.max_char_passes)
 
 
 # Gives a Memory marker (max 1 per character). Returns whether one was gained.
 func give_memory(target: CharacterInstance) -> bool:
-	if target == null or target.defeated or target.has_status("memory"):
+	if target == null or target.defeated or memory_count(target) >= handler_for(target).memory_max(target):
 		return false
-	add_status(target, "memory", 1, "until_used")
+	var held := _memory_status(target)
+	if held != null:
+		held.value += 1   # one Memory status carries the count (Sahu-Ren holds up to 3)
+	else:
+		add_status(target, "memory", 1, "until_used")
 	EventBus.memory_gained.emit(target.instance_id)
 	return true
+
+
+func memory_count(target: CharacterInstance) -> int:
+	var held := _memory_status(target)
+	return held.value if held != null else 0
+
+
+# Removes up to `amount` Memory; returns how many were removed.
+func take_memory(target: CharacterInstance, amount: int = 1) -> int:
+	var held := _memory_status(target)
+	if held == null:
+		return 0
+	var taken := mini(amount, held.value)
+	held.value -= taken
+	if held.value <= 0:
+		target.status_effects.erase(held)
+	return taken
+
+
+func _memory_status(target: CharacterInstance) -> StatusEffect:
+	for se in target.status_effects:
+		if se.type == "memory":
+			return se
+	return null
+
+
+# --- Off-board characters (Slumber, Missing In The Signal) ------------------------------
+
+# Takes `instance` off the board until its owner's next turn, when it must return.
+# rule: {"kind": "within", "reach": 2} (near where it left) or {"kind": "adjacent_ally"}.
+# A rider leaves its Mount behind on the tile.
+func remove_from_board(instance: CharacterInstance, rule: Dictionary) -> void:
+	var from := instance.position
+	if instance.is_mounted_rider:
+		var mount_char := find(instance.mounted_with_id)
+		instance.mounted_with_id = ""
+		instance.is_mounted_rider = false
+		if mount_char != null:
+			mount_char.mounted_with_id = ""
+			board.set_occupant(from, mount_char.instance_id)
+		sync_conditional_hp(instance)
+	else:
+		board.clear_occupant(from)
+	instance.position = CharacterInstance.UNPLACED
+	instance.ability_uses_this_match["off_board"] = {"from": from, "rule": rule}
+
+
+func is_off_board(instance: CharacterInstance) -> bool:
+	return instance.ability_uses_this_match.has("off_board")
+
+
+# Where an off-board character may come back; any empty tile if none qualifies.
+func return_tiles(instance: CharacterInstance) -> Array[Vector2i]:
+	var info: Dictionary = instance.ability_uses_this_match.get("off_board", {})
+	var rule: Dictionary = info.get("rule", {})
+	var preferred: Array[Vector2i] = []
+	var any_empty: Array[Vector2i] = []
+	for y in BoardModel.BOARD_SIZE:
+		for x in BoardModel.BOARD_SIZE:
+			var pos := Vector2i(x, y)
+			if not is_empty_tile(pos):
+				continue
+			any_empty.append(pos)
+			match rule.get("kind", ""):
+				"within":
+					if distance(pos, info.get("from", pos)) <= int(rule.get("reach", 2)):
+						preferred.append(pos)
+				"adjacent_ally":
+					if _next_to_team(pos, instance.player_id):
+						preferred.append(pos)
+	if preferred.is_empty():
+		return any_empty
+	return preferred
+
+
+func _next_to_team(pos: Vector2i, player_id: String) -> bool:
+	for n in neighbors(pos):
+		var c := occupant(n)
+		if c != null and c.player_id == player_id:
+			return true
+	return false
+
+
+func _return_to_board(instance: CharacterInstance, payload: Dictionary) -> Dictionary:
+	var to = payload.get("to")
+	if not to is Vector2i or not return_tiles(instance).has(to):
+		return {"success": false, "reason": "choose a highlighted tile"}
+	consume_bonus(instance, "return")
+	instance.ability_uses_this_match.erase("off_board")
+	board.set_occupant(to, instance.instance_id)
+	instance.position = to
+	EventBus.character_repositioned.emit(instance.instance_id, to, to, "return")
+	handler_for(instance).on_returned(self, instance, payload)
+	return {"success": true}
 
 
 # A Leak is a neutral placed object (designer ruling 2026-10-06): it counts for "placed
@@ -447,6 +583,9 @@ func _enter_tiles(c: CharacterInstance, tiles: Array[Vector2i]) -> void:
 		if c.defeated:
 			return
 		if not has_leak(pos):
+			continue
+		# Leak-immune characters (Reactor Worker, Access Granted L2) leave the Leak in place.
+		if handler_for(c).ignores_leaks(self, c) or c.has_status("ignore_leak_move"):
 			continue
 		if c.ability_uses_this_turn.get("ignore_leak_once", false):
 			c.ability_uses_this_turn.erase("ignore_leak_once")
@@ -484,6 +623,10 @@ func sync_conditional_hp(instance: CharacterInstance) -> void:
 	if instance.defeated:
 		return
 	var bonus := handler_for(instance).get_own_conditional_max_hp_bonus(self, instance)
+	if instance.is_mounted_rider:
+		var mount_char := find(instance.mounted_with_id)
+		if mount_char != null:
+			bonus += handler_for(mount_char).get_rider_max_hp_bonus(self, mount_char, instance)
 	var applied := int(instance.ability_uses_this_match.get("_hp_bonus_applied", 0))
 	if bonus == applied:
 		return
@@ -508,6 +651,7 @@ func _on_character_moved(character_id: String, from: Vector2i, to: Vector2i) -> 
 	var entered := BoardModel.tiles_between(from, to)
 	entered.append(to)
 	_enter_tiles(mover, entered)
+	remove_status(mover, "ignore_leak_move")   # "during its next movement this turn"
 
 
 func _on_character_repositioned(character_id: String, from: Vector2i, to: Vector2i, cause: String) -> void:
@@ -578,6 +722,24 @@ func _on_turn_started(player_id: String) -> void:
 		return
 	for c in live_characters():
 		handler_for(c).on_turn_started(self, c, player_id)
+	for c in _match.get_player(player_id).characters:
+		if not c.defeated and is_off_board(c):
+			offer_bonus(c, "return")   # must come back before anything else this turn
+	_vault_shields(player_id)
+
+
+# The Hidden Vault (Iset-Nara L3): at the start of its owner's turn, allies adjacent to it
+# gain Shield. It belongs to the board, so it works even after Iset-Nara falls.
+func _vault_shields(player_id: String) -> void:
+	for y in BoardModel.BOARD_SIZE:
+		for x in BoardModel.BOARD_SIZE:
+			var obj := board.get_placed_object(Vector2i(x, y))
+			if obj == null or obj.type_id != "vault" or obj.owner_player_id != player_id:
+				continue
+			for n in neighbors(Vector2i(x, y)):
+				var c := occupant(n)
+				if c != null and c.player_id == player_id:
+					add_status(c, "shield", 1, "this_turn")
 
 
 # --- Internals ------------------------------------------------------------------------

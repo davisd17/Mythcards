@@ -18,6 +18,21 @@ const HANDLERS := {
 	"a-hero": "a_hero_ability.gd",
 	"a-architect": "a_architect_ability.gd",
 	"a-harmonic": "a_harmonic_ability.gd",
+	# Closed City vs Flood Survivors playtest roster (LLD-closed-city-flood-roster.md).
+	"r-reactor-worker": "r_reactor_worker_ability.gd",
+	"r-vera-7": "r_vera_7_ability.gd",
+	"r-yuri-volkov": "r_yuri_volkov_ability.gd",
+	"r-mikhail-orlov": "r_mikhail_orlov_ability.gd",
+	"r-irina-karpova": "r_irina_karpova_ability.gd",
+	"r-elena-morozova": "r_elena_morozova_ability.gd",
+	"r-zoya-miranova": "r_zoya_miranova_ability.gd",
+	"a-flood-survivor-stone-line-laborer": "a_stone_line_laborer_ability.gd",
+	"a-flood-survivor-ahesu": "a_ahesu_ability.gd",
+	"a-flood-survivor-naia": "a_naia_ability.gd",
+	"a-flood-survivor-sahu-ren": "a_sahu_ren_ability.gd",
+	"a-flood-survivor-meret-anu": "a_meret_anu_ability.gd",
+	"a-flood-survivor-iset-nara": "a_iset_nara_ability.gd",
+	"a-flood-survivor-thalassa-nekh": "a_thalassa_nekh_ability.gd",
 }
 
 

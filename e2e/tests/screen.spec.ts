@@ -59,7 +59,7 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   await page.screenshot({ path: 'test-results/screen-1-setup.png' });
 
   // Place the Hero by hand, the rest automatically, for both players.
-  await clickButton(page, 'Bogatyr Champion');
+  await clickButton(page, 'Dr. Mikhail Orlov');
   await clickTile(page, 3, 0);
   await clickButton(page, 'Auto-place the rest');
   await clickButton(page, 'Done placing');
@@ -67,15 +67,15 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   await clickButton(page, 'Done placing');
   let s = await state(page);
   expect(s.phase).toBe('in_progress');
-  expect(character(s, 'p1_r-hero').position).toEqual({ x: 3, y: 0 });
+  expect(character(s, 'p1_r-mikhail-orlov').position).toEqual({ x: 3, y: 0 });
   await page.screenshot({ path: 'test-results/screen-2-card-drawn.png' });
 
   await answerChoices(page);
   s = await state(page);
   expect(s.pending_choice?.pick ?? null).toBeFalsy();
 
-  // Select the Gymnast and move it straight up 2 tiles.
-  const gymnast = character(s, 'p1_r-gymnast');
+  // Select the Reactor Worker and move it straight up 2 tiles.
+  const gymnast = character(s, 'p1_r-reactor-worker');
   await clickTile(page, gymnast.position.x, gymnast.position.y);
   await page.screenshot({ path: 'test-results/screen-3-selected.png' });
 
@@ -89,7 +89,7 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   expect((await ui(page)).popup).toBe(false);
   await clickTile(page, gymnast.position.x, gymnast.position.y + 2);
   s = await state(page);
-  expect(character(s, 'p1_r-gymnast').position).toEqual({ x: gymnast.position.x, y: gymnast.position.y + 2 });
+  expect(character(s, 'p1_r-reactor-worker').position).toEqual({ x: gymnast.position.x, y: gymnast.position.y + 2 });
   expect(s.players.p1.pool_ap_remaining).toBe(1);
 
   await clickButton(page, 'End turn');
@@ -97,18 +97,18 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   expect(s.active_player_id).toBe('p2');
   await page.screenshot({ path: 'test-results/screen-4-p2-turn.png' });
 
-  // Player 2 uses an ability by clicks: Astral Harmonic shields the Crystal Architect.
+  // Player 2 uses an ability by clicks: Thalassa-Nekh gives Iset-Nara a Memory marker.
   await answerChoices(page);
   s = await state(page);
-  const harmonic = character(s, 'p2_a-harmonic');
-  const architect = character(s, 'p2_a-architect');
+  const harmonic = character(s, 'p2_a-flood-survivor-thalassa-nekh');
+  const architect = character(s, 'p2_a-flood-survivor-iset-nara');
   await clickTile(page, harmonic.position.x, harmonic.position.y);
   await expect(page.getByRole('button', { name: /^Outfit:/ })).toHaveCount(0);
   await page.screenshot({ path: 'test-results/screen-5-full-roster.png' });
-  await clickButton(page, 'Resonance Shield');
-  expect((await ui(page)).prompt).toContain('Shield which ally?');
+  await clickButton(page, 'Black-Water Communion');
+  expect((await ui(page)).prompt).toContain('which ally gains Memory?');
   await page.screenshot({ path: 'test-results/screen-6-ability-prompt.png' });
   await clickTile(page, architect.position.x, architect.position.y);
   s = await state(page);
-  expect(character(s, 'p2_a-architect').status_effects.map((e: any) => e.type)).toContain('shield');
+  expect(character(s, 'p2_a-flood-survivor-iset-nara').status_effects.map((e: any) => e.type)).toContain('memory');
 });

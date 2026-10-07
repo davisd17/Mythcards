@@ -34,6 +34,12 @@ func get_movement_max_passes(_sys, _instance: CharacterInstance) -> int:
 	return -1
 
 
+# Cap on characters passed in one move, on top of get_movement_max_passes (-1 = no extra
+# cap). Ahesu L2 passes any number of allied Stones but only 1 ally.
+func get_movement_max_char_passes(_sys, _instance: CharacterInstance) -> int:
+	return -1
+
+
 # Extra destinations beyond the normal move (Gymnast L2: 1 extra tile after vaulting).
 func get_bonus_move_tiles(_sys, _instance: CharacterInstance, _from: Vector2i, _budget: int) -> Array[Vector2i]:
 	return []
@@ -109,6 +115,52 @@ func validate(sys, instance: CharacterInstance, ability_id: String, payload: Dic
 
 func execute(_sys, _instance: CharacterInstance, _ability_id: String, _payload: Dictionary) -> Dictionary:
 	return {"success": false, "reason": "no AP ability defined for this character"}
+
+
+# --- Closed City / Flood Survivors hooks (LLD-closed-city-flood-roster.md 3) ------------
+
+# Never triggers Leaks: no damage, and the Leak stays (Reactor Worker).
+func ignores_leaks(_sys, _instance: CharacterInstance) -> bool:
+	return false
+
+
+# Max HP this Mount gives whoever rides it (VERA-7: Protected Passenger).
+func get_rider_max_hp_bonus(_sys, _mount: CharacterInstance, _rider: CharacterInstance) -> int:
+	return 0
+
+
+# How many Memory markers this character may hold (Sahu-Ren: 3).
+func memory_max(_instance: CharacterInstance) -> int:
+	return 1
+
+
+# After every damage instance, including fully prevented ones. `incoming` is the amount
+# before reductions, shields, and Memory; `final` is what was taken. attacker == damaged
+# for hazard damage (Leaks).
+func on_character_damaged(_sys, _instance: CharacterInstance, _damaged: CharacterInstance,
+		_attacker: CharacterInstance, _incoming: int, _final: int) -> void:
+	pass
+
+
+# A character spent Memory to prevent damage.
+func on_memory_spent(_sys, _instance: CharacterInstance, _holder: CharacterInstance,
+		_attacker: CharacterInstance) -> void:
+	pass
+
+
+# Free bonuses offered by live state rather than a stored flag (checked on demand).
+func offered_bonuses(_sys, _instance: CharacterInstance) -> Array[String]:
+	return []
+
+
+# An off-board character returning (Slumber, Missing In The Signal): steps after the
+# return tile is chosen, and what happens once it's back.
+func return_step(_sys, _instance: CharacterInstance, _payload: Dictionary) -> Dictionary:
+	return {}
+
+
+func on_returned(_sys, _instance: CharacterInstance, _payload: Dictionary) -> void:
+	pass
 
 
 # --- Targeting steps, for the tap-driven game screen ------------------------------

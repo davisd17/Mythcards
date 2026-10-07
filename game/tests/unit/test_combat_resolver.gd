@@ -24,7 +24,7 @@ class FakeAbility extends AbilitySystem:
 		return reduction if (is_ranged or not ranged_only_reduction) else 0
 	func get_penetration(_i) -> Dictionary:
 		return penetration
-	func intercept_lethal_damage(_d, _c) -> Dictionary:
+	func intercept_lethal_damage(_d, _c, _had_memory: bool = false) -> Dictionary:
 		return intercept
 	func get_conditional_atk_bonus(_i) -> int:
 		return atk_bonus

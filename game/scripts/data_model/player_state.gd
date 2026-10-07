@@ -3,6 +3,7 @@ extends RefCounted
 
 var id: String = ""                  # "p1" | "p2"
 var culture: String = ""             # e.g. "Russian-inspired"
+var team_id: String = ""             # e.g. "closed-city" ("" when chosen by culture)
 var characters: Array[CharacterInstance] = []  # exactly 7 once setup completes (BR-005)
 var active_relic_id: String = ""     # mutated only by RelicEventDeck (BR-029)
 var pool_ap_remaining: int = 0

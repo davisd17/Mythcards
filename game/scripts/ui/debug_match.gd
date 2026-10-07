@@ -1,6 +1,6 @@
 extends Control
-# The playable debug match (HLD build step 14): a local hotseat match of the original
-# 14 on a clickable board, with the DebugPanel readout and a command line for
+# The playable debug match (HLD build step 14): a local hotseat match of the playtest
+# matchup (teams.json) on a clickable board, with the DebugPanel readout and a command line for
 # abilities, free actions, and card choices. Debug-grade by design; the mobile UI is
 # the presentation step (HLD 4.12).
 
@@ -64,7 +64,7 @@ func _open_game_view() -> void:
 	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
 
-# Starts a fresh match: original 14, each back row in card order, p1 first.
+# Starts a fresh match: the playtest matchup (teams.json), each back row in card order, p1 first.
 func start_new_match(deck_seed: int = -1) -> void:
 	if _setup != null:
 		_setup.queue_free()
@@ -72,8 +72,8 @@ func start_new_match(deck_seed: int = -1) -> void:
 	controller.selected_id = ""
 	_setup = SetupFlowScript.new()
 	add_child(_setup)
-	_setup.select_culture("p1", "Russian-inspired")
-	_setup.select_culture("p2", "Atlantean")
+	_setup.select_team("p1", ContentDB.get_matchup()[0])
+	_setup.select_team("p2", ContentDB.get_matchup()[1])
 	for id in ["p1", "p2"]:
 		var x := 0
 		for c in _setup.get_player(id).characters:

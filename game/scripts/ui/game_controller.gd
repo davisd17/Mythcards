@@ -22,13 +22,15 @@ var message := ""
 
 # --- Setup -------------------------------------------------------------------------
 
-func begin_setup(p1_culture: String = "Russian-inspired", p2_culture: String = "Atlantean") -> Node:
+# Teams default to the matchup in teams.json (Closed City vs Flood Survivors).
+func begin_setup(p1_team: String = "", p2_team: String = "") -> Node:
 	GameState.reset()
 	if setup != null:
 		setup.free()
+	var matchup := ContentDB.get_matchup()
 	setup = SetupFlowScript.new()
-	setup.select_culture("p1", p1_culture)
-	setup.select_culture("p2", p2_culture)
+	setup.select_team("p1", p1_team if p1_team != "" else matchup[0])
+	setup.select_team("p2", p2_team if p2_team != "" else matchup[1])
 	placing_player = "p1"
 	placing_id = ""
 	selected_id = ""
@@ -278,7 +280,7 @@ func skip() -> void:
 
 
 func can_cancel() -> bool:
-	return not flow.is_empty() and flow.kind != "deck"
+	return not flow.is_empty() and flow.kind != "deck" and not flow.get("required", false)
 
 
 func cancel() -> void:
@@ -445,6 +447,8 @@ static func describe_attack(attacker: CharacterInstance, target: CharacterInstan
 func sync() -> void:
 	if flow.get("kind") == "deck" and not RelicEventDeck.has_pending_choice(flow.actor):
 		flow = {}
+	if flow.get("required", false) and not find(flow.actor).ability_uses_this_turn.get("return_available", false):
+		flow = {}
 	_start_pending_choice()
 
 
@@ -456,6 +460,12 @@ func _start_pending_choice() -> void:
 	var player := state.active_player_id
 	if RelicEventDeck.has_pending_choice(player):
 		flow = {"kind": "deck", "actor": player, "id": "", "payload": {}, "spec": RelicEventDeck.choice_spec(player)}
+		return
+	# An off-board character (Slumber, Missing In The Signal) must come back first.
+	for c in state.get_player(player).characters:
+		if c.ability_uses_this_turn.get("return_available", false):
+			flow = {"kind": "bonus", "actor": c.instance_id, "id": "return", "payload": {}, "required": true}
+			return
 
 
 func _selected() -> CharacterInstance:

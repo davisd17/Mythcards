@@ -496,13 +496,18 @@ func _margin(child: Control, side: int = 10) -> MarginContainer:
 	return m
 
 
-static func _player_name(player_id: String) -> String:
-	var culture := ""
-	var state := GameState.match_state
-	if state != null and state.get_player(player_id) != null:
-		culture = state.get_player(player_id).culture
+# "Player 1 (Closed City)": the team name, or the culture for a culture-built squad.
+func _player_name(player_id: String) -> String:
+	var side := ""
+	var player: PlayerState = null
+	if controller.setup != null:
+		player = controller.setup.get_player(player_id)
+	elif GameState.match_state != null:
+		player = GameState.match_state.get_player(player_id)
+	if player != null:
+		side = str(ContentDB.get_team(player.team_id).get("name", player.culture))
 	var n := "Player 1" if player_id == "p1" else "Player 2"
-	return "%s (%s)" % [n, culture] if culture != "" else n
+	return "%s (%s)" % [n, side] if side != "" else n
 
 
 static func _short_name(player_id: String) -> String:

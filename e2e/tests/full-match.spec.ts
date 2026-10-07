@@ -18,7 +18,8 @@ for (const seed of [42, 7, 2026]) {
 }
 
 // Runs in the browser. Each turn: resolve any drawn-card choice; every character
-// attacks an enemy in range if it can, otherwise steps toward the nearest enemy;
+// attacks an enemy in range if it can, else an enemy object (Stones), otherwise steps
+// toward the nearest enemy;
 // then the turn ends. Only the bridge hooks are used.
 function playMatch({ maxTurns }: { maxTurns: number }) {
   const w = window as any;
@@ -77,6 +78,14 @@ function playMatch({ maxTurns }: { maxTurns: number }) {
         const r = act('attack', c.instance_id, { target_id: e.instance_id });
         if (r.success) { actions++; done = true; break; }
         if (r.reason === 'no pool AP remaining') break;
+      }
+      // No character in range: break an enemy object in the way (Stones wall lines off).
+      if (!done) {
+        for (const o of get().objects ?? []) {
+          if (o.owner === me) continue;
+          const r = act('attack', c.instance_id, { target_pos: o.position });
+          if (r.success) { actions++; done = true; break; }
+        }
       }
       s = get();
       if (done || s.phase !== 'in_progress') continue;

@@ -10,12 +10,18 @@ const CHARACTERS_PATH := "res://data/cards/characters.json"
 # the first playtest). prototype_relic_events.json keeps the original PRD set.
 const RELIC_EVENTS_PATH := "res://data/cards/relic_events.json"
 const REVIEW_DRAFTS_DIR := "res://data/cards/review_drafts/"
+# Teams and the matchup the game plays (LLD-closed-city-flood-roster.md 2). A card listed
+# in a team is playable even when its text lives in a review-draft file.
+const TEAMS_PATH := "res://data/cards/teams.json"
 const DRAFT_STATUS := "draft_for_review"
 
 var characters: Dictionary = {}          # String id -> CharacterData (playable)
 var relic_events: Dictionary = {}        # String id -> RelicEventData (playable)
 var draft_characters: Dictionary = {}    # String id -> CharacterData (review drafts, BR-043A)
 var draft_relic_events: Dictionary = {}  # String id -> RelicEventData (review drafts, BR-043A)
+var teams: Dictionary = {}               # team id -> {name, culture, offered, characters: [ids]}
+var matchup: Array[String] = []          # [Player 1 team id, Player 2 team id]
+var abbreviations: Dictionary = {}       # card id -> 2-letter board tag
 
 # Problems found while parsing (duplicate ids, malformed stats, unknown entry shapes).
 # Reported by validate() alongside the structural checks.
@@ -32,7 +38,7 @@ func _ready() -> void:
 
 func load_all(characters_path: String = CHARACTERS_PATH,
 		relic_events_path: String = RELIC_EVENTS_PATH,
-		drafts_dir: String = REVIEW_DRAFTS_DIR) -> void:
+		drafts_dir: String = REVIEW_DRAFTS_DIR, teams_path: String = TEAMS_PATH) -> void:
 	clear()
 	var char_entries = _read_json(characters_path)
 	if char_entries is Array:
@@ -41,6 +47,7 @@ func load_all(characters_path: String = CHARACTERS_PATH,
 	if relic_entries is Array:
 		add_relic_event_entries(relic_entries, false)
 	_load_review_drafts(drafts_dir)
+	_load_teams(teams_path)
 
 
 func clear() -> void:
@@ -48,11 +55,42 @@ func clear() -> void:
 	relic_events.clear()
 	draft_characters.clear()
 	draft_relic_events.clear()
+	teams.clear()
+	matchup.clear()
+	abbreviations.clear()
 	_load_errors.clear()
 
 
 func get_character(id: String) -> CharacterData:
-	return characters.get(id, null)
+	# Team-listed review drafts are playable too.
+	if characters.has(id):
+		return characters[id]
+	return draft_characters.get(id) if _team_listed(id) else null
+
+
+func get_team(team_id: String) -> Dictionary:
+	return teams.get(team_id, {})
+
+
+# The team's 7 characters, in the order teams.json lists them.
+func get_team_characters(team_id: String) -> Array[CharacterData]:
+	var result: Array[CharacterData] = []
+	for id in get_team(team_id).get("characters", []):
+		var data := get_character(str(id))
+		if data != null:
+			result.append(data)
+	return result
+
+
+func get_matchup() -> Array[String]:
+	return matchup
+
+
+func _team_listed(id: String) -> bool:
+	for team in teams.values():
+		if team.get("characters", []).has(id):
+			return true
+	return false
 
 
 func get_characters_by_culture(culture: String) -> Array[CharacterData]:
@@ -156,6 +194,26 @@ func validate() -> Array[String]:
 			if n != 1:
 				errors.append("culture '%s' has %d %s character(s); expected exactly 1" % [culture, n, t])
 
+	# Every team is a full squad: 7 known cards, one of each type, all of the team's culture.
+	for team_id in teams:
+		var team: Dictionary = teams[team_id]
+		var ids: Array = team.get("characters", [])
+		var types := {}
+		for id in ids:
+			var c := get_character(str(id))
+			if c == null:
+				errors.append("team '%s' lists unknown character '%s'" % [team_id, id])
+				continue
+			if c.culture != team.get("culture", ""):
+				errors.append("team '%s': '%s' is %s, not %s" % [team_id, id, c.culture, team.get("culture", "")])
+			types[c.type] = types.get(c.type, 0) + 1
+		for t in GameEnums.CHARACTER_TYPES:
+			if types.get(t, 0) != 1:
+				errors.append("team '%s' has %d %s character(s); expected exactly 1" % [team_id, types.get(t, 0), t])
+	for team_id in matchup:
+		if not teams.has(team_id):
+			errors.append("matchup names unknown team '%s'" % team_id)
+
 	return errors
 
 
@@ -183,6 +241,19 @@ func _load_review_drafts(dir_path: String) -> void:
 				add_character_entries([entry], true, file_name)
 			else:
 				_load_errors.append("%s: entry '%s' has neither 'kind' nor 'type'" % [file_name, entry.get("id", "?")])
+
+
+func _load_teams(path: String) -> void:
+	if not FileAccess.file_exists(path):
+		return
+	var parsed = _read_json(path)
+	if not parsed is Dictionary or not parsed.get("teams") is Dictionary:
+		_load_errors.append("%s: expected {matchup, teams}" % path)
+		return
+	teams = parsed.teams
+	abbreviations = parsed.get("abbreviations", {})
+	for id in parsed.get("matchup", []):
+		matchup.append(str(id))
 
 
 func _read_json(path: String) -> Variant:

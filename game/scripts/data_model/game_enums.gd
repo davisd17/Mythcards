@@ -14,7 +14,7 @@ const RELIC_EVENT_KINDS: Array[String] = ["Relic", "Rare Relic", "Event"]
 
 const MOVEMENT_PATTERNS: Array[String] = ["orthogonal"]
 
-const PLACED_OBJECT_TYPES: Array[String] = ["barricade", "pylon", "stone", "leak"]
+const PLACED_OBJECT_TYPES: Array[String] = ["barricade", "pylon", "stone", "leak", "vault"]
 
 const MATCH_PHASES: Array[String] = ["setup", "in_progress", "ended"]
 const WIN_CONDITIONS: Array[String] = ["", "hero_capture", "army_defeat"]

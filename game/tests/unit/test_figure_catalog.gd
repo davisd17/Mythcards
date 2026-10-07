@@ -1,9 +1,13 @@
 extends GutTest
 
 
+# The 14 playtest characters (teams.json); figure folders are keyed by card id.
 const CHARACTER_IDS := [
-	"r-gymnast", "r-tiger", "r-sniper", "r-general", "r-hero", "r-engineer", "r-seer",
-	"a-attendant", "a-glider", "a-guard", "a-conductor", "a-hero", "a-architect", "a-harmonic",
+	"r-reactor-worker", "r-vera-7", "r-yuri-volkov", "r-mikhail-orlov", "r-irina-karpova",
+	"r-elena-morozova", "r-zoya-miranova",
+	"a-flood-survivor-stone-line-laborer", "a-flood-survivor-ahesu", "a-flood-survivor-naia",
+	"a-flood-survivor-sahu-ren", "a-flood-survivor-meret-anu", "a-flood-survivor-iset-nara",
+	"a-flood-survivor-thalassa-nekh",
 ]
 
 
@@ -15,6 +19,15 @@ func test_all_board_characters_have_a_default_figure() -> void:
 
 
 func test_single_default_wraps_without_touching_character_data() -> void:
-	assert_eq(FigureCatalog.next_outfit_id("r-seer", "default"), "default")
-	assert_eq(FigureCatalog.outfit_name("r-seer", "default"), "Zoya Miranova")
-	assert_false(ContentDB.get_character("r-seer").raw.has("outfit"))
+	assert_eq(FigureCatalog.next_outfit_id("r-zoya-miranova", "default"), "default")
+	assert_eq(FigureCatalog.outfit_name("r-zoya-miranova", "default"), "Zoya Miranova")
+	assert_false(ContentDB.get_character("r-zoya-miranova").raw.has("outfit"))
+
+
+func test_figure_names_match_the_characters_they_stand_for() -> void:
+	# Playtest 2026-10-07: figures had been mapped onto the old characters' ids.
+	for character_id in CHARACTER_IDS:
+		var card := ContentDB.get_character(character_id)
+		assert_not_null(card, character_id)
+		assert_true(card.char_name.begins_with(FigureCatalog.outfit_name(character_id, "default").split(",")[0]),
+				"%s figure '%s' vs card '%s'" % [character_id, FigureCatalog.outfit_name(character_id, "default"), card.char_name])

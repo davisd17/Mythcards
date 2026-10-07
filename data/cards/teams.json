@@ -1,0 +1,81 @@
+{
+  "_note": "Teams the game can field. Card text lives in characters.json (original 14) or the review_drafts files; listing a card in a team makes it playable. 'matchup' is what the game plays: [Player 1 team, Player 2 team]. Teams with offered=false are kept (their cards will come back) but not shown. See LLD-closed-city-flood-roster.md. 'abbreviations' are the 2-letter board tags (from digital_tabletop.html); other cards use their initials.",
+  "matchup": [
+    "closed-city",
+    "flood-survivors"
+  ],
+  "abbreviations": {
+    "r-reactor-worker": "RW",
+    "r-vera-7": "V7",
+    "r-yuri-volkov": "YV",
+    "r-mikhail-orlov": "MO",
+    "r-irina-karpova": "IK",
+    "r-elena-morozova": "EM",
+    "r-zoya-miranova": "ZM",
+    "a-flood-survivor-stone-line-laborer": "SL",
+    "a-flood-survivor-ahesu": "AH",
+    "a-flood-survivor-naia": "NA",
+    "a-flood-survivor-sahu-ren": "SR",
+    "a-flood-survivor-meret-anu": "MA",
+    "a-flood-survivor-iset-nara": "IN",
+    "a-flood-survivor-thalassa-nekh": "TN"
+  },
+  "teams": {
+    "closed-city": {
+      "name": "Closed City",
+      "culture": "Russian-inspired",
+      "offered": true,
+      "characters": [
+        "r-reactor-worker",
+        "r-vera-7",
+        "r-yuri-volkov",
+        "r-mikhail-orlov",
+        "r-irina-karpova",
+        "r-elena-morozova",
+        "r-zoya-miranova"
+      ]
+    },
+    "flood-survivors": {
+      "name": "Flood Survivors",
+      "culture": "Atlantean",
+      "offered": true,
+      "characters": [
+        "a-flood-survivor-stone-line-laborer",
+        "a-flood-survivor-ahesu",
+        "a-flood-survivor-naia",
+        "a-flood-survivor-sahu-ren",
+        "a-flood-survivor-meret-anu",
+        "a-flood-survivor-iset-nara",
+        "a-flood-survivor-thalassa-nekh"
+      ]
+    },
+    "original-russian": {
+      "name": "Original Russian-inspired",
+      "culture": "Russian-inspired",
+      "offered": false,
+      "characters": [
+        "r-gymnast",
+        "r-tiger",
+        "r-sniper",
+        "r-general",
+        "r-hero",
+        "r-engineer",
+        "r-seer"
+      ]
+    },
+    "original-atlantean": {
+      "name": "Original Atlantean",
+      "culture": "Atlantean",
+      "offered": false,
+      "characters": [
+        "a-attendant",
+        "a-glider",
+        "a-guard",
+        "a-conductor",
+        "a-hero",
+        "a-architect",
+        "a-harmonic"
+      ]
+    }
+  }
+}

@@ -123,12 +123,13 @@ func is_center(pos: Vector2i) -> bool:
 func get_legal_moves(from: Vector2i, move_budget: int, pattern: String = "orthogonal",
 		passable_predicate: Callable = Callable(),
 		object_passable_predicate: Callable = Callable(),
-		max_passes: int = -1, ignore_terrain: bool = false) -> Array[Vector2i]:
+		max_passes: int = -1, ignore_terrain: bool = false, max_char_passes: int = -1) -> Array[Vector2i]:
 	# Straight-line movement (designer ruling 2026-09-27): up to move_budget tiles in ONE of
 	# the four directions, no turning. passable_predicate: may pass through (not stop on) a
 	# character-occupied tile; object_passable_predicate: same for movement-blocking
 	# objects. max_passes caps pass-throughs (characters and objects) along the line; -1 =
-	# unlimited. Entering frost ends the line there unless ignore_terrain (Phase Current).
+	# unlimited. max_char_passes further caps the characters passed (Ahesu: any number of
+	# Stones, but 1 ally). Entering frost ends the line there unless ignore_terrain.
 	var result: Array[Vector2i] = []
 	if pattern != "orthogonal":
 		push_error("BoardModel.get_legal_moves: unsupported pattern '%s'" % pattern)
@@ -136,15 +137,18 @@ func get_legal_moves(from: Vector2i, move_budget: int, pattern: String = "orthog
 	for dir in ORTHOGONAL_DIRECTIONS:
 		var cursor := from
 		var passes := 0
+		var char_passes := 0
 		for _step in move_budget:
 			cursor += dir
 			if not is_in_bounds(cursor):
 				break
 			if is_occupied_by_character(cursor):
 				var may_pass: bool = passable_predicate.is_valid() and passable_predicate.call(cursor)
-				if not may_pass or (max_passes >= 0 and passes >= max_passes):
+				if not may_pass or (max_passes >= 0 and passes >= max_passes) \
+						or (max_char_passes >= 0 and char_passes >= max_char_passes):
 					break
 				passes += 1
+				char_passes += 1
 				continue   # can pass, can't stop
 			var def := _object_def_at(cursor)
 			if def != null and def.blocks_movement:

@@ -103,8 +103,11 @@ static func render(state: MatchState, selected_id: String = "") -> String:
 
 
 static func abbreviation(data: CharacterData) -> String:
-	# Two letters: word initials ("Frost Seer" -> FS), or the first two letters of a
-	# one-word name ("Gymnast" -> GY).
+	# The tag teams.json gives the card (the tabletop's, e.g. Sahu-Ren -> SR); otherwise two
+	# letters: word initials ("Frost Seer" -> FS), or the first two letters of a one-word
+	# name ("Gymnast" -> GY).
+	if ContentDB.abbreviations.has(data.id):
+		return str(ContentDB.abbreviations[data.id])
 	var words := data.char_name.split(" ", false)
 	if words.size() >= 2:
 		return (words[0].left(1) + words[1].left(1)).to_upper()

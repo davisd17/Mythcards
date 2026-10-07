@@ -8,12 +8,12 @@ selection, or hit testing.
 Alternate outfits may later require an entitlement, but outfit ownership and selection
 must never change character stats, abilities, board footprint, or match state.
 
-The default set covers all 14 gameplay roles. The presentation catalog maps the seven
-Russian gameplay ids to the Closed City cast and the seven Atlantean gameplay ids to
-the Flood Survivors cast. This is intentionally an art-layer mapping: gameplay ids,
-stats, abilities, setup rules, and save/test fixtures remain unchanged.
+The default set covers the 14 playtest characters: the Closed City team and the Flood
+Survivors team (designer decision 2026-10-07; see LLD-closed-city-flood-roster.md).
+Each folder is named by the character's card id, so a figure always belongs to the
+character whose rules it shows.
 
-| Gameplay role | Closed City | Flood Survivors |
+| Type | Closed City | Flood Survivors |
 | --- | --- | --- |
 | Common | Reactor Worker / Nikolai Yegorov | Stone-Line Laborer |
 | Mount | VERA-7 | Ahesu, the Stone-Current Serpent |
@@ -22,3 +22,8 @@ stats, abilities, setup rules, and save/test fixtures remain unchanged.
 | Hero | Dr. Mikhail Orlov | Sahu-Ren, Last Memory-Keeper |
 | Specialist | Dr. Elena Morozova | Iset-Nara |
 | Mystic | Zoya Miranova | Thalassa-Nekh |
+
+Folder ids: `r-reactor-worker`, `r-vera-7`, `r-yuri-volkov`, `r-irina-karpova`,
+`r-mikhail-orlov`, `r-elena-morozova`, `r-zoya-miranova`; `a-flood-survivor-stone-line-laborer`,
+`-ahesu`, `-naia`, `-meret-anu`, `-sahu-ren`, `-iset-nara`, `-thalassa-nekh`. The original 14
+characters have no figures and show their card art on the board.

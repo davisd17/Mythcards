@@ -35,7 +35,7 @@ func get_legal_move_tiles(actor_id: String) -> Array[Vector2i]:
 	var m := _movement(actor)
 	var rules: Dictionary = ability_system.movement_rules(m.mover, actor)
 	var tiles := _board().get_legal_moves(actor.position, m.budget, m.pattern,
-			rules.pass_char, rules.pass_obj, rules.max_passes)
+			rules.pass_char, rules.pass_obj, rules.max_passes, false, rules.max_char_passes)
 	for extra in ability_system.get_bonus_move_tiles(m.mover, actor.position, m.budget):
 		if not tiles.has(extra):
 			tiles.append(extra)
@@ -97,6 +97,11 @@ func get_offered_bonus_tags(actor_id: String) -> Array[String]:
 		for key in flags:
 			var tag := str(key).trim_suffix("_available")
 			if str(key).ends_with("_available") and flags[key] and not result.has(tag):
+				result.append(tag)
+	if actor.is_placed():
+		_ensure_systems()
+		for tag in ability_system.handler_for(actor).offered_bonuses(ability_system, actor):
+			if not result.has(tag):
 				result.append(tag)
 	return result
 
@@ -180,6 +185,10 @@ func _validate_common(action_type: String, actor_id: String) -> String:
 	# A drawn card waiting on a decision (keep a relic? heal whom?) comes first.
 	if action_type != "deck_choice" and RelicEventDeck.has_pending_choice(state.active_player_id):
 		return "resolve the drawn card first"
+	# An off-board character (Slumber, Missing In The Signal) comes back before anything else.
+	var returning := action_type == "reactive_bonus" and _is_returning(actor_id)
+	if action_type != "deck_choice" and _return_pending(state.active_player_id) and not returning:
+		return "return your character to the board first"
 	if ["end_turn", "deck_choice", "use_relic"].has(action_type):
 		return "" if actor_id == state.active_player_id else "not your turn"
 	var actor := state.find_character(actor_id)
@@ -326,6 +335,7 @@ func _handle_mount(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 	if error != "":
 		return _fail(error)
 	mount_system.mount(actor, mount_char)
+	ability_system.sync_conditional_hp(actor)   # VERA-7: Protected Passenger
 	_spend_ap(actor)
 	return {"success": true}
 
@@ -352,6 +362,7 @@ func _handle_dismount(actor: CharacterInstance, payload: Dictionary) -> Dictiona
 	if error != "":
 		return _fail(error)
 	mount_system.dismount(actor, to)
+	ability_system.sync_conditional_hp(actor)
 	_spend_ap(actor)
 	return {"success": true}
 
@@ -384,6 +395,9 @@ func _handle_reactive_bonus(actor: CharacterInstance, payload: Dictionary) -> Di
 	# Offers live on the character, or on the player for relic grants (General's War Map).
 	var offered: bool = actor.ability_uses_this_turn.get(flag, false) \
 			or actor.ability_uses_this_match.get(flag, false) or _flags(actor).get(flag, false)
+	# Offers that come from live state (Forbidden Testimony, Passenger Signal).
+	if not offered:
+		offered = ability_system.handler_for(actor).offered_bonuses(ability_system, actor).has(str(payload.get("tag", "")))
 	if not offered:
 		return _fail("no bonus action available")
 	return ability_system.execute_reactive_bonus(actor, str(payload.get("tag", "")), payload)
@@ -430,6 +444,18 @@ func _movement(actor: CharacterInstance) -> Dictionary:
 		}
 	return {"mover": actor, "budget": actor.get_effective_move() + ability_system.get_move_bonus(actor),
 			"pattern": ability_system.get_movement_pattern(actor)}
+
+
+func _return_pending(player_id: String) -> bool:
+	for c in GameState.match_state.get_player(player_id).characters:
+		if c.ability_uses_this_turn.get("return_available", false):
+			return true
+	return false
+
+
+func _is_returning(actor_id: String) -> bool:
+	var c := GameState.match_state.find_character(actor_id)
+	return c != null and c.ability_uses_this_turn.get("return_available", false)
 
 
 func _flags(actor: CharacterInstance) -> Dictionary:
