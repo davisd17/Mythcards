@@ -229,12 +229,13 @@ func apply_level_up_effects(instance: CharacterInstance, new_level: int) -> void
 	var bonus: Dictionary = handler_for(instance).level_bonuses().get(new_level, {})
 	var hp := int(bonus.get("hp", 0))
 	instance.base_max_hp += hp
-	instance.current_hp += hp   # a level-up that raises max HP also heals by that much
 	instance.atk_bonus += int(bonus.get("atk", 0))
 	instance.move_bonus += int(bonus.get("move", 0))
 	instance.range_bonus += int(bonus.get("range", 0))
 	handler_for(instance).on_level_up(self, instance, new_level)
 	sync_conditional_hp(instance)
+	# Every level-up restores the character to full HP (designer ruling 2026-10-06).
+	instance.current_hp = get_effective_max_hp(instance)
 
 
 # --- Helpers for handlers -----------------------------------------------------------
@@ -423,14 +424,20 @@ func give_memory(target: CharacterInstance) -> bool:
 	return true
 
 
+# A Leak is a neutral placed object (designer ruling 2026-10-06): it counts for "placed
+# object" card effects and a Leak tile isn't empty, but it blocks neither movement nor
+# line of sight, has no owner, and can't be attacked.
 func has_leak(pos: Vector2i) -> bool:
-	var tile := board.get_tile(pos)
-	return tile != null and tile.leak
+	var obj := board.get_placed_object(pos)
+	return obj != null and obj.type_id == "leak"
 
 
-# A Leak can go on an empty tile with no Leak already (designer ruling 2026-09-27).
 func can_place_leak(pos: Vector2i) -> bool:
-	return is_empty_tile(pos) and not has_leak(pos)
+	return is_empty_tile(pos)
+
+
+func place_leak(pos: Vector2i) -> void:
+	board.place_object(pos, "leak", "")
 
 
 # The first character to enter a Leak tile takes 1 damage and the Leak is removed
@@ -444,7 +451,7 @@ func _enter_tiles(c: CharacterInstance, tiles: Array[Vector2i]) -> void:
 		if c.ability_uses_this_turn.get("ignore_leak_once", false):
 			c.ability_uses_this_turn.erase("ignore_leak_once")
 			continue
-		board.get_tile(pos).leak = false
+		board.remove_object(pos)
 		EventBus.leak_triggered.emit(c.instance_id, pos)
 		var combat_resolver := combat()
 		if combat_resolver != null:

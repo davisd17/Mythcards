@@ -101,15 +101,28 @@ func test_consume_on_attack_buff_is_spent_by_the_next_attack() -> void:
 	assert_eq(sniper.sum_status("temp_atk"), 1, "only the single-use buff is gone")
 
 
-func test_level_up_bakes_bonuses_and_heals_by_the_hp_gained() -> void:
-	var gymnast := _c(GYMNAST)          # L2: +1 MOVE
+func test_level_up_bakes_bonuses_and_restores_full_hp() -> void:
+	# Designer ruling 2026-10-06: every level-up restores the character to full HP.
+	var gymnast := _c(GYMNAST)          # L2: +1 MOVE, no HP
+	gymnast.current_hp = 1
 	sys.apply_level_up_effects(gymnast, 2)
 	assert_eq(gymnast.move_bonus, 1)
+	assert_eq(gymnast.current_hp, 2, "healed to full even with no HP bonus")
 	var tiger := _c(Fixture.TIGER)      # L2: +1 HP, +1 MOVE
-	tiger.current_hp = 2
+	tiger.current_hp = 1
 	sys.apply_level_up_effects(tiger, 2)
 	assert_eq(tiger.base_max_hp, 5)
-	assert_eq(tiger.current_hp, 3)
+	assert_eq(tiger.current_hp, 5)
+
+
+func test_level_up_heals_to_the_effective_maximum() -> void:
+	# Relic bonuses count: The Black Sarcophagus gives your Warrior +1 maximum HP.
+	Fixture.state().get_player("p1").active_relic_id = "a-flood-survivor-black-sarcophagus"
+	var sniper := _c(SNIPER)            # Warrior, HP 3
+	sniper.current_hp = 1
+	sys.apply_level_up_effects(sniper, 3)
+	assert_eq(sniper.current_hp, sys.get_effective_max_hp(sniper))
+	assert_eq(sniper.current_hp, 4)
 
 
 func test_deck_peek_and_move_to_bottom() -> void:

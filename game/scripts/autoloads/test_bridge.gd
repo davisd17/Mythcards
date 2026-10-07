@@ -118,6 +118,7 @@ func ui_layout() -> Dictionary:
 	var xf := get_viewport().get_final_transform()
 	for b in ui.buttons:
 		b.center = _px(xf * b.center)
+	ui.summary = _px(xf * ui.summary)
 	for key in ui.tiles:
 		ui.tiles[key] = _px(xf * ui.tiles[key])
 	return ui

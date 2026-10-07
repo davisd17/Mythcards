@@ -7,7 +7,6 @@ var position: Vector2i
 var occupant_id: String = ""   # character id, or "" if empty
 var object_id: String = ""     # PlacedObjectInstance id, or "" if none
 var terrain_type: String = ""  # e.g. "frost"; BoardModel stores it but never interprets it
-var leak: bool = false         # a Leak marker: the first character to enter takes 1 damage (AbilitySystem)
 var is_center: bool = false
 
 

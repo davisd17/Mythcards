@@ -230,8 +230,8 @@ func test_drawn_card_choice_becomes_a_flow_that_cannot_be_cancelled() -> void:
 	assert_false(gc.current_step().tiles.has(CENTER), "each tile once")
 	gc.tap_tile(Vector2i(3, 2))
 	assert_true(gc.flow.is_empty())
-	assert_true(Fixture.board().get_tile(CENTER).leak)
-	assert_true(Fixture.board().get_tile(Vector2i(3, 2)).leak)
+	assert_true(RulesEngine.systems().ability.has_leak(CENTER))
+	assert_true(RulesEngine.systems().ability.has_leak(Vector2i(3, 2)))
 
 
 func test_relic_replace_choice_uses_option_buttons() -> void:

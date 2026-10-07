@@ -169,6 +169,8 @@ The first implementation (`game/scripts/systems/leveling_system.gd`) differs fro
 - **Non-move arrivals level up too — designer ruling 2026-09-27.** Being pushed, placed, or teleported onto the opponent's edge or the center counts the same as moving there. Implemented as a separate `EventBus.character_repositioned(character_id, from, to, cause)` signal rather than reusing `character_moved`, so "after moving" abilities (Pounce, Vault follow-ups) don't fire from being pushed. It's emitted by `CombatResolver.apply_push` (`"push"`), `MountSystem.mount` (`"mount"`: the Mount lands on its rider's tile), and `MountSystem.dismount` (`"dismount"`). Future teleports and repositioning effects (e.g. Relay Gate) must emit it as well.
 - Tests use the original 14. The integration suite (`test_match_flow.gd`) levels through real moves, kills, pushes, mounting, and dismounting.
 
+- **Every level-up restores full HP** (designer ruling 2026-10-06). After the level's bonuses are applied, `AbilitySystem.apply_level_up_effects` sets current HP to the effective maximum, counting conditional HP (Stand Firm) and relic bonuses. This replaces the earlier "heal by the HP gained".
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

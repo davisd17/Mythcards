@@ -50,7 +50,7 @@ func _relic(player_id: String, card_id: String) -> void:
 
 
 func _leak(pos: Vector2i) -> void:
-	Fixture.board().get_tile(pos).leak = true
+	sys.place_leak(pos)
 
 
 func _combat() -> CombatResolver:
@@ -104,6 +104,40 @@ func test_leak_damages_the_first_character_to_enter_then_goes() -> void:
 	assert_eq(gymnast.current_hp, 1, "crossing it counts as entering")
 	assert_false(sys.has_leak(Vector2i(3, 2)))
 	assert_signal_emitted_with_parameters(EventBus, "leak_triggered", [GYMNAST, Vector2i(3, 2)])
+
+
+func test_leak_is_a_neutral_placed_object() -> void:
+	# Designer ruling 2026-10-06: Leaks are placed objects, owned by no one, with no HP.
+	_leak(CENTER)
+	var obj := Fixture.board().get_placed_object(CENTER)
+	assert_eq(obj.type_id, "leak")
+	assert_eq(obj.owner_player_id, "")
+	assert_eq(obj.max_hp, 0)
+	assert_false(sys.is_empty_tile(CENTER), "a Leak tile is not empty")
+	assert_false(sys.can_place_leak(CENTER))
+	Fixture.put(SNIPER, Vector2i(3, 0))
+	assert_false(RulesEngine.get_legal_attack_object_tiles(SNIPER).has(CENTER), "it can't be attacked")
+
+
+func test_leak_counts_for_placed_object_effects() -> void:
+	# Frozen Redoubt: allies adjacent to placed objects take -1 from ranged attacks.
+	var engineer := Fixture.put(ENGINEER, Vector2i(0, 0))
+	engineer.level = 3
+	var seer := Fixture.put(SEER, Vector2i(3, 3))
+	_leak(Vector2i(3, 2))
+	Fixture.state().get_player("p1").pool_ap_remaining = 0
+	_act("end_turn", "p1")
+	Fixture.put(CONDUCTOR, Vector2i(3, 6))
+	_act("attack", CONDUCTOR, {"target_id": SEER})
+	assert_eq(seer.current_hp, 3, "1 ATK at range, -1 next to the Leak")
+
+
+func test_landing_on_a_leak_triggers_it() -> void:
+	var gymnast := Fixture.put(GYMNAST, Vector2i(3, 0))
+	_leak(Vector2i(3, 2))
+	assert_true(_act("move", GYMNAST, {"to": Vector2i(3, 2)}).success)
+	assert_eq(gymnast.current_hp, 1)
+	assert_false(sys.has_leak(Vector2i(3, 2)))
 
 
 func test_leak_does_not_block_line_of_sight() -> void:

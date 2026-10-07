@@ -6,6 +6,7 @@ import { state, character } from './mythcards';
 // the canvas. Screenshots land in test-results/ for a visual check.
 
 type Ui = { buttons: { text: string; center: { x: number; y: number }; disabled: boolean }[];
+  summary: { x: number; y: number };
   tiles: Record<string, { x: number; y: number }>; prompt: string; popup: boolean; setup: boolean };
 
 async function ui(page: Page): Promise<Ui> {
@@ -77,6 +78,15 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   const gymnast = character(s, 'p1_r-gymnast');
   await clickTile(page, gymnast.position.x, gymnast.position.y);
   await page.screenshot({ path: 'test-results/screen-3-selected.png' });
+
+  // The strip under the board opens the full card in a scrollable overlay.
+  const strip = (await ui(page)).summary;
+  await page.mouse.click(strip.x, strip.y);
+  await page.waitForTimeout(150);
+  expect((await ui(page)).popup).toBe(true);
+  await page.screenshot({ path: 'test-results/screen-3b-full-card.png' });
+  await clickButton(page, 'Close');
+  expect((await ui(page)).popup).toBe(false);
   await clickTile(page, gymnast.position.x, gymnast.position.y + 2);
   s = await state(page);
   expect(character(s, 'p1_r-gymnast').position).toEqual({ x: gymnast.position.x, y: gymnast.position.y + 2 });

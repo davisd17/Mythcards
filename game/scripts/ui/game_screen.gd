@@ -2,8 +2,9 @@ extends Control
 # The game screen (HLD build step 16, LLD-presentation.md): a local hotseat match that is
 # played entirely by tapping. Portrait, mobile-first. From top to bottom: turn and AP,
 # relic and event chips, the board, the prompt bar (what to pick next, with option
-# buttons), then the inspected card beside the action buttons. Drawn relic and event
-# cards pop up full size. All game logic lives in GameController and the engine.
+# buttons), then a summary strip of the inspected character beside the action buttons
+# (tap it for the full card). Drawn relic and event cards pop up full size; the popup
+# scrolls, so no card is ever cut off (playtest 2026-10-06). All game logic lives in GameController and the engine.
 
 const DEBUG_SCENE := "res://scenes/debug_match.tscn"
 const BUTTON_FONT := 20
@@ -18,11 +19,13 @@ var _chips := HFlowContainer.new()
 var _board := GameBoardView.new()
 var _prompt := Label.new()
 var _options := HFlowContainer.new()
-var _card := CardView.new(true)
+var _summary := CardSummary.new()
 var _primary: Button               # "Done placing" in setup, "End turn" in the match
 var _side := HFlowContainer.new()   # action buttons; two per row when the card is hidden
 var _popup := Control.new()
 var _popup_card := CardView.new()
+var _popup_scroll := ScrollContainer.new()
+var _popup_button: Button
 var _popup_note := Label.new()
 var _popup_queue: Array[String] = []   # card ids waiting to be shown, oldest first
 var _menu := PanelContainer.new()
@@ -83,13 +86,10 @@ func _ready() -> void:
 	var bottom := HBoxContainer.new()
 	bottom.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bottom.add_theme_constant_override("separation", 8)
-	var card_scroll := ScrollContainer.new()
-	card_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	card_scroll.size_flags_stretch_ratio = 1.4
-	card_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	card_scroll.add_child(_card)
-	bottom.add_child(card_scroll)
+	_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_summary.size_flags_stretch_ratio = 1.4
+	_summary.pressed.connect(_show_character_card)
+	bottom.add_child(_summary)
 	var side_scroll := ScrollContainer.new()
 	side_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	side_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -138,7 +138,8 @@ func ui_snapshot() -> Dictionary:
 	for y in BoardModel.BOARD_SIZE:
 		for x in BoardModel.BOARD_SIZE:
 			tiles["%d,%d" % [x, y]] = _board.get_global_transform() * _board.tile_rect(Vector2i(x, y)).get_center()
-	return {"buttons": buttons, "tiles": tiles, "prompt": _prompt.text, "popup": _popup.visible,
+	var summary := _summary.get_global_rect().get_center() if _summary.is_visible_in_tree() else Vector2(-1, -1)
+	return {"buttons": buttons, "tiles": tiles, "summary": summary, "prompt": _prompt.text, "popup": _popup.visible,
 			"setup": controller.in_setup()}
 
 
@@ -263,9 +264,18 @@ func _refresh_card() -> void:
 	if id == "":
 		id = controller.selected_id
 	var c := controller.find(id)
-	_card.visible = c != null
+	_summary.visible = c != null
 	if c != null:
-		_card.show_character(c.data, c)
+		_summary.show_character(c.data, c)
+
+
+# The inspected character's full card, in the scrollable popup.
+func _show_character_card() -> void:
+	var id := controller.inspect_id if controller.inspect_id != "" else controller.selected_id
+	if controller.find(id) == null:
+		return
+	_popup_queue.push_front("char:%s|" % id)
+	_next_popup()
 
 
 # --- Drawn-card popup --------------------------------------------------------------------
@@ -279,15 +289,26 @@ func _build_popup() -> void:
 	_popup.add_child(dim)
 	var box := VBoxContainer.new()
 	box.set_anchors_preset(Control.PRESET_FULL_RECT)
-	box.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_theme_constant_override("separation", 10)
+	var top_gap := Control.new()
+	top_gap.custom_minimum_size = Vector2(0, 30)
+	box.add_child(top_gap)
 	_popup_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_popup_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_popup_note.add_theme_font_size_override("font_size", 22)
 	_popup_note.add_theme_color_override("font_color", Color("#f3e3b5"))
 	box.add_child(_margin(_popup_note, 40))
-	box.add_child(_margin(_popup_card, 60))
-	box.add_child(_margin(_accent(_button("Continue", _next_popup)), 60))
+	# The card scrolls inside the overlay, so a long card never runs off the screen.
+	_popup_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_popup_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_popup_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_popup_scroll.add_child(_popup_card)
+	box.add_child(_margin(_popup_scroll, 50))
+	_popup_button = _accent(_button("Continue", _next_popup))
+	box.add_child(_margin(_popup_button, 50))
+	var bottom_gap := Control.new()
+	bottom_gap.custom_minimum_size = Vector2(0, 30)
+	box.add_child(bottom_gap)
 	_popup.add_child(box)
 	add_child(_popup)
 
@@ -313,8 +334,19 @@ func _next_popup() -> void:
 		return
 	var entry: String = _popup_queue.pop_front()
 	var parts := entry.split("|", true, 1)
-	_popup_card.show_relic_event(parts[0])
 	var note := parts[1]
+	_popup_scroll.scroll_vertical = 0
+	if parts[0].begins_with("char:"):
+		var c := controller.find(parts[0].trim_prefix("char:"))
+		_popup_card.show_character(c.data, c)
+		_popup_note.text = ""
+		_popup_note.visible = false
+		_popup_button.text = "Close"
+		_popup.visible = true
+		return
+	_popup_card.show_relic_event(parts[0])
+	_popup_note.visible = true
+	_popup_button.text = "Continue"
 	if RelicEventDeck.has_pending_choice(GameState.match_state.active_player_id) and _popup_queue.is_empty():
 		note += " It needs a choice: answer it below the board."
 	_popup_note.text = note

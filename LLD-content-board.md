@@ -473,6 +473,8 @@ The first implementation (`game/`) differs from this spec in these places:
 - **Misuse errors:** `place_object()` on a non-empty tile and `get_edge_row()` with a bad side call `push_error` and return `""` / `-1` instead of asserting. GUT can assert on `push_error`; a failed `assert` halts the function in a way tests can't check. `ContentDB._ready()` still asserts on validation errors.
 - **Testable loader:** `load_all()` takes paths, and `add_character_entries()` / `add_relic_event_entries()` are public, so fixture tests (C3, C6, C6a) run against a fresh instance instead of the autoload.
 
+- **`leak` placed-object type** (2026-10-06): `PlacedObjectDef("leak", blocks_movement=false, blocks_line_of_sight=false, default_max_hp=0)`, owned by `""`. It replaces `BoardTile.leak`; see LLD-relic-event-deck 9B.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

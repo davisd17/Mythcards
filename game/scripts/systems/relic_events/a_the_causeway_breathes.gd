@@ -32,4 +32,4 @@ func resolve_choice(sys, player_id: String, payload: Dictionary) -> Dictionary:
 
 
 func _candidates(sys) -> Array[Vector2i]:
-	return tiles_near_center(sys, REACH, func(pos): return sys.is_empty_tile(pos) and not sys.has_leak(pos))
+	return tiles_near_center(sys, REACH, func(pos): return sys.is_empty_tile(pos))

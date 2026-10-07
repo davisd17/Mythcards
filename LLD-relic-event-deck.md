@@ -300,7 +300,7 @@ All 14 original cards are implemented (`game/scripts/systems/relic_events/`, dec
 Each card has one handler in `game/scripts/systems/relic_events/`, and its header comment restates the card text and payload. Tests are in `test_relic_event_deck.gd` (one or more per card).
 
 **Markers the set needs (designer rulings)**
-- **Leak** is a tile marker (`BoardTile.leak`), not an object. The first character to enter the tile takes 1 hazard damage, and the marker is removed. Entering covers passing through on a straight-line move, a push or pull path, and landing there. Leaks don't block movement or line of sight.
+- **Leak** is a placed object (designer ruling 2026-10-06, replacing the 2026-09-27 tile-marker version): registry type `"leak"`, which blocks neither movement nor line of sight, has no owner (`""`), and has no HP, so nobody can attack it. It counts for every "placed object" card effect (for example Frozen Redoubt, Signal Array Turns, and "adjacent to a placed object" conditions), but never for "your placed objects", since it has no owner. A Leak tile isn't empty, so cards that need an empty tile can't use it. The first character to enter it takes 1 hazard damage, and the Leak is removed. Entering covers passing through on a straight-line move, a push or pull path, and landing there (`AbilitySystem.has_leak` / `place_leak` / `_enter_tiles`).
 - **Memory** is a status (`"memory"`, max 1). It's spent automatically to prevent 1 damage *after* shields; it's kept if shields absorb everything. `EventBus.memory_gained` fires when it's given.
 - **Stone** is a placed object with 1 HP. Like every object, it blocks movement and line of sight.
 

@@ -111,10 +111,6 @@ func _draw() -> void:
 				draw_arc(c, r * 0.58, 0.0, TAU, 24, Color("#a8c6b1"), 2.0)
 				for dir in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
 					draw_line(c + dir * r * 0.2, c + dir * r, Color("#d0c392"), 2.0)
-			if tile.leak:
-				draw_circle(rect.get_center(), px * 0.3, Color(LEAK, 0.35))
-				draw_arc(rect.get_center(), px * 0.3, 0.0, TAU, 24, LEAK, 3.0)
-				_text(font, "LEAK", Rect2(rect.position + Vector2(0, px * 0.62), Vector2(px, px * 0.3)), px * 0.16, Color("#2d5a10"))
 			var obj := board.get_placed_object(pos)
 			if obj != null:
 				_draw_object(font, rect, obj)
@@ -133,6 +129,12 @@ func _draw() -> void:
 
 func _draw_object(font: Font, rect: Rect2, obj: PlacedObjectInstance) -> void:
 	var px := rect.size.x
+	if obj.type_id == "leak":
+		# Neutral and walk-on: a glowing pool rather than a block.
+		draw_circle(rect.get_center(), px * 0.3, Color(LEAK, 0.35))
+		draw_arc(rect.get_center(), px * 0.3, 0.0, TAU, 24, LEAK, 3.0)
+		_text(font, "LEAK", Rect2(rect.position + Vector2(0, px * 0.62), Vector2(px, px * 0.3)), px * 0.16, Color("#2d5a10"))
+		return
 	var inset := rect.grow(-px * 0.16)
 	var colors := {"barricade": Color("#6b5b45"), "pylon": Color("#7fd6c9"), "stone": Color("#6e6e6e")}
 	draw_rect(inset, colors.get(obj.type_id, Color("#555555")))

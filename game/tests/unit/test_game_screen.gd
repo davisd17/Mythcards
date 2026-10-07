@@ -80,3 +80,24 @@ func test_a_seeded_match_plays_through_the_whole_deck_by_taps() -> void:
 		turns += 1
 	assert_eq(state.shared_deck.size(), 0, "every card drawn")
 	assert_eq(gc.message, "", "no action failed")
+
+
+func test_summary_strip_and_full_card_overlay() -> void:
+	# Playtest 2026-10-06: the card under the board didn't show fully. The strip shows a
+	# summary; tapping it opens the full card in a scrollable overlay.
+	_deploy_both()
+	screen._popup_queue.clear()
+	screen._next_popup()
+	var gc: GameController = screen.controller
+	gc.tap_tile(GameState.match_state.find_character("p1_r-seer").position)
+	screen._refresh()
+	assert_true(screen._summary.visible)
+	assert_string_contains(screen._summary.text(), "Frost Seer  L1")
+	assert_string_contains(screen._summary.text(), "Chill deals 1 damage")
+	assert_false(screen._summary.text().contains("Winter Veil"), "upgrades not reached stay on the full card")
+	screen._summary.pressed.emit()
+	assert_true(screen._popup.visible)
+	assert_eq(screen._popup_button.text, "Close")
+	assert_string_contains(screen._popup_card._body.get_parsed_text(), "Winter Veil")
+	screen._next_popup()
+	assert_false(screen._popup.visible)

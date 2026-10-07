@@ -304,6 +304,7 @@ Upgrade path:
 - Level 2 is earned by crossing all the way to the opponent's edge of the board.
 - Level 3 is earned after a Level 2 character collects a Spirit Ember released by a defeated enemy and carries it to the center square.
 - Levels 2 and 3 improve that character's existing identity without changing the card into a different character.
+- Each level-up restores the character to full HP, using its new maximum (decided 2026-10-06).
 - Card levels are part of match gameplay, not account progression or paid unlocks.
 
 ### Character Abilities

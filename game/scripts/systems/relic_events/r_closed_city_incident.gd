@@ -27,7 +27,7 @@ func resolve_choice(sys, _player_id: String, payload: Dictionary) -> Dictionary:
 		if not candidates.has(pos) or tiles.count(pos) > 1:
 			return {"success": false, "reason": "choose different empty tiles within 2 of the center"}
 	for pos in tiles:
-		sys.board.get_tile(pos).leak = true
+		sys.place_leak(pos)
 	return {"success": true}
 
 

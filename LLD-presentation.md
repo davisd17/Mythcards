@@ -285,6 +285,8 @@ Built as HLD step 16 after the first hands-on playtest. **Designer ruling: the g
 
 **Tests:** `test_game_controller.gd` (taps, flows, setup), `test_game_screen.gd` (builds, popups, a seeded match through the whole deck answered by taps), and `e2e/tests/screen.spec.ts`. That spec plays in the browser by real mouse clicks at positions reported by TestBridge's `mythcards_ui()`: deploy, answer the drawn card, move, end the turn, and use an ability.
 
+**Layout revision (playtest 2026-10-06: the card under the board didn't show fully).** The full `CardView` under the board is replaced by `CardSummary`, a strip with a portrait, name and level, live stats and statuses, and the abilities up to the current level. It clips instead of overflowing. Tapping it opens the full card in the overlay that drawn relic and event cards use. That overlay now scrolls, so no card runs off the screen; it shows "Close" for character cards and "Continue" for drawn cards. `mythcards_ui()` also reports the strip's position, and `screen.spec.ts` opens and closes the full card by clicking.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

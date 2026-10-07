@@ -90,9 +90,9 @@ func show_character(data: CharacterData, instance: CharacterInstance = null) -> 
 	var level := instance.level if instance != null else 1
 	_subtitle.text = "%s · %s · Level %d" % [data.type, data.culture, level]
 	var lines: Array[String] = []
-	lines.append(_stat_line(data, instance))
+	lines.append(stat_line(data, instance))
 	if instance != null:
-		var extras := _status_text(instance)
+		var extras := status_text(instance)
 		if extras != "":
 			lines.append(extras)
 	for i in 3:
@@ -128,7 +128,7 @@ func _set_art(card_id: String, card_name: String, kind: String, color: Color) ->
 	_placeholder_label.text = "%s\n\n%s" % [card_name, kind.to_upper()]
 
 
-static func _stat_line(data: CharacterData, instance: CharacterInstance) -> String:
+static func stat_line(data: CharacterData, instance: CharacterInstance) -> String:
 	if instance == null or GameState.match_state == null:
 		return "[b]HP %d · ATK %d · MOVE %d · RANGE %d[/b]" % [data.hp, data.atk, data.move, data.range]
 	var sys: AbilitySystem = RulesEngine.systems().ability
@@ -142,7 +142,7 @@ static func _stat_line(data: CharacterData, instance: CharacterInstance) -> Stri
 	return line
 
 
-static func _status_text(instance: CharacterInstance) -> String:
+static func status_text(instance: CharacterInstance) -> String:
 	var parts: Array[String] = []
 	parts.append("AP %d/%d" % [instance.character_ap_remaining, instance.character_ap_max])
 	if instance.spirit_ember_count > 0:
