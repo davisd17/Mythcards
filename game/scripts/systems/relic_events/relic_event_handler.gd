@@ -99,6 +99,14 @@ func resolve_choice(_sys, _player_id: String, _payload: Dictionary) -> Dictionar
 	return {"success": false, "reason": "nothing to choose"}
 
 
+# --- AI (LLD-ai-opponent.md 4) -------------------------------------------------------
+
+# How good one answer to this card's choice is for the AI (AIEvaluator points). The
+# default treats every legal answer alike. `ai` is the AIEvaluator.
+func ai_choice_value(_sys, _player_id: String, _payload: Dictionary, _ai) -> float:
+	return 0.0
+
+
 # --- Shared helpers for handlers ---------------------------------------------------------
 
 static func tiles_near_center(sys, reach: int, allow: Callable) -> Array[Vector2i]:

@@ -135,3 +135,13 @@ static func _ids(payload: Dictionary) -> Array:
 		if payload.get(key) != null and str(payload.get(key)) != "":
 			result.append(str(payload[key]))
 	return result
+
+
+func ai_value(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary, ai) -> float:
+	if ability_id == "bonus:" + TAG:
+		return 0.6
+	var v := 0.0
+	for id in _ids(payload):
+		var enemy: CharacterInstance = sys.find(id)
+		v += ai.damage_value(instance, enemy, ai.preview(instance, enemy, 1))
+	return v

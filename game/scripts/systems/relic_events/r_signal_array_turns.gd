@@ -49,3 +49,12 @@ func _destinations(sys) -> Array[Vector2i]:
 				if sys.is_empty_tile(pos) and not result.has(pos):
 					result.append(pos)
 	return result
+
+
+# AI: the move that improves a character's position most.
+func ai_choice_value(sys, _player_id: String, payload: Dictionary, ai) -> float:
+	var c: CharacterInstance = sys.find(str(payload.get("target_id", "")))
+	var to = payload.get("to")
+	if c == null or not to is Vector2i:
+		return 0.0
+	return ai._tile_value(c, to) - ai._tile_value(c, c.position)

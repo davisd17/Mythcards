@@ -33,3 +33,11 @@ func resolve_choice(sys, _player_id: String, payload: Dictionary) -> Dictionary:
 
 func _candidates(sys) -> Array[Vector2i]:
 	return tiles_near_center(sys, REACH, func(pos): return sys.can_place_leak(pos))
+
+
+# AI: Leaks where enemies will walk.
+func ai_choice_value(_sys, _player_id: String, payload: Dictionary, ai) -> float:
+	var v := 0.0
+	for pos in payload.get("tiles", []):
+		v += ai.enemies_near(pos, 2)
+	return v

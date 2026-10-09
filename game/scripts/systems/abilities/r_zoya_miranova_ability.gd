@@ -66,3 +66,16 @@ func _voice(sys, instance: CharacterInstance, enemy: CharacterInstance) -> Dicti
 		instance.ability_uses_this_match["too_many_names_used"] = true
 		sys.offer_bonus(instance, TAG)
 	return {"success": true, "moved": moved}
+
+
+func ai_value(sys, instance: CharacterInstance, _ability_id: String, payload: Dictionary, _ai) -> float:
+	var enemy: CharacterInstance = sys.find(str(payload.get("target", "")))
+	if enemy == null:
+		return 0.0
+	var step := Vector2i(signi(instance.position.x - enemy.position.x), signi(instance.position.y - enemy.position.y))
+	var v := 0.4
+	if sys.has_leak(enemy.position + step):
+		v += 1.0   # pulled into a Leak
+	if instance.level >= 2:
+		v += 0.5   # and Marked
+	return v

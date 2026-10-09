@@ -131,3 +131,26 @@ func test_deck_peek_and_move_to_bottom() -> void:
 	RelicEventDeck.move_top_to_bottom()
 	assert_eq(Fixture.state().shared_deck, ["b", "c", "a"] as Array[String])
 
+
+
+func test_max_hp_rise_lifts_a_full_character_only() -> void:
+	# Designer ruling 2026-10-09: at full HP, current HP rises with max HP; a damaged
+	# character keeps its HP. The Black Sarcophagus gives Warriors +1 maximum HP.
+	var sniper := _c(SNIPER)                       # Warrior, HP 3, full
+	var guard := _c(Fixture.GUARD)                 # p2 Warrior, HP 5
+	guard.current_hp = 3
+	Fixture.state().get_player("p1").active_relic_id = "a-flood-survivor-black-sarcophagus"
+	Fixture.state().get_player("p2").active_relic_id = "a-flood-survivor-black-sarcophagus"
+	sys.sync_all_max_hp()
+	assert_eq(sniper.current_hp, 4, "full: rises to the new maximum")
+	assert_eq(guard.current_hp, 3, "damaged: unchanged")
+	Fixture.state().get_player("p1").active_relic_id = ""
+	sys.sync_all_max_hp()
+	assert_eq(sniper.current_hp, 3, "trimmed when the maximum falls")
+
+
+func test_max_hp_syncs_after_every_action() -> void:
+	var sniper := _c(SNIPER)
+	Fixture.state().get_player("p1").active_relic_id = "a-flood-survivor-black-sarcophagus"
+	RulesEngine.request_action("end_turn", "p1", {})
+	assert_eq(sniper.current_hp, 4)

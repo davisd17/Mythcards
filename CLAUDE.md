@@ -45,6 +45,8 @@ For any deliverable, follow this order:
 3. Self-review — check against the relevant skill's checklist and anti-patterns.
 4. Flag gaps — surface unknowns with `[NEED: ...]`, don't fill them with guesses.
 
+After pulling, list what changed in content (characters, cards, art) and confirm the game actually uses it before reporting the pull as done. Passing tests alone don't prove new content is loaded.
+
 ---
 
 ## Self-Improvement Protocol

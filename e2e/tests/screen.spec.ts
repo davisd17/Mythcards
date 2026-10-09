@@ -55,6 +55,8 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   await page.goto('/');
   await page.waitForFunction(() => (window as any).mythcards_ready === true, null, { timeout: 90_000 });
   await page.waitForTimeout(500);
+  await page.screenshot({ path: 'test-results/screen-0-new-match.png' });
+  await clickButton(page, 'Hotseat: play both sides');
   expect((await ui(page)).setup).toBe(true);
   await page.screenshot({ path: 'test-results/screen-1-setup.png' });
 
@@ -111,4 +113,29 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   await clickTile(page, architect.position.x, architect.position.y);
   s = await state(page);
   expect(character(s, 'p2_a-flood-survivor-iset-nara').status_effects.map((e: any) => e.type)).toContain('memory');
+});
+
+test('play Closed City against the AI with clicks', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForFunction(() => (window as any).mythcards_ready === true, null, { timeout: 90_000 });
+  await page.waitForTimeout(500);
+  await clickButton(page, 'Play Closed City vs the AI');
+  await clickButton(page, 'Auto-place the rest');
+  await clickButton(page, 'Done placing');
+  let s = await state(page);
+  expect(s.phase).toBe('in_progress');
+  expect(s.players.p2.characters.every((c: any) => c.position.y === 6)).toBe(true);   // the AI deployed
+  await answerChoices(page);
+  await clickButton(page, 'End turn');
+  // The AI plays its turn on a timer, one visible step at a time, then hands back.
+  await page.waitForFunction(() => {
+    const st = JSON.parse((window as any).mythcards_get_state());
+    return st.active_player_id === 'p1' && st.turn_number >= 3;
+  }, null, { timeout: 60_000 });
+  await page.screenshot({ path: 'test-results/screen-7-after-ai-turn.png' });
+  while ((await ui(page)).popup) await clickButton(page, 'Continue');   // cards the AI drew, then ours
+  await clickButton(page, 'Log');
+  await page.screenshot({ path: 'test-results/screen-8-log.png' });
+  s = await state(page);
+  expect(s.active_player_id).toBe('p1');
 });

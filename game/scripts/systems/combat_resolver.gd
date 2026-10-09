@@ -12,6 +12,7 @@ var mount_system: MountSystem
 var last_attack_breakdown: Dictionary = {}
 var _last_breakdown: Dictionary = {}
 var current_attacker: CharacterInstance = null
+var _base_lines: Array[String] = []   # how the incoming amount was built, set by callers that know
 
 
 func _init(p_board: BoardModel, p_ability_system: AbilitySystem = null, p_mount_system: MountSystem = null) -> void:
@@ -25,6 +26,8 @@ func resolve_attack(attacker: CharacterInstance, defender: CharacterInstance) ->
 	# regardless of printed RANGE (BR-011B).
 	var base_amount := attacker.get_effective_atk() + ability_system.get_conditional_atk_bonus(attacker)
 	var is_ranged := _distance(attacker.position, defender.position) > 1
+	_base_lines = ability_system.atk_sources(attacker)
+	_base_lines.append("ranged attack" if is_ranged else "adjacent attack")
 	var result := apply_damage(attacker, defender, base_amount, is_ranged)
 	# Kept before attack_resolved, whose reactions (Resonant Bastion) may deal damage too.
 	last_attack_breakdown = _last_breakdown
@@ -102,6 +105,10 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 	_last_breakdown = {"atk": marked_amount, "reduced": marked_amount - after_reduction, "reduced_by": reduced_by,
 			"shielded": shield_consumed, "memory": memory_spent}
 
+	EventBus.damage_resolved.emit(attacker.instance_id, defender.instance_id, final_damage,
+			_explain(attacker, defender, base_amount, used_marks, penetration, is_ranged, shield_consumed,
+			shield_bonus, memory_spent, defender.current_hp <= 0 or would_be_hp > 0))
+	_base_lines = []
 	if marked_amount > 0:
 		ability_system.notify_damaged(defender, attacker, marked_amount, final_damage)
 
@@ -109,6 +116,34 @@ func apply_damage(attacker: CharacterInstance, defender: CharacterInstance, base
 	if defeated and not defender.defeated:
 		_handle_defeat(defender, attacker)
 	return {"damage": final_damage, "defeated": defeated}
+
+
+# What apply_damage would deal, without changing anything (the AI's and previews' view).
+# Ignores lethal intercepts; reports the damage, not whether the target survives.
+func preview_damage(attacker: CharacterInstance, defender: CharacterInstance, base_amount: int, is_ranged: bool) -> int:
+	var amount := base_amount
+	for se in _marks_benefiting(defender, attacker):
+		amount += se.value
+	var penetration := ability_system.get_penetration(attacker)
+	var reduction := maxi(0, ability_system.get_passive_damage_reduction(defender, attacker, is_ranged)
+			- int(penetration.get("ignore_reduction", 0)))
+	var after := maxi(0, amount - reduction)
+	var shields := 0
+	for se in defender.status_effects:
+		if se.type == "shield":
+			shields += se.value
+	if shields > 0:
+		shields += RelicEventDeck.get_relic_shield_bonus(ability_system, defender)
+	shields = maxi(0, shields - int(penetration.get("ignore_shield", 0)))
+	var final := after - mini(shields, after)
+	if final > 0 and defender.has_status("memory"):
+		final -= 1
+	return final
+
+
+func preview_attack(attacker: CharacterInstance, defender: CharacterInstance) -> int:
+	var base := attacker.get_effective_atk() + ability_system.get_conditional_atk_bonus(attacker)
+	return preview_damage(attacker, defender, base, _distance(attacker.position, defender.position) > 1)
 
 
 func apply_push(target: CharacterInstance, from_position: Vector2i, distance: int) -> Vector2i:
@@ -145,6 +180,7 @@ func apply_hazard_damage(target: CharacterInstance, amount: int) -> Dictionary:
 	# Damage from the board or a card rather than a character (Leak, Reactor Prayer). It
 	# still runs the normal pipeline (shields, Memory, Last Oath). With no attacker, a
 	# defeat is credited to the target itself, so no enemy gains a Spirit Ember from it.
+	_base_lines = ["%d hazard damage (no attacker)" % amount]
 	return apply_damage(target, target, amount, false)
 
 
@@ -201,6 +237,29 @@ func _marks_benefiting(defender: CharacterInstance, attacker: CharacterInstance)
 		if se.source_character_id == "" or (source != null and source.player_id == attacker.player_id):
 			result.append(se)
 	return result
+
+
+# The action log's account of one damage instance, each step with its source.
+func _explain(attacker: CharacterInstance, defender: CharacterInstance, base_amount: int,
+		used_marks: Array[StatusEffect], penetration: Dictionary, is_ranged: bool, shield_consumed: int,
+		shield_bonus: int, memory_spent: bool, no_intercept: bool) -> Array:
+	var lines: Array = []
+	if _base_lines.is_empty():
+		lines.append("%d damage" % base_amount)
+	else:
+		lines.append_array(_base_lines)
+	for se in used_marks:
+		lines.append("+%d Marked (by %s)" % [se.value, ability_system._source_name(se.source_character_id)])
+	lines.append_array(ability_system.damage_reduction_parts(defender, attacker, is_ranged))
+	if int(penetration.get("ignore_reduction", 0)) > 0:
+		lines.append("ignores %d reduction (%s)" % [penetration.ignore_reduction, attacker.data.char_name])
+	if shield_consumed > 0:
+		lines.append("-%d Shield%s" % [shield_consumed, " (incl. +%d from a relic)" % shield_bonus if shield_bonus > 0 else ""])
+	if memory_spent:
+		lines.append("-1 Memory (spent)")
+	if not no_intercept:
+		lines.append("would have been defeated: kept at %d HP by an ability" % defender.current_hp)
+	return lines
 
 
 static func _consume_shields(defender: CharacterInstance, amount: int) -> void:

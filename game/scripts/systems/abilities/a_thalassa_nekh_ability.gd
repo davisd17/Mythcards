@@ -72,3 +72,10 @@ func on_memory_spent(sys, instance: CharacterInstance, holder: CharacterInstance
 	var reach := instance.get_effective_range("attack", sys.get_conditional_range_bonus(instance, "attack"))
 	if sys.distance(holder.position, instance.position) <= reach:
 		sys.add_status(attacker, "marked", 1, "until_used", instance)
+
+
+func ai_value(sys, _instance: CharacterInstance, ability_id: String, payload: Dictionary, ai) -> float:
+	if ability_id == L3_ID:
+		return 2.0
+	var ally: CharacterInstance = sys.find(str(payload.get("target", "")))
+	return 0.3 + 0.3 * ai.danger(ally, ally.position) if ally != null else 0.0

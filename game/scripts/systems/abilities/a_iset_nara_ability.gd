@@ -108,3 +108,7 @@ func _vault_tiles(sys) -> Array:
 					result.append(pos)
 					break
 	return result
+
+
+func ai_value(_sys, _instance: CharacterInstance, ability_id: String, _payload: Dictionary, _ai) -> float:
+	return 1.5 if ability_id == L3_ID else 0.15

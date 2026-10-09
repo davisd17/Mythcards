@@ -21,3 +21,14 @@ func resolve_choice(sys, player_id: String, payload: Dictionary) -> Dictionary:
 		target.character_ap_remaining += 1
 		EventBus.character_ap_changed.emit(target.instance_id, target.character_ap_remaining)
 	return {"success": true}
+
+
+# AI: hurt a sturdy character that can use the extra AP, never one about to fall.
+func ai_choice_value(sys, _player_id: String, payload: Dictionary, _ai) -> float:
+	var c: CharacterInstance = sys.find(str(payload.get("target_id", "")))
+	if c == null:
+		return 0.0
+	if c.current_hp <= 1:
+		return -5.0
+	var can_strike := not RulesEngine.get_legal_attack_target_ids(c.instance_id).is_empty()
+	return c.current_hp * 0.2 + (1.0 if can_strike else 0.0)

@@ -19,6 +19,11 @@ signal character_repositioned(character_id: String, from: Vector2i, to: Vector2i
 signal attack_resolved(attacker_id: String, target_id: String, damage: int, defeated: bool)
 signal object_attacked(attacker_id: String, pos: Vector2i, object_type: String, damage: int, destroyed: bool)
 signal memory_gained(character_id: String)
+# For the action log (MatchLog): every damage instance with each step explained and its
+# source named (e.g. ["ATK 2", "+1 from Irina Vasilievna Karpova (+ATK)", "-1 Resonance Guard"]),
+# and every status added with whoever caused it ("" when a card or the board did).
+signal damage_resolved(attacker_id: String, target_id: String, amount: int, lines: Array)
+signal status_added(target_id: String, status_type: String, value: int, source_id: String)
 signal leak_triggered(character_id: String, pos: Vector2i)
 signal character_defeated(character_id: String, defeated_by_id: String, cause: String)  # cause: "direct" | "mount_propagation"
 

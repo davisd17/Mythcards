@@ -80,3 +80,18 @@ static func _ids(payload: Dictionary) -> Array:
 		if payload.get(key) != null and str(payload.get(key)) != "":
 			result.append(str(payload[key]))
 	return result
+
+
+func ai_value(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary, ai) -> float:
+	if ability_id == L3_ID:
+		var protected_allies := 0
+		for c in sys.allies_of(instance) + [instance]:
+			if sys.memory_count(c) > 0 and ai.danger(c, c.position) > 0:
+				protected_allies += 1
+		return 0.5 * protected_allies
+	var v := 0.3 if sys.memory_count(instance) == 0 else 0.0
+	for id in _ids(payload):
+		var ally: CharacterInstance = sys.find(id)
+		if sys.memory_count(ally) < sys.handler_for(ally).memory_max(ally):
+			v += 0.3 + 0.3 * ai.danger(ally, ally.position)
+	return v

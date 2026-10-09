@@ -237,6 +237,7 @@ First-pass balance assumptions:
 - Default attack pattern is orthogonal line-of-sight: vertical and horizontal only.
 - An attack counts as **ranged** when the attacker and defender are more than 1 tile apart at the moment of the attack — not when the attacker merely has a high printed RANGE (decided 2026-09-25). A Sniper shooting an adjacent enemy is not making a ranged attack, so Quartz Armor and similar "reduces ranged damage" effects do not apply.
 - When a character carries more than one shield, the most recently applied shield is used up first (decided 2026-09-25).
+- Max HP changes (decided 2026-10-09): when a character's maximum HP rises (a relic, VERA-7's Protected Passenger), a character at full HP rises with it; a damaged character keeps its current HP. When the maximum falls, current HP is trimmed to it. Effects that print "+N maximum and current HP" still raise both. Every level-up restores full HP (decided 2026-10-06).
 - Line-of-sight rule (decided): ranged attacks, and any ability that targets at range — including non-damage support/utility abilities such as Command, Resonance Shield, Foresight, and Pylon range boosts, not only damage-dealing abilities — cannot pass through an occupied tile — ally or enemy — unless the specific card or ability explicitly states it can. Divine Conductor's Link Mind is the first card to use this exception (its target may ignore one allied character when checking line-of-sight). This resolves PRD-OQ-011: line-of-sight applies by default to all ranged targeting, not just damage.
 - Placed objects and line-of-sight (decided, 2026-09-07): a tile holding a placed object (e.g., a barricade, a quartz pylon) blocks line-of-sight by default, the same as an occupied character tile, unless the specific card or object explicitly states otherwise. No current card grants an exception for its own placed object.
 - Diagonal, area, jump, teleport, or unusual patterns are special-case rules printed on characters, relics, events, or future cards.
@@ -561,7 +562,8 @@ Avoid pay-to-win progression. Competitive modes should prioritize fair access, r
 
 ### Prototype Mode
 
-- Local hotseat match
+- Local hotseat match, or a match against a basic AI where the player picks Closed City or Flood Survivors (decided 2026-10-09; see `LLD-ai-opponent.md`)
+- An action log for playtesting: every action with each bonus and reduction and where it came from (may not ship in the final game)
 - Fixed starting squads
 - Shared relic/event deck
 - Basic board

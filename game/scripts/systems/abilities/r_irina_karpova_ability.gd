@@ -79,3 +79,16 @@ static func _ids(payload: Dictionary) -> Array:
 		if payload.get(key) != null and str(payload.get(key)) != "":
 			result.append(str(payload[key]))
 	return result
+
+
+func ai_value(_sys, _instance: CharacterInstance, ability_id: String, payload: Dictionary, _ai) -> float:
+	var v := 0.0
+	for id in _ids(payload):
+		var ally: CharacterInstance = GameState.match_state.find_character(id)
+		if ability_id == L3_ID:
+			v += 0.6
+		elif ally.character_ap_remaining > 0 and not RulesEngine.get_legal_attack_target_ids(id).is_empty():
+			v += 1.0   # +1 ATK on an attack it can still make
+		else:
+			v += 0.15
+	return v

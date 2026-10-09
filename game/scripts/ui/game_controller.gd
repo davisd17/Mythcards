@@ -18,13 +18,18 @@ var selected_id := ""             # the active player's character being commande
 var inspect_id := ""              # whichever character's card is shown
 var flow: Dictionary = {}         # {kind, actor, id, payload}, or {} when none
 var message := ""
+var ai_players: Dictionary = {}   # player_id -> AIPlayer for sides the computer plays (LLD-ai-opponent.md 5)
 
 
 # --- Setup -------------------------------------------------------------------------
 
 # Teams default to the matchup in teams.json (Closed City vs Flood Survivors).
-func begin_setup(p1_team: String = "", p2_team: String = "") -> Node:
+# ai_side: "" for hotseat, or the player the AI controls ("p1" / "p2").
+func begin_setup(p1_team: String = "", p2_team: String = "", ai_side: String = "") -> Node:
 	GameState.reset()
+	ai_players = {}
+	if ai_side != "":
+		ai_players[ai_side] = AIPlayer.new(ai_side, null, randi())
 	if setup != null:
 		setup.free()
 	var matchup := ContentDB.get_matchup()
@@ -38,6 +43,11 @@ func begin_setup(p1_team: String = "", p2_team: String = "") -> Node:
 	flow = {}
 	message = "Player 1: pick a character below, then tap a highlighted tile on your back row."
 	_pick_first()
+	if ai_players.has("p1"):
+		ai_players.p1.place_squad(setup)   # the AI deploys at once; the human deploys next
+		placing_player = "p2"
+		message = "Player 2: pick a character below, then tap a highlighted tile on your back row."
+		_pick_first()
 	return setup
 
 
@@ -89,6 +99,9 @@ func confirm_placement(deck_seed: int = -1) -> void:
 		message = "Place all 7 characters first."
 		return
 	placing_id = ""
+	if placing_player == "p1" and ai_players.has("p2"):
+		ai_players.p2.place_squad(setup)
+		placing_player = "p2"
 	if placing_player == "p1":
 		placing_player = "p2"
 		message = "Player 2: pick a character below, then tap a highlighted tile on your back row."
@@ -216,7 +229,32 @@ func relic_power_label() -> String:
 
 # --- Taps and buttons --------------------------------------------------------------------
 
+func is_ai_turn() -> bool:
+	var state := GameState.match_state
+	return setup == null and state != null and GameState.is_match_active() and ai_players.has(state.active_player_id)
+
+
+func is_ai(player_id: String) -> bool:
+	return ai_players.has(player_id)
+
+
+# One AI decision, sent like a tap would send it. Returns what it did (for the screen).
+func ai_step() -> Dictionary:
+	if not is_ai_turn():
+		return {}
+	var ai: AIPlayer = ai_players[GameState.match_state.active_player_id]
+	var action := ai.next_action()
+	if action.is_empty():
+		return {}
+	flow = {}
+	_send(action.action_type, action.actor_id, action.payload)
+	message = "AI: %s" % action.get("why", action.action_type)
+	return action
+
+
 func tap_tile(pos: Vector2i) -> void:
+	if is_ai_turn():
+		return
 	message = ""
 	if setup != null:
 		_tap_setup(pos)
@@ -291,7 +329,7 @@ func cancel() -> void:
 
 func end_turn() -> void:
 	var state := GameState.match_state
-	if state == null or setup != null or not flow.is_empty():
+	if state == null or setup != null or not flow.is_empty() or is_ai_turn():
 		return
 	selected_id = ""
 	_send("end_turn", state.active_player_id, {})
@@ -320,7 +358,10 @@ func current_step() -> Dictionary:
 			return AbilityHandler.target_step("to", "The Mount steps out onto which tile?",
 					RulesEngine.get_legal_dismount_tiles(flow.actor))
 		"deck", "power":
-			return spec_step(flow.spec, payload)
+			var step := spec_step(flow.spec, payload)
+			if not step.is_empty() and str(flow.spec.get("revealed", "")) != "":
+				step["revealed"] = flow.spec.revealed   # a peeked card the screen shows in full
+			return step
 	return {}
 
 
@@ -384,16 +425,23 @@ func _choose(value) -> void:
 
 
 # Sends the flow's action once nothing is left to pick.
+# Picks made one step at a time -> the payload to send: skipped (null) picks dropped, and
+# a chosen card option's payload merged in. Shared with the AI (ActionGenerator).
+static func finalize_payload(picks: Dictionary) -> Dictionary:
+	var payload := {}
+	for key in picks:
+		if picks[key] != null and key != "_option":
+			payload[key] = picks[key]
+	if picks.get("_option") is Dictionary:
+		payload.merge(picks._option, true)
+	return payload
+
+
 func _advance() -> void:
 	if not current_step().is_empty():
 		return
 	var done := flow
-	var payload := {}
-	for key in done.payload:
-		if done.payload[key] != null and key != "_option":
-			payload[key] = done.payload[key]
-	if done.payload.get("_option") is Dictionary:
-		payload.merge(done.payload._option, true)
+	var payload := finalize_payload(done.payload)
 	flow = {}
 	match done.kind:
 		"ability":
@@ -458,6 +506,8 @@ func _start_pending_choice() -> void:
 	if state == null or not flow.is_empty() or not GameState.is_match_active():
 		return
 	var player := state.active_player_id
+	if ai_players.has(player):
+		return   # the AI answers its own choices
 	if RelicEventDeck.has_pending_choice(player):
 		flow = {"kind": "deck", "actor": player, "id": "", "payload": {}, "spec": RelicEventDeck.choice_spec(player)}
 		return

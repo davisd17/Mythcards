@@ -33,3 +33,14 @@ func resolve_choice(sys, player_id: String, payload: Dictionary) -> Dictionary:
 
 func _candidates(sys) -> Array[Vector2i]:
 	return tiles_near_center(sys, REACH, func(pos): return sys.is_empty_tile(pos))
+
+
+# AI: Stones next to its own characters (cover, and Naia's Tomb Sentinel).
+func ai_choice_value(sys, player_id: String, payload: Dictionary, _ai) -> float:
+	var v := 0.0
+	for pos in payload.get("tiles", []):
+		for n in sys.neighbors(pos):
+			var c: CharacterInstance = sys.occupant(n)
+			if c != null and c.player_id == player_id:
+				v += 1.0
+	return v

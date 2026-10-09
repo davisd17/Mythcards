@@ -28,7 +28,14 @@ var _popup_scroll := ScrollContainer.new()
 var _popup_button: Button
 var _popup_note := Label.new()
 var _popup_queue: Array[String] = []   # card ids waiting to be shown, oldest first
+var _shown_reveal := ""                # the revealed card already shown for the current choice
 var _menu := PanelContainer.new()
+var _chooser := Control.new()        # New match: vs AI as either team, or hotseat
+var _ai_timer := Timer.new()         # plays the AI's turn one visible step at a time
+const AI_STEP_SECONDS := 0.6
+var _log := Control.new()            # the action log overlay (MatchLog)
+var _log_text := RichTextLabel.new()
+var _log_scroll := ScrollContainer.new()
 var _game_over := Control.new()
 var _game_over_label := Label.new()
 
@@ -59,6 +66,7 @@ func _ready() -> void:
 	_primary.custom_minimum_size.x = 170
 	_accent(_primary)
 	top.add_child(_primary)
+	top.add_child(_button("Log", _toggle_log, false))
 	top.add_child(_button("Menu", _toggle_menu, false))
 	root.add_child(_margin(top))
 
@@ -101,7 +109,13 @@ func _ready() -> void:
 	root.add_child(_margin(bottom))
 
 	_build_popup()
+	_build_log()
 	_build_menu()
+	_build_chooser()
+	_ai_timer.wait_time = AI_STEP_SECONDS
+	_ai_timer.timeout.connect(_on_ai_tick)
+	add_child(_ai_timer)
+	_ai_timer.start()
 	_build_game_over()
 
 	EventBus.relic_drawn.connect(_on_card_drawn)
@@ -120,7 +134,7 @@ func _exit_tree() -> void:
 
 # TestBridge's restart hook: both back rows in card order, then a fixed deck seed.
 func start_new_match(deck_seed: int = -1) -> void:
-	new_match()
+	_start("")
 	for i in 2:
 		controller.auto_place()
 		controller.confirm_placement(deck_seed)
@@ -143,12 +157,27 @@ func ui_snapshot() -> Dictionary:
 			"setup": controller.in_setup()}
 
 
+# Shows the New match chooser; a hotseat setup waits underneath until a choice is made.
 func new_match() -> void:
+	_start("")
+	_chooser.visible = true
+
+
+# ai_side: the player the AI controls ("p1" / "p2"), or "" for hotseat.
+func _start(ai_side: String) -> void:
 	_popup_queue.clear()
 	_popup.visible = false
 	_menu.visible = false
-	controller.begin_setup()
+	_log.visible = false
+	_chooser.visible = false
+	controller.begin_setup("", "", ai_side)
 	_refresh()
+
+
+func _on_ai_tick() -> void:
+	if controller.is_ai_turn() and not _chooser.visible:
+		controller.ai_step()
+		_refresh()
 
 
 # --- Rendering -------------------------------------------------------------------------
@@ -178,7 +207,7 @@ func _refresh_header() -> void:
 		_primary.visible = true
 		return
 	_primary.text = "End turn"
-	_primary.disabled = not controller.flow.is_empty()
+	_primary.disabled = not controller.flow.is_empty() or controller.is_ai_turn()
 	_primary.visible = GameState.is_match_active()
 	var state := GameState.match_state
 	if state == null:
@@ -204,6 +233,14 @@ func _refresh_prompt() -> void:
 	for child in _options.get_children():
 		child.queue_free()
 	var step := controller.current_step()
+	# A card revealed from the deck (Chintamani Fragment, Foresight) is shown in full,
+	# once, before the top-or-bottom choice (playtest 2026-10-09).
+	var revealed := str(step.get("revealed", ""))
+	if revealed != "" and revealed != _shown_reveal:
+		_shown_reveal = revealed
+		_show_card.call_deferred(revealed, "Revealed: the next card in the shared deck. Choose below the board whether it stays on top.")
+	elif revealed == "":
+		_shown_reveal = ""
 	if not step.is_empty():
 		var prompt: String = step.get("prompt", "")
 		if step.pick == "tile" or step.pick == "character":
@@ -219,7 +256,9 @@ func _refresh_prompt() -> void:
 		if controller.can_cancel():
 			_options.add_child(_button("Cancel", func(): controller.cancel(); _refresh()))
 		return
-	if controller.message != "":
+	if controller.is_ai_turn():
+		_prompt.text = "%s is playing. %s" % [_player_name(GameState.match_state.active_player_id), controller.message]
+	elif controller.message != "":
 		_prompt.text = controller.message
 	elif controller.in_setup():
 		_prompt.text = "Pick a character on the right, then tap a highlighted tile on your back row. Tap a placed character to pick it up again."
@@ -378,6 +417,75 @@ func _on_primary() -> void:
 	_refresh()
 
 
+# --- Action log ----------------------------------------------------------------------------
+
+func _build_log() -> void:
+	_log.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_log.visible = false
+	var dim := ColorRect.new()
+	dim.color = Color(0.03, 0.04, 0.04, 0.96)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_log.add_child(dim)
+	var box := VBoxContainer.new()
+	box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	box.add_theme_constant_override("separation", 8)
+	var title := Label.new()
+	title.text = "Action log"
+	title.add_theme_font_size_override("font_size", 26)
+	title.add_theme_color_override("font_color", Color("#f3e3b5"))
+	box.add_child(_margin(title))
+	_log_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_log_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_log_text.bbcode_enabled = true
+	_log_text.fit_content = true
+	_log_text.scroll_active = false
+	_log_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_log_text.add_theme_font_size_override("normal_font_size", 17)
+	_log_text.add_theme_font_size_override("bold_font_size", 19)
+	_log_scroll.add_child(_log_text)
+	box.add_child(_margin(_log_scroll))
+	box.add_child(_margin(_accent(_button("Close", _toggle_log))))
+	var gap := Control.new()
+	gap.custom_minimum_size = Vector2(0, 16)
+	box.add_child(gap)
+	_log.add_child(box)
+	add_child(_log)
+
+
+func _toggle_log() -> void:
+	_log.visible = not _log.visible
+	if _log.visible:
+		_log_text.text = MatchLog.as_text(true) if not MatchLog.entries.is_empty() else "Nothing has happened yet."
+		await get_tree().process_frame
+		_log_scroll.scroll_vertical = int(_log_scroll.get_v_scroll_bar().max_value)   # newest at the bottom
+
+
+func _build_chooser() -> void:
+	_chooser.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var dim := ColorRect.new()
+	dim.color = Color(0.03, 0.04, 0.04, 0.97)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_chooser.add_child(dim)
+	var box := VBoxContainer.new()
+	box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_theme_constant_override("separation", 14)
+	var title := Label.new()
+	title.text = "New match"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 34)
+	title.add_theme_color_override("font_color", Color("#f3e3b5"))
+	box.add_child(title)
+	var teams := ContentDB.get_matchup()
+	var p1_name := str(ContentDB.get_team(teams[0]).get("name", "Player 1"))
+	var p2_name := str(ContentDB.get_team(teams[1]).get("name", "Player 2"))
+	box.add_child(_margin(_accent(_button("Play %s vs the AI" % p1_name, func(): _start("p2"))), 60))
+	box.add_child(_margin(_accent(_button("Play %s vs the AI" % p2_name, func(): _start("p1"))), 60))
+	box.add_child(_margin(_button("Hotseat: play both sides", func(): _start("")), 60))
+	_chooser.add_child(box)
+	add_child(_chooser)
+
+
 func _toggle_menu() -> void:
 	_menu.visible = not _menu.visible
 
@@ -507,6 +615,8 @@ func _player_name(player_id: String) -> String:
 	if player != null:
 		side = str(ContentDB.get_team(player.team_id).get("name", player.culture))
 	var n := "Player 1" if player_id == "p1" else "Player 2"
+	if controller.is_ai(player_id):
+		side = side + ", AI" if side != "" else "AI"
 	return "%s (%s)" % [n, side] if side != "" else n
 
 

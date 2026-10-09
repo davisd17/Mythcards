@@ -88,3 +88,7 @@ func _destinations(sys, instance: CharacterInstance, ally: CharacterInstance) ->
 	if ally == null:
 		return []
 	return sys.neighbors(instance.position).filter(func(pos): return sys.is_empty_tile(pos))
+
+
+func ai_value(_sys, _instance: CharacterInstance, _ability_id: String, _payload: Dictionary, _ai) -> float:
+	return 0.1

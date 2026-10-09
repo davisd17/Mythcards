@@ -183,3 +183,23 @@ func _move_marker(sys, instance: CharacterInstance, payload: Dictionary) -> void
 
 static func _harmful(se: StatusEffect) -> bool:
 	return se.type == "marked" or (["temp_move", "temp_atk", "temp_range"].has(se.type) and se.value < 0)
+
+
+func ai_value(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary, ai) -> float:
+	if ability_id == L3_ID:
+		var hurt := 1.0 - float(instance.current_hp) / maxf(1.0, float(sys.get_effective_max_hp(instance)))
+		return 1.5 * ai.danger(instance, instance.position) * hurt
+	var marker = payload.get("marker")
+	if not marker is Dictionary:
+		return 0.0
+	var giver: CharacterInstance = sys.find(str(marker.from))
+	var taker: CharacterInstance = sys.find(str(payload.other)) if giver.instance_id == str(payload.target) \
+			else sys.find(str(payload.target))
+	var harmful: bool = marker.type == "marked" or marker.type == "temp_move"
+	if harmful and taker.player_id != instance.player_id:
+		return 1.2
+	if not harmful and taker.player_id == instance.player_id and giver.player_id != instance.player_id:
+		return 1.0   # took a good marker from the enemy
+	if not harmful and taker.player_id == instance.player_id:
+		return 0.2 + 0.2 * ai.danger(taker, taker.position)
+	return 0.0

@@ -66,3 +66,13 @@ func _diagonal_targets(sys, instance: CharacterInstance, reach: int) -> Array[St
 			if sys.board.blocks_line_of_sight(pos):
 				break
 	return result
+
+
+func ai_value(sys, instance: CharacterInstance, _ability_id: String, payload: Dictionary, ai) -> float:
+	var target: CharacterInstance = sys.find(str(payload.get("target", "")))
+	if target == null:
+		return 0.0
+	var v: float = ai.damage_value(instance, target, ai.preview(instance, target, SHOT_DAMAGE))
+	if sys.neighbors(target.position).any(func(pos): return sys.has_leak(pos)):
+		v += 0.5   # it also becomes Marked
+	return v

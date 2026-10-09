@@ -75,3 +75,10 @@ static func _tiles(payload: Dictionary) -> Array:
 		if payload.get(key) is Vector2i:
 			result.append(payload[key])
 	return result
+
+
+func ai_value(_sys, _instance: CharacterInstance, _ability_id: String, payload: Dictionary, ai) -> float:
+	var v := 0.0
+	for pos in _tiles(payload):
+		v += 0.3 + 0.15 * ai.enemies_near(pos, 3)
+	return v

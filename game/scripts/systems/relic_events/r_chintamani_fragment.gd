@@ -34,3 +34,16 @@ func resolve_choice(_sys, _player_id: String, payload: Dictionary) -> Dictionary
 	if payload.get("to_bottom", false):
 		RelicEventDeck.move_top_to_bottom()
 	return {"success": true}
+
+
+# AI: keep its own culture's cards on top, bury the opponent's.
+func ai_choice_value(sys, player_id: String, payload: Dictionary, _ai) -> float:
+	if not payload.has("to_bottom"):
+		return 0.5   # the Reveal step itself
+	var pending: Dictionary = RelicEventDeck.get_pending_choice(player_id)
+	var card := ContentDB.get_relic_event(str(pending.get("revealed", "")))
+	if card == null:
+		return 0.0
+	var culture: String = sys.state().get_player(player_id).culture.to_lower().left(6)
+	var ours := card.faction.to_lower().begins_with(culture)
+	return 1.0 if ours != bool(payload.to_bottom) else 0.0

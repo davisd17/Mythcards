@@ -92,8 +92,10 @@ func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Di
 	if next != "" and not payload.has("to_bottom"):
 		var card := ContentDB.get_relic_event(next)
 		var title: String = card.card_name if card != null else next
-		return option_step("to_bottom", "Foresight reveals: %s." % title,
+		var step := option_step("to_bottom", "Foresight reveals: %s." % title,
 				[{"label": "Leave it on top", "value": false}, {"label": "Put it on the bottom", "value": true}])
+		step["revealed"] = next   # the screen shows the card itself
+		return step
 	if payload.has("ally_id"):
 		return {}
 	var allies := _adjacent_allies(sys, instance)

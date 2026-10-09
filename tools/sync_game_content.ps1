@@ -13,6 +13,11 @@ New-Item -ItemType Directory -Force (Join-Path $dst 'review_drafts') | Out-Null
 Copy-Item (Join-Path $src '*.json') $dst
 Copy-Item (Join-Path $src 'review_drafts\*.json') (Join-Path $dst 'review_drafts')
 
+# AI personalities (data/ai/*.json, LLD-ai-opponent.md).
+$aiDst = Join-Path $repo 'game\data\ai'
+New-Item -ItemType Directory -Force $aiDst | Out-Null
+Copy-Item (Join-Path $repo 'data\ai\*.json') $aiDst
+
 $count = (Get-ChildItem $dst -Recurse -Filter *.json).Count
 Write-Host "Synced $count card data files into game/data/cards"
 

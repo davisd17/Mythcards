@@ -1,0 +1,33 @@
+{
+  "_note": "Weights for the basic AI level (LLD-ai-opponent.md 4). A new level or personality is a new file with different numbers. Scores are in 'points'; the AI takes the best action scoring above end_turn_threshold, re-planning after each one. patience: the turn after which the AI grows bolder (less afraid of danger, keener to close in), so stalemates break.",
+  "name": "Basic",
+  "end_turn_threshold": 0.15,
+  "randomness": 0.05,
+  "weights": {
+    "damage": 1,
+    "defeat": 1.5,
+    "ember_at_level_2": 2,
+    "object_attack": 0.3,
+    "in_range": 1.2,
+    "approach": 0.35,
+    "danger": 0.45,
+    "level_2": 3,
+    "level_3": 4,
+    "leak_tile": 1,
+    "hero_cramped": 1.5,
+    "trap_enemy_hero": 1,
+    "mount": 0.6,
+    "relic_power": 0.4,
+    "ability_default": 0.5,
+    "patience": 20
+  },
+  "character_value": {
+    "Hero": 10,
+    "Leader": 6,
+    "Specialist": 4,
+    "Mystic": 4,
+    "Warrior": 4,
+    "Mount": 3,
+    "Common": 2
+  }
+}

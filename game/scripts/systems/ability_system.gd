@@ -26,6 +26,8 @@ func _init(p_board: BoardModel) -> void:
 	EventBus.character_defeated.connect(_on_character_defeated)
 	EventBus.spirit_ember_delivered.connect(_on_spirit_ember_delivered)
 	EventBus.turn_started.connect(_on_turn_started)
+	EventBus.action_resolved.connect(func(_a, _b, _c): sync_all_max_hp())
+	EventBus.relic_slot_changed.connect(func(_a, _b): sync_all_max_hp())
 
 
 func set_combat(combat: CombatResolver) -> void:
@@ -143,6 +145,42 @@ func get_conditional_atk_bonus(instance: CharacterInstance) -> int:
 			+ RelicEventDeck.get_relic_atk_bonus(self, instance)
 
 
+# Where an attacker's ATK comes from, for the action log: ["ATK 2 (printed)", "+1 Level",
+# "+1 from Irina Vasilievna Karpova", "+1 Reactor Core Fragment"].
+func atk_sources(instance: CharacterInstance) -> Array[String]:
+	var lines: Array[String] = ["ATK %d (printed)" % instance.data.atk]
+	if instance.atk_bonus != 0:
+		lines.append("%+d level / permanent bonuses" % instance.atk_bonus)
+	for se in instance.status_effects:
+		if se.type == "temp_atk" and se.value != 0:
+			lines.append("%+d from %s" % [se.value, _source_name(se.source_character_id)])
+	var own := handler_for(instance).get_conditional_atk_bonus(self, instance)
+	if own != 0:
+		lines.append("%+d %s's own ability" % [own, instance.data.char_name])
+	var relic := RelicEventDeck.get_relic_atk_bonus(self, instance)
+	if relic != 0:
+		lines.append("%+d active relic" % relic)
+	return lines
+
+
+# "-1 Resonance Guard" for each passive that reduced this damage.
+func damage_reduction_parts(defender: CharacterInstance, attacker: CharacterInstance, is_ranged: bool) -> Array[String]:
+	var lines: Array[String] = []
+	var own := handler_for(defender).get_own_damage_reduction(self, defender, attacker, is_ranged)
+	if own > 0:
+		lines.append("-%d %s's own ability" % [own, defender.data.char_name])
+	for source in allies_of(defender):
+		var aura := handler_for(source).get_aura_damage_reduction(self, source, defender, attacker, is_ranged)
+		if aura > 0:
+			lines.append("-%d from %s" % [aura, source.data.char_name])
+	return lines
+
+
+func _source_name(source_id: String) -> String:
+	var c: CharacterInstance = find(source_id) if source_id != "" else null
+	return c.data.char_name if c != null else "a card"
+
+
 func get_conditional_range_bonus(instance: CharacterInstance, context: String) -> int:
 	var parts := _range_parts(instance, context)
 	var bonus: int = parts.bonus
@@ -201,7 +239,40 @@ func notify_memory_spent(holder: CharacterInstance, attacker: CharacterInstance)
 
 func get_effective_max_hp(instance: CharacterInstance) -> int:
 	var conditional := int(instance.ability_uses_this_match.get("_hp_bonus_applied", 0))
-	return instance.base_max_hp + conditional + RelicEventDeck.get_relic_max_hp_bonus(self, instance)
+	var relic := RelicEventDeck.get_relic_max_hp_bonus(self, instance)
+	return instance.base_max_hp + conditional + relic + _rider_hp_bonus(instance)
+
+
+# VERA-7: Protected Passenger. A plain max-HP bonus, so current HP follows sync_max_hp.
+func _rider_hp_bonus(instance: CharacterInstance) -> int:
+	if not instance.is_mounted_rider:
+		return 0
+	var mount_char := find(instance.mounted_with_id)
+	return handler_for(mount_char).get_rider_max_hp_bonus(self, mount_char, instance) if mount_char != null else 0
+
+
+# Max HP rule (designer ruling 2026-10-09): when max HP rises, a character that was at full
+# HP rises with it; a damaged one keeps its current HP. When max HP falls, current HP is
+# trimmed to the new maximum. Run after anything that can change max HP.
+func sync_max_hp(instance: CharacterInstance) -> void:
+	if instance.defeated:
+		return
+	var new_max := get_effective_max_hp(instance)
+	var known := int(instance.ability_uses_this_match.get("_known_max_hp",
+			instance.base_max_hp + int(instance.ability_uses_this_match.get("_hp_bonus_applied", 0))))
+	if new_max > known and instance.current_hp >= known:
+		instance.current_hp = new_max
+	elif new_max < known:
+		instance.current_hp = mini(instance.current_hp, new_max)
+	instance.ability_uses_this_match["_known_max_hp"] = new_max
+
+
+func sync_all_max_hp() -> void:
+	if not _is_current():
+		return
+	for p in _match.players:
+		for c in p.characters:
+			sync_max_hp(c)
 
 
 # --- Activated abilities (RulesEngine) --------------------------------------------
@@ -274,6 +345,7 @@ func apply_level_up_effects(instance: CharacterInstance, new_level: int) -> void
 	sync_conditional_hp(instance)
 	# Every level-up restores the character to full HP (designer ruling 2026-10-06).
 	instance.current_hp = get_effective_max_hp(instance)
+	instance.ability_uses_this_match["_known_max_hp"] = instance.current_hp
 
 
 # --- Helpers for handlers -----------------------------------------------------------
@@ -386,6 +458,7 @@ func add_status(target: CharacterInstance, type: String, value: int, expires: St
 	se.source_character_id = source.instance_id if source != null else ""
 	se.consume_on_attack = consume_on_attack
 	target.status_effects.append(se)
+	EventBus.status_added.emit(target.instance_id, type, value, se.source_character_id)
 	return se
 
 
@@ -623,16 +696,14 @@ func sync_conditional_hp(instance: CharacterInstance) -> void:
 	if instance.defeated:
 		return
 	var bonus := handler_for(instance).get_own_conditional_max_hp_bonus(self, instance)
-	if instance.is_mounted_rider:
-		var mount_char := find(instance.mounted_with_id)
-		if mount_char != null:
-			bonus += handler_for(mount_char).get_rider_max_hp_bonus(self, mount_char, instance)
 	var applied := int(instance.ability_uses_this_match.get("_hp_bonus_applied", 0))
 	if bonus == applied:
 		return
 	instance.ability_uses_this_match["_hp_bonus_applied"] = bonus
 	var delta := bonus - applied
 	instance.current_hp = maxi(1, instance.current_hp + delta) if delta < 0 else instance.current_hp + delta
+	# Printed "+N maximum and current HP" (Stand Firm) already moved current HP itself.
+	instance.ability_uses_this_match["_known_max_hp"] = get_effective_max_hp(instance)
 
 
 # --- Event dispatch ----------------------------------------------------------------
@@ -722,6 +793,7 @@ func _on_turn_started(player_id: String) -> void:
 		return
 	for c in live_characters():
 		handler_for(c).on_turn_started(self, c, player_id)
+	sync_all_max_hp()
 	for c in _match.get_player(player_id).characters:
 		if not c.defeated and is_off_board(c):
 			offer_bonus(c, "return")   # must come back before anything else this turn

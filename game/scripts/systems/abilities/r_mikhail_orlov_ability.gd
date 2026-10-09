@@ -92,3 +92,15 @@ static func _tiles(payload: Dictionary) -> Array:
 		if payload.get(key) is Vector2i:
 			result.append(payload[key])
 	return result
+
+
+func ai_value(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary, ai) -> float:
+	if ability_id == L3_ID:
+		# Slumber: worth it when Orlov is threatened and hurt.
+		var hurt := 1.0 - float(instance.current_hp) / maxf(1.0, float(sys.get_effective_max_hp(instance)))
+		return 2.0 * ai.danger(instance, instance.position) * hurt
+	var v := 0.0
+	for pos in _tiles(payload):
+		# Leaks in the enemy's way, not where our own side will trip on them.
+		v += 0.4 * ai.enemies_near(pos, 2) - 0.3 * ai.allies_near(pos, 1)
+	return v

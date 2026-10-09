@@ -287,6 +287,11 @@ Built as HLD step 16 after the first hands-on playtest. **Designer ruling: the g
 
 **Layout revision (playtest 2026-10-06: the card under the board didn't show fully).** The full `CardView` under the board is replaced by `CardSummary`, a strip with a portrait, name and level, live stats and statuses, and the abilities up to the current level. It clips instead of overflowing. Tapping it opens the full card in the overlay that drawn relic and event cards use. That overlay now scrolls, so no card runs off the screen; it shows "Close" for character cards and "Continue" for drawn cards. `mythcards_ui()` also reports the strip's position, and `screen.spec.ts` opens and closes the full card by clicking.
 
+**Playtest additions (2026-10-09)**
+- **Revealed cards are shown in full.** When a choice carries a `revealed` card (Chintamani Fragment, Foresight), the card pops up once before the top-or-bottom choice.
+- **Action log.** `MatchLog` (autoload) listens to EventBus and keeps one entry per action, with detail lines for everything the action caused. Damage comes from the new `damage_resolved` signal, where `CombatResolver` names each step and its source: printed ATK, level bonuses, +ATK from whom, relics, Marked by whom, each reduction's owner, Shields, Memory, and survival intercepts. Statuses come from `status_added` (with who gave them). Draws, Leaks, Memory, defeats, level-ups, and Embers are recorded too. Entries are grouped by turn, and the next turn's draw is filed under that turn. The **Log** button in the top bar opens a scrollable overlay, newest at the bottom.
+- **New match chooser** at launch and from the Menu: *Play Closed City vs the AI*, *Play Flood Survivors vs the AI*, or *Hotseat*. On the AI's turn, a 0.6 s timer plays one AI decision per tick through `GameController.ai_step`. Taps and End turn are disabled until it ends its turn; its side is labelled "(…, AI)". See LLD-ai-opponent.md.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

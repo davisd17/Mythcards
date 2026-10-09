@@ -29,3 +29,13 @@ func _eligible(sys) -> Array[String]:
 		if target != null and not target.has_status("memory"):
 			result.append(target.instance_id)
 	return result
+
+
+# AI: Memory for its own most threatened character, never an enemy.
+func ai_choice_value(sys, player_id: String, payload: Dictionary, ai) -> float:
+	var c: CharacterInstance = sys.find(str(payload.get("target_id", "")))
+	if c == null:
+		return 0.0
+	if c.player_id != player_id:
+		return -2.0
+	return 1.0 + ai.danger(c, c.position)

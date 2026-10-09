@@ -163,6 +163,20 @@ func on_returned(_sys, _instance: CharacterInstance, _payload: Dictionary) -> vo
 	pass
 
 
+# --- AI (LLD-ai-opponent.md 4) -------------------------------------------------------
+
+# What one use is worth to the AI, in AIEvaluator points. `ability_id` is the ability, or
+# "bonus:<tag>" for a free bonus. `ai` is the AIEvaluator (value_of, danger, preview,
+# damage_value, enemies_near, personality). The default keeps every card playable by the
+# AI: a modest flat value, plus the damage it would deal if the payload names an enemy.
+func ai_value(sys, instance: CharacterInstance, _ability_id: String, payload: Dictionary, ai) -> float:
+	var v: float = ai.personality.w("ability_default", 0.5)
+	var target: CharacterInstance = sys.find(str(payload.get("target", payload.get("target_id", ""))))
+	if target != null and target.player_id != instance.player_id:
+		v += ai.damage_value(instance, target, ai.preview(instance, target, 1)) * 0.5
+	return v
+
+
 # --- Targeting steps, for the tap-driven game screen ------------------------------
 # The game screen builds a payload one pick at a time. next_step returns the next thing
 # to pick given the picks so far, or {} when `payload` is ready to send. A step is
