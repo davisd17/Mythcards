@@ -80,6 +80,8 @@ const PORTRAIT_FOCUS := {"r-gymnast": 0.38, "r-tiger": 0.48, "r-sniper": 0.36, "
 var controller: GameController
 var outfit_by_instance_id: Dictionary = {}
 
+var fx := BoardFx.new()    # Phase 2 action feedback; presentation only
+
 var _time := 0.0           # drives the center pulse only
 var _since_redraw := 0.0
 static var _silhouettes: Dictionary = {}   # texture RID -> opaque Rect2 in texture pixels
@@ -93,15 +95,19 @@ static func status_name(se: StatusEffect) -> String:
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	resized.connect(queue_redraw)
+	fx.connect_signals()
 
 
-# The center's slow breathing pulse: a bounded redraw rate, and nothing while hidden.
+# The center's slow breathing pulse at a bounded redraw rate; every frame while an action
+# animation plays; nothing while hidden.
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():
 		return
 	_time += delta
 	_since_redraw += delta
-	if _since_redraw >= 1.0 / PULSE_FPS:
+	var animating := fx.active()
+	fx.advance(delta)
+	if animating or _since_redraw >= 1.0 / PULSE_FPS:
 		_since_redraw = 0.0
 		queue_redraw()
 
@@ -175,6 +181,10 @@ func _draw() -> void:
 
 	for c in draw_order(controller.characters()):
 		_draw_character(font, c, c.instance_id == selected_id)
+	for g in fx.ghosts:
+		_draw_ghost(g)
+	for e in fx.effects:
+		_draw_effect(font, e)
 
 
 # Back to front by screen row (Player 2's side at the top is "back"), then left to right,
@@ -423,16 +433,72 @@ func _draw_brackets(rect: Rect2, color: Color) -> void:
 
 func _draw_character(font: Font, c: CharacterInstance, selected: bool) -> void:
 	var rect := tile_rect(c.position)
+	rect.position += screen_offset(fx.offset_tiles(c), rect.size.x)
 	var spent: bool = GameState.match_state != null and c.player_id == GameState.match_state.active_player_id \
 			and c.character_ap_remaining <= 0 and _mount_ap(c) <= 0
 	var figure := FigureCatalog.texture_for(c.data.id, outfit_id_for(c))
 	_draw_piece_base(c, rect, selected)
 	if figure != null:
 		var modulate := Color(0.62, 0.62, 0.66, 0.9) if spent else Color.WHITE
+		modulate = modulate.lerp(Color(1.0, 0.32, 0.28), 0.75 * fx.hit_strength(c.instance_id))
 		draw_texture_rect(figure, figure_rect(c, rect, figure, selected), false, modulate)
 	else:
 		_draw_portrait_token(c, rect, spent)
 	_draw_labels(font, c, rect)
+
+
+# Board-space tiles (y up) to screen pixels (y down; Player 1 is at the bottom).
+static func screen_offset(tiles: Vector2, px: float) -> Vector2:
+	return Vector2(tiles.x, -tiles.y) * px
+
+
+# A defeated figure sinks into the stone and fades, tinted red.
+func _draw_ghost(g: Dictionary) -> void:
+	var c: CharacterInstance = g.character
+	var t := fx.progress(g.start, BoardFx.DEFEAT)
+	var rect := tile_rect(g.pos)
+	var figure := FigureCatalog.texture_for(c.data.id, outfit_id_for(c))
+	if figure == null:
+		return
+	var r := figure_rect(c, rect, figure, false)
+	r.position.y += rect.size.y * 0.22 * BoardFx.ease_out(t)
+	draw_texture_rect(figure, r, false, Color(1.0, 0.45, 0.4, 1.0 - t))
+
+
+# Rings, bursts, floating numbers, and the level-up flourish (BoardFx effects).
+func _draw_effect(font: Font, e: Dictionary) -> void:
+	var rect := tile_rect(e.pos)
+	var px := rect.size.x
+	var c := rect.get_center()
+	var t := fx.progress(e.start, e.duration)
+	var color: Color = e.color
+	match e.kind:
+		"ring":
+			draw_arc(c, px * (0.2 + 0.32 * BoardFx.ease_out(t)), 0.0, TAU, 32, Color(color, 1.0 - t), 3.0)
+		"burst":
+			for i in 8:
+				var dir := Vector2.from_angle(TAU * i / 8.0 + 0.3)
+				var a := c + dir * px * (0.12 + 0.30 * BoardFx.ease_out(t))
+				draw_line(a, a + dir * px * 0.10 * (1.0 - t), Color(color, 1.0 - t), 3.0)
+			if e.text != "":
+				_float_text(font, e.text, c, px, t, color, 0.16)
+		"number":
+			_float_text(font, e.text, c, px, t, color, 0.22)
+		"level":
+			for i in 2:
+				var ti := clampf(t * 1.4 - 0.25 * i, 0.0, 1.0)
+				draw_arc(c, px * (0.25 + 0.45 * BoardFx.ease_out(ti)), 0.0, TAU, 40, Color(color, 1.0 - ti), 4.0)
+			_float_text(font, e.text, c, px, t, color, 0.20)
+
+
+# Text that rises from a tile and fades, with a dark outline so it reads over anything.
+func _float_text(font: Font, s: String, center: Vector2, px: float, t: float, color: Color, size_frac: float) -> void:
+	var fs := int(maxf(12.0, px * size_frac))
+	var w := font.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+	var at := center + Vector2(-w * 0.5, -px * (0.15 + 0.35 * BoardFx.ease_out(t)))
+	var alpha := 1.0 - t * t
+	draw_string_outline(font, at, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 4, Color(0, 0, 0, alpha))
+	draw_string(font, at, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(color, alpha))
 
 
 # Where a figure is drawn (LLD 4.2, revised after visual review). Sized by its measured

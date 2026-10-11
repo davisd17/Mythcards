@@ -61,6 +61,18 @@ for (const vp of VIEWPORTS) {
     await page.mouse.click(yt.x, yt.y);
     await page.waitForTimeout(300);
     await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-attack.png` });
+    // Phase 2 action feedback: pass both turns so Yuri has AP again, then attack Naia
+    // (same signals as a click) and catch the hit mid-animation.
+    for (const p of ['p1', 'p2']) {
+      expect((await act(page, 'end_turn', p)).success).toBe(true);
+      await resolvePending(page);
+    }
+    await page.waitForTimeout(300);
+    await closePopups(page);
+    const hit = await act(page, 'attack', 'p1_r-yuri-volkov', { target_id: 'p2_a-flood-survivor-naia' });
+    expect(hit.success, JSON.stringify(hit)).toBe(true);
+    await page.waitForTimeout(90);
+    await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-hit.png` });
     expect(errors, 'no missing resources or script errors').toEqual([]);
   });
 }

@@ -110,6 +110,13 @@ func test_every_visual_state_draws() -> void:
 	Fixture.mount_pair("p1_r-irina-karpova", "p1_r-vera-7")
 	screen.controller.tap_tile(orlov.position)
 	screen._refresh()
+	# Phase 2 animations mid-flight: a slide, a hit with a number, a ghost, a level-up, a ring.
+	var naia := state.find_character("p2_a-flood-survivor-naia")
+	EventBus.character_moved.emit(naia.instance_id, naia.position + Vector2i(0, 1), naia.position)
+	EventBus.damage_resolved.emit(orlov.instance_id, naia.instance_id, 2, [])
+	EventBus.character_defeated.emit("p2_a-flood-survivor-iset-nara", orlov.instance_id, "direct")
+	EventBus.character_leveled_up.emit(orlov.instance_id, 2)
+	EventBus.status_added.emit(orlov.instance_id, "shield", 1, "")
 	await wait_process_frames(4)
 	assert_eq(screen.controller.selected_id, orlov.instance_id)
 	assert_false(screen.controller.highlights().move.is_empty())
