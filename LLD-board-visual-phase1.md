@@ -213,3 +213,15 @@ Browser (`visual.spec.ts`): the same scripted position at 3 viewports, by real c
 2. Add `test_board_visuals.gd`.
 3. Run GUT, the web export, and Playwright; capture the after screenshots; inspect them at all 3 viewports; iterate.
 4. Report per the handoff's "Required Agent Report".
+
+## 12. Contrast Pass (2026-10-11)
+
+Designer playtest feedback: Phase 1 read as "not many visual changes". The board was the same low value as the page, and thin inlay lines had replaced the old solid territory tints. Changes, all in `game_board_view.gd`:
+
+- **Stone:** about 25% brighter (`STONE_A`/`STONE_B`), with a slightly stronger grid and seams.
+- **Frame:** a soft four-step drop shadow and a bronze band with a brighter edge, so the board stands off the page.
+- **Territory:** each side's color washes its own three rows as a gradient, at 0.36 alpha on the back row and fading to nothing by the middle row (`territory_alpha`). The Phase 1 inlays stay on top.
+- **Center:** a warm glow that spills onto neighboring tiles and pulses, plus a gold tile edge, drawn after the material pass and under the markers.
+- **Selection:** the selected piece's tile gets a gold wash and edge.
+
+Screenshots: `docs/visual-polish-phase1/contrast-*.png`. GUT 467/467; the visual spec passes at all 3 viewports.

@@ -113,3 +113,9 @@ func test_every_visual_state_draws() -> void:
 	await wait_process_frames(4)
 	assert_eq(screen.controller.selected_id, orlov.instance_id)
 	assert_false(screen.controller.highlights().move.is_empty())
+
+
+func test_territory_wash_fades_to_nothing_by_the_middle() -> void:
+	assert_almost_eq(GameBoardView.territory_alpha(0.0), GameBoardView.TERRITORY_ALPHA, 0.001)
+	assert_gt(GameBoardView.territory_alpha(1.0), GameBoardView.territory_alpha(2.0))
+	assert_eq(GameBoardView.territory_alpha(GameBoardView.TERRITORY_DEPTH), 0.0, "the middle row stays neutral")

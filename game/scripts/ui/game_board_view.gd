@@ -11,15 +11,21 @@ signal tile_tapped(pos: Vector2i)
 
 # --- Material -------------------------------------------------------------------------
 const BACKGROUND := Color("#0b0f0e")
-const STONE_A := Color("#232a29")
-const STONE_B := Color("#202726")
-const SEAM := Color(0.85, 0.88, 0.84, 0.07)
+# Contrast pass (LLD-board-visual-phase1.md 12): the stone sits clearly above the page.
+const STONE_A := Color("#3a4542")
+const STONE_B := Color("#333d3a")
+const SEAM := Color(0.85, 0.88, 0.84, 0.10)
 const SPECK := Color(0.9, 0.92, 0.88, 1.0)
-const GRID := Color(0.85, 0.88, 0.84, 0.07)
+const GRID := Color(0.85, 0.88, 0.84, 0.13)
 const FRAME_SHADOW := Color(0.0, 0.0, 0.0, 0.85)
-const FRAME_EDGE := Color("#9a958a")
-const FRAME_BEVEL_LIGHT := Color("#c9c3b4")
-const FRAME_BEVEL_DARK := Color("#3a3d3a")
+const FRAME_BAND := Color("#4a4438")
+const FRAME_EDGE := Color("#b9a27a")
+const FRAME_BEVEL_LIGHT := Color("#e2d3ac")
+const FRAME_BEVEL_DARK := Color("#211f1a")
+const CENTER_GLOW := Color("#f2b85a")
+# Territory wash: strongest on a side's own back row, gone by the fourth row.
+const TERRITORY_ALPHA := 0.36
+const TERRITORY_DEPTH := 3.0
 const FROST := Color("#8fb3bd")
 const FROST_EDGE := Color("#e4f4f8")
 # --- Faction --------------------------------------------------------------------------
@@ -129,17 +135,32 @@ func _draw() -> void:
 			occupants[c.position] = c
 	var selected_id := controller.selected_id if controller.selected_id != "" else controller.placing_id
 
+	var center_rect := Rect2()
 	for y in BoardModel.BOARD_SIZE:
 		for x in BoardModel.BOARD_SIZE:
 			var pos := Vector2i(x, y)
 			var rect := tile_rect(pos)
 			var tile := board.get_tile(pos)
 			_draw_tile_material(pos, rect)
+			_draw_territory(pos, rect)
 			_draw_faction_inlay(pos, rect)
 			if tile.terrain_type == "frost":
 				_draw_frost(rect)
 			if tile.is_center:
-				_draw_center_aperture(rect)
+				center_rect = rect
+	# The center glow spills onto its neighbors, so it goes over the whole material pass.
+	if center_rect.size.x > 0:
+		_draw_center_glow(center_rect)
+		_draw_center_aperture(center_rect)
+	for c in occupants.values():
+		if selected_id != "" and (c.instance_id == selected_id or c.mounted_with_id == selected_id):
+			_draw_selected_tile(tile_rect(c.position))
+			break
+
+	for y in BoardModel.BOARD_SIZE:
+		for x in BoardModel.BOARD_SIZE:
+			var pos := Vector2i(x, y)
+			var rect := tile_rect(pos)
 			var obj := board.get_placed_object(pos)
 			if obj != null:
 				_draw_object(font, rect, obj)
@@ -173,9 +194,12 @@ static func pulse(t: float) -> float:
 
 
 func _draw_board_frame(board_rect: Rect2) -> void:
-	draw_rect(board_rect.grow(16.0), FRAME_SHADOW)
-	draw_rect(board_rect.grow(10.0), Color("#151918"))
+	# A soft drop shadow, then a bronze band that separates the board from the page.
+	for i in 4:
+		draw_rect(board_rect.grow(20.0 - 2.0 * i), Color(FRAME_SHADOW, 0.18 + 0.12 * i))
+	draw_rect(board_rect.grow(10.0), FRAME_BAND)
 	draw_rect(board_rect.grow(10.0), FRAME_EDGE, false, 3.0)
+	draw_rect(board_rect.grow(1.5), Color(0, 0, 0, 0.6), false, 2.0)
 	var bevel := board_rect.grow(5.0)
 	draw_line(bevel.position, Vector2(bevel.end.x, bevel.position.y), FRAME_BEVEL_LIGHT, 2.0)
 	draw_line(bevel.position, Vector2(bevel.position.x, bevel.end.y), FRAME_BEVEL_LIGHT, 2.0)
@@ -215,7 +239,35 @@ static func _lcg(noise: int) -> int:
 	return (noise * 1103515245 + 12345) & 0x7fffffff
 
 
-# Faction territory inlaid into each back row: channels and inlays, never solid fills.
+# Each side's territory as a colored wash that fades toward the middle of the board:
+# a vertical gradient per tile, continuous across rows (Player 1 is at the bottom).
+func _draw_territory(pos: Vector2i, rect: Rect2) -> void:
+	var depth_p1 := float(pos.y - BoardModel.PLAYER_A_EDGE_ROW)
+	var depth_p2 := float(BoardModel.PLAYER_B_EDGE_ROW - pos.y)
+	var color: Color
+	var near_edge: float   # tiles from the owner's outer edge to this tile's outer side
+	if depth_p1 < TERRITORY_DEPTH:
+		color = CITY_RED
+		near_edge = depth_p1
+	elif depth_p2 < TERRITORY_DEPTH:
+		color = FLOOD_CYAN
+		near_edge = depth_p2
+	else:
+		return
+	var outer := Color(color, territory_alpha(near_edge))
+	var inner := Color(color, territory_alpha(near_edge + 1.0))
+	var top := inner if color == CITY_RED else outer
+	var bottom := outer if color == CITY_RED else inner
+	draw_polygon(PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end,
+			Vector2(rect.position.x, rect.end.y)]), PackedColorArray([top, top, bottom, bottom]))
+
+
+static func territory_alpha(tiles_from_edge: float) -> float:
+	var t := clampf(1.0 - tiles_from_edge / TERRITORY_DEPTH, 0.0, 1.0)
+	return TERRITORY_ALPHA * t * t
+
+
+# Faction territory inlaid into each back row: channels and inlays over the wash.
 func _draw_faction_inlay(pos: Vector2i, rect: Rect2) -> void:
 	var px := rect.size.x
 	if pos.y == BoardModel.PLAYER_A_EDGE_ROW:
@@ -235,6 +287,24 @@ func _draw_faction_inlay(pos: Vector2i, rect: Rect2) -> void:
 		draw_line(Vector2(rect.position.x, y2), Vector2(rect.end.x, y2), Color(FLOOD_CYAN, 0.4), 1.0)
 		draw_arc(rect.position + Vector2(px * 0.5, px * 0.14), px * 0.09, 0.0, PI, 10, Color(FLOOD_BRONZE, 0.8), 1.5)
 		draw_circle(rect.position + Vector2(px * 0.5, px * 0.19), px * 0.018, Color(FLOOD_IVORY, 0.85))
+
+
+# A warm light pooling out of the convergence: it reaches the neighboring tiles so the
+# objective reads from across the board, and breathes with the pulse.
+func _draw_center_glow(rect: Rect2) -> void:
+	var px := rect.size.x
+	var c := rect.get_center()
+	var p := pulse(_time)
+	draw_rect(rect, Color(CENTER_GLOW, 0.10 + 0.04 * p))
+	for i in 8:
+		draw_circle(c, px * (1.15 - 0.12 * i), Color(CENTER_GLOW, 0.022 + 0.008 * p))
+	draw_rect(rect.grow(-1.0), Color(CENTER_GLOW, 0.55 + 0.2 * p), false, 2.0)
+
+
+# The selected piece's tile: a gold wash and edge, under its markers and figure.
+func _draw_selected_tile(rect: Rect2) -> void:
+	draw_rect(rect, Color(SELECTED, 0.20))
+	draw_rect(rect.grow(-1.5), Color(SELECTED, 0.85), false, 3.0)
 
 
 func _draw_frost(rect: Rect2) -> void:
