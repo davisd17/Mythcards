@@ -91,8 +91,10 @@ func damage_value(attacker: CharacterInstance, target: CharacterInstance, damage
 	var v := personality.w("damage") * damage
 	if damage >= target.current_hp:
 		v += personality.w("defeat") * value_of(target)
+		# Embers stack (ruling 2026-10-11): 1 plus whatever the target carried.
+		v += personality.w("ember") * (1 + target.spirit_ember_count)
 		if attacker.level == 2:
-			v += personality.w("ember_at_level_2")
+			v += personality.w("level_3")   # a Level 2 character's defeat raises it to Level 3
 	return v
 
 
@@ -142,12 +144,16 @@ func _tile_value(c: CharacterInstance, pos: Vector2i) -> float:
 	# Fragile, valuable pieces fear danger more, but capped: an uncapped ratio made two
 	# 2-HP Heroes refuse to engage forever (AI vs AI, seed 2).
 	var fragility := clampf(value_of(c) / maxf(1.0, float(c.current_hp)), 0.5, 2.0)
-	v -= personality.w("danger") * danger(c, pos) * fragility * 0.5 * boldness
+	# Carried Embers go to whoever defeats the carrier, so carriers are more careful.
+	v -= personality.w("danger") * danger(c, pos) * fragility * 0.5 * boldness * (1.0 + 0.3 * c.spirit_ember_count)
 	var sys: AbilitySystem = RulesEngine.systems().ability
 	if c.level == 1 and pos.y == _opponent_edge(c.player_id):
 		v += personality.w("level_2")
-	if c.level == 2 and c.spirit_ember_count > 0 and pos == BoardModel.CENTER_TILE:
-		v += personality.w("level_3")
+	if c.spirit_ember_count > 0 and pos == BoardModel.CENTER_TILE:
+		var banked: int = GameState.match_state.get_player(c.player_id).embers_delivered
+		v += personality.w("deliver") * c.spirit_ember_count
+		if banked + c.spirit_ember_count >= VictoryChecker.EMBERS_TO_WIN:
+			v += personality.w("win", 100.0)
 	if sys.has_leak(pos) and not sys.handler_for(c).ignores_leaks(sys, c):
 		v -= personality.w("leak_tile")
 	return v

@@ -246,9 +246,9 @@ First-pass balance assumptions:
 - Low-ATK characters should have stronger utility abilities so they remain fun even when their basic attacks are weak.
 
 Mounted character rules:
-- A Hero or Leader may mount an allied Mount character as an action if adjacent to that Mount, and only if both the player's pool AP and that Hero or Leader's own character AP are available — mounting costs 1 pool AP and 1 character AP like any other action (see Section 12).
+- A Hero or Leader may mount an adjacent allied Mount character. Mounting is free: it costs no pool AP and no character AP (decided 2026-10-11). Dismounting still costs 1 pool AP and the rider's character AP.
 - Mounting moves the Hero or Leader onto the Mount's tile. They occupy the same space as one combined mounted pair.
-- Mounted pair AP (decided, 2026-09-28): moving a mounted pair spends 1 pool AP and the Mount's character AP, not the rider's. Mounting, attacks, abilities, and dismounting spend the rider's character AP. Movement is separate from mounting, so a Hero or Leader can mount and then move in the same turn. Track in paper tests: a mounted pair can now take two actions per turn (a move plus an attack or ability), which may make mounting too strong.
+- Mounted pair AP (decided, 2026-09-28): moving a mounted pair spends 1 pool AP and the Mount's character AP, not the rider's. Attacks, abilities, and dismounting spend the rider's character AP (mounting is free, 2026-10-11). Movement is separate from mounting, so a Hero or Leader can mount and then move in the same turn. Track in paper tests: a mounted pair can now take two actions per turn (a move plus an attack or ability), which may make mounting too strong.
 - A mounted pair uses the Hero or Leader's HP, ATK, RANGE, level, and abilities, but uses the Mount's MOVE and movement pattern.
 - The Mount cannot take separate actions while mounted.
 - Damage is applied to the mounted Hero or Leader's HP. When that HP reaches 0, both the rider and Mount are defeated.
@@ -317,7 +317,7 @@ Upgrade path:
 - Each character has 3 levels.
 - Level 1 is the starting version.
 - Level 2 is earned by crossing all the way to the opponent's edge of the board.
-- Level 3 is earned after a Level 2 character collects a Spirit Ember released by a defeated enemy and carries it to the center square.
+- Level 3 is earned when a Level 2 character defeats an enemy (decided 2026-10-11). A Level 1 character that defeats an enemy only takes the Spirit Ember(s).
 - Levels 2 and 3 improve that character's existing identity without changing the card into a different character.
 - Each level-up restores the character to full HP, using its new maximum (decided 2026-10-06).
 - Card levels are part of match gameplay, not account progression or paid unlocks.
@@ -418,15 +418,15 @@ The current level-up rule has two stages:
 | Level | Requirement | Design Purpose |
 | --- | --- | --- |
 | Level 2 | A Level 1 character crosses to the opponent's board edge. | Rewards penetration, risk, and reaching enemy territory. |
-| Level 3 | A Level 2 character collects a Spirit Ember from a defeated enemy, then reaches the center square. | Forces a second tactical objective and pulls upgraded pieces back toward the contested middle. |
+| Level 3 | A Level 2 character defeats an enemy (decided 2026-10-11). | Rewards a leveled piece for fighting, and puts the transformative Level 3 within reach in real matches (AI-vs-AI runs reached the old center requirement in only 3 of 20 matches). |
 
 Terminology (decided):
 - The mechanic and its rules/UI name is `Spirit Ember` - a fragment of spirit/myth released when an enemy is defeated within the convergence, not a literal body part. This resolves PRD-RISK-006 and PRD-OQ-009.
-- The center square becomes important for Level 3 progression in addition to positioning and relic/event effects.
+- The center square is where Spirit Embers are delivered: banking 4 wins the match (Section 13).
 
-Collection mechanic (decided, 2026-08-28): Spirit Ember pickup is automatic and immediate — when a character defeats an enemy character, the defeating character receives the Spirit Ember at that moment. No separate action, and no requirement to move onto the defeated character's tile, is needed to collect it. The character must still physically carry it to the center square while at Level 2 to trigger Level 3.
+Collection mechanic (decided 2026-08-28, updated 2026-10-11): when a character defeats an enemy character, the defeating character receives that enemy's Spirit Ember at once, plus every undelivered Ember the enemy was carrying. Embers stack, so a carrier is a richer target. A defeat with no enemy responsible (a Leak) loses the carried Embers. Embers are no longer used for leveling; they're delivered for the Ember win (Section 13).
 
-Mounted pairs (decided, 2026-09-25): defeating a mounted pair defeats two characters — the rider and the Mount — and so releases **two** Spirit Embers, both to the defeating character. A character may therefore carry more than one Ember; reaching the center square at Level 2 spends one, and any surplus stays with the carrier. Worth tracking in paper tests as a possible over-reward for killing mounted pieces, since a second Ember currently has no second use.
+Mounted pairs (decided, 2026-09-25): defeating a mounted pair defeats two characters, the rider and the Mount, so the defeating character receives two Embers plus anything either carried.
 
 Open balance task: leveling should reliably be worth pursuing, not just theoretically available. Given the small 7-unit squads and instant-loss-on-Hero-capture, the risk of exposing a piece to reach the enemy edge (Level 2) or return to center with a Spirit Ember (Level 3) needs explicit playtesting to confirm the reward justifies the exposure — tune HP/ability power at Level 2/3, or the risk of the crossing itself, if early paper matches show players never attempt it.
 
@@ -446,7 +446,7 @@ Initial requirements:
 - Show danger zones.
 - Support drag-and-drop and tap-to-confirm controls.
 - The center tile should be visually marked during testing because it is a natural tactical focal point.
-- The center tile must support Level 3 advancement when a Level 2 character carrying a Spirit Ember reaches it.
+- The center tile is where Spirit Embers are delivered: a carrier reaching it banks every Ember it holds into its team's total (decided 2026-10-11).
 - The digital tabletop prototype should support manually placed board objects, such as pylons, barricades, or other playtest markers.
 
 ### Future Board Features
@@ -470,7 +470,7 @@ Recommended prototype turn structure:
    - Move a character by spending 1 pool AP and 1 of that character's AP.
    - Attack with a character by spending 1 pool AP and 1 of that character's AP.
    - Activate an ability by spending 1 pool AP and 1 of that character's AP.
-   - Pick up, carry, or deliver a Spirit Ember if the final prototype implementation treats Spirit Embers as explicit board objects or status markers.
+   - Spirit Embers are picked up automatically on a defeat and delivered automatically on reaching the center tile; neither costs AP.
    - Resolve any active relic or event effects.
 6. Player ends turn.
 7. End of turn effects resolve.
@@ -516,6 +516,14 @@ Pros:
 Design note:
 The Hero should be powerful enough to matter, but vulnerable enough that careless positioning can lose the game.
 
+### Spirit Ember Delivery
+
+Win (decided 2026-10-11) when your team has delivered 4 Spirit Embers to the center tile over the match. A character reaching the center banks every Ember it carries at once. Hero capture and army defeat remain as the other two ways to win.
+
+Pros:
+- Gives every match an objective to race toward instead of a long mop-up.
+- Makes the center contested and Ember carriers worth hunting.
+
 ### Army Defeat
 
 If a player defeats all opposing characters, that player also wins.
@@ -536,7 +544,7 @@ Progression must keep the game fair. Cards stay mechanically consistent, and unl
 
 - Each character has 3 levels.
 - Characters reach Level 2 during a match by crossing to the opponent's edge of the board.
-- Characters reach Level 3 by collecting a Spirit Ember from a defeated enemy and taking it to the center square.
+- Characters reach Level 3 when, at Level 2, they defeat an enemy.
 - Level-ups should improve or deepen the character's existing role.
 - Level-ups reset each match unless a future mode explicitly says otherwise.
 
@@ -694,10 +702,10 @@ The first playable prototype should prove the core game is fun before adding col
 | PRD-FR-001 | The prototype shall support a 7x7 tactical board with a visible center tile and two opposing player sides. | PRD-GOAL-001 |
 | PRD-FR-002 | The prototype shall support two playable cultures, Russian-inspired and Atlantean, each with one character for each of the seven base character types. | PRD-GOAL-002 |
 | PRD-FR-003 | The prototype shall support turn-based movement, attacks, character abilities, mount/dismount actions, and pass/end-turn flow. | PRD-GOAL-001 |
-| PRD-FR-004 | The prototype shall support Hero capture and army defeat victory conditions. | PRD-GOAL-001 |
+| PRD-FR-004 | The prototype shall support Hero capture, army defeat, and Spirit Ember delivery (4 banked at the center) victory conditions. | PRD-GOAL-001 |
 | PRD-FR-005 | The prototype shall support a shared relic/event deck with one draw for the active player each turn. | PRD-GOAL-004 |
 | PRD-FR-006 | The prototype shall support in-match character progression from Level 1 to Level 2 by reaching the opponent's edge. | PRD-GOAL-001 |
-| PRD-FR-007 | The prototype shall support Level 3 progression by having a Level 2 character collect a Spirit Ember and deliver it to the center square. | PRD-GOAL-001 |
+| PRD-FR-007 | The prototype shall support Level 3 progression when a Level 2 character defeats an enemy, and Spirit Ember stacking and delivery to the center for the Ember win. | PRD-GOAL-001 |
 | PRD-FR-008 | The prototype shall expose enough debug or inspection UI for playtesters to understand HP, AP, level, status effects, relics, events, and legal actions. | PRD-GOAL-001 |
 | PRD-FR-009 | The content system shall be structured so future factions can support three sub-areas with seven character types plus relics and events. | PRD-GOAL-005 |
 | PRD-FR-010 | The MVP shall include tutorial, AI match, casual PvP, squad or cosmetic view, collection view, analytics events, local save data, and internal balancing tools. | PRD-GOAL-006 |
@@ -827,7 +835,7 @@ Deliverables:
 - Character abilities
 - Shared relic/event draw
 - Character level-up trigger
-- Spirit Ember tracking for Level 3 progression
+- Spirit Ember tracking (stacking, delivery, Ember win)
 - Win/loss condition
 - Debug UI
 

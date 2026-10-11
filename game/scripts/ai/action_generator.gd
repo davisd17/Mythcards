@@ -53,10 +53,10 @@ func generate() -> Array[Dictionary]:
 					var payload := GameController.finalize_payload(picks)
 					payload["ability_id"] = ability_id
 					result.append(_candidate("ability", id, payload, "ability"))
-			for mount_id in RulesEngine.get_legal_mount_ids(id):
-				result.append(_candidate("mount", id, {"mount_id": mount_id}, "mount"))
 			for to in RulesEngine.get_legal_dismount_tiles(id):
 				result.append(_candidate("dismount", id, {"to": to}, "dismount"))
+		for mount_id in RulesEngine.get_legal_mount_ids(id):   # free (ruling 2026-10-11)
+			result.append(_candidate("mount", id, {"mount_id": mount_id}, "mount"))
 		for tag in RulesEngine.get_offered_bonus_tags(id):
 			for picks in expand(func(p): return sys.bonus_step(c, tag, p)):
 				var payload := GameController.finalize_payload(picks)

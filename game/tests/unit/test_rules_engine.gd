@@ -381,12 +381,14 @@ func test_failed_ability_execution_spends_nothing() -> void:
 
 # --- Mount / dismount ----------------------------------------------------------
 
-func test_mount_adjacent_mount_calls_mount_system_and_spends_ap() -> void:
+func test_mount_adjacent_mount_calls_mount_system_and_is_free() -> void:
 	var general := _put(GENERAL, Vector2i(3, 3))
 	_put(TIGER, Vector2i(3, 4))
-	assert_true(_act("mount", GENERAL, {"mount_id": TIGER}).success)
+	general.character_ap_remaining = 0
+	_state().get_player("p1").pool_ap_remaining = 0
+	assert_true(_act("mount", GENERAL, {"mount_id": TIGER}).success, "no AP needed (ruling 2026-10-11)")
 	assert_eq(mounts.mounted, [[GENERAL, TIGER]])
-	assert_eq(general.character_ap_remaining, 0)
+	assert_eq(_state().get_player("p1").pool_ap_remaining, 0)
 
 
 func test_c9_mount_not_adjacent() -> void:

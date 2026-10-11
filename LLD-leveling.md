@@ -171,6 +171,12 @@ The first implementation (`game/scripts/systems/leveling_system.gd`) differs fro
 
 - **Every level-up restores full HP** (designer ruling 2026-10-06). After the level's bonuses are applied, `AbilitySystem.apply_level_up_effects` sets current HP to the effective maximum, counting conditional HP (Stand Firm) and relic bonuses. This replaces the earlier "heal by the HP gained".
 
+- **New leveling and Ember rules** (designer rulings 2026-10-11; these replace Level 3 at the center):
+  - Level 2 is unchanged: reaching the opponent's edge.
+  - **Level 3: a Level 2 character defeats an enemy.** A Level 1 character that defeats an enemy only takes the Embers.
+  - **Embers stack:** a defeat gives 1 Ember plus everything the fallen character carried. A hazard defeat (Leak) loses them.
+  - **Delivery:** a carrier on the center tile, by move, reposition, or a defeat made while standing there, banks every Ember it holds into `PlayerState.embers_delivered`. `spirit_ember_delivered` still fires, so cards like Tactical Mastery and Perfect Chord still trigger.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

@@ -256,6 +256,8 @@ The first implementation (`game/scripts/systems/combat_resolver.gd`, `mount_syst
 
 **Damage explanation (not a rule change):** a Sniper's 2 ATK taking 1 life was reported as a bug. The engine is correct: the Resonance Guard's Quartz Armor takes 1 off ranged attacks (`test_sniper_damage.gd` checks every Atlantean at range and adjacent). The game screen now explains each basic attack, e.g. "Sniper hit Resonance Guard for 1 (ATK 2, -1 Resonance Guard's armor)", from `CombatResolver.last_attack_breakdown` (ATK, reduction and its sources, shield, Memory).
 
+- **Mounting is free** (designer ruling 2026-10-11): no pool or character AP (`mount` left `CHARACTER_ACTIONS_WITH_AP`). Dismounting still costs 1 AP from the rider. The pair still moves on the Mount's AP, so a Hero can mount, move, and attack in one turn.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

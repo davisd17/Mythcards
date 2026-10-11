@@ -31,6 +31,9 @@ var _popup_queue: Array[String] = []   # card ids waiting to be shown, oldest fi
 var _shown_reveal := ""                # the revealed card already shown for the current choice
 var _menu := PanelContainer.new()
 var _chooser := Control.new()        # New match: vs AI as either team, or hotseat
+var _notice_button := Button.new()  # a passing notice (e.g. the AI drew a card); fades on its own
+var _notice_timer := Timer.new()
+var _notice_card := ""
 var _ai_timer := Timer.new()         # plays the AI's turn one visible step at a time
 const AI_STEP_SECONDS := 0.6
 var _log := Control.new()            # the action log overlay (MatchLog)
@@ -111,6 +114,7 @@ func _ready() -> void:
 	_build_popup()
 	_build_log()
 	_build_menu()
+	_build_notice()
 	_build_chooser()
 	_ai_timer.wait_time = AI_STEP_SECONDS
 	_ai_timer.timeout.connect(_on_ai_tick)
@@ -192,7 +196,8 @@ func _refresh() -> void:
 	var state := GameState.match_state
 	_game_over.visible = state != null and state.phase == "ended" and controller.setup == null
 	if _game_over.visible:
-		var how := "Hero capture" if state.win_condition == "hero_capture" else "Army defeat"
+		var how: String = {"hero_capture": "Hero capture", "army_defeat": "Army defeat",
+				"ember_delivery": "delivering 4 Spirit Embers"}.get(state.win_condition, state.win_condition)
 		_game_over_label.text = "%s wins by %s." % [_player_name(state.winner_id), how]
 
 
@@ -226,6 +231,9 @@ func _refresh_header() -> void:
 		var chip := _chip("Event: " + _card_name(card_id), Color("#5b4a2e"))
 		chip.pressed.connect(func(): _show_card(card_id, "This event is in effect."))
 		_chips.add_child(chip)
+	for p in state.players:
+		var embers := "%s Embers %d/%d" % [_short_name(p.id), p.embers_delivered, VictoryChecker.EMBERS_TO_WIN]
+		_chips.add_child(_chip(embers, Color("#7a4a1c")))
 	_chips.add_child(_chip("Deck: %d" % state.shared_deck.size(), Color("#333333")))
 
 
@@ -356,6 +364,10 @@ func _on_card_drawn(player_id: String, card_id: String) -> void:
 	var card := ContentDB.get_relic_event(card_id)
 	var kind := card.kind.to_lower() if card != null else "card"
 	var article := "an" if kind.begins_with("e") else "a"
+	if controller.is_ai(player_id):
+		# The AI's draws don't stop play (playtest 2026-10-11): a notice you can tap to view.
+		_notice("%s drew %s. Tap to view." % [_player_name(player_id), card.card_name if card != null else card_id], card_id)
+		return
 	_popup_queue.append("%s|%s drew %s %s." % [card_id, _player_name(player_id), article, kind])
 	if not _popup.visible:
 		_next_popup()
@@ -458,6 +470,33 @@ func _toggle_log() -> void:
 		_log_text.text = MatchLog.as_text(true) if not MatchLog.entries.is_empty() else "Nothing has happened yet."
 		await get_tree().process_frame
 		_log_scroll.scroll_vertical = int(_log_scroll.get_v_scroll_bar().max_value)   # newest at the bottom
+
+
+func _build_notice() -> void:
+	_notice_button.visible = false
+	_notice_button.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	_notice_button.offset_left = -320
+	_notice_button.offset_right = 320
+	_notice_button.offset_top = 120
+	_notice_button.custom_minimum_size = Vector2(0, BUTTON_HEIGHT)
+	_notice_button.add_theme_font_size_override("font_size", 18)
+	_notice_button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_notice_button.pressed.connect(func():
+		_notice_button.visible = false
+		if _notice_card != "":
+			_show_card(_notice_card, "Drawn by the AI."))
+	add_child(_notice_button)
+	_notice_timer.one_shot = true
+	_notice_timer.wait_time = 4.0
+	_notice_timer.timeout.connect(func(): _notice_button.visible = false)
+	add_child(_notice_timer)
+
+
+func _notice(text: String, card_id: String = "") -> void:
+	_notice_button.text = text
+	_notice_card = card_id
+	_notice_button.visible = true
+	_notice_timer.start()
 
 
 func _build_chooser() -> void:

@@ -170,3 +170,31 @@ func test_the_ai_plays_its_turn_and_hands_back() -> void:
 		ticks += 1
 	assert_eq(state.active_player_id, "p1", "the AI ended its turn")
 	assert_true(MatchLog.entries.any(func(e): return e.player == "p2" and e.text.contains("ends the turn")))
+
+
+func test_ai_draws_do_not_stop_play() -> void:
+	# Playtest 2026-10-11: no Continue needed when the computer draws.
+	screen._start("p2")
+	var gc: GameController = screen.controller
+	gc.auto_place()
+	gc.confirm_placement(7)
+	screen._popup_queue.clear()
+	screen._next_popup()
+	TurnManager.relic_event_deck = null
+	GameState.match_state.shared_deck = ["r-seventeen-seconds"] as Array[String]
+	RelicEventDeck.draw_for("p2")
+	assert_false(screen._popup.visible, "no blocking popup for the AI's draw")
+	assert_true(screen._notice_button.visible)
+	assert_string_contains(screen._notice_button.text, "drew Seventeen Seconds")
+	screen._notice_button.pressed.emit()
+	assert_true(screen._popup.visible, "tapping the notice shows the card")
+
+
+func test_ember_score_shows_in_the_top_bar() -> void:
+	_deploy_both()
+	GameState.match_state.get_player("p1").embers_delivered = 2
+	screen._refresh()
+	await wait_process_frames(1)
+	var chips: Array = screen._chips.get_children().filter(func(c): return not c.is_queued_for_deletion()).map(func(c): return c.text)
+	assert_true(chips.has("P1 Embers 2/4"), str(chips))
+	assert_true(chips.has("P2 Embers 0/4"))

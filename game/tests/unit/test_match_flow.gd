@@ -70,13 +70,14 @@ func test_mount_ride_dismount_sequence() -> void:
 	var tiger := Fixture.put(TIGER, Vector2i(3, 2))
 
 	Fixture.state().get_player("p1").pool_ap_remaining = 4
-	# Designer ruling 2026-09-28: the rider climbs onto the Mount's square, mounting spends
-	# the rider's AP, and the pair then moves on the Mount's AP in the same turn.
+	# Designer rulings: the rider climbs onto the Mount's square (2026-09-28); mounting is
+	# free (2026-10-11); the pair moves on the Mount's AP; dismounting costs 1 AP.
 	assert_true(_act("mount", GENERAL, {"mount_id": TIGER}).success)
 	assert_true(general.is_mounted_rider)
 	assert_eq(general.position, Vector2i(3, 2))
 	assert_false(Fixture.board().is_occupied_by_character(Vector2i(3, 1)))
-	assert_eq(general.character_ap_remaining, 0)
+	assert_eq(general.character_ap_remaining, 1, "mounting is free (ruling 2026-10-11)")
+	assert_eq(Fixture.state().get_player("p1").pool_ap_remaining, 4)
 	assert_eq(_act("move", TIGER, {"to": Vector2i(3, 3)}).reason, "carrying a rider")
 	assert_true(RulesEngine.get_legal_move_tiles(GENERAL).has(Vector2i(3, 5)), "3 tiles, within the Mount's MOVE 4")
 	assert_true(_act("move", GENERAL, {"to": Vector2i(3, 5)}).success)

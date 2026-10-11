@@ -17,7 +17,7 @@ const MOVEMENT_PATTERNS: Array[String] = ["orthogonal"]
 const PLACED_OBJECT_TYPES: Array[String] = ["barricade", "pylon", "stone", "leak", "vault"]
 
 const MATCH_PHASES: Array[String] = ["setup", "in_progress", "ended"]
-const WIN_CONDITIONS: Array[String] = ["", "hero_capture", "army_defeat"]
+const WIN_CONDITIONS: Array[String] = ["", "hero_capture", "army_defeat", "ember_delivery"]
 
 # How long a StatusEffect lasts; TurnManager clears each kind at its owner's turn start
 # (LLD-match-setup 4.3).

@@ -132,6 +132,8 @@ The first implementation (`game/scripts/autoloads/victory_checker.gd`) differs f
 - **Tests use the real board** instead of doubles for `BoardModel`/`MountSystem`, because a trapped or free Hero is easy to arrange on a 7x7 grid. The integration suite (`test_match_flow.gd`) covers losing by ending a turn with a trapped Hero, freeing it just in time, and winning immediately on the last defeat. An opening-position test confirms no Hero is ever captured straight from setup.
 - **⚠ Balance flag — a Hero slowed to 0 MOVE is captured at the end of its own turn, even with open tiles next to it.** This is the literal BR-034 reading ("no legal move available"), and HLD-R-002 requires status effects to count. The concrete case: Frost Seer's **Deep Freeze** (L3) makes an already-slowed target "unable to move next turn." That's a `next_turn` effect, still active at the end of the Hero's next turn, so **Deep Freeze on a slowed Hero is an instant win.** Mounting avoids it, because a mounted pair uses the Mount's MOVE. **Designer ruling 2026-09-27: keep as-is.** It's a Level 3 payoff; watch it in playtesting. If it proves too strong, one fix is to count only *positional* blocking toward capture and ignore MOVE reductions, which would be a BR-034 change.
 
+- **Ember win** (designer ruling 2026-10-11): a team that has banked `VictoryChecker.EMBERS_TO_WIN` (4) Spirit Embers at the center wins, checked on each `spirit_ember_delivered`. Win condition id `ember_delivery`. Hero capture and army defeat are unchanged.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

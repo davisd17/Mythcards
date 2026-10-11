@@ -6,20 +6,22 @@
   "weights": {
     "damage": 1,
     "defeat": 1.5,
-    "ember_at_level_2": 2,
     "object_attack": 0.3,
     "in_range": 1.2,
     "approach": 0.35,
     "danger": 0.45,
     "level_2": 3,
-    "level_3": 4,
+    "level_3": 3,
     "leak_tile": 1,
     "hero_cramped": 1.5,
     "trap_enemy_hero": 1,
     "mount": 0.6,
     "relic_power": 0.4,
     "ability_default": 0.5,
-    "patience": 20
+    "patience": 20,
+    "ember": 1,
+    "deliver": 2.5,
+    "win": 100
   },
   "character_value": {
     "Hero": 10,

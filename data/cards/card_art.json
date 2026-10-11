@@ -1,5 +1,5 @@
 {
-  "_note": "Card id -> art file (relative to the repo root) shown on the game screen. Where several versions exist, the tarot-titled or newest one was used. Cards not listed show a text card. tools/sync_game_content.ps1 copies downscaled versions into the game.",
+  "_note": "Card id -> art file (relative to the repo root) shown on the game screen. Uses the preferred (first-listed) asset in each card's review-draft entry, else the tarot-titled or newest version. Cards not listed show a text card. tools/sync_game_content.ps1 copies downscaled versions into the game.",
   "r-vera-7": "assets/characters/vera-7-queen-of-pentacles-character-card-art.png",
   "r-yuri-volkov": "assets/characters/major-yuri-volkov-strength-character-card-art.png",
   "r-mikhail-orlov": "assets/characters/dr-mikhail-orlov-the-magician-character-art.png",
@@ -26,5 +26,12 @@
   "r-signal-array-turns": "assets/events/closed-city-signal-array-turns-eight-of-wands-event-art.png",
   "r-reactor-prayer": "assets/events/closed-city-reactor-prayer-the-sun-event-art.png",
   "r-closed-city-incident": "assets/events/closed-city-incident-the-tower-event-art.png",
-  "r-seventeen-seconds": "assets/events/closed-city-seventeen-seconds-wheel-of-fortune-event-art.png"
+  "r-seventeen-seconds": "assets/events/closed-city-seventeen-seconds-wheel-of-fortune-event-art.png",
+  "a-flood-survivor-emerald-tablet": "assets/relics/flood-survivors-emerald-tablet-the-magician-relic-art-v4.png",
+  "a-flood-survivor-black-sarcophagus": "assets/relics/flood-survivors-black-sarcophagus-death-relic-art-v2.png",
+  "a-flood-survivor-tide-sealed-archive": "assets/relics/flood-survivors-tide-sealed-archive-seven-of-cups-relic-art-v3.png",
+  "a-flood-survivor-the-causeway-breathes": "assets/events/flood-survivors-the-causeway-breathes-ace-of-wands-event-art-v2.png",
+  "a-flood-survivor-black-water-remembers": "assets/events/flood-survivors-black-water-remembers-the-moon-event-art-v2.png",
+  "a-flood-survivor-the-flood-reaches-the-walls": "assets/events/flood-survivors-the-flood-reaches-the-walls-the-tower-event-art.png",
+  "a-flood-survivor-the-drowned-seraph-speaks": "assets/events/flood-survivors-the-drowned-seraph-speaks-justice-event-art.png"
 }

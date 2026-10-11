@@ -5,7 +5,8 @@ extends Node
 
 const ACTION_TYPES: Array[String] = ["move", "attack", "ability", "mount", "dismount", "end_turn",
 	"reactive_bonus", "deck_choice", "use_relic"]
-const CHARACTER_ACTIONS_WITH_AP: Array[String] = ["move", "attack", "ability", "mount", "dismount"]
+# Mounting is free (designer ruling 2026-10-11); dismounting still costs 1 AP.
+const CHARACTER_ACTIONS_WITH_AP: Array[String] = ["move", "attack", "ability", "dismount"]
 
 # Per-match collaborators, built for the current MatchState on first use. Tests replace
 # them with use_systems().
@@ -336,8 +337,7 @@ func _handle_mount(actor: CharacterInstance, payload: Dictionary) -> Dictionary:
 		return _fail(error)
 	mount_system.mount(actor, mount_char)
 	ability_system.sync_conditional_hp(actor)   # VERA-7: Protected Passenger
-	_spend_ap(actor)
-	return {"success": true}
+	return {"success": true}   # free: no pool or character AP
 
 
 func _mount_error(actor: CharacterInstance, mount_char: CharacterInstance) -> String:

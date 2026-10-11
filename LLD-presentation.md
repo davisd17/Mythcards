@@ -292,6 +292,10 @@ Built as HLD step 16 after the first hands-on playtest. **Designer ruling: the g
 - **Action log.** `MatchLog` (autoload) listens to EventBus and keeps one entry per action, with detail lines for everything the action caused. Damage comes from the new `damage_resolved` signal, where `CombatResolver` names each step and its source: printed ATK, level bonuses, +ATK from whom, relics, Marked by whom, each reduction's owner, Shields, Memory, and survival intercepts. Statuses come from `status_added` (with who gave them). Draws, Leaks, Memory, defeats, level-ups, and Embers are recorded too. Entries are grouped by turn, and the next turn's draw is filed under that turn. The **Log** button in the top bar opens a scrollable overlay, newest at the bottom.
 - **New match chooser** at launch and from the Menu: *Play Closed City vs the AI*, *Play Flood Survivors vs the AI*, or *Hotseat*. On the AI's turn, a 0.6 s timer plays one AI decision per tick through `GameController.ai_step`. Taps and End turn are disabled until it ends its turn; its side is labelled "(…, AI)". See LLD-ai-opponent.md.
 
+**Playtest additions (2026-10-11)**
+- **The AI's draws don't stop play.** A card the AI draws shows as a notice under the top bar ("… drew X. Tap to view.") that disappears after 4 s; tapping it opens the card. Your own draws still pop up.
+- **Ember score** chips ("P1 Embers 2/4") sit with the relic and event chips. The game-over panel names the Ember win.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

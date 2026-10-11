@@ -95,15 +95,15 @@ func test_being_repositioned_onto_the_edge_levels_up() -> void:
 	assert_eq(gymnast.level, 2)
 
 
-func test_being_repositioned_onto_the_center_with_an_ember_gives_level_3() -> void:
+func test_being_repositioned_onto_the_center_banks_embers() -> void:
 	var sniper := Fixture.put(SNIPER, CENTER)
-	sniper.level = 2
 	sniper.spirit_ember_count = 1
 	EventBus.character_repositioned.emit(SNIPER, Vector2i(3, 2), CENTER, "teleport")
-	assert_eq(sniper.level, 3)
+	assert_eq(sniper.spirit_ember_count, 0)
+	assert_eq(Fixture.state().get_player("p1").embers_delivered, 1)
 
 
-# --- Spirit Embers -------------------------------------------------------------
+# --- Spirit Embers (designer rulings 2026-10-11) ------------------------------
 
 func test_c3_defeat_grants_the_attacker_an_ember() -> void:
 	_defeated(GUARD, SNIPER)
@@ -119,63 +119,80 @@ func test_c4_mounted_pair_kill_grants_two_embers() -> void:
 	assert_signal_emit_count(EventBus, "spirit_ember_picked_up", 2)
 
 
+func test_embers_stack_onto_whoever_defeats_the_carrier() -> void:
+	_c(GUARD).spirit_ember_count = 2          # undelivered
+	_defeated(GUARD, SNIPER)
+	assert_eq(_c(SNIPER).spirit_ember_count, 3, "its own 1 plus the 2 it carried")
+	assert_eq(_c(GUARD).spirit_ember_count, 0)
+
+
+func test_a_hazard_defeat_loses_the_embers() -> void:
+	_c(GUARD).spirit_ember_count = 2
+	_defeated(GUARD, GUARD)                     # a Leak: no enemy did it
+	assert_eq(_c(GUARD).spirit_ember_count, 0)
+	assert_signal_not_emitted(EventBus, "spirit_ember_picked_up")
+
+
 func test_unknown_attacker_is_ignored() -> void:
 	_defeated(GUARD, "nobody")
 	assert_signal_not_emitted(EventBus, "spirit_ember_picked_up")
 
 
-# --- Level 3 -------------------------------------------------------------------
+# --- Level 3: a Level 2 character defeats an enemy ------------------------------
 
-func test_c2_center_without_ember_stays_level_2() -> void:
+func test_level_2_defeating_an_enemy_reaches_level_3() -> void:
 	_c(SNIPER).level = 2
-	_moved(SNIPER, CENTER)
-	assert_eq(_c(SNIPER).level, 2)
+	_defeated(GUARD, SNIPER)
+	assert_eq(_c(SNIPER).level, 3)
+	assert_eq(ability.level_ups, [[SNIPER, 3]])
+	assert_eq(_c(SNIPER).spirit_ember_count, 1, "and takes the Ember")
 
 
-func test_level_1_with_ember_on_center_stays_level_1() -> void:
-	_c(SNIPER).spirit_ember_count = 1
-	_moved(SNIPER, CENTER)
+func test_level_1_defeating_an_enemy_only_takes_the_ember() -> void:
+	_defeated(GUARD, SNIPER)
 	assert_eq(_c(SNIPER).level, 1)
 	assert_eq(_c(SNIPER).spirit_ember_count, 1)
 
 
-func test_c6_level_2_carrying_ember_to_center_gives_level_3() -> void:
+func test_level_3_stays_level_3() -> void:
+	_c(SNIPER).level = 3
+	_defeated(GUARD, SNIPER)
+	assert_eq(_c(SNIPER).level, 3)
+	assert_signal_not_emitted(EventBus, "character_leveled_up")
+
+
+func test_the_center_no_longer_levels() -> void:
 	var sniper := _c(SNIPER)
 	sniper.level = 2
 	sniper.spirit_ember_count = 1
 	_moved(SNIPER, CENTER)
-	assert_eq(sniper.level, 3)
+	assert_eq(sniper.level, 2)
+
+
+# --- Delivering Embers --------------------------------------------------------------
+
+func test_a_carrier_on_the_center_banks_everything_it_holds() -> void:
+	var sniper := _c(SNIPER)
+	sniper.spirit_ember_count = 3
+	_moved(SNIPER, CENTER)
 	assert_eq(sniper.spirit_ember_count, 0)
-	assert_eq(ability.level_ups, [[SNIPER, 3]])
+	assert_eq(Fixture.state().get_player("p1").embers_delivered, 3)
 	assert_signal_emitted_with_parameters(EventBus, "spirit_ember_delivered", [SNIPER])
 
 
-func test_c5_ember_picked_up_on_center_completes_level_3() -> void:
-	_c(SNIPER).level = 2
+func test_a_defeat_on_the_center_banks_at_once() -> void:
 	Fixture.put(SNIPER, CENTER)
 	_defeated(GUARD, SNIPER)
-	assert_eq(_c(SNIPER).level, 3)
-	assert_signal_emit_count(EventBus, "spirit_ember_delivered", 1)
+	assert_eq(Fixture.state().get_player("p1").embers_delivered, 1)
 
 
-func test_c4a_pair_kill_on_center_levels_once_and_keeps_the_spare() -> void:
-	_c(SNIPER).level = 2
-	Fixture.put(SNIPER, CENTER)
-	_defeated(Fixture.CONDUCTOR, SNIPER, "direct")
-	_defeated(Fixture.GLIDER, SNIPER, "mount_propagation")
-	assert_eq(_c(SNIPER).level, 3)
-	assert_eq(_c(SNIPER).spirit_ember_count, 1)
-	assert_signal_emit_count(EventBus, "spirit_ember_delivered", 1)
-
-
-func test_c7_level_2_on_center_with_ember_chains_to_level_3() -> void:
-	# The edge row can't be the center on a 7x7 board, so drive the chain directly:
-	# a Level 2 announcement for a character already qualified for Level 3.
-	var sniper := Fixture.put(SNIPER, CENTER)
-	sniper.level = 2
-	sniper.spirit_ember_count = 1
-	EventBus.character_leveled_up.emit(SNIPER, 2)
-	assert_eq(sniper.level, 3)
+func test_four_banked_embers_win() -> void:
+	Fixture.state().get_player("p1").embers_delivered = 2
+	_c(SNIPER).spirit_ember_count = 2
+	_moved(SNIPER, CENTER)
+	assert_eq(Fixture.state().phase, "ended")
+	assert_eq(Fixture.state().winner_id, "p1")
+	assert_eq(Fixture.state().win_condition, "ember_delivery")
 
 
 func test_defeated_characters_do_not_level() -> void:

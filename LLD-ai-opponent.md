@@ -79,6 +79,8 @@ The AI-vs-AI test (4 seeded matches) found three AI bugs before any human played
 
 After the fixes, all 4 matches finish in 16–31 turns. Flood Survivors won 3 of 4. That isn't balance evidence yet: the scoring is basic, and Player 1 starts with 2 AP. It's worth watching in the planned AI-vs-AI balance runs.
 
+**Ember rules (2026-10-11):** a defeat is worth 1 Ember plus whatever the target carried, plus `level_3` when the attacker is Level 2. The center is worth `deliver` per Ember carried, plus `win` when banking would reach 4. Carriers weigh danger more, since their Embers go to whoever defeats them. Mount candidates no longer need AP. In AI-vs-AI runs, 2 of 4 matches ended by the Ember win.
+
 ## 7. Roadmap (not built yet)
 
 - **Phase 2 — lookahead.** Score actions by simulating them and evaluating the resulting board. This needs a simulation sandbox:
