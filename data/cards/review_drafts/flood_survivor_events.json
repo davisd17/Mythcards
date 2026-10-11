@@ -221,9 +221,10 @@
     },
     "art_prompt": "A tide-sealed royal casket cracking open in Queen Meret-Anu's hands, releasing thin lines of water-light that form witness faces and erased records.",
     "asset_candidates": [
+      "assets/events/flood-survivors-tide-sealed-archive-opens-four-of-pentacles-event-art-v2.png",
       "assets/events/flood-survivors-tide-sealed-archive-opens-four-of-pentacles-event-art.png"
     ],
-    "art_direction_note": "Four of Pentacles event art keeps Queen Meret-Anu's established face, shell-fan crown, blue veil, white gown, black-gold mantle, and Tide-Sealed Archive casket in the grounded near-photographic Flood Survivors style. The casket opens only a narrow seam, releasing incomplete witness faces and erased records. Four primary archive seals structure the tarot symbolism: two on the casket and two in separate floor plates beneath her feet, expressing protection that has become possession.",
+    "art_direction_note": "Four of Pentacles event art keeps Queen Meret-Anu's established face, shell-fan crown, blue veil, white gown, black-gold mantle, and Tide-Sealed Archive in the grounded near-photographic Flood Survivors style. The preferred v2 restores the casket's original dark weathered bronze construction and same-material low-relief fan motif rather than using a contrasting gold shell. Exactly four ceremonial shell seals are embedded in separate floor plates around Meret-Anu and connected by restrained water-light, forming the opening ritual that releases incomplete witness faces and erased records through one narrow seam.",
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Tide-Sealed Archive can also remain a relic; this event represents a temporary opening of that relic's records.",

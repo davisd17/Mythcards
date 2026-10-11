@@ -6,9 +6,10 @@
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
     "set": "Flood Survivor Relic Set",
-    "set_count": "1 of 6",
+    "set_count": "1 of 7",
     "name": "The Emerald Tablet",
     "kind": "Rare Relic",
+    "tarot_mapping": "The Magician",
     "duration": "Persistent",
     "effect": "Once each turn, after one of your characters gains Memory or starts movement adjacent to a placed object, choose one allied character within 2 tiles of a placed object. It gains Shield or +1 RANGE on its next AP ability this turn.",
     "flavor": "As below, so the drowned city answered above.",
@@ -22,7 +23,13 @@
       "Iset-Nara's sacred measurements"
     ],
     "art_prompt": "A green stone tablet covered in Atlantean-Hermetic symbols resting between black water and desert sand, with mirrored star geometry above and below it.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/flood-survivors-emerald-tablet-the-magician-relic-art-v4.png",
+      "assets/relics/flood-survivors-emerald-tablet-the-magician-relic-art-v3.png",
+      "assets/relics/flood-survivors-emerald-tablet-the-magician-relic-art-v2.png",
+      "assets/relics/flood-survivors-emerald-tablet-the-magician-relic-art.png"
+    ],
+    "art_direction_note": "Preferred v4 presents the Tablet as a thick, brilliant-green fragment cleaved from a much larger mass of nearly pure emerald, with sharp raw crystalline edges and very little salt wear. Dense orderly lines use recognizable letterforms from the historical 21-character Enochian alphabet recorded by John Dee and Edward Kelley, arranged right to left as in Dee's diary. The long Atlantean story inscription is fictional and should not be represented as a verified translation of the limited historical Enochian corpus. Three small separators suggest the Great Crystal, the Flood, and Egypt. Exactly four Magician implements remain around it: one ley-measuring rod, one black-water vessel, one ceremonial bronze blade, and one basalt royal seal.",
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Rare relic for the Flood Survivor sub-area.",
@@ -37,9 +44,10 @@
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
     "set": "Flood Survivor Relic Set",
-    "set_count": "2 of 6",
+    "set_count": "2 of 7",
     "name": "The Black Sarcophagus",
     "kind": "Relic",
+    "tarot_mapping": "Death",
     "duration": "Persistent",
     "effect": "Your Warrior and Hero each gain +1 maximum HP. Once each round, when an enemy adjacent to one of your placed objects attacks, Mark that enemy after the attack resolves.",
     "flavor": "Some coffins are prisons with better prayers.",
@@ -52,7 +60,11 @@
       "the dead as witnesses"
     ],
     "art_prompt": "A sealed black-stone sarcophagus half-submerged in a drowned vault, guarded by a bronze shield and lit by a voice-like glow leaking through the lid seam.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/flood-survivors-black-sarcophagus-death-relic-art-v2.png",
+      "assets/relics/flood-survivors-black-sarcophagus-death-relic-art.png"
+    ],
+    "art_direction_note": "Preferred v2 places Naia's established black-and-gold sarcophagus inside an enclosed Atlantean transformation chamber, avoiding the migration imagery of Exiles Walk Beneath Egypt. It crosses a broken ritual circle divided into thirteen parts. Extinguished rites, dead lotus stems, fallen crowns, and erased names mark the completed cycle; loosening funerary bindings, translucent new growth, changed water, and the splitting of an old royal emblem express irreversible transformation. An eclipse crowns the scene while the lid remains firmly sealed.",
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "User direction: keep The Black Sarcophagus primarily as a relic, not an event.",
@@ -66,9 +78,10 @@
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
     "set": "Flood Survivor Relic Set",
-    "set_count": "3 of 6",
+    "set_count": "3 of 7",
     "name": "Tide-Sealed Archive",
     "kind": "Relic",
+    "tarot_mapping": "Seven of Cups",
     "duration": "Persistent",
     "effect": "Your Leader and Specialist each gain +1 RANGE on AP abilities. Once each turn, when an ally gains Memory, you may move that ally 1 tile. It must end on an empty tile.",
     "flavor": "Memory is mercy after it has been disciplined.",
@@ -78,10 +91,18 @@
       "Queen Meret-Anu",
       "Iset-Nara",
       "controlled truth",
-      "survivor bloodlines"
+      "survivor bloodlines",
+      "First Mind",
+      "Crystal Dominion",
+      "the Oracle Sovereign's foreknowledge of convergence"
     ],
     "art_prompt": "A royal Atlantean casket sealed with tideglass and black bronze, with tiny witness faces pressed against the inner water-lit surface.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/flood-survivors-tide-sealed-archive-seven-of-cups-relic-art-v3.png",
+      "assets/relics/flood-survivors-tide-sealed-archive-seven-of-cups-relic-art-v2.png",
+      "assets/relics/flood-survivors-tide-sealed-archive-seven-of-cups-relic-art.png"
+    ],
+    "art_direction_note": "Preferred v3 preserves Meret-Anu's established closed dark-bronze casket and same-material shell-fan relief while making the Archive a bridge across all three Atlantean sub-areas. Exactly seven tideglass vessels appear in a three-over-four arrangement: First Mind sages around a living star map; the Oracle Sovereign witnessing overlapping realities; the intact Great Crystal powering Crystal Dominion; Crystal Dominion weaponizing the Great Crystal and causing it to explode when destructive energy feeds back through the firing array; Flood Survivors carrying the Black Sarcophagus through ley tunnels; builders extending the hidden route toward Egypt; and the Oracle Sovereign touching the convergence pattern shared by the Crystal and Flood. Only the final connective memory casts an accurate reflection, leaving open whether it is history, warning, or edited confession.",
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "The casket appears in Meret-Anu's character art and can become its own relic art later.",
@@ -95,9 +116,10 @@
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
     "set": "Flood Survivor Relic Set",
-    "set_count": "4 of 6",
+    "set_count": "4 of 7",
     "name": "Seraphic Burial Veil",
     "kind": "Relic",
+    "tarot_mapping": "Temperance",
     "duration": "Persistent",
     "effect": "Your Mystic gains +1 maximum HP. Once each round, when one of your allies would become Marked, you may prevent that Marked condition and give that ally Shield instead.",
     "flavor": "The cloth was meant for a body. Something else wore it back.",
@@ -110,7 +132,10 @@
       "sacrifice refusal"
     ],
     "art_prompt": "A translucent burial veil floating upright in black water, its folds suggesting vast angular wings without showing a simple human angel.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/flood-survivors-seraphic-burial-veil-temperance-relic-art.png"
+    ],
+    "art_direction_note": "Temperance relic art presents the actual Seraphic Burial Veil floating unworn above Thalassa-Nekh's circular black-water burial basin. Its empty cream funerary folds retain black-and-gold binding, shell ornaments, and the angular many-winged geometry associated with the Drowned Seraph. Exactly two ritual vessels exchange opposing black and pale currents through the cloth. Loosened burial bindings and a dead lotus occupy one side; restrained new aquatic growth occupies the other. Overlapping human and nonhuman hand impressions leave uncertain whether the veil remembers Thalassa, the Seraph, or the boundary joining them.",
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Should feel protective and unsettling, not purely holy.",
@@ -124,9 +149,10 @@
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
     "set": "Flood Survivor Relic Set",
-    "set_count": "5 of 6",
+    "set_count": "5 of 7",
     "name": "Basalt Ley Compass",
     "kind": "Relic",
+    "tarot_mapping": "Two of Wands",
     "duration": "Persistent",
     "effect": "Your Common and Specialist each gain +1 MOVE. Once each turn, one of them may move through 1 allied Stone marker or placed object, but must end on an empty tile.",
     "flavor": "It points toward roads the map was ordered to forget.",
@@ -139,7 +165,10 @@
       "great stonework"
     ],
     "art_prompt": "A basalt-and-bronze compass resting on wet carved stone, its needle pointing through a wall toward a glowing hidden causeway.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/flood-survivors-basalt-ley-compass-two-of-wands-relic-art.png"
+    ],
+    "art_direction_note": "Two of Wands relic art treats the compass as a practical heavy basalt-and-bronze surveying instrument resting on a carved model of the Flood Survivor settlement. Exactly two physical ley-marker rods frame it. A warm carved route returns safely into the known settlement, while the compass needle aligns with a cool route that leaves the official map, passes through solid stone, and continues beneath floodwater and desert foundations toward an unknown vault. The choice between preservation and the forgotten road carries the archetype.",
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus relic.",
@@ -153,26 +182,66 @@
     "culture": "Atlantean",
     "sub_area": "Flood Survivors",
     "set": "Flood Survivor Relic Set",
-    "set_count": "6 of 6",
+    "set_count": "6 of 7",
     "name": "Pearl Of The Lower Vault",
     "kind": "Relic",
+    "tarot_mapping": "Five of Cups",
     "duration": "Persistent",
     "effect": "Your Hero and Mystic each gain +1 RANGE on AP abilities. Once each round, when one of them prevents damage with Memory or Shield, Mark the attacker.",
     "flavor": "The pearl contains a grief that still knows who caused it.",
-    "role": "A luminous pearl recovered from a sealed pressure chamber beneath the drowned city. It contains a memory that cannot be spoken without making listeners weep.",
+    "role": "A luminous pearl recovered from a sealed pressure chamber beneath the drowned city. It formed around the final memory of a victim separated from their family when Crystal Dominion weaponized the Great Crystal. The memory cannot be spoken without making listeners weep, but it recognizes the indistinct commander responsible for the firing.",
     "mechanical_lane": "Hero/Mystic range bonus and grief-as-judgment retaliation.",
     "narrative_links": [
       "Sahu-Ren",
       "Thalassa-Nekh",
       "lower vaults",
-      "sorrow preserved as power"
+      "sorrow preserved as power",
+      "Crystal Dominion weaponization of the Great Crystal",
+      "an unidentified commander preserved in the victim's final memory"
     ],
     "art_prompt": "A luminous pearl in a cracked pressure-vault reliquary, projecting a tiny sorrowful memory scene into black water.",
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/relics/flood-survivors-pearl-of-the-lower-vault-five-of-cups-relic-art.png"
+    ],
+    "art_direction_note": "Five of Cups relic art centers a large luminous pearl above its cracked black-basalt pressure reliquary. Exactly five shell-shaped memory vessels surround it: three overturned, empty, and drained, while two remain upright with black water and surviving memory-light. Inside the pearl, a parent's final memory shows two children being separated by the white-green blast of Crystal Dominion's weaponized Great Crystal, with an indistinct commanding silhouette on the firing platform. The pearl's reflection lengthens into a single human tear, presenting grief as preserved testimony and future judgment.",
     "review_notes": [
       "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
       "Stat-bonus relic.",
       "Pairs naturally with Memory marker prevention and the Drowned Seraph event."
+    ]
+  },
+  {
+    "id": "a-flood-survivor-name-cutting-blade",
+    "review_status": "draft_for_review",
+    "faction": "Atlantean",
+    "culture": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "set": "Flood Survivor Relic Set",
+    "set_count": "7 of 7",
+    "name": "The Name-Cutting Blade",
+    "kind": "Relic",
+    "tarot_mapping": "Ace of Swords",
+    "duration": "Persistent",
+    "effect": "Your Warrior and Leader each gain +1 ATTACK. Once each round, when one of them damages a Marked enemy, remove Shield from that enemy before resolving the damage.",
+    "flavor": "A name cut from stone still survives in the blade.",
+    "role": "A ceremonial sword forged from a sliver shed by the Great Crystal before Crystal Dominion weaponized it. After the Flood, the founders used the blade to remove one sovereign's name from monuments, bloodline records, and ceremonial memory. It can sever a name from matter, but not from living memory.",
+    "mechanical_lane": "Warrior/Leader attack bonus and decisive truth-strike against exposed enemies.",
+    "narrative_links": [
+      "Naia's oath that the blade never be used again",
+      "Sahu-Ren's knowledge of the erased sovereign",
+      "The Name Was Cut From Stone",
+      "the Great Crystal before its weaponization",
+      "edited Flood Survivor bloodlines"
+    ],
+    "art_prompt": "A pristine pale crystal ceremonial sword resting across a black-stone royal inscription from which one complete name has been cut, while the missing characters remain visible in the blade's reflection.",
+    "asset_candidates": [
+      "assets/relics/flood-survivors-name-cutting-blade-ace-of-swords-relic-art.png"
+    ],
+    "art_direction_note": "Ace of Swords relic art isolates one straight ceremonial blade made from pale white-green Great Crystal material and dark Atlantean bronze. It rests across a black-basalt royal inscription whose central name has been physically gouged away. The missing inscription survives whole and luminous within the reflective crystal blade. A single vertical shaft of clear light and one suspended crown-ring align above its point, framing the weapon as both revelation and censorship. Faint sarcophagus and memory-keeper emblems connect the relic to Naia and Sahu-Ren without depicting them.",
+    "review_notes": [
+      "Draft relic card, not yet added to the playable prototype shared relic/event deck.",
+      "Seventh and final relic required by the 10-character, 9-event, 7-relic sub-area structure.",
+      "Attack value and Shield-removal timing should be tuned during prototype integration."
     ]
   }
 ]

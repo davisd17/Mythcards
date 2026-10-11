@@ -1229,7 +1229,9 @@
           "card_type": "Rare Relic",
           "reason": "The Emerald Tablet is the preserved formula by which above and below, Atlantis and Egypt, symbol and matter reflect one another.",
           "status": "proposed",
-          "art_audit": "no_art_yet"
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/flood-survivors-emerald-tablet-the-magician-relic-art-v4.png",
+          "art_note": "The focal Tablet is a thick raw fragment of nearly pure emerald with minimal wear. Its dense right-to-left inscription uses recognizable forms from Dee and Kelley's historical 21-letter Enochian alphabet; the fictional narrative is not claimed as a verified historical translation. Three restrained separators suggest the Great Crystal, the Flood, and Egypt, while exactly four practical Magician implements surround it."
         },
         {
           "tarot": "The High Priestess",
@@ -1285,7 +1287,59 @@
           "card_type": "Relic",
           "reason": "The sarcophagus is death, transformation, forbidden remains, and the unsealing of what must change.",
           "status": "proposed",
-          "art_audit": "no_art_yet"
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/flood-survivors-black-sarcophagus-death-relic-art-v2.png",
+          "art_note": "The sarcophagus crosses a broken thirteen-part ritual boundary inside an enclosed transformation chamber. Dead rites, erased names, fallen crowns, loosening bindings, new aquatic growth, a splitting royal emblem, and an eclipse express the end of one identity and irreversible change without conventional skeletal imagery."
+        },
+        {
+          "tarot": "Seven of Cups",
+          "mythcards_card": "Tide-Sealed Archive",
+          "card_type": "Relic",
+          "reason": "The Archive preserves seven competing accounts of the past, turning memory into a choice among alluring, edited, and potentially false truths.",
+          "status": "proposed",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/flood-survivors-tide-sealed-archive-seven-of-cups-relic-art-v3.png",
+          "art_note": "The closed bronze casket reveals exactly seven tideglass memories spanning First Mind, Crystal Dominion, and the Flood Survivors. The fourth records Crystal Dominion weaponizing the Great Crystal and causing its explosion through catastrophic firing feedback. The final vessel connects the Oracle Sovereign to the convergence pattern across all three eras and alone casts an accurate reflection."
+        },
+        {
+          "tarot": "Temperance",
+          "mythcards_card": "Seraphic Burial Veil",
+          "card_type": "Relic",
+          "reason": "The veil holds human and Seraph, burial and survival, exposure and protection in a controlled but uncertain exchange.",
+          "status": "proposed",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/flood-survivors-seraphic-burial-veil-temperance-relic-art.png",
+          "art_note": "An empty funerary veil forms angular nonhuman wings while exactly two opposing ritual vessels exchange black and pale currents through its cloth. Dead bindings and new aquatic growth frame transformation without resolving which presence emerged from the rite."
+        },
+        {
+          "tarot": "Two of Wands",
+          "mythcards_card": "Basalt Ley Compass",
+          "card_type": "Relic",
+          "reason": "The compass reveals a choice between preserving the mapped settlement and committing to an erased route beyond the known world.",
+          "status": "proposed",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/flood-survivors-basalt-ley-compass-two-of-wands-relic-art.png",
+          "art_note": "Exactly two ley-marker rods frame a practical basalt compass. One warm route loops safely through the known settlement, while a cool route follows the needle beyond the carved map and through solid stone."
+        },
+        {
+          "tarot": "Five of Cups",
+          "mythcards_card": "Pearl Of The Lower Vault",
+          "card_type": "Relic",
+          "reason": "The pearl preserves intimate grief from the Crystal weapon catastrophe, turning mourning and regret into testimony against whoever ordered the firing.",
+          "status": "proposed",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/flood-survivors-pearl-of-the-lower-vault-five-of-cups-relic-art.png",
+          "art_note": "Exactly five shell vessels surround the pearl: three overturned and empty, two upright with surviving memories. A family's separation is preserved inside the pearl, while its reflection forms a single tear."
+        },
+        {
+          "tarot": "Ace of Swords",
+          "mythcards_card": "The Name-Cutting Blade",
+          "card_type": "Relic",
+          "reason": "The blade embodies decisive truth and the irreversible power to reveal, sever, or deliberately erase a name from history.",
+          "status": "proposed",
+          "art_audit": "matches_tarot",
+          "approved_asset": "assets/relics/flood-survivors-name-cutting-blade-ace-of-swords-relic-art.png",
+          "art_note": "One pale crystal sword crosses a royal inscription whose central name has been gouged away, while the missing characters remain luminous in the blade's reflection beneath a single shaft of clear light."
         },
         {
           "tarot": "The Tower",
