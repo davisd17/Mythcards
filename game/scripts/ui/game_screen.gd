@@ -14,7 +14,10 @@ const SIDE_BUTTON_WIDTH := 280.0
 var controller := GameController.new()
 
 var _turn_label := Label.new()
-var _ap_label := Label.new()
+var _ap_meter := ApMeter.new()
+var _turn_bar := ColorRect.new()     # the active player's color under the header (Phase 3)
+var _popup_box := VBoxContainer.new()
+var _popup_card_id := ""             # the relic/event card the popup shows, to dock on close
 var _chips := HFlowContainer.new()
 var _board := GameBoardView.new()
 var _prompt := Label.new()
@@ -62,9 +65,7 @@ func _ready() -> void:
 	_turn_label.add_theme_font_size_override("font_size", 24)
 	_turn_label.add_theme_color_override("font_color", Color("#f3e3b5"))
 	top.add_child(_turn_label)
-	_ap_label.add_theme_font_size_override("font_size", 24)
-	_ap_label.add_theme_color_override("font_color", Color("#9fe0f5"))
-	top.add_child(_ap_label)
+	top.add_child(_ap_meter)
 	_primary = _button("End turn", _on_primary, false)
 	_primary.custom_minimum_size.x = 170
 	_accent(_primary)
@@ -72,6 +73,9 @@ func _ready() -> void:
 	top.add_child(_button("Log", _toggle_log, false))
 	top.add_child(_button("Menu", _toggle_menu, false))
 	root.add_child(_margin(top))
+	_turn_bar.custom_minimum_size = Vector2(0, 3)
+	_turn_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(_turn_bar)
 
 	_chips.add_theme_constant_override("h_separation", 6)
 	_chips.add_theme_constant_override("v_separation", 6)
@@ -80,7 +84,7 @@ func _ready() -> void:
 	_board.controller = controller
 	_board.custom_minimum_size = Vector2(0, 560)
 	_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_board.size_flags_stretch_ratio = 2.2
+	_board.size_flags_stretch_ratio = 3.0
 	_board.tile_tapped.connect(func(pos): controller.tap_tile(pos); _refresh())
 	root.add_child(_board)
 
@@ -125,6 +129,7 @@ func _ready() -> void:
 	_build_game_over()
 
 	EventBus.relic_drawn.connect(_on_card_drawn)
+	EventBus.turn_started.connect(_on_turn_started)
 	EventBus.match_ended.connect(func(_w, _c): _refresh())
 	for s in ["action_resolved", "turn_started", "relic_slot_changed", "character_defeated"]:
 		EventBus.connect(s, func(_a = null, _b = null, _c = null): _refresh.call_deferred())
@@ -182,7 +187,25 @@ func _start(ai_side: String) -> void:
 
 # Landscape windows give the board more of the height (LLD-board-visual-phase1.md 3.4).
 func _fit_board() -> void:
-	_board.size_flags_stretch_ratio = 4.5 if size.x > size.y * 1.1 else 2.2
+	_board.size_flags_stretch_ratio = 4.5 if size.x > size.y * 1.1 else 3.0
+
+
+# A short banner whenever the turn passes (Phase 3); it ignores input and fades on its own.
+func _on_turn_started(player_id: String) -> void:
+	var state := GameState.match_state
+	if state == null or controller.setup != null:
+		return
+	var player := state.get_player(player_id)
+	var team := str(ContentDB.get_team(player.team_id).get("name", player.culture)) if player != null else ""
+	var text := "Turn %d · %s" % [state.turn_number, team]
+	if controller.is_ai(player_id):
+		text += " (AI)"
+	elif not controller.ai_players.is_empty():
+		text = "Your turn · " + text
+	for old in find_children("TurnBanner", "", false, false):
+		old.queue_free()
+	var banner := HudFx.turn_banner(self, text, _bright(player_id))
+	move_child(banner, _popup.get_index())   # under a drawn card's popup, over the board
 
 
 func _on_ai_tick() -> void:
@@ -213,7 +236,9 @@ func _refresh_header() -> void:
 		child.queue_free()
 	if controller.in_setup():
 		_turn_label.text = "Setup · %s" % _player_name(controller.placing_player)
-		_ap_label.text = ""
+		_turn_label.add_theme_color_override("font_color", _bright(controller.placing_player))
+		_turn_bar.color = Color(_bright(controller.placing_player), 0.8)
+		_ap_meter.set_ap(0, 0)
 		_primary.text = "Done placing"
 		_primary.disabled = not controller.placement_done()
 		_primary.visible = true
@@ -226,7 +251,9 @@ func _refresh_header() -> void:
 		return
 	_turn_label.text = "Turn %d · %s" % [state.turn_number, _player_name(state.active_player_id)]
 	var player := state.get_player(state.active_player_id)
-	_ap_label.text = "AP %d/%d" % [player.pool_ap_remaining, player.pool_ap_max]
+	_turn_label.add_theme_color_override("font_color", _bright(state.active_player_id))
+	_turn_bar.color = Color(_bright(state.active_player_id), 0.8)
+	_ap_meter.set_ap(player.pool_ap_remaining, player.pool_ap_max)
 	for p in state.players:
 		var label := "%s relic: %s" % [_short_name(p.id), _card_name(p.active_relic_id) if p.active_relic_id != "" else "none"]
 		var chip := _chip(label, PLAYER_COLORS[p.id])
@@ -341,7 +368,7 @@ func _build_popup() -> void:
 	dim.color = Color(0, 0, 0, 0.75)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_popup.add_child(dim)
-	var box := VBoxContainer.new()
+	var box := _popup_box
 	box.set_anchors_preset(Control.PRESET_FULL_RECT)
 	box.add_theme_constant_override("separation", 10)
 	var top_gap := Control.new()
@@ -372,8 +399,10 @@ func _on_card_drawn(player_id: String, card_id: String) -> void:
 	var kind := card.kind.to_lower() if card != null else "card"
 	var article := "an" if kind.begins_with("e") else "a"
 	if controller.is_ai(player_id):
-		# The AI's draws don't stop play (playtest 2026-10-11): a notice you can tap to view.
+		# The AI's draws don't stop play (playtest 2026-10-11): a notice you can tap to view,
+		# and the card itself flies in over the board and docks into the HUD (Phase 3).
 		_notice("%s drew %s. Tap to view." % [_player_name(player_id), card.card_name if card != null else card_id], card_id)
+		_dock.call_deferred(card_id, _board.get_global_rect().get_center(), HudFx.FLY_HOLD)
 		return
 	_popup_queue.append("%s|%s drew %s %s." % [card_id, _player_name(player_id), article, kind])
 	if not _popup.visible:
@@ -386,10 +415,15 @@ func _show_card(card_id: String, note: String) -> void:
 
 
 func _next_popup() -> void:
+	# Closing a relic/event card sends a small copy of it into its HUD chip (Phase 3).
+	if _popup.visible and _popup_card_id != "":
+		_dock.call_deferred(_popup_card_id, _popup_scroll.get_global_rect().get_center(), 0.0)
+	_popup_card_id = ""
 	if _popup_queue.is_empty():
 		_popup.visible = false
 		_refresh()
 		return
+	var was_visible := _popup.visible
 	var entry: String = _popup_queue.pop_front()
 	var parts := entry.split("|", true, 1)
 	var note := parts[1]
@@ -402,6 +436,9 @@ func _next_popup() -> void:
 		_popup_button.text = "Close"
 		_popup.visible = true
 		return
+	_popup_card_id = parts[0]
+	if not was_visible:
+		HudFx.pop_in(_popup_box)
 	_popup_card.show_relic_event(parts[0])
 	_popup_note.visible = true
 	_popup_button.text = "Continue"
@@ -409,6 +446,20 @@ func _next_popup() -> void:
 		note += " It needs a choice: answer it below the board."
 	_popup_note.text = note
 	_popup.visible = true
+
+
+# Flies a card from `from` into the HUD chip that now holds it: the player's relic chip,
+# an active event's chip, or the deck chip for a card that went back or already resolved.
+func _dock(card_id: String, from: Vector2, hold: float) -> void:
+	var card_name := _card_name(card_id)
+	var target: Control = null
+	for chip in _chips.get_children():
+		if chip.is_queued_for_deletion():
+			continue
+		if chip.text.contains(card_name) or (target == null and chip.text.begins_with("Deck")):
+			target = chip
+	var to := target.get_global_rect() if target != null else Rect2(_ap_meter.get_global_rect())
+	HudFx.card_flyer(self, card_id, from - get_global_position(), Rect2(to.position - get_global_position(), to.size), hold)
 
 
 # --- Menu and game over --------------------------------------------------------------------
@@ -664,6 +715,11 @@ func _player_name(player_id: String) -> String:
 	if controller.is_ai(player_id):
 		side = side + ", AI" if side != "" else "AI"
 	return "%s (%s)" % [n, side] if side != "" else n
+
+
+# The player's faction color, bright enough for text and banners on the dark page.
+static func _bright(player_id: String) -> Color:
+	return GameBoardView.PLAYER_COLORS.get(player_id, Color("#c9a45c")).lightened(0.15)
 
 
 static func _short_name(player_id: String) -> String:

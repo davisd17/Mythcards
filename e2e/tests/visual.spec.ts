@@ -73,6 +73,17 @@ for (const vp of VIEWPORTS) {
     expect(hit.success, JSON.stringify(hit)).toBe(true);
     await page.waitForTimeout(90);
     await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-hit.png` });
+    // Phase 3: the turn passes (banner and the drawn card's popup), then the card docks.
+    await page.waitForTimeout(400);
+    expect((await act(page, 'end_turn', 'p1')).success).toBe(true);
+    await page.waitForTimeout(350);
+    await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-turn.png` });
+    const cont = (await ui(page)).buttons.find((x: any) => x.text === 'Continue');
+    if (cont) {
+      await page.mouse.click(cont.center.x, cont.center.y);
+      await page.waitForTimeout(200);
+      await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-dock.png` });
+    }
     expect(errors, 'no missing resources or script errors').toEqual([]);
   });
 }
