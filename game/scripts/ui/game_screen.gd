@@ -111,6 +111,8 @@ func _ready() -> void:
 	bottom.add_child(side_scroll)
 	root.add_child(_margin(bottom))
 
+	resized.connect(_fit_board)
+	_fit_board()
 	_build_popup()
 	_build_log()
 	_build_menu()
@@ -176,6 +178,11 @@ func _start(ai_side: String) -> void:
 	_chooser.visible = false
 	controller.begin_setup("", "", ai_side)
 	_refresh()
+
+
+# Landscape windows give the board more of the height (LLD-board-visual-phase1.md 3.4).
+func _fit_board() -> void:
+	_board.size_flags_stretch_ratio = 4.5 if size.x > size.y * 1.1 else 2.2
 
 
 func _on_ai_tick() -> void:
