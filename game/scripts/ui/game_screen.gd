@@ -18,6 +18,7 @@ var _ap_meter := ApMeter.new()
 var _turn_bar := ColorRect.new()     # the active player's color under the header (Phase 3)
 var _popup_box := VBoxContainer.new()
 var _popup_card_id := ""             # the relic/event card the popup shows, to dock on close
+var _sfx := Sfx.new()                # Phase 4 sound and haptics
 var _chips := HFlowContainer.new()
 var _board := GameBoardView.new()
 var _prompt := Label.new()
@@ -49,6 +50,8 @@ var _game_over_label := Label.new()
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = _build_ui_theme()
+	Settings.load_saved()
+	add_child(_sfx)
 	var background := ColorRect.new()
 	background.color = Color("#0b0f0e")
 	background.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -218,6 +221,7 @@ func _on_ai_tick() -> void:
 
 func _refresh() -> void:
 	controller.sync()
+	_board.refresh_palettes()   # the Leaders may have changed (new match, mirror)
 	_board.queue_redraw()
 	_refresh_header()
 	_refresh_prompt()
@@ -256,7 +260,7 @@ func _refresh_header() -> void:
 	_ap_meter.set_ap(player.pool_ap_remaining, player.pool_ap_max)
 	for p in state.players:
 		var label := "%s relic: %s" % [_short_name(p.id), _card_name(p.active_relic_id) if p.active_relic_id != "" else "none"]
-		var chip := _chip(label, PLAYER_COLORS[p.id])
+		var chip := _chip(label, _board.faction_color(p.id).darkened(0.35))
 		if p.active_relic_id != "":
 			var id := p.active_relic_id
 			chip.pressed.connect(func(): _show_card(id, "%s's active relic." % _player_name(p.id)))
@@ -474,9 +478,26 @@ func _build_menu() -> void:
 	box.custom_minimum_size = Vector2(240, 0)
 	box.add_child(_button("New match", new_match))
 	box.add_child(_button("Debug view", func(): get_tree().change_scene_to_file(DEBUG_SCENE)))
+	# Phase 4 presentation toggles, saved across restarts.
+	box.add_child(_setting_toggle("Sound", "sound"))
+	box.add_child(_setting_toggle("Atmosphere", "atmosphere"))
+	box.add_child(_setting_toggle("Vibration", "haptics"))
 	box.add_child(_button("Close", _toggle_menu))
 	_menu.add_child(box)
 	add_child(_menu)
+
+
+# A menu button showing "Sound: On" that flips the Settings field and saves it.
+func _setting_toggle(label: String, field: String) -> Button:
+	var b := _button("", func(): pass)
+	var relabel := func(): b.text = "%s: %s" % [label, "On" if Settings.value(field) else "Off"]
+	relabel.call()
+	b.pressed.connect(func():
+		Settings.toggle(field)
+		relabel.call()
+		_sfx.apply_settings()
+		_board.queue_redraw())
+	return b
 
 
 func _on_primary() -> void:
@@ -610,7 +631,6 @@ func _build_game_over() -> void:
 
 # --- Helpers ---------------------------------------------------------------------------------
 
-const PLAYER_COLORS := {"p1": Color("#8c2f39"), "p2": Color("#1f6f8b")}
 
 
 func _build_ui_theme() -> Theme:
@@ -718,8 +738,8 @@ func _player_name(player_id: String) -> String:
 
 
 # The player's faction color, bright enough for text and banners on the dark page.
-static func _bright(player_id: String) -> Color:
-	return GameBoardView.PLAYER_COLORS.get(player_id, Color("#c9a45c")).lightened(0.15)
+func _bright(player_id: String) -> Color:
+	return _board.side_palette(player_id).primary.lightened(0.15) if player_id in ["p1", "p2"] else Color("#c9a45c")
 
 
 static func _short_name(player_id: String) -> String:

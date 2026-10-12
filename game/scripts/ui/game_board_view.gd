@@ -62,7 +62,7 @@ const SELECT_LIFT := 0.035
 const MARGIN := 22.0
 # --- Timing -----------------------------------------------------------------------------
 const PULSE_PERIOD := 3.2
-const PULSE_FPS := 15.0
+const PULSE_FPS := 24.0       # also paces the Phase 4 ambience
 
 # Short badges for status effects, drawn on the token; full names show on the card.
 const STATUS := {
@@ -81,6 +81,7 @@ var controller: GameController
 var outfit_by_instance_id: Dictionary = {}
 
 var fx := BoardFx.new()    # Phase 2 action feedback; presentation only
+var _palettes: Dictionary = {}   # "p1"/"p2" -> SidePalette, refreshed every draw
 
 var _time := 0.0           # drives the center pulse only
 var _since_redraw := 0.0
@@ -129,6 +130,7 @@ func _draw() -> void:
 	if controller == null or controller.board() == null:
 		return
 	var board := controller.board()
+	_palettes = palettes()
 	var font := ThemeDB.fallback_font
 	var px := tile_px()
 	var h := controller.highlights()
@@ -154,10 +156,14 @@ func _draw() -> void:
 				_draw_frost(rect)
 			if tile.is_center:
 				center_rect = rect
+	if Settings.atmosphere:
+		_draw_atmosphere(board, px)
 	# The center glow spills onto its neighbors, so it goes over the whole material pass.
 	if center_rect.size.x > 0:
 		_draw_center_glow(center_rect)
 		_draw_center_aperture(center_rect)
+		if Settings.atmosphere:
+			BoardAtmosphere.draw_convergence(self, center_rect.get_center(), px, _time, CENTER_GLOW)
 	for c in occupants.values():
 		if selected_id != "" and (c.instance_id == selected_id or c.mounted_with_id == selected_id):
 			_draw_selected_tile(tile_rect(c.position))
@@ -249,25 +255,20 @@ static func _lcg(noise: int) -> int:
 	return (noise * 1103515245 + 12345) & 0x7fffffff
 
 
-# Each side's territory as a colored wash that fades toward the middle of the board:
-# a vertical gradient per tile, continuous across rows (Player 1 is at the bottom).
+# Each side's territory as a wash of its palette color that fades toward the middle of the
+# board: a vertical gradient per tile, continuous across rows (Player 1 is at the bottom).
 func _draw_territory(pos: Vector2i, rect: Rect2) -> void:
 	var depth_p1 := float(pos.y - BoardModel.PLAYER_A_EDGE_ROW)
 	var depth_p2 := float(BoardModel.PLAYER_B_EDGE_ROW - pos.y)
-	var color: Color
-	var near_edge: float   # tiles from the owner's outer edge to this tile's outer side
-	if depth_p1 < TERRITORY_DEPTH:
-		color = CITY_RED
-		near_edge = depth_p1
-	elif depth_p2 < TERRITORY_DEPTH:
-		color = FLOOD_CYAN
-		near_edge = depth_p2
-	else:
+	var bottom_side := depth_p1 < TERRITORY_DEPTH
+	if not bottom_side and depth_p2 >= TERRITORY_DEPTH:
 		return
+	var color := faction_color("p1" if bottom_side else "p2")
+	var near_edge := depth_p1 if bottom_side else depth_p2   # tiles from the owner's outer edge
 	var outer := Color(color, territory_alpha(near_edge))
 	var inner := Color(color, territory_alpha(near_edge + 1.0))
-	var top := inner if color == CITY_RED else outer
-	var bottom := outer if color == CITY_RED else inner
+	var top := inner if bottom_side else outer
+	var bottom := outer if bottom_side else inner
 	draw_polygon(PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end,
 			Vector2(rect.position.x, rect.end.y)]), PackedColorArray([top, top, bottom, bottom]))
 
@@ -277,26 +278,78 @@ static func territory_alpha(tiles_from_edge: float) -> float:
 	return TERRITORY_ALPHA * t * t
 
 
-# Faction territory inlaid into each back row: channels and inlays over the wash.
+# Each back row's inlay, in its side's culture style and palette, measured from the
+# board's outer edge (the bottom for Player 1, the top for Player 2).
 func _draw_faction_inlay(pos: Vector2i, rect: Rect2) -> void:
+	var bottom_side := pos.y == BoardModel.PLAYER_A_EDGE_ROW
+	if not bottom_side and pos.y != BoardModel.PLAYER_B_EDGE_ROW:
+		return
+	var palette := side_palette("p1" if bottom_side else "p2")
 	var px := rect.size.x
-	if pos.y == BoardModel.PLAYER_A_EDGE_ROW:
-		# Closed City: warning-red channels near the outer edge, pressure seals, a registration dot.
-		var y1 := rect.position.y + px * 0.86
-		var y2 := rect.position.y + px * 0.93
-		draw_line(Vector2(rect.position.x, y1), Vector2(rect.end.x, y1), Color(CITY_RED, 0.75), 2.0)
-		draw_line(Vector2(rect.position.x, y2), Vector2(rect.end.x, y2), Color(CITY_RED, 0.45), 1.0)
-		draw_rect(Rect2(rect.position + Vector2(px * 0.02, px * 0.80), Vector2(px * 0.05, px * 0.16)), Color(CITY_RED, 0.55), false, 1.5)
-		draw_circle(rect.position + Vector2(px * 0.5, px * 0.89), px * 0.022, Color(CITY_GREEN, 0.85))
-		draw_line(rect.position + Vector2(px * 0.44, px * 0.80), rect.position + Vector2(px * 0.56, px * 0.80), Color(CITY_GREEN, 0.4), 1.0)
-	elif pos.y == BoardModel.PLAYER_B_EDGE_ROW:
-		# Flood Survivors: cyan ley lines near the outer edge, a bronze shell arc, an ivory inlay.
-		var y1 := rect.position.y + px * 0.14
-		var y2 := rect.position.y + px * 0.07
-		draw_line(Vector2(rect.position.x, y1), Vector2(rect.end.x, y1), Color(FLOOD_CYAN, 0.75), 2.0)
-		draw_line(Vector2(rect.position.x, y2), Vector2(rect.end.x, y2), Color(FLOOD_CYAN, 0.4), 1.0)
-		draw_arc(rect.position + Vector2(px * 0.5, px * 0.14), px * 0.09, 0.0, PI, 10, Color(FLOOD_BRONZE, 0.8), 1.5)
-		draw_circle(rect.position + Vector2(px * 0.5, px * 0.19), px * 0.018, Color(FLOOD_IVORY, 0.85))
+	var outer_y := rect.end.y if bottom_side else rect.position.y
+	var inward := -1.0 if bottom_side else 1.0
+	var at := func(x: float, d: float) -> Vector2: return Vector2(rect.position.x + px * x, outer_y + inward * px * d)
+	var primary := palette.primary
+	var accent := palette.accent
+	if palette.inlay == "city":
+		# Russian-inspired: channels near the outer edge, a pressure seal, a registration dot.
+		draw_line(at.call(0.0, 0.14), at.call(1.0, 0.14), Color(primary, 0.75), 2.0)
+		draw_line(at.call(0.0, 0.07), at.call(1.0, 0.07), Color(primary, 0.45), 1.0)
+		var seal_a: Vector2 = at.call(0.02, 0.04)
+		var seal_b: Vector2 = at.call(0.07, 0.20)
+		draw_rect(Rect2(Vector2(seal_a.x, minf(seal_a.y, seal_b.y)), (seal_b - seal_a).abs()), Color(primary, 0.55), false, 1.5)
+		draw_circle(at.call(0.5, 0.11), px * 0.022, Color(accent, 0.85))
+		draw_line(at.call(0.44, 0.20), at.call(0.56, 0.20), Color(accent, 0.4), 1.0)
+	else:
+		# Atlantean: ley lines near the outer edge, a shell arc opening inward, an inlaid dot.
+		draw_line(at.call(0.0, 0.14), at.call(1.0, 0.14), Color(primary, 0.75), 2.0)
+		draw_line(at.call(0.0, 0.07), at.call(1.0, 0.07), Color(primary, 0.4), 1.0)
+		var arc_from := PI if bottom_side else 0.0
+		draw_arc(at.call(0.5, 0.14), px * 0.09, arc_from, arc_from + PI, 10, Color(accent, 0.8), 1.5)
+		draw_circle(at.call(0.5, 0.19), px * 0.018, Color(accent.lightened(0.4), 0.85))
+
+
+# Phase 4 ambience: each side's atmosphere over its three home rows, and frost drift.
+func _draw_atmosphere(board: BoardModel, px: float) -> void:
+	var depth := int(TERRITORY_DEPTH) - 1
+	var p1_region := tile_rect(Vector2i(0, BoardModel.PLAYER_A_EDGE_ROW + depth)).merge(
+			tile_rect(Vector2i(BoardModel.BOARD_SIZE - 1, BoardModel.PLAYER_A_EDGE_ROW)))
+	var p2_region := tile_rect(Vector2i(0, BoardModel.PLAYER_B_EDGE_ROW)).merge(
+			tile_rect(Vector2i(BoardModel.BOARD_SIZE - 1, BoardModel.PLAYER_B_EDGE_ROW - depth)))
+	BoardAtmosphere.draw_side(self, side_palette("p1"), p1_region, true, px, _time)
+	BoardAtmosphere.draw_side(self, side_palette("p2"), p2_region, false, px, _time)
+	for y in BoardModel.BOARD_SIZE:
+		for x in BoardModel.BOARD_SIZE:
+			if board.get_tile(Vector2i(x, y)).terrain_type == "frost":
+				BoardAtmosphere.draw_frost_drift(self, tile_rect(Vector2i(x, y)), _time, x * 7 + y)
+
+
+# --- Side palettes (LLD-atmosphere-phase4.md 2) ----------------------------------------------
+
+# Both sides' palettes, from the Leaders on the board (or still in the setup tray).
+func palettes() -> Dictionary:
+	var source: Object = null
+	if controller != null and controller.setup != null:
+		source = controller.setup
+	elif GameState.match_state != null:
+		source = GameState.match_state
+	if source == null:
+		return SidePalette.for_players(null, null)
+	return SidePalette.for_players(source.get_player("p1"), source.get_player("p2"))
+
+
+func refresh_palettes() -> void:
+	_palettes = palettes()
+
+
+func side_palette(player_id: String) -> SidePalette:
+	if _palettes.is_empty():
+		_palettes = palettes()
+	return _palettes.get(player_id, _palettes.p1)
+
+
+func faction_color(player_id: String) -> Color:
+	return side_palette(player_id).primary if player_id in ["p1", "p2"] else Color.GRAY
 
 
 # A warm light pooling out of the convergence: it reaches the neighboring tiles so the
@@ -392,7 +445,7 @@ func _draw_object(font: Font, rect: Rect2, obj: PlacedObjectInstance) -> void:
 			draw_polyline(outline + PackedVector2Array([outline[0]]), Color(0, 0, 0, 0.5), 1.5)
 			if obj.type_id == "vault":
 				draw_arc(block.get_center(), px * 0.12, 0.0, TAU, 16, Color(FLOOD_BRONZE, 0.9), 2.0)
-			draw_polyline(outline + PackedVector2Array([outline[0]]), PLAYER_COLORS.get(obj.owner_player_id, Color.GRAY), 2.0)
+			draw_polyline(outline + PackedVector2Array([outline[0]]), faction_color(obj.owner_player_id), 2.0)
 	if obj.max_hp > 0:
 		# HP as pips along the bottom edge.
 		for i in obj.current_hp:
@@ -535,7 +588,7 @@ static func _silhouette(texture: Texture2D) -> Rect2:
 func _draw_piece_base(c: CharacterInstance, rect: Rect2, selected: bool) -> void:
 	var px := rect.size.x
 	var feet := Vector2(rect.get_center().x, rect.position.y + px * (FEET_LINE - 0.01))
-	var faction: Color = PLAYER_COLORS.get(c.player_id, Color.GRAY)
+	var faction := faction_color(c.player_id)
 	var role: Color = ROLE_COLORS.get(c.data.type, Color("#b7b8b1"))
 	draw_set_transform(feet, 0.0, Vector2(1.0, 0.34))
 	draw_circle(Vector2.ZERO, px * 0.30, Color(0, 0, 0, 0.6))
@@ -562,8 +615,8 @@ func _draw_portrait_token(c: CharacterInstance, rect: Rect2, spent: bool) -> voi
 		draw_texture_rect_region(texture, portrait, Rect2(Vector2((source.x - crop) * 0.5, top), Vector2(crop, crop)),
 				Color(0.62, 0.62, 0.66, 0.9) if spent else Color.WHITE)
 	else:
-		draw_rect(portrait, PLAYER_COLORS.get(c.player_id, Color.GRAY).darkened(0.4))
-	draw_rect(portrait, PLAYER_COLORS.get(c.player_id, Color.GRAY), false, 2.0)
+		draw_rect(portrait, faction_color(c.player_id).darkened(0.4))
+	draw_rect(portrait, faction_color(c.player_id), false, 2.0)
 
 
 # The fixed tag/HP pill (LLD 3.2): the same rect whether or not the figure is selected.
@@ -574,7 +627,7 @@ func label_rect(tile: Rect2) -> Rect2:
 
 func _draw_labels(font: Font, c: CharacterInstance, rect: Rect2) -> void:
 	var px := rect.size.x
-	var faction: Color = PLAYER_COLORS.get(c.player_id, Color.GRAY)
+	var faction := faction_color(c.player_id)
 	var hp_max := c.base_max_hp
 	if GameState.match_state != null:
 		hp_max = RulesEngine.systems().ability.get_effective_max_hp(c)

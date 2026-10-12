@@ -617,6 +617,7 @@ Initial direction:
 - Each culture should have distinct silhouettes, color accents, iconography, and board motifs.
 - Unit designs should be readable at small mobile sizes.
 - Card art should be expressive but not visually noisy.
+- Side palettes (decided 2026-10-11): each side's board colors and ambient atmosphere come from the area and sub-area of its Leader. When both Leaders come from the same sub-area, one side takes the inverse color set. See `LLD-atmosphere-phase4.md`.
 
 Production needs:
 - Logo
