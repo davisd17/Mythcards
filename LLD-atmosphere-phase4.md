@@ -25,7 +25,7 @@ Each side's colors and ambient effect now come from its Leader's sub-area. The b
 - **Inlay:** the back-row inlay style follows the culture (Russian-inspired channels, Atlantean ley lines), not the seat.
 - **Mirror rule:** if both Leaders share a sub-area, Player 2 gets the inverse set. Each color's hue turns 180° (its complement) and keeps its saturation and brightness, so a Closed City mirror is red vs. teal. The atmosphere stays the same; only the colors flip.
 - **Coverage:** territory wash, inlays, figure bases, name pills, placed-object outlines, HUD relic chips, the turn line and bar, and the turn banner. The center stays neutral bronze and gold.
-- **Interpretation:** "same area" was read as the same sub-area. Two different sub-areas of one culture (e.g. Winter Front vs Closed City) already get distinct palettes. `[NEED: designer confirm]` whether same-*culture* matches should also invert.
+- **Decided (2026-10-12):** only a matching sub-area inverts. Two different sub-areas of one culture (e.g. Winter Front vs Closed City) keep their own palettes.
 
 ## 3. Atmosphere (`BoardAtmosphere`)
 
@@ -71,6 +71,5 @@ Each side's colors and ambient effect now come from its Leader's sub-area. The b
 
 ## 6. Open
 
-- `[NEED: designer confirm]` the same-culture inversion question in Section 2.
 - `[NEED: designer review]` palette picks for the four sub-areas not yet in play (Winter Front, Far North, First Mind, Crystal Dominion).
 - `[NEED: designer review]` sound character and volume in hands-on play. The Flood caustics are subtle in stills; tune after seeing them move.
