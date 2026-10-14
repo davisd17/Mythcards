@@ -10,13 +10,13 @@ var _saved := []
 
 
 func before_each() -> void:
-	_saved = [Settings.sound, Settings.atmosphere, Settings.haptics]
+	_saved = [Settings.sound, Settings.motion, Settings.haptics]
 	Settings.haptics = false   # never buzz a test machine
 
 
 func after_each() -> void:
 	Settings.sound = _saved[0]
-	Settings.atmosphere = _saved[1]
+	Settings.motion = _saved[1]
 	Settings.haptics = _saved[2]
 	Fixture.teardown()
 
@@ -153,8 +153,8 @@ func test_the_convergence_drone_loops_and_follows_the_setting() -> void:
 
 
 func test_settings_toggle_by_name() -> void:
-	var before := Settings.atmosphere
-	Settings.toggle("atmosphere")
-	assert_eq(Settings.value("atmosphere"), not before)
-	Settings.toggle("atmosphere")
-	assert_eq(Settings.value("atmosphere"), before)
+	var before := Settings.motion
+	Settings.toggle("motion")
+	assert_eq(Settings.value("motion"), not before)
+	Settings.toggle("motion")
+	assert_eq(Settings.value("motion"), before)

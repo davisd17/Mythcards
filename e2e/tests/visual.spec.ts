@@ -73,6 +73,14 @@ for (const vp of VIEWPORTS) {
     expect(hit.success, JSON.stringify(hit)).toBe(true);
     await page.waitForTimeout(90);
     await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-hit.png` });
+    // Phase 5: a figure mid-hop as it moves (skipped if the step isn't legal this run).
+    await page.waitForTimeout(400);
+    const rw = character(await state(page), 'p1_r-reactor-worker');
+    const hop = await act(page, 'move', 'p1_r-reactor-worker', { to: { x: rw.position.x, y: rw.position.y + 1 } });
+    if (hop.success) {
+      await page.waitForTimeout(110);
+      await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-hop.png` });
+    }
     // Phase 3: the turn passes (banner and the drawn card's popup), then the card docks.
     await page.waitForTimeout(400);
     expect((await act(page, 'end_turn', 'p1')).success).toBe(true);

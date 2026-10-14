@@ -156,13 +156,13 @@ func _draw() -> void:
 				_draw_frost(rect)
 			if tile.is_center:
 				center_rect = rect
-	if Settings.atmosphere:
+	if Settings.motion:
 		_draw_atmosphere(board, px)
 	# The center glow spills onto its neighbors, so it goes over the whole material pass.
 	if center_rect.size.x > 0:
 		_draw_center_glow(center_rect)
 		_draw_center_aperture(center_rect)
-		if Settings.atmosphere:
+		if Settings.motion:
 			BoardAtmosphere.draw_convergence(self, center_rect.get_center(), px, _time, CENTER_GLOW)
 	for c in occupants.values():
 		if selected_id != "" and (c.instance_id == selected_id or c.mounted_with_id == selected_id):
@@ -491,13 +491,32 @@ func _draw_character(font: Font, c: CharacterInstance, selected: bool) -> void:
 			and c.character_ap_remaining <= 0 and _mount_ap(c) <= 0
 	var figure := FigureCatalog.texture_for(c.data.id, outfit_id_for(c))
 	_draw_piece_base(c, rect, selected)
+	# Phase 5: breathe, hop, wind up, recoil... posed about the feet. Only the figure moves;
+	# the base, the HP pill, and the badges stay level and readable.
+	var feet := feet_point(rect, selected)
+	_begin_pose(feet, FigurePose.pose(c, fx, spent, selected, Settings.motion), rect.size.x)
 	if figure != null:
 		var modulate := Color(0.62, 0.62, 0.66, 0.9) if spent else Color.WHITE
 		modulate = modulate.lerp(Color(1.0, 0.32, 0.28), 0.75 * fx.hit_strength(c.instance_id))
-		draw_texture_rect(figure, figure_rect(c, rect, figure, selected), false, modulate)
+		var fr := figure_rect(c, rect, figure, selected)
+		draw_texture_rect(figure, Rect2(fr.position - feet, fr.size), false, modulate)
 	else:
-		_draw_portrait_token(c, rect, spent)
+		_draw_portrait_token(c, Rect2(rect.position - feet, rect.size), spent)
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	_draw_labels(font, c, rect)
+
+
+# Where a figure's feet rest on its tile: the pivot for every pose.
+func feet_point(tile: Rect2, selected: bool) -> Vector2:
+	var px := tile.size.x
+	return Vector2(tile.get_center().x, tile.position.y + FEET_LINE * px - (SELECT_LIFT * px if selected else 0.0))
+
+
+# Sets the canvas transform so local (0, 0) is the feet, lifted, leaned, and squashed or
+# stretched. Volume is kept roughly: a taller figure gets a touch narrower.
+func _begin_pose(feet: Vector2, pose: Dictionary, px: float) -> void:
+	var sy: float = pose.scale_y
+	draw_set_transform(feet - Vector2(0.0, pose.lift * px), deg_to_rad(pose.lean), Vector2(1.0 - (sy - 1.0) * 0.5, sy))
 
 
 # Board-space tiles (y up) to screen pixels (y down; Player 1 is at the bottom).
@@ -514,8 +533,12 @@ func _draw_ghost(g: Dictionary) -> void:
 	if figure == null:
 		return
 	var r := figure_rect(c, rect, figure, false)
-	r.position.y += rect.size.y * 0.22 * BoardFx.ease_out(t)
-	draw_texture_rect(figure, r, false, Color(1.0, 0.45, 0.4, 1.0 - t))
+	var feet := feet_point(rect, false)
+	# It sinks into the stone and, Phase 5, tips over away from whoever defeated it.
+	var sunk := feet + Vector2(0.0, rect.size.y * 0.22 * BoardFx.ease_out(t))
+	draw_set_transform(sunk, deg_to_rad(FigurePose.topple(g, fx)), Vector2.ONE)
+	draw_texture_rect(figure, Rect2(r.position - feet, r.size), false, Color(1.0, 0.45, 0.4, 1.0 - t))
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 # Rings, bursts, floating numbers, and the level-up flourish (BoardFx effects).

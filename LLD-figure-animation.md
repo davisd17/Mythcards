@@ -3,9 +3,9 @@
 | Field | Value |
 | --- | --- |
 | Source | Designer request 2026-10-14: "the next phase where we add simple animations", which the designer clarified as animating the figures themselves |
-| Status | **Draft, awaiting designer approval**. Nothing is built yet. |
+| Status | Approved and implemented 2026-10-14 (decisions in Section 7) |
 | Builds on | `LLD-board-fx.md` (Phase 2 slides, lunges, hit flashes), `LLD-atmosphere-phase4.md` (Settings) |
-| Files (planned) | `game/scripts/ui/figure_pose.gd` (new), `board_fx.gd`, `game_board_view.gd`, `game/tests/unit/test_figure_pose.gd` (new) |
+| Files | `game/scripts/ui/figure_pose.gd` (new), `board_fx.gd`, `game_board_view.gd`, `game/tests/unit/test_figure_pose.gd` (new) |
 
 ## 1. Goal
 
@@ -65,3 +65,17 @@ The existing board smoke test draws every pose mid-flight. `visual.spec.ts` adds
 2. Should idle be on by default for everyone, or only when Motion is on (the plan: on by default, can be switched off)?
 3. Rename the Atmosphere toggle to "Motion" (covering both ambience and idle), or keep two separate toggles?
 4. Any animation in Section 3 you'd cut, or one missing (e.g. a staggered "ready" bob from the whole side when its turn starts)?
+
+## 7. Designer Decisions and Implementation Notes (2026-10-14)
+
+1. **Amplitude:** raised from 1.2% to **2% height and ±0.9° sway**. The designer asked "What would Sam say?" Sam's profile isn't saved, so this was judged for the PRD's primary player (a mobile tactics player glancing between moves): noticeable at a glance, never distracting. `[NEED: Sam persona details]` would make this call exact next time.
+2. **Default:** idle is on by default.
+3. **Toggles:** one toggle. Menu > Atmosphere became **Motion**, covering both the Phase 4 ambience and the idle animation. A saved "Atmosphere: Off" carries over as "Motion: Off".
+4. **Ready bob:** added after the rest was running. When a turn starts, that side's figures bob (0.05 tile, 3% stretch, 0.30 s each), rippling left to right 0.05 s per column. It plays whatever the Motion setting, like the other action animations.
+
+Deviations from Sections 3–4:
+- Squash and stretch keep volume roughly: width changes by half the height change in the opposite direction (Section 3 had said width is preserved). It reads more naturally.
+- A wind-up straight up or down the board crouches instead of leaning, and a recoil straight up or down squashes, since a lean only reads sideways.
+- Ghosts topple away from the attacker, or to the right when there's no attacker, such as a Leak.
+
+Tests: `test_figure_pose.gd` (13). GUT 520/520, Playwright 13/13. One full Playwright run had a one-off 60 s timeout in "play Closed City against the AI with clicks" under parallel load. It then passed 10/10 alone and in two further full runs.

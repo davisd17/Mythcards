@@ -488,7 +488,7 @@ func _build_menu() -> void:
 	box.add_child(_button("Debug view", func(): get_tree().change_scene_to_file(DEBUG_SCENE)))
 	# Phase 4 presentation toggles, saved across restarts.
 	box.add_child(_setting_toggle("Sound", "sound"))
-	box.add_child(_setting_toggle("Atmosphere", "atmosphere"))
+	box.add_child(_setting_toggle("Motion", "motion"))
 	box.add_child(_setting_toggle("Vibration", "haptics"))
 	box.add_child(_button("Close", _toggle_menu))
 	_menu.add_child(box)
