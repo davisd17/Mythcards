@@ -507,6 +507,23 @@ func move_character(instance: CharacterInstance, to: Vector2i) -> void:
 
 
 # A position change that isn't the character's own move (Relay Gate teleport).
+func swap_characters(first: CharacterInstance, other: CharacterInstance, cause: String) -> void:
+	var first_from := first.position
+	var other_from := other.position
+	# Complete both placements before emitting hooks so neither tile is overwritten.
+	board.set_occupant(first_from, other.instance_id)
+	board.set_occupant(other_from, first.instance_id)
+	first.position = other_from
+	other.position = first_from
+	for c in [first, other]:
+		if c.is_mounted_rider:
+			var mount_char := _match.find_character(c.mounted_with_id)
+			if mount_char != null:
+				mount_char.position = c.position
+	EventBus.character_repositioned.emit(first.instance_id, first_from, other_from, cause)
+	EventBus.character_repositioned.emit(other.instance_id, other_from, first_from, cause)
+
+
 func reposition_character(instance: CharacterInstance, to: Vector2i, cause: String) -> void:
 	var from := instance.position
 	board.clear_occupant(from)

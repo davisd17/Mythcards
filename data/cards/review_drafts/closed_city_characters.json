@@ -9,10 +9,10 @@
     "type": "Specialist",
     "unique": true,
     "stats": [3, 1, 2, 3],
-    "l1": "AP Ability: Dream Link chooses an ally within 3 tiles. Move one temporary combat marker, such as Shield, +ATK, +MOVE, Pounce, Slow, or Marked, between that ally and another allied character within 2 tiles. Spirit Ember cannot be moved this way.",
-    "l2": "Signal Breach: Dream Link range becomes 4 and may move one temporary combat marker between any two characters within range. If a harmful marker is moved onto an enemy, give Elena a 1-damage shield. Spirit Ember cannot be moved this way.",
-    "l3": "Missing In The Signal: +1 RANGE. Once per match, Elena may remove herself from the board until your next turn. When she returns, place her on any empty tile adjacent to an ally and move one temporary combat marker from any character within 4 tiles to any other character within 4 tiles. Spirit Ember cannot be moved this way.",
-    "role": "Closed City consciousness specialist. Transfers status effects, turns battlefield conditions into tactical leverage, and becomes a disappearance/reposition engine at Level 3.",
+    "l1": "AP Ability: Dream Link chooses 1 allied character within 2 tiles of Elena. Swap its position with another allied character anywhere on the board.",
+    "l2": "Signal Breach: Dream Link may choose its first allied character within 4 tiles of Elena.",
+    "l3": "The Dream Becomes Real: +1 HP. Dream Link may swap the chosen ally with any other character, including an enemy, anywhere on the board.",
+    "role": "Closed City consciousness specialist. Links allied positions across the board and at Level 3 rewrites enemy positions through shared dream space.",
     "narrative": {
       "public_role": "Dream/consciousness scientist.",
       "private_hunger": "To prove that symbolic material in test subjects is not random.",
@@ -28,9 +28,9 @@
     ],
     "review_notes": [
       "Not added to the playable 14-card prototype deck yet.",
-      "Uses Spirit Ember-safe status movement: her status transfer explicitly excludes Spirit Ember.",
-      "Level 2 is intended to be a clear power spike by expanding range, target flexibility, and defense.",
-      "Level 3 is intended to be transformative by temporarily removing Elena from danger and letting her reassign a key combat marker when she returns."
+      "Dream Link swaps positions instead of transferring markers; each character retains its own markers.",
+      "Level 2 extends the first ally's selection range from 2 to 4 tiles; the second ally may be anywhere on the board.",
+      "Level 3 adds +1 HP and allows an enemy as the second character on every Dream Link use, at normal AP cost."
     ]
   },
   {

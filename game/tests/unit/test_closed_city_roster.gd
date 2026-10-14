@@ -216,46 +216,91 @@ func test_private_favors_and_the_door() -> void:
 
 # --- Dr. Elena Morozova -------------------------------------------------------------------------
 
-func test_dream_link_moves_a_marker_between_allies() -> void:
+func test_dream_link_swaps_a_nearby_ally_with_a_distant_ally() -> void:
 	Fixture.put(ELENA, Vector2i(3, 0))
 	var yuri := Fixture.put(YURI, Vector2i(3, 2))
-	var worker := Fixture.put(WORKER, Vector2i(4, 2))
+	var worker := Fixture.put(WORKER, Vector2i(6, 5))
 	sys.add_status(yuri, "shield", 1, "this_turn")
-	var step := sys.ability_step(_c(ELENA), "r-elena-morozova", {"target": YURI, "other": WORKER})
-	assert_eq(step.options.size(), 1)
-	assert_true(_ability(ELENA, {"target": YURI, "other": WORKER, "marker": step.options[0].value}).success)
-	assert_false(yuri.has_status("shield"))
-	assert_true(worker.has_status("shield"))
+	var ap_before := _c(ELENA).character_ap_remaining
+	var pool_before := Fixture.state().get_player("p1").pool_ap_remaining
+	assert_true(_ability(ELENA, {"target": YURI, "other": WORKER}).success)
+	assert_eq(yuri.position, Vector2i(6, 5))
+	assert_eq(worker.position, Vector2i(3, 2))
+	assert_eq(sys.board.get_tile(yuri.position).occupant_id, YURI)
+	assert_eq(sys.board.get_tile(worker.position).occupant_id, WORKER)
+	assert_true(yuri.has_status("shield"), "markers stay with their characters")
+	assert_eq(_c(ELENA).character_ap_remaining, ap_before - 1)
+	assert_eq(Fixture.state().get_player("p1").pool_ap_remaining, pool_before - 1)
 
 
-func test_signal_breach_steals_memory_and_shields_elena() -> void:
+func test_dream_link_level_1_rejects_distant_first_ally_and_enemies() -> void:
+	Fixture.put(ELENA, Vector2i(3, 0))
+	Fixture.put(YURI, Vector2i(3, 3))
+	Fixture.put(WORKER, Vector2i(2, 0))
+	Fixture.put(SAHU, Vector2i(6, 5))
+	var pool_before := Fixture.state().get_player("p1").pool_ap_remaining
+	assert_false(_ability(ELENA, {"target": YURI, "other": WORKER}).success)
+	assert_false(_ability(ELENA, {"target": WORKER, "other": SAHU}).success)
+	assert_false(_ability(ELENA, {"target": WORKER, "other": WORKER}).success)
+	assert_eq(Fixture.state().get_player("p1").pool_ap_remaining, pool_before)
+
+
+func test_dream_link_level_2_extends_first_pick_but_keeps_allied_swaps() -> void:
 	var elena := _level(ELENA, 2)
 	Fixture.put(ELENA, Vector2i(3, 0))
-	var sahu := Fixture.put(SAHU, Vector2i(3, 3))
-	var worker := Fixture.put(WORKER, Vector2i(2, 0))
-	sys.give_memory(sahu)
-	assert_true(_ability(ELENA, {"target": SAHU, "other": WORKER,
-			"marker": {"from": SAHU, "type": "memory", "index": 0}}).success, "Memory moves (ruling 2026-10-07)")
-	assert_eq(sys.memory_count(sahu), 0)
-	assert_eq(sys.memory_count(worker), 1)
-	_pass_to_p1()
-	sys.add_status(worker, "marked", 1, "until_used")
-	assert_true(_ability(ELENA, {"target": WORKER, "other": SAHU,
-			"marker": {"from": WORKER, "type": "marked", "index": 0}}).success)
-	assert_true(sahu.has_status("marked"))
-	assert_true(elena.has_status("shield"), "a harmful marker moved onto an enemy")
+	Fixture.put(YURI, Vector2i(3, 4))
+	Fixture.put(SAHU, Vector2i(6, 5))
+	assert_false(_ability(ELENA, {"target": YURI, "other": SAHU}).success)
+	assert_true(_ability(ELENA, {"target": YURI, "other": ELENA}).success)
+	assert_eq(elena.position, Vector2i(3, 4))
+	assert_eq(_c(YURI).position, Vector2i(3, 0))
 
 
-func test_missing_in_the_signal() -> void:
+func test_dream_link_level_3_swaps_enemies_repeatedly_and_gains_hp() -> void:
 	var elena := _level(ELENA, 3)
-	Fixture.put(ELENA, Vector2i(3, 2))
-	Fixture.put(WORKER, Vector2i(0, 0))
-	assert_true(_ability(ELENA, {}, "r-elena-morozova_l3").success)
-	assert_false(elena.is_placed())
+	assert_eq(elena.current_hp, 4)
+	assert_eq(elena.range_bonus, 0)
+	Fixture.put(ELENA, Vector2i(3, 0))
+	var worker := Fixture.put(WORKER, Vector2i(3, 2))
+	var sahu := Fixture.put(SAHU, Vector2i(6, 5))
+	assert_false(_ability(ELENA, {"target": SAHU, "other": WORKER}).success)
+	assert_true(_ability(ELENA, {"target": WORKER, "other": SAHU}).success)
+	assert_eq(worker.position, Vector2i(6, 5))
+	assert_eq(sahu.position, Vector2i(3, 2))
 	_pass_to_p1()
-	assert_false(sys.return_tiles(elena).has(Vector2i(5, 5)), "next to an ally")
-	assert_true(_act("reactive_bonus", ELENA, {"tag": "return", "to": Vector2i(1, 0)}).success)
-	assert_eq(elena.position, Vector2i(1, 0))
+	Fixture.put(WORKER, Vector2i(2, 0))
+	assert_true(_ability(ELENA, {"target": WORKER, "other": SAHU}).success)
+	assert_eq(sahu.position, Vector2i(2, 0))
+
+
+func test_dream_link_respects_line_of_sight_and_forced_movement_protection() -> void:
+	_level(ELENA, 3)
+	Fixture.put(ELENA, Vector2i(3, 0))
+	Fixture.put(YURI, Vector2i(3, 3))
+	Fixture.put(WORKER, Vector2i(3, 1))
+	var sahu := Fixture.put(SAHU, Vector2i(6, 5))
+	assert_false(_ability(ELENA, {"target": YURI, "other": SAHU}).success)
+	sys.add_status(sahu, "no_push", 1, "this_turn")
+	assert_false(_ability(ELENA, {"target": WORKER, "other": SAHU}).success)
+
+
+func test_dream_link_moves_a_mounted_pair_and_levels_both_arrivals() -> void:
+	Fixture.put(ELENA, Vector2i(3, 0))
+	var orlov := Fixture.put(ORLOV, Vector2i(3, 2))
+	var vera := Fixture.put(VERA, Vector2i(3, 3))
+	var worker := Fixture.put(WORKER, Vector2i(6, 6))
+	assert_true(_act("mount", ORLOV, {"mount_id": VERA}).success)
+	# Mounting moved Orlov to VERA; bring the pair back into Dream Link range.
+	sys.reposition_character(orlov, Vector2i(3, 2), "test")
+	var step := sys.ability_step(_c(ELENA), "r-elena-morozova", {"target": ORLOV})
+	assert_false(step.characters.has(VERA), "a carried mount is not a separate swap target")
+	assert_true(_ability(ELENA, {"target": ORLOV, "other": WORKER}).success)
+	assert_eq(orlov.position, Vector2i(6, 6))
+	assert_eq(vera.position, orlov.position)
+	assert_eq(worker.position, Vector2i(3, 2))
+	assert_eq(orlov.level, 2)
+	assert_eq(vera.level, 2)
+	assert_eq(sys.board.get_tile(orlov.position).occupant_id, ORLOV)
 
 
 # --- Zoya Miranova ------------------------------------------------------------------------------

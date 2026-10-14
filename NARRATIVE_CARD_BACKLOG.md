@@ -679,7 +679,7 @@ These should be considered when expanding Russian/Closed City beyond the current
 | Warrior | Major Yuri Volkov | Former cosmonaut candidate turned armored containment responder, emotionally bound to Elena Morozova. | Marks threats near Leaks, gains durability, and fires Containment Shot diagonally at Level 3. |
 | Leader | Irina Vasilievna Karpova | Wealthy and influential patron who funded Elena's dream work and may know more about the Convergence than she admits. | Orders, leverage, resource control, sacrifice for advantage, manipulation of relic/event access. |
 | Hero | Dr. Mikhail Orlov | Coma gate patient and symbolic center. | Reveal/manipulate events, risk through damage/status. |
-| Specialist | Dr. Elena Morozova | Consciousness researcher and missing emotional key. | Dream links, status transfer, prediction, relationship mechanics. |
+| Specialist | Dr. Elena Morozova | Consciousness researcher and missing emotional key. | Dream Link swaps allied positions across the board, extending its local reach at Level 2 and exchanging allies with enemies at Level 3. |
 | Mystic | Subject 3: Zoya | Remote-viewing dream subject connected to Orlov before waking contact. Full story name: Zoya Miranova. | Unstable prophecy, desire/signal effects, copy abilities, dream links, choice-based psychic effects. |
 
 ## Proposed Flood Survivor Character Cards
