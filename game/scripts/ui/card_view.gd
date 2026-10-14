@@ -9,6 +9,9 @@ const ART_DIR := "res://data/card_art/"
 const FACTION_COLORS := {"Russian-inspired": Color("#8c2f39"), "Russian-Inspired": Color("#8c2f39"),
 		"Atlantean": Color("#1f6f8b")}
 
+const FULL_ART_HEIGHT := 600.0   # whole 2:3 art at 400 wide; with the text, fits a 1280-tall screen
+const FULL_CARD_WIDTH := 600.0
+
 static var _art_cache: Dictionary = {}
 
 var compact := false   # smaller art for the side panel
@@ -52,9 +55,11 @@ func _ready() -> void:
 	box.add_theme_constant_override("separation", 4)
 	add_child(box)
 
-	var art_height := 150.0 if compact else 360.0
+	# The full card shows its whole portrait (2:3) art, uncropped (playtest 2026-10-13:
+	# the old full-width strip cut most of the image off). The compact view keeps a crop.
+	var art_height := 150.0 if compact else FULL_ART_HEIGHT
 	_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED if compact else TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_art.custom_minimum_size = Vector2(0, art_height)
 	_art.clip_contents = true
 	box.add_child(_art)

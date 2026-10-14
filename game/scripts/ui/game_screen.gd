@@ -383,11 +383,19 @@ func _build_popup() -> void:
 	_popup_note.add_theme_font_size_override("font_size", 22)
 	_popup_note.add_theme_color_override("font_color", Color("#f3e3b5"))
 	box.add_child(_margin(_popup_note, 40))
-	# The card scrolls inside the overlay, so a long card never runs off the screen.
+	# The card scrolls inside the overlay, so a long card never runs off the screen. It sits
+	# centered, at a card's width, below the note rather than against the top edge
+	# (playtest 2026-10-13); a column as tall as the scroll area does the centering.
 	_popup_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_popup_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_popup_card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_popup_scroll.add_child(_popup_card)
+	var column := VBoxContainer.new()
+	column.alignment = BoxContainer.ALIGNMENT_CENTER
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_popup_scroll.resized.connect(func(): column.custom_minimum_size.y = _popup_scroll.size.y)
+	_popup_card.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_popup_card.custom_minimum_size.x = CardView.FULL_CARD_WIDTH
+	column.add_child(_popup_card)
+	_popup_scroll.add_child(column)
 	box.add_child(_margin(_popup_scroll, 50))
 	_popup_button = _accent(_button("Continue", _next_popup))
 	box.add_child(_margin(_popup_button, 50))
