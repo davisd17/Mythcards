@@ -141,13 +141,10 @@ func _pick_first() -> void:
 		pick_from_tray(rest[0].instance_id)
 
 
+# Only the deploying player's own pieces answer a tap; the other formation stays hidden.
 func _setup_occupant(pos: Vector2i) -> CharacterInstance:
 	var id: String = setup.board.get_tile(pos).occupant_id
-	for player_id in GameEnums.PLAYER_IDS:
-		var c: CharacterInstance = setup.get_player(player_id).find_character(id)
-		if c != null:
-			return c
-	return null
+	return setup.get_player(placing_player).find_character(id)
 
 
 static func _back_row(player_id: String) -> int:
@@ -162,8 +159,13 @@ func board() -> BoardModel:
 	return GameState.match_state.board if GameState.match_state != null else null
 
 
+# During setup only the deploying player's squad: nobody sees the other formation until
+# the match starts (playtest 2026-10-13).
 func characters() -> Array[CharacterInstance]:
 	var result: Array[CharacterInstance] = []
+	if setup != null:
+		result.append_array(setup.get_player(placing_player).characters)
+		return result
 	for player_id in GameEnums.PLAYER_IDS:
 		var p: PlayerState = setup.get_player(player_id) if setup != null \
 				else (GameState.match_state.get_player(player_id) if GameState.match_state != null else null)

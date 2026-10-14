@@ -198,3 +198,32 @@ func test_ember_score_shows_in_the_top_bar() -> void:
 	var chips: Array = screen._chips.get_children().filter(func(c): return not c.is_queued_for_deletion()).map(func(c): return c.text)
 	assert_true(chips.has("P1 Embers 2/4"), str(chips))
 	assert_true(chips.has("P2 Embers 0/4"))
+
+
+# Playtest 2026-10-13: a player picking a formation never sees the other one.
+func test_player_2_does_not_see_player_1s_formation_while_deploying() -> void:
+	var gc: GameController = screen.controller
+	gc.auto_place()
+	gc.confirm_placement(42)
+	assert_eq(gc.placing_player, "p2")
+	assert_true(gc.characters().all(func(c): return c.player_id == "p2"), "only Player 2's squad is drawn")
+	var p1_piece: CharacterInstance = gc.setup.get_player("p1").characters[0]
+	gc.tap_tile(p1_piece.position)
+	assert_ne(gc.inspect_id, p1_piece.instance_id, "tapping a hidden piece reveals nothing")
+	assert_null(gc.find(p1_piece.instance_id))
+	gc.auto_place()
+	gc.confirm_placement(42)
+	assert_eq(gc.characters().size(), 14, "both formations appear once the match starts")
+
+
+func test_player_1_never_sees_player_2_before_the_match() -> void:
+	var gc: GameController = screen.controller
+	assert_true(gc.characters().all(func(c): return c.player_id == "p1"))
+
+
+func test_an_ai_that_deploys_first_stays_hidden() -> void:
+	screen._start("p1")   # the AI is Player 1 and places its squad at once
+	var gc: GameController = screen.controller
+	assert_eq(gc.placing_player, "p2")
+	assert_true(gc.setup.is_player_ready("p1"), "the AI has deployed")
+	assert_true(gc.characters().all(func(c): return c.player_id == "p2"), "but its formation is hidden")
