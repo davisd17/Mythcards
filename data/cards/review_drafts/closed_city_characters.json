@@ -247,7 +247,7 @@
     "stats": [4, 1, 2, 3],
     "l1": "AP Ability: Access Granted chooses an allied character within 3. That ally gains +1 ATK this turn.",
     "l2": "Private Favors: Access Granted may target 2 allies within 3. Each target gains +1 ATK this turn and may ignore Leak damage during its next movement this turn.",
-    "l3": "The Door Was Always There: +1 HP. Once per match, choose up to 2 allied characters within 3. Each chosen ally may move 1 tile without spending AP.",
+    "l3": "The Price of Access: +1 HP. Once per game, when Irina delivers a Spirit Ember, she may defeat one enemy character anywhere on the board. This costs no additional AP.",
     "role": "Closed City leader and patron of the sealed city. Turns access, permissions, and favors into controlled movement through dangerous infrastructure.",
     "narrative": {
       "public_role": "Industrial patron and political liaison.",
@@ -264,7 +264,7 @@
       "Not added to the playable 14-card prototype deck yet.",
       "Designed to make Closed City movement through hazards feel political and infrastructural rather than heroic command.",
       "Level 2 is intended to be a clear power spike by expanding safe access to two allies.",
-      "Level 3 is intended to be transformative by giving a once-per-match access-based reposition to two allies."
+      "Level 3 turns Irina's own Ember delivery into a once-per-game direct enemy defeat anywhere on the board, with no additional AP."
     ]
   },
   {

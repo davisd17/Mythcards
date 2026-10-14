@@ -4,11 +4,10 @@ extends AbilityHandler
 #    Payload: {"target": id} (L2 adds "target_2").
 # L2 Private Favors: up to 2 allies; each also ignores Leak damage during its next move
 #    this turn (it doesn't trigger Leaks on that move).
-# L3 The Door Was Always There: +1 HP. Standalone ability "r-irina-karpova_l3", once per
-#    match (AP): up to 2 allies within 3 may each move 1 tile without spending AP.
-#    Payload: {"target": id, "target_2": optional id}.
+# L3 The Price of Access: +1 HP. Once per game, delivering an Ember offers a free
+# direct defeat of one enemy anywhere on the board.
 
-const L3_ID := "r-irina-karpova_l3"
+const TAG := "price_of_access"
 const REACH := 3
 const ATK := 1
 
@@ -17,17 +16,11 @@ func level_bonuses() -> Dictionary:
 	return {3: {"hp": 1}}
 
 
-func ability_ids(instance: CharacterInstance) -> Array[String]:
-	return [instance.data.id, L3_ID]
+func ability_label(_instance: CharacterInstance, _ability_id: String) -> String:
+	return "Access Granted"
 
 
-func ability_label(_instance: CharacterInstance, ability_id: String) -> String:
-	return "The Door Was Always There" if ability_id == L3_ID else "Access Granted"
-
-
-func can_use(sys, instance: CharacterInstance, ability_id: String) -> bool:
-	if ability_id == L3_ID:
-		return instance.level >= 3 and not sys.used_this_match(instance, "door_used")
+func can_use(_sys, _instance: CharacterInstance, _ability_id: String) -> bool:
 	return true
 
 
@@ -37,7 +30,7 @@ func get_legal_targets(sys, instance: CharacterInstance, _ability_id: String) ->
 
 func validate(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> String:
 	var ids := _ids(payload)
-	var limit := 2 if (ability_id == L3_ID or instance.level >= 2) else 1
+	var limit := 2 if instance.level >= 2 else 1
 	if ids.is_empty():
 		return "choose an ally"
 	if ids.size() > limit:
@@ -51,26 +44,60 @@ func validate(sys, instance: CharacterInstance, ability_id: String, payload: Dic
 
 func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
 	var legal := get_legal_targets(sys, instance, ability_id)
-	var verb := "Who may move 1 tile for free?" if ability_id == L3_ID else "Access Granted: which ally gets +1 ATK this turn?"
+	var verb := "Access Granted: which ally gets +1 ATK this turn?"
 	if not payload.has("target"):
 		return target_step("target", verb, legal)
-	if (ability_id != L3_ID and instance.level < 2) or payload.has("target_2"):
+	if instance.level < 2 or payload.has("target_2"):
 		return {}
 	return second_step("target_2", "And a second ally?", legal, payload.target)
 
 
-func execute(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
-	if ability_id == L3_ID:
-		instance.ability_uses_this_match["door_used"] = true
+func execute(sys, instance: CharacterInstance, _ability_id: String, payload: Dictionary) -> Dictionary:
 	for id in _ids(payload):
 		var ally: CharacterInstance = sys.find(id)
-		if ability_id == L3_ID:
-			sys.offer_bonus(ally, "free_move")
-			continue
 		sys.add_status(ally, "temp_atk", ATK, "this_turn", instance)
 		if instance.level >= 2:
 			sys.add_status(ally, "ignore_leak_move", 1, "this_turn", instance)
 	return {"success": true}
+
+
+func on_spirit_ember_delivered(sys, instance: CharacterInstance, carrier: CharacterInstance) -> void:
+	if carrier == instance and instance.level >= 3 and not sys.used_this_match(instance, TAG + "_used"):
+		if not _defeat_targets(sys, instance).is_empty():
+			sys.offer_bonus(instance, TAG)
+
+
+func _defeat_targets(sys, instance: CharacterInstance) -> Array:
+	var result := []
+	for enemy in sys.enemies_of(instance):
+		if sys.occupant(enemy.position) == enemy:
+			result.append(enemy.instance_id)
+	return result
+
+
+func bonus_label(tag: String) -> String:
+	return "The Price of Access" if tag == TAG else super(tag)
+
+
+func bonus_step(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
+	if tag != TAG or payload.has("target"):
+		return {}
+	return target_step("target", "The Price of Access: defeat which enemy?", _defeat_targets(sys, instance))
+
+
+func execute_reactive_bonus(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
+	if tag != TAG:
+		return super(sys, instance, tag, payload)
+	if sys.used_this_match(instance, TAG + "_used"):
+		return {"success": false, "reason": "already used this game"}
+	if not _defeat_targets(sys, instance).has(str(payload.get("target", ""))):
+		return {"success": false, "reason": "choose an enemy on the board"}
+	# Consume before defeat signals: a defeat on the center immediately delivers again.
+	instance.ability_uses_this_match[TAG + "_used"] = true
+	sys.consume_bonus(instance, TAG)
+	var enemy: CharacterInstance = sys.find(str(payload.target))
+	sys.combat().defeat_character(instance, enemy)
+	return {"success": true, "defeated": true, "target": enemy.instance_id}
 
 
 static func _ids(payload: Dictionary) -> Array:
@@ -81,13 +108,14 @@ static func _ids(payload: Dictionary) -> Array:
 	return result
 
 
-func ai_value(_sys, _instance: CharacterInstance, ability_id: String, payload: Dictionary, _ai) -> float:
+func ai_value(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary, ai) -> float:
+	if ability_id == "bonus:" + TAG:
+		var enemy: CharacterInstance = sys.find(str(payload.get("target", "")))
+		return ai.damage_value(instance, enemy, enemy.current_hp) if enemy != null else 0.0
 	var v := 0.0
 	for id in _ids(payload):
 		var ally: CharacterInstance = GameState.match_state.find_character(id)
-		if ability_id == L3_ID:
-			v += 0.6
-		elif ally.character_ap_remaining > 0 and not RulesEngine.get_legal_attack_target_ids(id).is_empty():
+		if ally.character_ap_remaining > 0 and not RulesEngine.get_legal_attack_target_ids(id).is_empty():
 			v += 1.0   # +1 ATK on an attack it can still make
 		else:
 			v += 0.15

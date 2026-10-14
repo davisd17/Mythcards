@@ -214,6 +214,14 @@ func apply_pull(target: CharacterInstance, toward: Vector2i, distance: int) -> V
 	return cursor
 
 
+func defeat_character(attacker: CharacterInstance, defender: CharacterInstance) -> void:
+	# A direct defeat is not damage and bypasses damage prevention and lethal intercepts.
+	if defender.defeated:
+		return
+	defender.current_hp = 0
+	_handle_defeat(defender, attacker)
+
+
 func _handle_defeat(defender: CharacterInstance, attacker: CharacterInstance) -> void:
 	board.clear_occupant(defender.position)
 	defender.defeated = true

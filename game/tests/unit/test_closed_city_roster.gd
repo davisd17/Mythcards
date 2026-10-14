@@ -197,7 +197,7 @@ func test_access_granted() -> void:
 	assert_eq(naia.current_hp, 1)
 
 
-func test_private_favors_and_the_door() -> void:
+func test_private_favors() -> void:
 	_level(KARPOVA, 3)
 	Fixture.put(KARPOVA, Vector2i(3, 0))
 	var worker := Fixture.put(WORKER, Vector2i(3, 2))
@@ -208,10 +208,91 @@ func test_private_favors_and_the_door() -> void:
 	assert_true(_act("move", ZOYA, {"to": Vector2i(2, 2)}).success)
 	assert_eq(zoya.current_hp, 3, "ignores Leak damage on its next move")
 	assert_true(sys.has_leak(Vector2i(2, 1)))
+
+
+
+func test_price_of_access_delivers_then_defeats_a_distant_shielded_enemy_for_free() -> void:
+	var irina := _level(KARPOVA, 3)
+	Fixture.put(KARPOVA, Vector2i(3, 2))
+	var naia := Fixture.put(NAIA, Vector2i(6, 6))
+	var sahu := Fixture.put(SAHU, Vector2i(0, 6))
+	_level(NAIA, 3)
+	sys.add_status(naia, "shield", 20, "until_used")
+	sys.give_memory(naia)
+	irina.spirit_ember_count = 1
+	assert_false(RulesEngine.get_usable_ability_ids(KARPOVA).has("r-irina-karpova_l3"))
+	assert_true(_act("move", KARPOVA, {"to": CENTER}).success)
+	assert_true(RulesEngine.get_offered_bonus_tags(KARPOVA).has("price_of_access"))
+	var pool := Fixture.state().get_player("p1").pool_ap_remaining
+	var ap := irina.character_ap_remaining
+	var step := sys.bonus_step(irina, "price_of_access", {})
+	assert_true(step.characters.has(NAIA))
+	assert_false(step.characters.has(KARPOVA))
+	assert_false(_act("reactive_bonus", KARPOVA, {"tag": "price_of_access", "target": KARPOVA}).success)
+	assert_true(_act("reactive_bonus", KARPOVA, {"tag": "price_of_access", "target": NAIA}).success)
+	assert_true(naia.defeated, "direct defeat bypasses Shield, Memory and Naia's survival")
+	assert_eq(naia.current_hp, 0)
+	assert_eq(sys.board.get_tile(Vector2i(6, 6)).occupant_id, "")
+	assert_eq(Fixture.state().get_player("p1").pool_ap_remaining, pool)
+	assert_eq(irina.character_ap_remaining, ap)
+	assert_eq(Fixture.state().get_player("p1").embers_delivered, 2, "defeat's Ember also banks on center")
+	assert_false(RulesEngine.get_offered_bonus_tags(KARPOVA).has("price_of_access"), "no recursive offer")
+	assert_false(_act("reactive_bonus", KARPOVA, {"tag": "price_of_access", "target": SAHU}).success)
+	assert_false(sahu.defeated)
+
+
+func test_price_of_access_triggers_on_a_defeat_that_levels_irina_and_delivers() -> void:
+	var irina := _level(KARPOVA, 2)
+	Fixture.put(KARPOVA, CENTER)
+	var laborer := Fixture.put(LABORER, Vector2i(3, 4))
+	Fixture.put(NAIA, Vector2i(6, 6))
+	laborer.current_hp = 1
+	assert_true(_act("attack", KARPOVA, {"target_id": LABORER}).success)
+	assert_eq(irina.level, 3)
+	assert_eq(irina.current_hp, 5)
+	assert_eq(Fixture.state().get_player("p1").embers_delivered, 1)
+	assert_true(RulesEngine.get_offered_bonus_tags(KARPOVA).has("price_of_access"))
+	irina.character_ap_remaining = 0
+	Fixture.state().get_player("p1").pool_ap_remaining = 0
+	assert_true(_act("reactive_bonus", KARPOVA, {"tag": "price_of_access", "target": NAIA}).success)
+
+
+func test_price_of_access_requires_irinas_own_level_3_delivery() -> void:
+	var irina := _level(KARPOVA, 2)
+	Fixture.put(KARPOVA, Vector2i(3, 2))
+	Fixture.put(NAIA, Vector2i(6, 6))
+	irina.spirit_ember_count = 1
+	assert_true(_act("move", KARPOVA, {"to": CENTER}).success)
+	assert_false(RulesEngine.get_offered_bonus_tags(KARPOVA).has("price_of_access"))
+	_level(KARPOVA, 3)
+	var worker := Fixture.put(WORKER, Vector2i(2, 3))
+	worker.spirit_ember_count = 1
+	Fixture.put(KARPOVA, Vector2i(3, 2))
+	assert_true(_act("move", WORKER, {"to": CENTER}).success)
+	assert_false(RulesEngine.get_offered_bonus_tags(KARPOVA).has("price_of_access"))
+	assert_false(_act("reactive_bonus", KARPOVA, {"tag": "price_of_access", "target": NAIA}).success)
+
+
+func test_price_of_access_defeats_a_mounted_pair_and_only_once() -> void:
+	var irina := _level(KARPOVA, 3)
+	Fixture.put(KARPOVA, Vector2i(3, 2))
+	var meret := Fixture.put(MERET, Vector2i(0, 5))
+	var mount_id := "p2_a-flood-survivor-ahesu"
+	var ahesu := Fixture.put(mount_id, Vector2i(0, 6))
+	sys.combat().mount_system.mount(meret, ahesu)
+	Fixture.put(NAIA, Vector2i(6, 5))
+	irina.spirit_ember_count = 1
+	assert_true(_act("move", KARPOVA, {"to": CENTER}).success)
+	var step := sys.bonus_step(irina, "price_of_access", {})
+	assert_false(step.characters.has(mount_id), "target the visible mounted pair via its rider")
+	assert_true(_act("reactive_bonus", KARPOVA, {"tag": "price_of_access", "target": MERET}).success)
+	assert_true(meret.defeated)
+	assert_true(ahesu.defeated)
+	assert_eq(Fixture.state().get_player("p1").embers_delivered, 3)
 	_pass_to_p1()
-	assert_true(_ability(KARPOVA, {"target": WORKER}, "r-irina-karpova_l3").success)
-	assert_true(_act("reactive_bonus", WORKER, {"tag": "free_move", "to": Vector2i(3, 3)}).success)
-	assert_eq(worker.position, Vector2i(3, 3))
+	irina.spirit_ember_count = 1
+	sys.reposition_character(irina, CENTER, "test")
+	assert_false(RulesEngine.get_offered_bonus_tags(KARPOVA).has("price_of_access"))
 
 
 # --- Dr. Elena Morozova -------------------------------------------------------------------------
