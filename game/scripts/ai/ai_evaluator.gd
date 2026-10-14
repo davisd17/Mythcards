@@ -149,11 +149,19 @@ func _tile_value(c: CharacterInstance, pos: Vector2i) -> float:
 	var sys: AbilitySystem = RulesEngine.systems().ability
 	if c.level == 1 and pos.y == _opponent_edge(c.player_id):
 		v += personality.w("level_2")
-	if c.spirit_ember_count > 0 and pos == BoardModel.CENTER_TILE:
+	if c.spirit_ember_count > 0:
 		var banked: int = GameState.match_state.get_player(c.player_id).embers_delivered
-		v += personality.w("deliver") * c.spirit_ember_count
-		if banked + c.spirit_ember_count >= VictoryChecker.EMBERS_TO_WIN:
-			v += personality.w("win", 100.0)
+		if pos == BoardModel.CENTER_TILE:
+			v += personality.w("deliver") * c.spirit_ember_count
+			if banked + c.spirit_ember_count >= VictoryChecker.EMBERS_TO_WIN:
+				v += personality.w("win", 100.0)
+		else:
+			# A carrier heads for the center (2026-10-14: carriers picked up ~8 Embers a
+			# match but delivered under 1, because only the center tile itself scored).
+			# Stronger with more Embers and the closer the team is to the Ember win.
+			var urgency := 1.0 + float(banked + c.spirit_ember_count) / VictoryChecker.EMBERS_TO_WIN
+			v -= personality.w("deliver_approach") * c.spirit_ember_count * urgency \
+					* AbilitySystem.distance(pos, BoardModel.CENTER_TILE)
 	if sys.has_leak(pos) and not sys.handler_for(c).ignores_leaks(sys, c):
 		v -= personality.w("leak_tile")
 	return v

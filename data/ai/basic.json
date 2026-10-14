@@ -21,6 +21,7 @@
     "patience": 20,
     "ember": 1,
     "deliver": 2.5,
+    "deliver_approach": 0.6,
     "win": 100
   },
   "character_value": {

@@ -92,3 +92,9 @@ After the fixes, all 4 matches finish in 16–31 turns. Flood Survivors won 3 of
 - **Time budget** per decision for mobile.
 - **AI vs AI watch / balance runs:** two `AIPlayer`s headless over many seeds, reporting win rates, match length, and how often Level 2/3 is reached. These are PRD Section 26 playtest questions.
 - **Telemetry hooks:** log each decision's top candidates and scores for tuning.
+
+### 9B addendum (2026-10-14): Ember carriers head for the center
+
+Before, only the center tile itself scored for a carrier, so carriers delivered only when the center was one move away. In 12 AI-vs-AI matches (Closed City vs Flood Survivors), carriers picked up about 8–9 Embers per match but delivered fewer than 1, and 2 of 12 matches ended on the Ember win. `_tile_value` now subtracts `deliver_approach` (0.6) × Embers carried × urgency × distance to the center. Urgency is 1 + (banked + carried) / 4. After the change, about 2.4 Embers were delivered per match and 7 of 12 matches ended on the Ember win; matches ran slightly shorter.
+
+Observed, not changed: Flood Survivors won 12/12 from either seat (24/24 total) in these AI-vs-AI runs. `[NEED: designer review]` This could be faction balance or the AI playing one roster better; check in human playtests.

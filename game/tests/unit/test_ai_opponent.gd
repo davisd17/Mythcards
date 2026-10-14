@@ -146,3 +146,16 @@ func test_never_walls_in_its_own_hero_with_a_card_choice() -> void:
 	assert_true(ai.evaluator.score({"kind": "deck_choice", "actor_id": "p2",
 			"payload": {"tiles": [Vector2i(3, 5), Vector2i(2, 4)]}}).score <= AIEvaluator.VETO)
 	assert_false(RulesEngine.get_legal_move_tiles(sahu.instance_id).is_empty())
+
+
+# 2026-10-14: carriers used to deliver only when the center was one move away.
+func test_an_ember_carrier_heads_for_the_center() -> void:
+	var ai := _arranged()
+	Fixture.put(ORLOV, Vector2i(6, 0))
+	var yuri := Fixture.put(YURI, Vector2i(0, 3))   # 3 tiles west of the center, MOVE 2
+	yuri.spirit_ember_count = 2
+	Fixture.put(NAIA, Vector2i(6, 6))
+	var action := ai.next_action()
+	assert_eq([action.action_type, action.actor_id], ["move", YURI], str(action))
+	var to: Vector2i = action.payload.to
+	assert_lt(AbilitySystem.distance(to, BoardModel.CENTER_TILE), 3, "closer to the center than it started")
