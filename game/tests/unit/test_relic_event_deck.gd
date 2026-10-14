@@ -101,7 +101,8 @@ func test_leak_damages_the_first_character_to_enter_then_goes() -> void:
 	var gymnast := Fixture.put(GYMNAST, Vector2i(3, 0))
 	_leak(Vector2i(3, 2))
 	assert_true(_act("move", GYMNAST, {"to": Vector2i(3, 3)}).success, "Leaks don't block movement")
-	assert_eq(gymnast.current_hp, 1, "crossing it counts as entering")
+	assert_eq(gymnast.current_hp, 0, "crossing it counts as entering; Leaks deal 2")
+	assert_true(gymnast.defeated)
 	assert_false(sys.has_leak(Vector2i(3, 2)))
 	assert_signal_emitted_with_parameters(EventBus, "leak_triggered", [GYMNAST, Vector2i(3, 2)])
 
@@ -136,7 +137,7 @@ func test_landing_on_a_leak_triggers_it() -> void:
 	var gymnast := Fixture.put(GYMNAST, Vector2i(3, 0))
 	_leak(Vector2i(3, 2))
 	assert_true(_act("move", GYMNAST, {"to": Vector2i(3, 2)}).success)
-	assert_eq(gymnast.current_hp, 1)
+	assert_true(gymnast.defeated, "2 damage defeats the 2-HP Gymnast")
 	assert_false(sys.has_leak(Vector2i(3, 2)))
 
 
@@ -151,7 +152,7 @@ func test_being_pushed_onto_a_leak_triggers_it() -> void:
 	var conductor := Fixture.put(CONDUCTOR, Vector2i(3, 3))
 	_leak(Vector2i(3, 4))
 	_combat().apply_push(conductor, Vector2i(3, 2), 1)
-	assert_eq(conductor.current_hp, 3)
+	assert_eq(conductor.current_hp, 2)
 
 
 func test_memory_blocks_one_damage_after_shields() -> void:
@@ -265,7 +266,7 @@ func test_seventeen_seconds_does_not_protect_from_leaks() -> void:
 	_leak(Vector2i(3, 1))
 	_draw("r-seventeen-seconds")
 	_act("move", GYMNAST, {"to": Vector2i(3, 2)})
-	assert_eq(gymnast.current_hp, 1)
+	assert_true(gymnast.defeated)
 	assert_false(sys.has_leak(Vector2i(3, 1)))
 
 

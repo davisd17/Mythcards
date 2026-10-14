@@ -61,7 +61,7 @@ func test_moves_failures_and_leaks_are_logged() -> void:
 	_act("move", "p1_r-zoya-miranova", {"to": Vector2i(0, 2)})
 	assert_eq(_last().text, "Zoya Miranova moves 2 up")
 	assert_eq(_last().lines[0], "Zoya Miranova triggers a Leak")
-	assert_string_contains(_last().lines[1], "Zoya Miranova takes 1: 1 hazard damage (no attacker)")
+	assert_string_contains(_last().lines[1], "Zoya Miranova takes 2: 2 hazard damage (no attacker)")
 
 
 func test_text_groups_by_turn() -> void:

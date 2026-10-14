@@ -311,7 +311,8 @@ func test_voice_under_static_pulls_into_a_leak() -> void:
 	sys.place_leak(Vector2i(3, 2))
 	assert_true(_ability(ZOYA, {"target": LABORER}).success)
 	assert_eq(laborer.position, Vector2i(3, 2))
-	assert_eq(laborer.current_hp, 1, "the Leak it was pulled onto")
+	assert_eq(laborer.current_hp, 0, "the Leak it was pulled onto deals 2")
+	assert_true(laborer.defeated, "a 2-HP Laborer doesn't survive a Leak")
 
 
 func test_subject_three_and_too_many_names() -> void:

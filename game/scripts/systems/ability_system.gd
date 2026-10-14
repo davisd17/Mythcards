@@ -9,6 +9,7 @@ extends RefCounted
 # across matches; see LLD-leveling 9A).
 
 const ADJACENT_AURA_RANGE := 1
+const LEAK_DAMAGE := 2   # per Leak triggered (ruling 2026-10-13; was 1)
 
 var board: BoardModel
 var _match: MatchState
@@ -666,8 +667,8 @@ func place_leak(pos: Vector2i) -> void:
 	board.place_object(pos, "leak", "")
 
 
-# The first character to enter a Leak tile takes 1 damage and the Leak is removed
-# (designer ruling 2026-09-27).
+# The first character to enter a Leak tile takes LEAK_DAMAGE and the Leak is removed
+# (designer ruling 2026-09-27; 2 damage, not 1, by ruling 2026-10-13).
 func _enter_tiles(c: CharacterInstance, tiles: Array[Vector2i]) -> void:
 	for pos in tiles:
 		if c.defeated:
@@ -684,7 +685,7 @@ func _enter_tiles(c: CharacterInstance, tiles: Array[Vector2i]) -> void:
 		EventBus.leak_triggered.emit(c.instance_id, pos)
 		var combat_resolver := combat()
 		if combat_resolver != null:
-			combat_resolver.apply_hazard_damage(c, 1)
+			combat_resolver.apply_hazard_damage(c, LEAK_DAMAGE)
 
 
 # Pylon-equivalence (LLD 5.8 joint pass, recommended defaults): a tile is a pylon source

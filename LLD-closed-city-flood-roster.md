@@ -17,6 +17,7 @@
 - **Once-per-match Level 3 abilities cost 1 AP** (pool + character), like every activated ability.
 - **Dream Link swaps positions** (ruling 2026-10-13): the first ally must be within 2 tiles at Level 1, or 4 at Levels 2/3, using normal ability range bonuses and line of sight. The second character can be anywhere on the board: allied at Levels 1/2, either side at Level 3. Each use costs normal AP; there is no once-per-match limit. Mounted pairs remain together, and standard landing/leveling hooks apply.
 - **Reactor Worker never triggers Leaks**, and its Level 3 AP gain has no per-turn limit (the 4-AP pool still caps it).
+- **Leaks deal 2 damage** (ruling 2026-10-13; was 1): `AbilitySystem.LEAK_DAMAGE`. Still the first character to enter, then the Leak is removed.
 
 ## 2. Teams
 

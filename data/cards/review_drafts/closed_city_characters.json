@@ -43,7 +43,7 @@
     "type": "Hero",
     "unique": true,
     "stats": [5, 1, 2, 3],
-    "l1": "AP Ability: Reactor Leak places a Leak marker on an empty tile within 2. The first character to enter a Leak tile takes 1 damage, then remove that marker.",
+    "l1": "AP Ability: Reactor Leak places a Leak marker on an empty tile within 2. The first character to enter a Leak tile takes 2 damage, then remove that marker.",
     "l2": "Containment Pattern: +1 RANGE. Reactor Leak may place 2 Leak markers instead of 1. The markers must be on different empty tiles within range.",
     "l3": "Slumber: +1 HP. Once per match, remove Orlov from the board until your next turn. When he returns, place him on any empty tile within 2 of where he left. Then place 1 Leak marker on an adjacent empty tile.",
     "role": "Closed City coma-gate hero. Controls dangerous reactor leaks while his Level 3 turns his coma into a story-first disappearance and return.",
