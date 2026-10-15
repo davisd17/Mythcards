@@ -82,7 +82,7 @@ Tests: `test_figure_pose.gd` (13). GUT 520/520, Playwright 13/13. One full Playw
 
 ## 8. Next: Phase 6, Art-Driven Attack Wind-Ups (decided 2026-10-14)
 
-The designer wants character-unique, multi-frame attack wind-up art. An art spec for the graphic designer is published at https://claude.ai/artifact/733oX1LZktxg28BqtVRU7Y. Decisions:
+The designer wants character-unique, multi-frame attack wind-up art. An art spec for the graphic designer is in `docs/art-specs/attack-windup-spec.html` (open it from a clone; it loads Yuri's figure from `game/assets/figures/`) and published at https://claude.ai/artifact/733oX1LZktxg28BqtVRU7Y. Decisions:
 
 - **Frames:** 4 key poses per character (Ready ~120 ms, Wind-up ~180 ms, Strike ~100 ms, Recover ~150 ms, about 550 ms total). Code blends between them and keeps the Phase 5 lean and lunge.
 - **Actions:** basic attack only. Abilities keep the procedural cast animation.

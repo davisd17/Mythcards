@@ -1,0 +1,251 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Published copy: https://claude.ai/artifact/733oX1LZktxg28BqtVRU7Y (Yuri figure embedded there). -->
+<title>Wind-Up Frame Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column of spec sections, with the canvas diagram and pose strip as full-width figures. */
+:root {
+  --paper: #f3f1ec;
+  --sheet: #fbfaf7;
+  --ink: #1f2423;
+  --muted: #5d6663;
+  --line: #d6d2c8;
+  --bronze: #8a6526;
+  --city: #a8393f;
+  --flood: #23808a;
+  --mark: #c23b2f;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121615; --sheet: #191e1d; --ink: #e7e4dc; --muted: #9ba5a1; --line: #323937;
+    --bronze: #d6b36c; --city: #e0767b; --flood: #5cc3cc; --mark: #ff7a6e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121615; --sheet: #191e1d; --ink: #e7e4dc; --muted: #9ba5a1; --line: #323937;
+  --bronze: #d6b36c; --city: #e0767b; --flood: #5cc3cc; --mark: #ff7a6e;
+  color-scheme: dark;
+}
+
+body { background: var(--paper); color: var(--ink); font: 16px/1.6 var(--body); padding-inline: 20px; }
+main { max-width: 860px; margin: 0 auto; padding-block: 40px 72px; display: flex; flex-direction: column; gap: 44px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.1; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.4rem, 6vw, 3.4rem); letter-spacing: 0.01em; }
+h2 { font-size: 1.75rem; letter-spacing: 0.015em; }
+h3 { font-size: 1.2rem; letter-spacing: 0.02em; }
+p { margin: 0; max-width: 66ch; }
+section { display: flex; flex-direction: column; gap: 14px; }
+.eyebrow { font: 600 0.78rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--bronze); }
+.lede { font-size: 1.12rem; color: var(--ink); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font: 0.86rem/1.4 var(--mono); color: var(--muted); }
+code, .mono { font-family: var(--mono); font-size: 0.9em; }
+code { background: var(--sheet); border: 1px solid var(--line); border-radius: 4px; padding: 0.05em 0.35em; overflow-wrap: anywhere; }
+ul, ol { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; max-width: 66ch; }
+.note { border-left: 3px solid var(--bronze); padding: 2px 0 2px 14px; color: var(--muted); max-width: 66ch; }
+.note strong { color: var(--ink); }
+
+/* Pilot callout: the one boxed element on the page. */
+.pilot { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; grid-template-columns: 150px 1fr; gap: 22px; align-items: center; }
+.pilot img { width: 150px; height: auto; display: block; }
+.pilot div { display: flex; flex-direction: column; gap: 10px; }
+@media (max-width: 560px) { .pilot { grid-template-columns: 1fr; } .pilot img { width: 120px; } }
+
+/* Pose sequence: four poses in order, widths proportional to their screen time. */
+.poses { display: grid; grid-template-columns: 120fr 180fr 100fr 150fr; gap: 6px; }
+.pose { border-top: 4px solid var(--bronze); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pose:nth-child(2) { border-top-color: var(--mark); }
+.pose b { font: 600 1.05rem/1.2 var(--display); letter-spacing: 0.03em; }
+.pose .ms { font: 500 0.8rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.pose span:last-child { font-size: 0.88rem; color: var(--muted); line-height: 1.45; }
+@media (max-width: 640px) { .poses { grid-template-columns: 1fr 1fr; } }
+
+/* Canvas diagram */
+figure { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+figcaption { font-size: 0.88rem; color: var(--muted); max-width: 66ch; }
+.canvas-wrap { display: grid; grid-template-columns: minmax(0, 300px) 1fr; gap: 26px; align-items: start; }
+@media (max-width: 640px) { .canvas-wrap { grid-template-columns: 1fr; } }
+.canvas-wrap svg { width: 100%; max-width: 300px; height: auto; display: block; }
+.legend { display: flex; flex-direction: column; gap: 10px; font-size: 0.92rem; }
+.legend div { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: baseline; }
+.swatch { width: 18px; height: 3px; display: inline-block; transform: translateY(-3px); }
+
+.sv-sheet { fill: var(--sheet); stroke: var(--muted); }
+.sv-safe { fill: none; stroke: var(--bronze); }
+.sv-center { stroke: var(--flood); }
+.sv-base { stroke: var(--mark); }
+.sv-label { fill: var(--muted); }
+.sv-base-label { fill: var(--mark); font-weight: 500; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet); }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font: 600 0.74rem/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+td.req { width: 26%; font-weight: 600; }
+td .id { display: block; font: 0.78rem/1.3 var(--mono); color: var(--muted); }
+.side { font: 600 0.72rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.side.city { color: var(--city); } .side.flood { color: var(--flood); }
+.range { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tree { font: 0.88rem/1.55 var(--mono); background: var(--sheet); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; overflow-x: auto; white-space: pre; margin: 0; }
+.checks li { list-style: none; position: relative; }
+.checks { padding-left: 1.6em; }
+.checks li::before { content: ""; position: absolute; left: -1.5em; top: 0.38em; width: 0.8em; height: 0.8em; border: 1.5px solid var(--bronze); border-radius: 2px; }
+footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<main>
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <span class="eyebrow">MythCards · Board figure art</span>
+    <h1>Attack Wind-Up Frames</h1>
+    <p class="lede">Four key poses of each character's basic attack, drawn in the existing board-figure style. The game plays them in sequence, about half a second, every time that character attacks.</p>
+    <div class="meta"><span>Scope: 14 characters × 4 frames</span><span>Start: 1 pilot character</span><span>Format: 512 × 768 PNG, transparent</span></div>
+  </header>
+
+  <section>
+    <span class="eyebrow">Start here</span>
+    <div class="pilot">
+      <img src="../../game/assets/figures/r-yuri-volkov/default.png" alt="Major Yuri Volkov's current board figure: a man in a quilted hazard suit holding a helmet under one arm and a rifle at his side, facing screen-right.">
+      <div>
+        <h2>Pilot: Major Yuri Volkov</h2>
+        <p>Please deliver Yuri's four frames first. We'll drop them into the game, check them on a phone-sized board, and send feedback before you start the other 13. Any problem with the spec gets fixed once, not fourteen times.</p>
+        <p>His attack is a ranged rifle shot (<em>Containment Shot</em>, range 2). The picture is his current figure: your frames should look like this same man in motion.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">The sequence</span>
+    <h2>Four poses, in this order</h2>
+    <p>The game blends between your poses and adds small movement (a lean, a short step toward the target), so each frame should be a clear, held pose rather than an in-between. The widths below are proportional to how long each pose is on screen.</p>
+    <div class="poses" role="list">
+      <div class="pose" role="listitem"><b>1 · Ready</b><span class="ms">~120 ms</span><span>Combat stance, weapon raised, eyes on the target. The bridge from the idle figure.</span></div>
+      <div class="pose" role="listitem"><b>2 · Wind-up</b><span class="ms">~180 ms</span><span>The anticipation: the body coils away from the target and the weapon draws back or charges. The most characterful frame, so exaggerate it.</span></div>
+      <div class="pose" role="listitem"><b>3 · Strike</b><span class="ms">~100 ms</span><span>The release: fullest extension toward screen-right. Muzzle flash or energy may appear here.</span></div>
+      <div class="pose" role="listitem"><b>4 · Recover</b><span class="ms">~150 ms</span><span>Settling back toward the idle stance. The game then returns to the default figure.</span></div>
+    </div>
+    <p class="note"><strong>Size on screen:</strong> a figure is about 60–120 px tall on a phone. The pose has to read as a silhouette at that size: keep the limbs and weapon clear of the body, and push the wind-up further than feels natural at full size.</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">Technical</span>
+    <h2>The canvas</h2>
+    <div class="canvas-wrap">
+      <figure>
+        <svg viewBox="-34 -22 600 812" role="img" aria-label="Diagram of the 512 by 768 pixel canvas with Yuri's figure, showing the foot baseline 12 pixels above the bottom, side margins of 24 pixels, a top margin of 18 pixels, and the vertical center line at x 256.">
+          <rect class="sv-sheet" x="0" y="0" width="512" height="768" stroke-width="3"/>
+          <image href="../../game/assets/figures/r-yuri-volkov/default.png" x="0" y="0" width="512" height="768"/>
+          <rect class="sv-safe" x="24" y="18" width="464" height="738" stroke-width="3" stroke-dasharray="14 10"/>
+          <line class="sv-center" x1="256" y1="0" x2="256" y2="768" stroke-width="3" stroke-dasharray="6 10"/>
+          <line class="sv-base" x1="-20" y1="756" x2="532" y2="756" stroke-width="4"/>
+          <text class="sv-label" x="256" y="-6" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="24">512 px</text>
+          <text class="sv-label" x="-10" y="384" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="24" transform="rotate(-90 -10 384)">768 px</text>
+          <text class="sv-base-label" x="500" y="745" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="24">y 756</text>
+        </svg>
+        <figcaption>Yuri's current figure on the canvas, drawn to scale.</figcaption>
+      </figure>
+      <div class="legend">
+        <div><span class="swatch" style="background:var(--mark)"></span><span><strong>Foot baseline, y = 756.</strong> The lowest pixel of the feet sits 12 px above the bottom edge in every frame. The game pins this line to the board tile, so a frame whose feet sit higher or lower makes the character jump.</span></div>
+        <div><span class="swatch" style="background:var(--flood)"></span><span><strong>Center line, x = 256.</strong> The body stays centered on the same point in all four frames. Only weapons and effects reach past it.</span></div>
+        <div><span class="swatch" style="background:var(--bronze)"></span><span><strong>Safe area:</strong> 24 px from each side, 18 px from the top. Nothing, including effects, may touch the canvas edge.</span></div>
+        <div><span></span><span>Quick check: lay <code>default.png</code> over each frame at 50% opacity. The feet should line up and the body should be the same size.</span></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Requirement</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td class="req">File</td><td>PNG, RGBA, 512 × 768 px, transparent background. One file per pose. Please also send the layered source (PSD, Krita, or similar).</td></tr>
+          <tr><td class="req">Facing</td><td>Three-quarter view, attacking toward <strong>screen-right</strong>, like the current figures. The game mirrors the frames for attacks to the left, so avoid lettering or one-sided details that would look wrong flipped.</td></tr>
+          <tr><td class="req">Scale</td><td>The body matches <code>default.png</code> exactly. Do not crop, re-center, or rescale frames one by one.</td></tr>
+          <tr><td class="req">Style</td><td>Match the current figure: the same painted, semi-realistic rendering, outfit, palette, lighting direction, and level of detail.</td></tr>
+          <tr><td class="req">No ground</td><td>No floor, base, ground shadow, or background. The game draws the base and shadow.</td></tr>
+          <tr><td class="req">Effects</td><td>Muzzle flash, energy, water, or dust may be painted into the Strike frame (and lightly into Wind-up), attached to the figure and inside the safe area.</td></tr>
+          <tr><td class="req">Outfit</td><td>Default outfit only. Zoya's <em>Aurora Rite</em> and Thalassa-Nekh's <em>Drowned Seraph</em> alternates are out of scope for now.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Delivery</span>
+    <h2>File names</h2>
+    <p>One folder per character, named by its id from the table below:</p>
+<pre class="tree">r-yuri-volkov/
+  attack-1-ready.png
+  attack-2-windup.png
+  attack-3-strike.png
+  attack-4-recover.png
+  r-yuri-volkov-attack.psd   (layered source)</pre>
+  </section>
+
+  <section>
+    <span class="eyebrow">The roster</span>
+    <h2>Fourteen attacks</h2>
+    <p>Range is the attack's reach in tiles: 1 is melee (the target is adjacent), 2 or more is ranged. The attack ideas are starting points drawn from each character's role; the weapon or gesture the current figure already shows takes precedence.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Character</th><th>Role</th><th>Range</th><th>Attack idea</th></tr></thead>
+        <tbody>
+          <tr><td>Major Yuri Volkov<span class="id">r-yuri-volkov</span><span class="side city">Closed City · pilot</span></td><td>Warrior</td><td class="range">2 ranged</td><td>Brings the rifle up from his hip, braces, fires. Muzzle flash on Strike.</td></tr>
+          <tr><td>Reactor Worker<span class="id">r-reactor-worker</span><span class="side city">Closed City</span></td><td>Common</td><td class="range">1 melee</td><td>Hauls back a heavy tool (wrench or pipe) and swings.</td></tr>
+          <tr><td>VERA-7<span class="id">r-vera-7</span><span class="side city">Closed City</span></td><td>Mount (rover)</td><td class="range">1 melee</td><td>Rocks back on its wheels, then rams forward or strikes with a work arm.</td></tr>
+          <tr><td>Irina Vasilievna Karpova<span class="id">r-irina-karpova</span><span class="side city">Closed City</span></td><td>Leader</td><td class="range">3 ranged</td><td>A cold, controlled gesture of authority: a sidearm from her coat, or a pointed command. Restrained, never frantic.</td></tr>
+          <tr><td>Dr. Mikhail Orlov<span class="id">r-mikhail-orlov</span><span class="side city">Closed City</span></td><td>Hero</td><td class="range">3 ranged</td><td>The reactor scientist releases a pulse of reactor glow from an instrument or his hands.</td></tr>
+          <tr><td>Dr. Elena Morozova<span class="id">r-elena-morozova</span><span class="side city">Closed City</span></td><td>Specialist</td><td class="range">3 ranged</td><td>The dream researcher sends a signal or dream-link pulse from a lab device.</td></tr>
+          <tr><td>Zoya Miranova<span class="id">r-zoya-miranova</span><span class="side city">Closed City</span></td><td>Mystic</td><td class="range">3 ranged</td><td>The remote-viewing subject draws in, then pushes out a wave of dream static.</td></tr>
+          <tr><td>Stone-Line Laborer<span class="id">a-flood-survivor-stone-line-laborer</span><span class="side flood">Flood Survivors</span></td><td>Common</td><td class="range">1 melee</td><td>Raises a stone hammer or chisel and brings it down.</td></tr>
+          <tr><td>Ahesu, the Stone-Current Serpent<span class="id">a-flood-survivor-ahesu</span><span class="side flood">Flood Survivors</span></td><td>Mount (serpent)</td><td class="range">1 melee</td><td>Coils back, head drawn high, then strikes forward.</td></tr>
+          <tr><td>Naia of the Black Sarcophagus<span class="id">a-flood-survivor-naia</span><span class="side flood">Flood Survivors</span></td><td>Warrior</td><td class="range">1 melee</td><td>The tomb sentinel draws her weapon back and cuts or thrusts.</td></tr>
+          <tr><td>Queen Meret-Anu<span class="id">a-flood-survivor-meret-anu</span><span class="side flood">Flood Survivors</span></td><td>Leader</td><td class="range">3 ranged</td><td>Lifts a scepter or hand and sends a surge of buried tide.</td></tr>
+          <tr><td>Sahu-Ren, Last Memory-Keeper<span class="id">a-flood-survivor-sahu-ren</span><span class="side flood">Flood Survivors</span></td><td>Hero</td><td class="range">3 ranged</td><td>The living archive releases remembered light from a tablet, scroll, or his eyes.</td></tr>
+          <tr><td>Iset-Nara<span class="id">a-flood-survivor-iset-nara</span><span class="side flood">Flood Survivors</span></td><td>Specialist</td><td class="range">2 ranged</td><td>The vault architect sights along a surveying rod and fires a ley-line beam.</td></tr>
+          <tr><td>Thalassa-Nekh<span class="id">a-flood-survivor-thalassa-nekh</span><span class="side flood">Flood Survivors</span></td><td>Mystic</td><td class="range">2 ranged</td><td>The drowned oracle's seraph stirs: wings or water surge outward.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><strong>Mounts:</strong> VERA-7 and Ahesu attack on their own when nobody is riding. When a Leader or Hero rides, only the rider's attack plays, so riders don't need mounted poses.</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">Also needed</span>
+    <h2>One fix to an existing figure</h2>
+    <p>Ahesu's current <code>a-flood-survivor-ahesu/default.png</code> has a stray fragment of VERA-7's wheel at its left edge, left over from a shared sheet. Because the game sizes figures by their visible pixels, it shrinks Ahesu on the board. Please send a clean re-export with Ahesu's frames.</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">Sign-off</span>
+    <h2>Acceptance checklist</h2>
+    <ul class="checks">
+      <li>Four PNGs per character, named as above, 512 × 768, transparent.</li>
+      <li>Feet on y = 756 and the body centered on x = 256 in every frame; matches <code>default.png</code> at 50% overlay.</li>
+      <li>Nothing touches the canvas edge (24 px sides, 18 px top).</li>
+      <li>Attacks toward screen-right; nothing reads wrong when mirrored.</li>
+      <li>Wind-up reads clearly as a silhouette at 80 px tall.</li>
+      <li>Same outfit, palette, and rendering as the current figure; no ground or shadow.</li>
+      <li>Layered source file included.</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="eyebrow">For the designer</span>
+    <h2>Questions back to us</h2>
+    <ul>
+      <li>Your rate and timeline for the pilot, and for the remaining 13.</li>
+      <li>Your tool and source format, so we can keep the layered files.</li>
+      <li>Any attack idea above that fights the existing figure. Tell us and suggest what fits.</li>
+    </ul>
+  </section>
+
+  <footer>MythCards board-figure art spec · Phase 6 (attack wind-ups) · 2026-10-14</footer>
+</main>
