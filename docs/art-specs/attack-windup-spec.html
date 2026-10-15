@@ -135,7 +135,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
       <div class="pose" role="listitem"><b>5 · Recoil</b><span class="ms">90 ms</span><span>Absorb the shot or swing; distinct follow-through before lowering.</span></div>
       <div class="pose" role="listitem"><b>6 · Recover</b><span class="ms">120 ms</span><span>Settle toward idle. Blend the transition back to default.</span></div>
     </div>
-    <p class="note"><strong>Size on screen:</strong> a figure is about 60–120 px tall on a phone. The pose has to read as a silhouette at that size: keep the limbs and weapon clear of the body, and push the wind-up further than feels natural at full size.</p>
+    <p class="note"><strong>Size on screen:</strong> a figure is about 60–120 px tall on a phone. The pose has to read as a silhouette at that size: keep the limbs and weapon clear of the body, and push the Brace pose further than feels natural at full size.</p>
   </section>
 
   <section>
@@ -172,7 +172,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
           <tr><td class="req">Scale</td><td>The body matches <code>default.png</code> exactly. Do not crop, re-center, or rescale frames one by one.</td></tr>
           <tr><td class="req">Style</td><td>Match the current figure: the same painted, semi-realistic rendering, outfit, palette, lighting direction, and level of detail.</td></tr>
           <tr><td class="req">No ground</td><td>No floor, base, ground shadow, or background. The game draws the base and shadow.</td></tr>
-          <tr><td class="req">Effects</td><td>Muzzle flash, energy, water, or dust may be painted into the Strike frame (and lightly into Wind-up), attached to the figure and inside the safe area.</td></tr>
+          <tr><td class="req">Effects</td><td>Muzzle flash, energy, water, or dust may be painted into the Fire frame (with a trace of smoke or dust allowed in Recoil), attached to the figure and inside the safe area.</td></tr>
           <tr><td class="req">Outfit</td><td>Default outfit only. Zoya's <em>Aurora Rite</em> and Thalassa-Nekh's <em>Drowned Seraph</em> alternates are out of scope for now.</td></tr>
         </tbody>
       </table>
@@ -194,6 +194,18 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
   </section>
 
   <section>
+    <span class="eyebrow">From the Yuri pilot</span>
+    <h2>What the first delivery taught us</h2>
+    <ul>
+      <li><strong>Pose 4 is the impact.</strong> The game shows the target being hit at the first moment of pose 4, so the shot, blow, or burst must land there, not in pose 3 or 5.</li>
+      <li><strong>Keep the holds.</strong> The six durations above (600 ms in total) are the default for every character. If an attack needs different timing, say so with the delivery; the game reads the holds per character.</li>
+      <li><strong>Keep carried props where the idle figure has them.</strong> At the end of the attack the game fades back to <code>default.png</code>. A prop that moves (Yuri's helmet went from under his arm to his hip) visibly jumps on that fade. If a prop must move, flag it.</li>
+      <li><strong>Send a contact sheet and a preview GIF</strong> with each character, as the pilot did. They make review fast.</li>
+      <li><strong>Attacks straight up or down the board</strong> currently reuse the sideways poses. Don't draw extra facings yet; that decision is pending.</li>
+    </ul>
+  </section>
+
+  <section>
     <span class="eyebrow">The roster</span>
     <h2>Fourteen attacks</h2>
     <p>Range is the attack's reach in tiles: 1 is melee (the target is adjacent), 2 or more is ranged. The attack ideas are starting points drawn from each character's role; the weapon or gesture the current figure already shows takes precedence.</p>
@@ -201,7 +213,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
       <table>
         <thead><tr><th>Character</th><th>Role</th><th>Range</th><th>Attack idea</th></tr></thead>
         <tbody>
-          <tr><td>Major Yuri Volkov<span class="id">r-yuri-volkov</span><span class="side city">Closed City · pilot</span></td><td>Warrior</td><td class="range">2 ranged</td><td>Brings the rifle up from his hip, braces, fires. Muzzle flash on Strike.</td></tr>
+          <tr><td>Major Yuri Volkov<span class="id">r-yuri-volkov</span><span class="side city">Closed City · pilot</span></td><td>Warrior</td><td class="range">2 ranged</td><td><strong>Delivered 2026-10-15.</strong> Rifle raised to the shoulder, braced, fired, recoil, lowered. Use it as the reference for pose spacing and alignment.</td></tr>
           <tr><td>Reactor Worker<span class="id">r-reactor-worker</span><span class="side city">Closed City</span></td><td>Common</td><td class="range">1 melee</td><td>Hauls back a heavy tool (wrench or pipe) and swings.</td></tr>
           <tr><td>VERA-7<span class="id">r-vera-7</span><span class="side city">Closed City</span></td><td>Mount (rover)</td><td class="range">1 melee</td><td>Rocks back on its wheels, then rams forward or strikes with a work arm.</td></tr>
           <tr><td>Irina Vasilievna Karpova<span class="id">r-irina-karpova</span><span class="side city">Closed City</span></td><td>Leader</td><td class="range">3 ranged</td><td>A cold, controlled gesture of authority: a sidearm from her coat, or a pointed command. Restrained, never frantic.</td></tr>
@@ -235,7 +247,8 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
       <li>Feet on y = 756 and the body centered on x = 256 in every frame; matches <code>default.png</code> at 50% overlay.</li>
       <li>Nothing touches the canvas edge (24 px sides, 18 px top).</li>
       <li>Attacks toward screen-right; nothing reads wrong when mirrored.</li>
-      <li>Wind-up reads clearly as a silhouette at 80 px tall.</li>
+      <li>Brace and Fire read clearly as silhouettes at 80 px tall.</li>
+      <li>The release (shot, blow, or burst) is in pose 4, Fire.</li>
       <li>Same outfit, palette, and rendering as the current figure; no ground or shadow.</li>
       <li>Layered source file included.</li>
     </ul>
@@ -251,5 +264,5 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
     </ul>
   </section>
 
-  <footer>MythCards board-figure art spec · Phase 6 (attack wind-ups) · 2026-10-14</footer>
+  <footer>MythCards board-figure art spec · Phase 6 (attack wind-ups) · revised 2026-10-15 for six poses</footer>
 </main>
