@@ -1,0 +1,7 @@
+{
+  "barricade": "docs/art-specs/placed-objects/sources/barricade.png",
+  "pylon": "docs/art-specs/placed-objects/sources/pylon.png",
+  "stone": "docs/art-specs/placed-objects/sources/stone.png",
+  "vault": "docs/art-specs/placed-objects/sources/vault.png",
+  "leak": "docs/art-specs/placed-objects/sources/leak.png"
+}

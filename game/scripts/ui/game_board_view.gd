@@ -65,6 +65,15 @@ const PULSE_PERIOD := 3.2
 const MAX_ANIMATION_STEP := 0.05   # seconds of animation per frame, at most
 const PULSE_FPS := 24.0       # also paces the Phase 4 ambience
 
+const OBJECT_ART := {
+	"barricade": "res://assets/objects/barricade.png",
+	"pylon": "res://assets/objects/pylon.png",
+	"stone": "res://assets/objects/stone.png",
+	"vault": "res://assets/objects/vault.png",
+	"leak": "res://assets/objects/leak.png",
+}
+static var _object_textures: Dictionary = {}
+
 # Short badges for status effects, drawn on the token; full names show on the card.
 const STATUS := {
 	"shield": ["S", "Shield"], "memory": ["Me", "Memory"], "marked": ["X", "Marked"],
@@ -410,6 +419,10 @@ func _draw_center_aperture(rect: Rect2) -> void:
 
 
 func _draw_object(font: Font, rect: Rect2, obj: PlacedObjectInstance) -> void:
+	var texture := object_texture(obj.type_id)
+	if texture != null:
+		_draw_object_art(rect, obj, texture)
+		return
 	var px := rect.size.x
 	var c := rect.get_center()
 	match obj.type_id:
@@ -455,6 +468,49 @@ func _draw_object(font: Font, rect: Rect2, obj: PlacedObjectInstance) -> void:
 		for i in obj.current_hp:
 			draw_circle(rect.position + Vector2(px * (0.5 + (i - (obj.current_hp - 1) * 0.5) * 0.12), px * 0.88),
 					px * 0.035, Color("#f1ede3"))
+
+
+static func object_texture(type_id: String) -> Texture2D:
+	if not OBJECT_ART.has(type_id):
+		return null
+	if not _object_textures.has(type_id):
+		var path: String = OBJECT_ART[type_id]
+		_object_textures[type_id] = load(path) if ResourceLoader.exists(path) else null
+	return _object_textures[type_id] as Texture2D
+
+
+func _draw_object_art(rect: Rect2, obj: PlacedObjectInstance, texture: Texture2D) -> void:
+	var px := rect.size.x
+	var center := rect.get_center()
+	var is_leak := obj.type_id == "leak"
+	if not is_leak:
+		draw_set_transform(Vector2(center.x, rect.position.y + px * 0.79), 0.0, Vector2(1.0, 0.28))
+		draw_circle(Vector2.ZERO, px * 0.31, Color(0, 0, 0, 0.38))
+		if obj.owner_player_id in ["p1", "p2"]:
+			draw_arc(Vector2.ZERO, px * 0.36, 0.0, TAU, 32, Color(faction_color(obj.owner_player_id), 0.85), 2.0)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	var side := px * (0.92 if is_leak else 0.86)
+	var target := Rect2(Vector2(center.x - side * 0.5, rect.position.y + px * 0.03), Vector2.ONE * side)
+	if is_leak:
+		target.position.y = center.y - side * 0.5
+	draw_texture_rect(texture, target, false)
+	if obj.max_hp > 0:
+		var width := px * maxf(0.28, obj.max_hp * 0.12 + 0.10)
+		draw_style_box(_object_health_backing(), Rect2(center.x - width * 0.5, rect.position.y + px * 0.84, width, px * 0.14))
+		for i in obj.max_hp:
+			var at := Vector2(center.x + px * (i - (obj.max_hp - 1) * 0.5) * 0.12, rect.position.y + px * 0.91)
+			draw_circle(at, px * 0.036, Color("#e9e3d3") if i < obj.current_hp else Color("#555b58"))
+
+
+static var _object_health_style: StyleBoxFlat
+
+
+static func _object_health_backing() -> StyleBoxFlat:
+	if _object_health_style == null:
+		_object_health_style = StyleBoxFlat.new()
+		_object_health_style.bg_color = Color(0.02, 0.03, 0.025, 0.88)
+		_object_health_style.set_corner_radius_all(3)
+	return _object_health_style
 
 
 func _draw_move_rune(rect: Rect2) -> void:

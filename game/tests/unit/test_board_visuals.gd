@@ -87,6 +87,18 @@ func test_hit_testing_is_unchanged() -> void:
 			assert_eq(view.tile_at(view.tile_rect(pos).get_center()), pos)
 
 
+func test_all_placed_object_sprites_load_with_transparency() -> void:
+	for type_id in ["barricade", "pylon", "stone", "vault", "leak"]:
+		var texture := GameBoardView.object_texture(type_id)
+		assert_not_null(texture, type_id)
+		if texture == null:
+			continue
+		assert_eq(texture.get_size(), Vector2(512, 512), type_id)
+		var image := texture.get_image()
+		assert_true(image.get_pixel(0, 0).a < 0.01, "%s has transparent margins" % type_id)
+		assert_false(image.get_used_rect().size == Vector2i.ZERO, "%s is not blank" % type_id)
+
+
 func test_every_visual_state_draws() -> void:
 	# Selection, moves, an attack target, a Leak, a Stone, a Vault, frost, a mounted pair,
 	# a level badge, an Ember carrier, statuses, a spent figure, and banked Embers.
@@ -100,6 +112,8 @@ func test_every_visual_state_draws() -> void:
 	sys.place_leak(Vector2i(3, 2))
 	state.board.place_object(Vector2i(0, 4), "stone", "p2")
 	state.board.place_object(Vector2i(6, 4), "vault", "p2")
+	state.board.place_object(Vector2i(1, 4), "barricade", "p1")
+	state.board.place_object(Vector2i(5, 4), "pylon", "p2")
 	state.board.get_tile(Vector2i(5, 3)).terrain_type = "frost"
 	var orlov := state.find_character("p1_r-mikhail-orlov")
 	orlov.level = 2
