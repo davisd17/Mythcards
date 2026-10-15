@@ -108,18 +108,27 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
     <span class="eyebrow">MythCards · Board figure art</span>
     <h1>Attack Wind-Up Frames</h1>
     <p class="lede">Six key poses of each character's basic attack, drawn in the existing board-figure style. The game blends them in sequence over 600 ms every time that character attacks. Revised after the designer requested a smoother six-image pilot.</p>
-    <div class="meta"><span>Scope: 14 characters × 6 frames</span><span>Start: 1 pilot character</span><span>Format: 512 × 768 PNG, transparent</span></div>
+    <div class="meta"><span>Scope: 14 characters × 6 frames</span><span>Pilot approved · 13 to go, in 2 batches</span><span>Format: 512 × 768 PNG, transparent</span></div>
   </header>
 
   <section>
-    <span class="eyebrow">Start here</span>
+    <span class="eyebrow">Status</span>
     <div class="pilot">
-      <img src="../../game/assets/figures/r-yuri-volkov/default.png" alt="Major Yuri Volkov's current board figure: a man in a quilted hazard suit holding a helmet under one arm and a rifle at his side, facing screen-right.">
+      <img src="../../game/assets/figures/r-yuri-volkov/attack-4-fire.png" alt="Yuri Volkov in pose 4, Fire: rifle shouldered, muzzle flash toward screen-right.">
       <div>
-        <h2>Pilot: Major Yuri Volkov</h2>
-        <p>Please deliver Yuri's six frames first. We'll drop them into the game, check them on a phone-sized board, and send feedback before you start the other 13. Any problem with the spec gets fixed once, not fourteen times.</p>
-        <p>His attack is a ranged rifle shot (<em>Containment Shot</em>, range 2). The picture is his current figure: your frames should look like this same man in motion.</p>
+        <h2>Pilot approved. Next: the other 13</h2>
+        <p>Yuri Volkov's six frames passed playtesting on 2026-10-15 and are in the game. Treat them as the reference for quality, pose spacing, and alignment. Pictured: his pose 4, Fire.</p>
+        <p>The remaining 13 characters come in two batches, default outfit only:</p>
       </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Batch</th><th>Characters</th><th>Why this order</th></tr></thead>
+        <tbody>
+          <tr><td class="req">1 · Closed City (6)</td><td>Reactor Worker, VERA-7, Irina Karpova, Mikhail Orlov, Elena Morozova, Zoya Miranova</td><td>Completes one fully animated team for playtests.</td></tr>
+          <tr><td class="req">2 · Flood Survivors (7)</td><td>Stone-Line Laborer, Ahesu, Naia, Meret-Anu, Sahu-Ren, Iset-Nara, Thalassa-Nekh</td><td>Includes Ahesu's clean figure re-export (see “Also needed”).</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -173,7 +182,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
           <tr><td class="req">Style</td><td>Match the current figure: the same painted, semi-realistic rendering, outfit, palette, lighting direction, and level of detail.</td></tr>
           <tr><td class="req">No ground</td><td>No floor, base, ground shadow, or background. The game draws the base and shadow.</td></tr>
           <tr><td class="req">Effects</td><td>Muzzle flash, energy, water, or dust may be painted into the Fire frame (with a trace of smoke or dust allowed in Recoil), attached to the figure and inside the safe area.</td></tr>
-          <tr><td class="req">Outfit</td><td>Default outfit only. Zoya's <em>Aurora Rite</em> and Thalassa-Nekh's <em>Drowned Seraph</em> alternates are out of scope for now.</td></tr>
+          <tr><td class="req">Outfit</td><td>Default outfit only for this commission. Outfits follow later, re-dressing the same poses (see “Outfits”).</td></tr>
         </tbody>
       </table>
     </div>
@@ -190,7 +199,20 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
   attack-4-fire.png
   attack-5-recoil.png
   attack-6-recover.png
-  r-yuri-volkov-attack.psd   (layered source)</pre>
+  r-yuri-volkov-attack.psd   (layered source; keep it, see “Outfits”)
+  contact-sheet.png          (the six poses side by side)
+  attack-preview.gif         (the sequence at its holds)</pre>
+  </section>
+
+  <section>
+    <span class="eyebrow">Looking ahead</span>
+    <h2>Outfits: your six poses become the pose reference</h2>
+    <p>MythCards will add cosmetic outfits. Each outfit gets its own six attack frames, so a character never changes clothes mid-attack. Rather than new choreography per outfit, each outfit re-dresses the same six poses: the same silhouette, timing, and moment of impact.</p>
+    <ul>
+      <li>The six poses you deliver now become that character's <strong>pose reference</strong>. Keep the layered sources; future outfits start from them.</li>
+      <li>Outfit frames use the outfit id as a prefix: <code>aurora-rite-attack-1-ready.png</code> … <code>aurora-rite-attack-6-recover.png</code>, in the same folder.</li>
+      <li>Zoya's <em>Aurora Rite</em> and Thalassa-Nekh's <em>Drowned Seraph</em> are the first outfits. They come in a later outfit pass, not this commission.</li>
+    </ul>
   </section>
 
   <section>
@@ -199,9 +221,9 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
     <ul>
       <li><strong>Pose 4 is the impact.</strong> The game shows the target being hit at the first moment of pose 4, so the shot, blow, or burst must land there, not in pose 3 or 5.</li>
       <li><strong>Keep the holds.</strong> The six durations above (600 ms in total) are the default for every character. If an attack needs different timing, say so with the delivery; the game reads the holds per character.</li>
-      <li><strong>Keep carried props where the idle figure has them.</strong> At the end of the attack the game fades back to <code>default.png</code>. A prop that moves (Yuri's helmet went from under his arm to his hip) visibly jumps on that fade. If a prop must move, flag it.</li>
+      <li><strong>Keep carried props where the idle figure has them.</strong> At the end of the attack the game fades back to <code>default.png</code>. A prop may move when the pose needs it (Yuri's helmet went from under his arm to his hip, and that played fine); flag it with the delivery so we can check the fade back to idle.</li>
       <li><strong>Send a contact sheet and a preview GIF</strong> with each character, as the pilot did. They make review fast.</li>
-      <li><strong>Attacks straight up or down the board</strong> currently reuse the sideways poses. Don't draw extra facings yet; that decision is pending.</li>
+      <li><strong>Attacks straight up or down the board</strong> reuse the sideways poses (decided 2026-10-15). Draw screen-right only.</li>
     </ul>
   </section>
 
@@ -236,7 +258,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
   <section>
     <span class="eyebrow">Also needed</span>
     <h2>One fix to an existing figure</h2>
-    <p>Ahesu's current <code>a-flood-survivor-ahesu/default.png</code> has a stray fragment of VERA-7's wheel at its left edge, left over from a shared sheet. Because the game sizes figures by their visible pixels, it shrinks Ahesu on the board. Please send a clean re-export with Ahesu's frames.</p>
+    <p>Ahesu's current <code>a-flood-survivor-ahesu/default.png</code> has a stray fragment of VERA-7's wheel at its left edge, left over from a shared sheet. Because the game sizes figures by their visible pixels, it shrinks Ahesu on the board. Please send a clean re-export with Ahesu's frames, and register the frames against the cleaned figure.</p>
   </section>
 
   <section>
@@ -250,19 +272,20 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
       <li>Brace and Fire read clearly as silhouettes at 80 px tall.</li>
       <li>The release (shot, blow, or burst) is in pose 4, Fire.</li>
       <li>Same outfit, palette, and rendering as the current figure; no ground or shadow.</li>
-      <li>Layered source file included.</li>
+      <li>Layered source file, contact sheet, and preview GIF included.</li>
     </ul>
+    <p class="note"><strong>Automatic check:</strong> on arrival, the game's test suite checks every frame for the canvas size, the foot line, the margins, the six poses, and the impact on pose 4. A frame that fails comes back with the exact file and problem.</p>
   </section>
 
   <section>
     <span class="eyebrow">For the designer</span>
     <h2>Questions back to us</h2>
     <ul>
-      <li>Your rate and timeline for the pilot, and for the remaining 13.</li>
+      <li>Your rate and timeline for each batch.</li>
       <li>Your tool and source format, so we can keep the layered files.</li>
       <li>Any attack idea above that fights the existing figure. Tell us and suggest what fits.</li>
     </ul>
   </section>
 
-  <footer>MythCards board-figure art spec · Phase 6 (attack wind-ups) · revised 2026-10-15 for six poses</footer>
+  <footer>MythCards board-figure art spec · Phase 6 (attack wind-ups) · revised 2026-10-15: six poses, two batches, outfits</footer>
 </main>

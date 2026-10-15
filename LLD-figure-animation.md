@@ -109,3 +109,22 @@ Tests: `test_attack_frames.gd` (8). GUT 528/528, Playwright 13/13, with `-hit`, 
 Open for designer review:
 - `[NEED: designer review]` **Vertical attacks:** the art faces sideways, so against a target straight up or down the board Yuri fires to the right. Options: accept it, add up/down poses to the spec, or face the art toward the target's side of the board.
 - `[NEED: designer review]` **The helmet:** the attack frames carry the helmet at the hip while the idle figure holds it under the arm. The 40 ms fade back to idle softens the change; judge it in play.
+
+### 8B. Plan for the remaining 13 (decided 2026-10-15)
+
+The Yuri pilot passed playtesting. Decisions before commissioning the rest:
+
+- **Vertical attacks:** reuse the sideways poses. No up/down art.
+- **Props:** a carried item may move when the pose needs it; the artist flags it with the delivery. Yuri's helmet moving to his hip played fine.
+- **Outfits (a planned feature):** attack art belongs to the outfit, not the character. Each outfit entry in `wardrobe.json` carries its own six frames. Each character's first delivery becomes its **pose reference**: later outfits re-dress the same six poses (same silhouette, holds and impact), so they cost less and play identically. An outfit without frames uses the procedural wind-up, never another outfit's frames, so a character never changes clothes mid-attack. Outfit files are named `<outfit-id>-attack-N-<pose>.png`. A recolor shader that reuses the default frames is a possible later tier for palette-only outfits. Ruled out: paper-doll clothing layers (they don't suit painted, generated art) and a skeletal rig (a pipeline rebuild).
+- **This commission:** default outfits only. Zoya's Aurora Rite and Thalassa-Nekh's Drowned Seraph (their idle images exist but aren't in `wardrobe.json` yet) come in a later outfit pass.
+- **Batches:**
+  1. Closed City's remaining 6 (Reactor Worker, VERA-7, Irina Karpova, Mikhail Orlov, Elena Morozova, Zoya Miranova), which completes one animated team.
+  2. Flood Survivors' 7, including Ahesu's clean figure re-export, with its frames registered against the cleaned figure.
+
+Pipeline for each delivery:
+1. Drop the frames into `game/assets/figures/<id>/`.
+2. Run `node tools/register_attack_frames.js <id> [outfit] [--holds …]`.
+3. Run `tools/run_game_tests.ps1`. `test_attack_art_contract.gd` checks every registered outfit: six poses, exactly one impact on pose 4, the same canvas as the idle figure, the lowest pixel at y = 756 ± 4, and nothing inside the 24 px side and 18 px top margins.
+
+The spec (repo copy and published link) is updated with all of this.
