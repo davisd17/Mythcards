@@ -71,8 +71,13 @@ for (const vp of VIEWPORTS) {
     await closePopups(page);
     const hit = await act(page, 'attack', 'p1_r-yuri-volkov', { target_id: 'p2_a-flood-survivor-naia' });
     expect(hit.success, JSON.stringify(hit)).toBe(true);
-    await page.waitForTimeout(90);
+    // Phase 6: Yuri's drawn attack at the raise, the shot (impact at 330 ms), and the recoil.
+    await page.waitForTimeout(150);
     await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-hit.png` });
+    await page.waitForTimeout(190);
+    await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-shot.png` });
+    await page.waitForTimeout(90);
+    await page.screenshot({ path: `test-results/visual/${TAG}-${vp.name}-recoil.png` });
     // Phase 5: a figure mid-hop as it moves (skipped if the step isn't legal this run).
     await page.waitForTimeout(400);
     const rw = character(await state(page), 'p1_r-reactor-worker');

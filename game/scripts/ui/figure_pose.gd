@@ -83,7 +83,9 @@ static func _windup(p: Dictionary, c: CharacterInstance, fx: BoardFx) -> void:
 	if not fx.lunges.has(c.instance_id):
 		return
 	var l: Dictionary = fx.lunges[c.instance_id]
-	var k := windup_curve(fx.progress(l.start, BoardFx.LUNGE))
+	if l.get("framed", false):
+		return   # Phase 6: the drawn brace and recoil are the wind-up; no extra lean
+	var k := windup_curve(fx.progress(l.start, l.duration))
 	var dx := signf(float(l.toward.x - c.position.x))
 	if dx != 0.0:
 		p.lean += dx * WINDUP_LEAN * k
@@ -125,3 +127,37 @@ static func level_curve(u: float) -> float:
 # The defeat ghost tips away from whoever defeated it as it sinks.
 static func topple(g: Dictionary, fx: BoardFx) -> float:
 	return float(g.get("away", 1)) * TOPPLE * BoardFx.ease_out(fx.progress(g.start, BoardFx.DEFEAT))
+
+
+# --- Phase 6: hand-drawn attack frames ----------------------------------------------------
+
+const FRAME_BLEND := 0.04   # seconds of crossfade into the next pose (and back to idle)
+
+
+# Which images to draw for an art attack `elapsed` seconds in, bottom to top:
+# [{frame: index, or -1 for the default figure, alpha}]. Each pose crossfades into the
+# next over the end of its hold (at most 40% of it), and the last pose into the idle
+# figure, so playback never snaps (art delivery note 2026-10-15: "less choppy").
+static func frame_layers(seconds: Array, elapsed: float) -> Array:
+	if seconds.is_empty():
+		return [{"frame": -1, "alpha": 1.0}]
+	if elapsed < FRAME_BLEND:
+		return [{"frame": -1, "alpha": 1.0}, {"frame": 0, "alpha": elapsed / FRAME_BLEND}]
+	var start := 0.0
+	for i in seconds.size():
+		var hold: float = seconds[i]
+		if elapsed < start + hold:
+			var window := minf(FRAME_BLEND, hold * 0.4)
+			var into := elapsed - start - (hold - window)
+			if into <= 0.0:
+				return [{"frame": i, "alpha": 1.0}]
+			var nxt := i + 1 if i + 1 < seconds.size() else -1
+			return [{"frame": i, "alpha": 1.0}, {"frame": nxt, "alpha": into / window}]
+		start += hold
+	return [{"frame": -1, "alpha": 1.0}]
+
+
+# Frames face screen-right; an attack toward the left plays them mirrored.
+static func attack_mirrored(c: CharacterInstance, fx: BoardFx) -> bool:
+	var l: Dictionary = fx.lunges.get(c.instance_id, {})
+	return l.get("framed", false) and l.toward.x < c.position.x

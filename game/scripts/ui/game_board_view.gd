@@ -62,6 +62,7 @@ const SELECT_LIFT := 0.035
 const MARGIN := 22.0
 # --- Timing -----------------------------------------------------------------------------
 const PULSE_PERIOD := 3.2
+const MAX_ANIMATION_STEP := 0.05   # seconds of animation per frame, at most
 const PULSE_FPS := 24.0       # also paces the Phase 4 ambience
 
 # Short badges for status effects, drawn on the token; full names show on the card.
@@ -97,6 +98,8 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	resized.connect(queue_redraw)
 	fx.connect_signals()
+	fx.attack_art = attack_art_for
+	FigureCatalog.preload_attack_frames()
 
 
 # The center's slow breathing pulse at a bounded redraw rate; every frame while an action
@@ -107,7 +110,8 @@ func _process(delta: float) -> void:
 	_time += delta
 	_since_redraw += delta
 	var animating := fx.active()
-	fx.advance(delta)
+	# A slow frame (a stall, a backgrounded tab) can't skip past an animation.
+	fx.advance(minf(delta, MAX_ANIMATION_STEP))
 	if animating or _since_redraw >= 1.0 / PULSE_FPS:
 		_since_redraw = 0.0
 		queue_redraw()
@@ -494,12 +498,17 @@ func _draw_character(font: Font, c: CharacterInstance, selected: bool) -> void:
 	# Phase 5: breathe, hop, wind up, recoil... posed about the feet. Only the figure moves;
 	# the base, the HP pill, and the badges stay level and readable.
 	var feet := feet_point(rect, selected)
-	_begin_pose(feet, FigurePose.pose(c, fx, spent, selected, Settings.motion), rect.size.x)
+	_begin_pose(feet, FigurePose.pose(c, fx, spent, selected, Settings.motion), rect.size.x,
+			FigurePose.attack_mirrored(c, fx))
 	if figure != null:
 		var modulate := Color(0.62, 0.62, 0.66, 0.9) if spent else Color.WHITE
 		modulate = modulate.lerp(Color(1.0, 0.32, 0.28), 0.75 * fx.hit_strength(c.instance_id))
+		# Every image, attack frames included, uses the default figure's transform: the
+		# frames share its canvas and foot anchor and are never fitted one by one.
 		var fr := figure_rect(c, rect, figure, selected)
-		draw_texture_rect(figure, Rect2(fr.position - feet, fr.size), false, modulate)
+		var local := Rect2(fr.position - feet, fr.size)
+		for layer in _figure_layers(c, figure):
+			draw_texture_rect(layer.texture, local, false, Color(modulate, modulate.a * layer.alpha))
 	else:
 		_draw_portrait_token(c, Rect2(rect.position - feet, rect.size), spent)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -514,9 +523,32 @@ func feet_point(tile: Rect2, selected: bool) -> Vector2:
 
 # Sets the canvas transform so local (0, 0) is the feet, lifted, leaned, and squashed or
 # stretched. Volume is kept roughly: a taller figure gets a touch narrower.
-func _begin_pose(feet: Vector2, pose: Dictionary, px: float) -> void:
+func _begin_pose(feet: Vector2, pose: Dictionary, px: float, mirrored := false) -> void:
 	var sy: float = pose.scale_y
-	draw_set_transform(feet - Vector2(0.0, pose.lift * px), deg_to_rad(pose.lean), Vector2(1.0 - (sy - 1.0) * 0.5, sy))
+	var sx := (1.0 - (sy - 1.0) * 0.5) * (-1.0 if mirrored else 1.0)
+	draw_set_transform(feet - Vector2(0.0, pose.lift * px), deg_to_rad(pose.lean), Vector2(sx, sy))
+
+
+# The images that make up a figure this frame, bottom to top: the default figure, or a
+# crossfade of hand-drawn attack frames while its art attack plays (Phase 6).
+func _figure_layers(c: CharacterInstance, figure: Texture2D) -> Array:
+	var l: Dictionary = fx.lunges.get(c.instance_id, {})
+	if not l.get("framed", false):
+		return [{"texture": figure, "alpha": 1.0}]
+	var frames := FigureCatalog.attack_frames(c.data.id, outfit_id_for(c))
+	var seconds := frames.map(func(f): return f.seconds)
+	var result := []
+	for layer in FigurePose.frame_layers(seconds, fx.now - l.start):
+		result.append({"texture": figure if layer.frame < 0 else frames[layer.frame].texture, "alpha": layer.alpha})
+	return result
+
+
+# For BoardFx: the attack art timing of a figure, by instance id ({} = procedural).
+func attack_art_for(instance_id: String) -> Dictionary:
+	var c: CharacterInstance = controller.find(instance_id) if controller != null else null
+	if c == null or c.data == null:
+		return {}
+	return FigureCatalog.attack_timing(c.data.id, outfit_id_for(c))
 
 
 # Board-space tiles (y up) to screen pixels (y down; Player 1 is at the bottom).
@@ -534,15 +566,19 @@ func _draw_ghost(g: Dictionary) -> void:
 		return
 	var r := figure_rect(c, rect, figure, false)
 	var feet := feet_point(rect, false)
+	# Before an art attack's impact the defeated figure still stands, untinted (Phase 6).
+	var tint := Color.WHITE.lerp(Color(1.0, 0.45, 0.4), minf(1.0, t * 4.0)) if fx.started(g.start) else Color.WHITE
 	# It sinks into the stone and, Phase 5, tips over away from whoever defeated it.
 	var sunk := feet + Vector2(0.0, rect.size.y * 0.22 * BoardFx.ease_out(t))
 	draw_set_transform(sunk, deg_to_rad(FigurePose.topple(g, fx)), Vector2.ONE)
-	draw_texture_rect(figure, Rect2(r.position - feet, r.size), false, Color(1.0, 0.45, 0.4, 1.0 - t))
+	draw_texture_rect(figure, Rect2(r.position - feet, r.size), false, Color(tint, 1.0 - t))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 # Rings, bursts, floating numbers, and the level-up flourish (BoardFx effects).
 func _draw_effect(font: Font, e: Dictionary) -> void:
+	if not fx.started(e.start):
+		return   # waiting for an art attack's impact frame
 	var rect := tile_rect(e.pos)
 	var px := rect.size.x
 	var c := rect.get_center()

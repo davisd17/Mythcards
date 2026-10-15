@@ -87,6 +87,8 @@ func _ready() -> void:
 	root.add_child(_margin(_chips))
 
 	_board.controller = controller
+	# Phase 6: an art attack's hit sounds wait for its impact frame, as its visuals do.
+	_sfx.impact_for = func(id: String) -> float: return float(_board.attack_art_for(id).get("impact", 0.0))
 	_board.custom_minimum_size = Vector2(0, 560)
 	_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_board.size_flags_stretch_ratio = 3.0

@@ -18,6 +18,11 @@ var played: Array[String] = []  # names actually played, newest last (for tests)
 var _players: Array[AudioStreamPlayer] = []
 var _drone := AudioStreamPlayer.new()
 var _last_ms := {}
+# Phase 6: (instance id) -> seconds until an art attack's impact frame (0 = none). While
+# such an attack resolves, the sounds it causes wait for the shot. Set by the game screen.
+var impact_for: Callable = Callable()
+var _delay := 0.0
+const AT_IMPACT := ["hit", "blocked", "defeat", "ember", "level"]
 var _next := 0
 
 
@@ -35,6 +40,7 @@ func _ready() -> void:
 	EventBus.character_repositioned.connect(_on_repositioned)
 	EventBus.damage_resolved.connect(func(_a, _t, amount, _l): play("hit" if amount > 0 else "blocked"))
 	EventBus.status_added.connect(_on_status)
+	EventBus.action_requested.connect(_on_requested)
 	EventBus.action_resolved.connect(_on_action)
 	EventBus.character_defeated.connect(_on_defeated)
 	EventBus.character_leveled_up.connect(func(_id, _l): play("level"))
@@ -55,6 +61,14 @@ func apply_settings() -> void:
 
 
 func play(sound: String) -> void:
+	if _delay > 0.0 and AT_IMPACT.has(sound) and is_inside_tree():
+		var wait := _delay
+		get_tree().create_timer(wait).timeout.connect(func(): _play_now(sound))
+		return
+	_play_now(sound)
+
+
+func _play_now(sound: String) -> void:
 	if Settings.haptics and HAPTIC_MS.has(sound):
 		Input.vibrate_handheld(HAPTIC_MS[sound])
 	if not Settings.sound or not streams.has(sound):
@@ -90,7 +104,12 @@ func _on_defeated(_id: String, _by: String, cause: String) -> void:
 		play("defeat")
 
 
+func _on_requested(action_type: String, actor_id: String, _payload: Dictionary) -> void:
+	_delay = float(impact_for.call(actor_id)) if action_type == "attack" and impact_for.is_valid() else 0.0
+
+
 func _on_action(action_type: String, _actor: String, result: Dictionary) -> void:
+	_delay = 0.0
 	if action_type == "ability" and result.get("success", false):
 		play("cast")
 

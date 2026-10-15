@@ -29,7 +29,7 @@ const LEVEL := Color("#f4cf6a")
 
 var now := 0.0
 var slides := {}      # instance id -> {from: Vector2i, to: Vector2i, start: float}
-var lunges := {}      # instance id -> {toward: Vector2i, start: float}
+var lunges := {}      # instance id -> {toward: Vector2i, start, duration, framed: bool (Phase 6 art)}
 var hits := {}        # instance id -> start
 var recoils := {}     # instance id -> {away: -1/0/1 (screen x away from the attacker), blocked: bool, start}
 var casts := {}       # instance id -> start
@@ -37,6 +37,13 @@ var levels := {}      # instance id -> start
 var ready := {}       # {player: "p1"/"p2", start}: the side whose turn just started
 var ghosts: Array = []    # {character, pos: Vector2i, start: float, away: -1/1 (topple direction)}
 var effects: Array = []   # {kind, pos: Vector2i, start, duration, text, color}
+# Phase 6: (instance id) -> FigureCatalog.attack_timing for that figure, or {} for the
+# procedural wind-up. Set by GameBoardView, which knows each figure's outfit.
+var attack_art: Callable = Callable()
+# While an attack with art resolves, everything it causes (the hit, the number, a defeat)
+# starts at the impact frame instead of at once. Presentation only: the rules have
+# already resolved; this only waits for the muzzle flash.
+var _delay := 0.0
 
 
 func connect_signals() -> void:
@@ -51,16 +58,19 @@ func connect_signals() -> void:
 	EventBus.character_leveled_up.connect(_on_leveled)
 	EventBus.spirit_ember_picked_up.connect(_on_ember_picked_up)
 	EventBus.spirit_ember_delivered.connect(_on_ember_delivered)
+	EventBus.action_requested.connect(_on_requested)
 	EventBus.action_resolved.connect(_on_action)
 	EventBus.turn_started.connect(_on_turn_started)
 
 
 func advance(delta: float) -> void:
 	now += delta
-	for table in [slides, lunges]:
-		for id in table.keys():
-			if now - table[id].start >= (SLIDE if table == slides else LUNGE):
-				table.erase(id)
+	for id in slides.keys():
+		if now - slides[id].start >= SLIDE:
+			slides.erase(id)
+	for id in lunges.keys():
+		if now - lunges[id].start >= lunges[id].duration:
+			lunges.erase(id)
 	for id in hits.keys():
 		if now - hits[id] >= HIT:
 			hits.erase(id)
@@ -120,7 +130,7 @@ func offset_tiles(c: CharacterInstance) -> Vector2:
 		var dir := Vector2(l.toward - c.position)
 		if dir.length() > 0.0:
 			# Phase 5 wind-up: a small step back, then the strike, then home.
-			result += dir.normalized() * lunge_reach(progress(l.start, LUNGE))
+			result += dir.normalized() * lunge_reach(progress(l.start, l.duration))
 	if hits.has(c.instance_id):
 		var t := progress(hits[c.instance_id], HIT)
 		result.x += 0.035 * sin(t * 38.0) * (1.0 - t)
@@ -139,7 +149,7 @@ static func lunge_reach(u: float) -> float:
 
 # 0..1 strength of the red hit flash on a character.
 func hit_strength(id: String) -> float:
-	if not hits.has(id):
+	if not hits.has(id) or now < hits[id]:
 		return 0.0
 	return 1.0 - progress(hits[id], HIT)
 
@@ -151,7 +161,7 @@ func _find(id: String) -> CharacterInstance:
 
 
 func _add(kind: String, pos: Vector2i, duration: float, text := "", color := Color.WHITE) -> void:
-	effects.append({"kind": kind, "pos": pos, "start": now, "duration": duration, "text": text, "color": color})
+	effects.append({"kind": kind, "pos": pos, "start": _t0(), "duration": duration, "text": text, "color": color})
 
 
 func _at(id: String, kind: String, duration: float, text := "", color := Color.WHITE) -> void:
@@ -162,7 +172,7 @@ func _at(id: String, kind: String, duration: float, text := "", color := Color.W
 
 func _on_moved(id: String, from: Vector2i, to: Vector2i) -> void:
 	if from != to:
-		slides[id] = {"from": from, "to": to, "start": now}
+		slides[id] = {"from": from, "to": to, "start": _t0()}
 
 
 func _on_repositioned(id: String, from: Vector2i, to: Vector2i, cause: String) -> void:
@@ -175,16 +185,18 @@ func _on_repositioned(id: String, from: Vector2i, to: Vector2i, cause: String) -
 func _on_attack(attacker_id: String, target_id: String, _damage: int, _defeated: bool) -> void:
 	var target := _find(target_id)
 	if target != null and target.is_placed():
-		lunges[attacker_id] = {"toward": target.position, "start": now}
+		var art := _art(attacker_id)
+		lunges[attacker_id] = {"toward": target.position, "start": now,
+				"duration": art.get("length", LUNGE), "framed": not art.is_empty()}
 
 
 func _on_damage(attacker_id: String, target_id: String, amount: int, _lines: Array) -> void:
 	var target := _find(target_id)
 	if target == null or not target.is_placed():
 		return
-	recoils[target_id] = {"away": _away_from(attacker_id, target.position), "blocked": amount <= 0, "start": now}
+	recoils[target_id] = {"away": _away_from(attacker_id, target.position), "blocked": amount <= 0, "start": _t0()}
 	if amount > 0:
-		hits[target_id] = now
+		hits[target_id] = _t0()
 		_add("number", target.position, NUMBER, "-%d" % amount, DAMAGE)
 	else:
 		_add("number", target.position, NUMBER, "Blocked", BLOCKED)
@@ -205,7 +217,7 @@ func _on_defeated(id: String, by: String, cause: String) -> void:
 	# A Mount falling with its rider is hidden under the rider's figure; one ghost is enough.
 	if c != null and c.is_placed() and cause != "mount_propagation":
 		var away := _away_from(by, c.position)
-		ghosts.append({"character": c, "pos": c.position, "start": now, "away": away if away != 0 else 1})
+		ghosts.append({"character": c, "pos": c.position, "start": _t0(), "away": away if away != 0 else 1})
 		_add("burst", c.position, DEFEAT, "", DAMAGE)
 
 
@@ -222,11 +234,16 @@ func _on_ember_delivered(id: String) -> void:
 
 
 func _on_leveled(id: String, level: int) -> void:
-	levels[id] = now
+	levels[id] = _t0()
 	_at(id, "level", LEVEL_UP, "LEVEL %d" % level, LEVEL)
 
 
+func _on_requested(action_type: String, actor_id: String, _payload: Dictionary) -> void:
+	_delay = float(_art(actor_id).get("impact", 0.0)) if action_type == "attack" else 0.0
+
+
 func _on_action(action_type: String, actor_id: String, result: Dictionary) -> void:
+	_delay = 0.0
 	if action_type == "ability" and result.get("success", false):
 		casts[actor_id] = now
 		_at(actor_id, "ring", RING, "", CAST)
@@ -244,3 +261,18 @@ func _away_from(attacker_id: String, pos: Vector2i) -> int:
 # The side whose turn starts does a quick "ready" bob, rippling across its columns.
 func _on_turn_started(player_id: String) -> void:
 	ready = {"player": player_id, "start": now}
+
+
+# When something caused by the action now resolving should start: now, or at the impact
+# frame of an attack with art.
+func _t0() -> float:
+	return now + _delay
+
+
+# True once something scheduled at `start` has begun (an art attack's hit waits).
+func started(start: float) -> bool:
+	return now >= start
+
+
+func _art(attacker_id: String) -> Dictionary:
+	return attack_art.call(attacker_id) if attack_art.is_valid() else {}

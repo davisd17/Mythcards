@@ -92,3 +92,20 @@ The designer wants character-unique, multi-frame attack wind-up art. An art spec
 - **Asset bug found:** `a-flood-survivor-ahesu/default.png` contains a stray VERA-7 wheel fragment at its left edge. It widens Ahesu's measured silhouette, so Ahesu is drawn smaller. A clean re-export was requested with Ahesu's frames.
 
 Engine work (wardrobe entries for the frames, frame playback in `FigurePose`, mirroring, fallback to the Phase 5 procedural wind-up when a character has no frames) starts when the pilot art arrives.
+
+### 8A. Implemented: Yuri Volkov pilot (2026-10-15)
+
+The art delivery (`docs/art-specs/yuri-attack-pilot/`) has **six** poses at 600 ms, replacing the spec's four: ready 100, raise 100, brace 130, fire 60, recoil 90, recover 120. Built to the delivery's notes:
+
+- **Data:** Yuri's default outfit in `wardrobe.json` lists the six frames with their holds, and the fire frame is marked `"impact": true`. `FigureCatalog.attack_frames` and `attack_timing` read it: length 0.60 s, impact at 0.33 s. A character with no `attack` list, or a missing frame, keeps the Phase 5 procedural wind-up.
+- **One transform:** every frame is drawn with the default figure's rect (scale and foot anchor). The frames are never fitted to their own bounds.
+- **Playback:** `FigurePose.frame_layers` holds each pose, then crossfades into the next over the last 40 ms (at most 40% of the hold). It fades in from the idle figure and fades the recover pose back to idle. The lunge step stays and runs over the 600 ms, peaking at 55%, which is the shot. The procedural lean and crouch are off for drawn attacks, because the brace and recoil art carry them.
+- **Mirroring:** frames flip when the target is to the attacker's left.
+- **Impact timing (presentation only):** everything an art attack causes waits for the impact frame: the target's flash, recoil, damage number or "Blocked", a defeat ghost (the figure stands untinted until then), Embers, level-ups, and the hit, defeat and Ember sounds. The rules have already resolved. A procedural attacker still reacts at once.
+- **Smoothness:** attack frames load when the board opens. In the web build, loading them on the first attack stalled a frame long enough to skip the wind-up. The board also advances animations by at most 50 ms per frame.
+
+Tests: `test_attack_frames.gd` (8). GUT 528/528, Playwright 13/13, with `-hit`, `-shot` and `-recoil` captures at 150, 340 and 430 ms into the attack.
+
+Open for designer review:
+- `[NEED: designer review]` **Vertical attacks:** the art faces sideways, so against a target straight up or down the board Yuri fires to the right. Options: accept it, add up/down poses to the spec, or face the art toward the target's side of the board.
+- `[NEED: designer review]` **The helmet:** the attack frames carry the helmet at the hip while the idle figure holds it under the arm. The 40 ms fade back to idle softens the change; judge it in play.
