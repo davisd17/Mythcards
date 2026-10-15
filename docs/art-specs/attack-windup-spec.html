@@ -59,8 +59,8 @@ ul, ol { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; 
 .pilot div { display: flex; flex-direction: column; gap: 10px; }
 @media (max-width: 560px) { .pilot { grid-template-columns: 1fr; } .pilot img { width: 120px; } }
 
-/* Pose sequence: four poses in order, widths proportional to their screen time. */
-.poses { display: grid; grid-template-columns: 120fr 180fr 100fr 150fr; gap: 6px; }
+/* Pose widths are proportional to the revised 600 ms sequence. */
+.poses { display: grid; grid-template-columns: 100fr 100fr 130fr 60fr 90fr 120fr; gap: 6px; }
 .pose { border-top: 4px solid var(--bronze); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .pose:nth-child(2) { border-top-color: var(--mark); }
 .pose b { font: 600 1.05rem/1.2 var(--display); letter-spacing: 0.03em; }
@@ -107,8 +107,8 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
   <header style="display:flex;flex-direction:column;gap:14px">
     <span class="eyebrow">MythCards · Board figure art</span>
     <h1>Attack Wind-Up Frames</h1>
-    <p class="lede">Four key poses of each character's basic attack, drawn in the existing board-figure style. The game plays them in sequence, about half a second, every time that character attacks.</p>
-    <div class="meta"><span>Scope: 14 characters × 4 frames</span><span>Start: 1 pilot character</span><span>Format: 512 × 768 PNG, transparent</span></div>
+    <p class="lede">Six key poses of each character's basic attack, drawn in the existing board-figure style. The game blends them in sequence over 600 ms every time that character attacks. Revised after the designer requested a smoother six-image pilot.</p>
+    <div class="meta"><span>Scope: 14 characters × 6 frames</span><span>Start: 1 pilot character</span><span>Format: 512 × 768 PNG, transparent</span></div>
   </header>
 
   <section>
@@ -117,7 +117,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
       <img src="../../game/assets/figures/r-yuri-volkov/default.png" alt="Major Yuri Volkov's current board figure: a man in a quilted hazard suit holding a helmet under one arm and a rifle at his side, facing screen-right.">
       <div>
         <h2>Pilot: Major Yuri Volkov</h2>
-        <p>Please deliver Yuri's four frames first. We'll drop them into the game, check them on a phone-sized board, and send feedback before you start the other 13. Any problem with the spec gets fixed once, not fourteen times.</p>
+        <p>Please deliver Yuri's six frames first. We'll drop them into the game, check them on a phone-sized board, and send feedback before you start the other 13. Any problem with the spec gets fixed once, not fourteen times.</p>
         <p>His attack is a ranged rifle shot (<em>Containment Shot</em>, range 2). The picture is his current figure: your frames should look like this same man in motion.</p>
       </div>
     </div>
@@ -125,13 +125,15 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
 
   <section>
     <span class="eyebrow">The sequence</span>
-    <h2>Four poses, in this order</h2>
+    <h2>Six poses, in this order</h2>
     <p>The game blends between your poses and adds small movement (a lean, a short step toward the target), so each frame should be a clear, held pose rather than an in-between. The widths below are proportional to how long each pose is on screen.</p>
     <div class="poses" role="list">
-      <div class="pose" role="listitem"><b>1 · Ready</b><span class="ms">~120 ms</span><span>Combat stance, weapon raised, eyes on the target. The bridge from the idle figure.</span></div>
-      <div class="pose" role="listitem"><b>2 · Wind-up</b><span class="ms">~180 ms</span><span>The anticipation: the body coils away from the target and the weapon draws back or charges. The most characterful frame, so exaggerate it.</span></div>
-      <div class="pose" role="listitem"><b>3 · Strike</b><span class="ms">~100 ms</span><span>The release: fullest extension toward screen-right. Muzzle flash or energy may appear here.</span></div>
-      <div class="pose" role="listitem"><b>4 · Recover</b><span class="ms">~150 ms</span><span>Settling back toward the idle stance. The game then returns to the default figure.</span></div>
+      <div class="pose" role="listitem"><b>1 · Ready</b><span class="ms">100 ms</span><span>Low combat ready, eyes on target; bridge from idle.</span></div>
+      <div class="pose" role="listitem"><b>2 · Raise</b><span class="ms">100 ms</span><span>Weapon rises through a clear intermediate pose.</span></div>
+      <div class="pose" role="listitem"><b>3 · Brace</b><span class="ms">130 ms</span><span>Anticipation: shoulder the rifle, bend knees and brace; other attacks coil or charge.</span></div>
+      <div class="pose" role="listitem"><b>4 · Fire</b><span class="ms">60 ms</span><span>Release toward screen-right; muzzle flash, energy or melee strike.</span></div>
+      <div class="pose" role="listitem"><b>5 · Recoil</b><span class="ms">90 ms</span><span>Absorb the shot or swing; distinct follow-through before lowering.</span></div>
+      <div class="pose" role="listitem"><b>6 · Recover</b><span class="ms">120 ms</span><span>Settle toward idle. Blend the transition back to default.</span></div>
     </div>
     <p class="note"><strong>Size on screen:</strong> a figure is about 60–120 px tall on a phone. The pose has to read as a silhouette at that size: keep the limbs and weapon clear of the body, and push the wind-up further than feels natural at full size.</p>
   </section>
@@ -155,7 +157,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
       </figure>
       <div class="legend">
         <div><span class="swatch" style="background:var(--mark)"></span><span><strong>Foot baseline, y = 756.</strong> The lowest pixel of the feet sits 12 px above the bottom edge in every frame. The game pins this line to the board tile, so a frame whose feet sit higher or lower makes the character jump.</span></div>
-        <div><span class="swatch" style="background:var(--flood)"></span><span><strong>Center line, x = 256.</strong> The body stays centered on the same point in all four frames. Only weapons and effects reach past it.</span></div>
+        <div><span class="swatch" style="background:var(--flood)"></span><span><strong>Center line, x = 256.</strong> The body stays centered on the same point in all six frames. Only weapons and effects reach past it.</span></div>
         <div><span class="swatch" style="background:var(--bronze)"></span><span><strong>Safe area:</strong> 24 px from each side, 18 px from the top. Nothing, including effects, may touch the canvas edge.</span></div>
         <div><span></span><span>Quick check: lay <code>default.png</code> over each frame at 50% opacity. The feet should line up and the body should be the same size.</span></div>
       </div>
@@ -183,9 +185,11 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
     <p>One folder per character, named by its id from the table below:</p>
 <pre class="tree">r-yuri-volkov/
   attack-1-ready.png
-  attack-2-windup.png
-  attack-3-strike.png
-  attack-4-recover.png
+  attack-2-raise.png
+  attack-3-brace.png
+  attack-4-fire.png
+  attack-5-recoil.png
+  attack-6-recover.png
   r-yuri-volkov-attack.psd   (layered source)</pre>
   </section>
 
@@ -227,7 +231,7 @@ footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--li
     <span class="eyebrow">Sign-off</span>
     <h2>Acceptance checklist</h2>
     <ul class="checks">
-      <li>Four PNGs per character, named as above, 512 × 768, transparent.</li>
+      <li>Six PNGs per character, named as above, 512 × 768, transparent; total hold duration 600 ms.</li>
       <li>Feet on y = 756 and the body centered on x = 256 in every frame; matches <code>default.png</code> at 50% overlay.</li>
       <li>Nothing touches the canvas edge (24 px sides, 18 px top).</li>
       <li>Attacks toward screen-right; nothing reads wrong when mirrored.</li>

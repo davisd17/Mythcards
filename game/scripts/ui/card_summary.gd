@@ -31,11 +31,11 @@ func _ready() -> void:
 
 	_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	_art.custom_minimum_size = Vector2(96, 0)
+	_art.custom_minimum_size = Vector2(80, 0)
 	_art.clip_contents = true
 	_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(_art)
-	_placeholder.custom_minimum_size = Vector2(96, 0)
+	_placeholder.custom_minimum_size = Vector2(80, 0)
 	_placeholder.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(_placeholder)
 
@@ -43,7 +43,7 @@ func _ready() -> void:
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(text)
-	_title.add_theme_font_size_override("font_size", 19)
+	_title.add_theme_font_size_override("font_size", 28)
 	_title.add_theme_color_override("font_color", Color("#f3e3b5"))
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -52,13 +52,14 @@ func _ready() -> void:
 	_body.scroll_active = false
 	_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_body.clip_contents = true
-	_body.add_theme_font_size_override("normal_font_size", 15)
-	_body.add_theme_font_size_override("bold_font_size", 15)
+	_body.add_theme_font_size_override("normal_font_size", 26)
+	_body.add_theme_font_size_override("bold_font_size", 26)
 	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	text.add_child(_body)
 	var hint := Label.new()
 	hint.text = "Tap for the full card"
-	hint.add_theme_font_size_override("font_size", 13)
+	hint.add_theme_font_size_override("font_size", 24)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.add_theme_color_override("font_color", Color("#9fe0f5"))
 	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	text.add_child(hint)

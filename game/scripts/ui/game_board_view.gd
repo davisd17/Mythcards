@@ -710,7 +710,9 @@ func _badge(font: Font, at: Vector2, text: String, color: Color, px: float) -> v
 
 
 func _text(font: Font, s: String, rect: Rect2, font_size: float, color: Color) -> void:
-	var fs := int(maxf(9.0, font_size))
+	var fs := int(maxf(16.0, font_size))
+	while fs > 9 and font.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > rect.size.x - 2.0:
+		fs -= 1
 	var w := font.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
 	var baseline := rect.position + Vector2((rect.size.x - w) / 2.0, rect.size.y / 2.0 + fs * 0.35)
 	draw_string(font, baseline, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, color)

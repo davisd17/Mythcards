@@ -84,11 +84,11 @@ Tests: `test_figure_pose.gd` (13). GUT 520/520, Playwright 13/13. One full Playw
 
 The designer wants character-unique, multi-frame attack wind-up art. An art spec for the graphic designer is in `docs/art-specs/attack-windup-spec.html` (open it from a clone; it loads Yuri's figure from `game/assets/figures/`) and published at https://claude.ai/artifact/733oX1LZktxg28BqtVRU7Y. Decisions:
 
-- **Frames:** 4 key poses per character (Ready ~120 ms, Wind-up ~180 ms, Strike ~100 ms, Recover ~150 ms, about 550 ms total). Code blends between them and keeps the Phase 5 lean and lunge.
+- **Frames (revised after pilot review):** 6 poses per character: Ready 100 ms, Raise 100 ms, Brace 130 ms, Fire 60 ms, Recoil 90 ms, Recover 120 ms (600 ms total). The designer requested six images to reduce choppiness and approved this sequence. Code blends between poses and keeps the Phase 5 lean and lunge. Keep the flash frame brief; do not make the attack slower merely to show more images.
 - **Actions:** basic attack only. Abilities keep the procedural cast animation.
 - **Facing:** frames are drawn facing screen-right, and the game mirrors them for leftward attacks.
 - **Pilot:** Major Yuri Volkov first. The remaining 13 are commissioned after an in-game review.
-- **Format:** 512×768 RGBA PNG, with the feet on y = 756 and the body centered on x = 256, matching `default.png`. Files go in `<character-id>/attack-1-ready.png` … `attack-4-recover.png`. The current `prepare_board_figures.py` re-fits every image to its own bounds, which would make the frames jitter, so the import path for these frames must keep the shared anchor.
+- **Format:** 512×768 RGBA PNG, with the feet on y = 756 and the body centered on x = 256, matching `default.png`. Files go in `<character-id>/attack-1-ready.png` through `attack-6-recover.png` (2 raise, 3 brace, 4 fire, 5 recoil). The current `prepare_board_figures.py` re-fits every image to its own bounds, which would make the frames jitter, so the import path for these frames must keep the shared anchor. Use the explicit ordered sequence in the art delivery's `registration.json`.
 - **Asset bug found:** `a-flood-survivor-ahesu/default.png` contains a stray VERA-7 wheel fragment at its left edge. It widens Ahesu's measured silhouette, so Ahesu is drawn smaller. A clean re-export was requested with Ahesu's frames.
 
 Engine work (wardrobe entries for the frames, frame playback in `FigurePose`, mirroring, fallback to the Phase 5 procedural wind-up when a character has no frames) starts when the pilot art arrives.

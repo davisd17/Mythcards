@@ -409,6 +409,339 @@
       ],
       "interpretation": "Marya embodies justice at its most human: deciding who can still be saved when time, medicine, and warmth are scarce. She knows that fairness without compassion is merely another form of cold.",
       "when_drawn": "See clearly, then choose what is fair."
+    },
+    {
+      "tarot_number": "XII",
+      "tarot_name": "The Hanged Man",
+      "mythcards_name": "Pavel Sokolov",
+      "card_type": "Character",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I release the life I can no longer return to.",
+      "upright_keywords": ["Surrender", "Perspective", "Suspension"],
+      "shadow_keywords": ["Stagnation", "Obsession", "Avoidance"],
+      "narrative_heading": "Backstory",
+      "narrative": "Pavel survives the Closed City Incident only to awaken impossibly far north, with the Sky-Hide Mirror against his chest and Nadia Belaya tending wounds that should have killed him. After Nadia disappears, he follows the Deep North Circus for Mila Vetrova, uncertain whether he is pursuing a woman, escaping his former life, or carrying the mirror somewhere it intends to go.",
+      "flavor_heading": "Quote",
+      "flavor_text": "I keep waking where my life should have ended.",
+      "relationships": [
+        {
+          "subject": "Mila Vetrova",
+          "dynamic": "Pavel's attraction to Mila begins as longing for beauty and escape, but he must learn to see her as a person rather than a symbol of salvation.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Nadia Belaya",
+          "dynamic": "Nadia saves Pavel and leaves before he can turn gratitude into dependence or demand that she explain his survival.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "mirror_carries_pavel_north",
+          "clue": "The Sky-Hide Mirror may be carrying Pavel toward its northern purpose rather than merely traveling with him.",
+          "connects_to": ["Sky-Hide Mirror", "Nadia Finds The Survivor", "Deep North Circus Arrives"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Pavel embodies the Hanged Man because survival has suspended him between identities. His attraction to Mila is sincere, but he must stop treating her as an escape and see her as a person with desires of her own. Only by surrendering the man he was can he understand why Nadia found him and what the mirror carried him north to witness.",
+      "when_drawn": "Stop forcing the answer and allow your perspective to change."
+    },
+    {
+      "tarot_number": "XIII",
+      "tarot_name": "Death",
+      "mythcards_name": "The Cabin Rite",
+      "card_type": "Event",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I release what has ended and follow what changes.",
+      "upright_keywords": ["Ending", "Transformation", "Renewal"],
+      "shadow_keywords": ["Resistance", "Decay", "Stagnation"],
+      "narrative_heading": "Event",
+      "narrative": "Beyond the Winter Front, Nikolai Baranov discovers a cabin older than the war. One iron ring lies among dead candles and rotted bindings; another has turned toward the door, where the first dawn light resembles the lantern glow of a circus that will not arrive for forty years.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The rite was over. The road it opened was not.",
+      "relationships": [
+        {
+          "subject": "Nikolai Baranov",
+          "dynamic": "Nikolai discovers that the ritual in the cabin predates the war and recognizes that its iron rings were left for someone to carry onward.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Deep North Circus",
+          "dynamic": "Decades later, the circus inherits the rings and repeats a rite whose original purpose has been forgotten.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "what_the_cabin_rite_invited",
+          "clue": "The rings may preserve an ancient protection, or they may continue an invitation that was never properly closed.",
+          "connects_to": ["The Rings Leave The Cabin", "Circus Convergence Rings", "The Circus Performs The Old Rite"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The Cabin Rite embodies Death as a change of form. Its original practitioners are gone, yet their iron rings will leave the cabin, travel north, and become part of the Deep North Circus's Old Rite. What ended in secrecy survives as performance, though no one yet knows whether the circus inherited a protection or continued an unfinished invitation.",
+      "when_drawn": "Let the finished form fall away so its living purpose can continue."
+    },
+    {
+      "tarot_number": "XIV",
+      "tarot_name": "Temperance",
+      "mythcards_name": "Anya Lebedeva",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I create passage by holding opposites in balance.",
+      "upright_keywords": ["Balance", "Adaptation", "Integration"],
+      "shadow_keywords": ["Instability", "Excess", "Compromise"],
+      "narrative_heading": "Backstory",
+      "narrative": "Anya Lebedeva made a career escaping rooms officials believed were secure, combining relay timing, lock pressure, and a performer's instinct for misdirection. When Elena's dream research teaches the Closed City to answer symbols, Anya balances machinery against occult rhythm and gives Pavel seventeen seconds to escape. The passage saves him, but something beyond the city may have learned the route.",
+      "flavor_heading": "Quote",
+      "flavor_text": "I do not open doors. I balance exits.",
+      "relationships": [
+        {
+          "subject": "Pavel Sokolov",
+          "dynamic": "Anya engineers the seventeen-second opening that allows Pavel to escape the Closed City with the Sky-Hide Mirror.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Colonel Viktor Semyonov",
+          "dynamic": "Semyonov wants Anya contained because her talent makes every lockdown imperfect.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Irina Karpova",
+          "dynamic": "Karpova recognizes Anya's value and may try to purchase, flatter, or coerce her into opening forbidden doors.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "escape_teaches_the_breach",
+          "clue": "Every route Anya opens may teach something outside the Closed City how to enter.",
+          "connects_to": ["Seventeen Seconds", "Pavel Sokolov", "Aurora Opens Like A Door"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Anya embodies Temperance through controlled passage between incompatible forces: machinery and ritual, imprisonment and freedom, one reality and another. Her precision makes Semyonov want her contained and Karpova want her controlled.",
+      "when_drawn": "Bring opposing forces into balance before choosing your way through."
+    },
+    {
+      "tarot_number": "XV",
+      "tarot_name": "The Devil",
+      "mythcards_name": "Enemy Cache Unearthed",
+      "card_type": "Event",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I recognize the power that seeks to possess me.",
+      "upright_keywords": ["Temptation", "Bondage", "Corruption"],
+      "shadow_keywords": ["Denial", "Obsession", "Surrender"],
+      "narrative_heading": "Event",
+      "narrative": "Beneath a collapsed enemy position, the soldiers uncover black notebooks, broken icons, astrological wheels, bone counters, and maps of places that do not exist. Alexei Vranov believes the cache may explain the impossible winter. Ilya Voronin feels something inside it waiting to be carried out.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "Every object offered an answer. Every answer wanted a price.",
+      "relationships": [
+        {
+          "subject": "Alexei Vranov",
+          "dynamic": "Alexei sees the cache as evidence that could explain the impossible winter and connect the battlefield to an older world.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Ilya Voronin",
+          "dynamic": "Ilya senses that something within the cache wants to be carried beyond the ruined position.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "cache_binds_three_eras",
+          "clue": "Using the cache's relics strengthens the bond between the Winter Front, ancient Atlantis, and the future Closed City.",
+          "connects_to": ["Bogatyr's Relic Case", "Alexei Vranov", "Closed City Incident"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The cache embodies the Devil as dangerous knowledge freely accepted. Its relics promise victory, understanding, and survival, but each use strengthens the bond between the Winter Front, Atlantis, and the future Closed City.",
+      "when_drawn": "Name what tempts you before deciding what it is worth."
+    },
+    {
+      "tarot_number": "XVI",
+      "tarot_name": "The Tower",
+      "mythcards_name": "Closed City Incident",
+      "card_type": "Event",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I face what remains when certainty collapses.",
+      "upright_keywords": ["Upheaval", "Revelation", "Awakening"],
+      "shadow_keywords": ["Ruin", "Denial", "Fear"],
+      "narrative_heading": "Event",
+      "narrative": "At 02:17, the reactor pulse, orbital receiver, and Elena's dream monitors synchronize. The facility does not explode outward; it opens inward, occupying several realities for seventeen seconds. Orlov collapses, Elena disappears into the signal, Zoya awakens changed, and Major Yuri Volkov must choose between the woman he loves and the orders demanding containment.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The alarms warned them to leave. Every door led deeper inside.",
+      "relationships": [
+        {
+          "subject": "Elena Morozova and Major Yuri Volkov",
+          "dynamic": "Elena's disappearance forces Yuri to choose between finding the woman he loves and obeying the containment orders that may condemn her.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Zoya Miranova",
+          "dynamic": "The incident changes Zoya from a contained subject into something the facility can no longer explain or fully confine.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "incident_reveals_existing_convergence",
+          "clue": "The incident did not create the convergence; it exposed forces already gathering beneath the city and across other eras.",
+          "connects_to": ["Elena Missing In The Signal", "Closed City Vision", "Meteor Contact To The North"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The Closed City Incident is the Tower's catastrophic revelation: the facility's walls, loyalties, and scientific explanations fail at once. Nothing created the convergence that night. The disaster merely exposed what had already been gathering beneath the city.",
+      "when_drawn": "Let the collapse reveal what was never stable."
+    },
+    {
+      "tarot_number": "XVII",
+      "tarot_name": "The Star",
+      "mythcards_name": "Nadia Belaya",
+      "card_type": "Character",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I trust that healing is possible.",
+      "upright_keywords": ["Hope", "Healing", "Renewal"],
+      "shadow_keywords": ["Disillusionment", "Dependence", "False Hope"],
+      "narrative_heading": "Backstory",
+      "narrative": "Nadia Belaya finds Pavel dying beneath an aurora where no survivor should have been able to reach. She heals him with medicine, breath, and northern rites, then leaves before gratitude can become dependence. Nadia never tells him that Aksinya's distant vision guided her to the snow, or that the relic against his chest seemed to call her by name.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Survival is not an answer. It is another question.",
+      "relationships": [
+        {
+          "subject": "Pavel Sokolov",
+          "dynamic": "Nadia saves Pavel but leaves before his gratitude can become dependence or an expectation that she explain his survival.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Aksinya Morozova",
+          "dynamic": "Aksinya's distant vision quietly guides Nadia to Pavel without directly entering the rescue.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "relic_calls_nadia",
+          "clue": "The relic against Pavel's chest may have called Nadia to him by name.",
+          "connects_to": ["Sky-Hide Mirror", "Nadia Finds The Survivor", "Aksinya Morozova"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Nadia embodies the Star as hope made real through compassionate action. She saves Pavel without promising him certainty, affection, or a return to his former life. Her mercy illuminates a path; it does not walk it for him.",
+      "when_drawn": "Accept the hope being offered without making its source perfect."
+    },
+    {
+      "tarot_number": "XVIII",
+      "tarot_name": "The Moon",
+      "mythcards_name": "Subject 3: Zoya",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I can trust myself even when I feel uncertain.",
+      "upright_keywords": ["Intuition", "Mystery", "Desire"],
+      "shadow_keywords": ["Illusion", "Fear", "Confusion"],
+      "narrative_heading": "Backstory",
+      "narrative": "Zoya Miranova entered the Closed City as a remote-viewing subject, but the program treated her body as a receiver and her dreams as state property. After the incident, several voices speak through her, and she can no longer tell whether her attraction to Orlov is entirely her own. His sleeping mind is the one place where her fractured selves can gather.",
+      "flavor_heading": "Quote",
+      "flavor_text": "I woke with too many names.",
+      "relationships": [
+        {
+          "subject": "Dr. Mikhail Orlov",
+          "dynamic": "Zoya is drawn to Orlov because his sleeping mind gives her fractured selves a place to gather, though neither knows whether the attraction belongs to them alone.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "who_speaks_through_zoya",
+          "clue": "Some of Zoya's voices may be alternate selves, convergence entities, or people observing the Closed City from other realities.",
+          "connects_to": ["Dream Monitors Synchronize", "Subject 3 Wakes", "Dr. Mikhail Orlov"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Zoya embodies the Moon's uncertain territory between intuition and illusion. Her feelings may be genuine, manipulated, or shared by something beyond her, yet denying them gives the program continued power over her identity.",
+      "when_drawn": "Trust your instincts, but question what fear and desire are showing you."
+    },
+    {
+      "tarot_number": "XIX",
+      "tarot_name": "The Sun",
+      "mythcards_name": "Reactor Prayer",
+      "card_type": "Event",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I am ready to see the truth clearly.",
+      "upright_keywords": ["Clarity", "Energy", "Revelation"],
+      "shadow_keywords": ["Exposure", "Exhaustion", "Arrogance"],
+      "narrative_heading": "Event",
+      "narrative": "During the night shift, the reactor's warning clicks settle into a slow, repeating cadence. One worker raises his hand toward the chamber without knowing why, while golden diagrams spread across the observation glass and recording paper. Elena recognizes the pattern from her dreams: the reactor is not failing. It is praying, and something has begun to answer.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "It answered every question with light.",
+      "relationships": [
+        {
+          "subject": "Elena Morozova",
+          "dynamic": "Elena recognizes that the reactor's luminous patterns reproduce a language she has already encountered in her dreams.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Closed City workers",
+          "dynamic": "The workers are the first to feel the reactor's call and the first whose bodies will bear the cost of exploiting it.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "who_answers_the_reactor_prayer",
+          "clue": "The reactor's patterned light behaves like an invocation, and an unknown intelligence has begun to answer it.",
+          "connects_to": ["Dream Monitors Synchronize", "Closed City Incident", "Elena Morozova"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Reactor Prayer embodies the Sun as an overwhelming moment of clarity. The reactor reveals that the Closed City's science and Elena's dream work have been speaking the same language. This knowledge offers extraordinary power, but its light falls first upon the workers whose bodies will pay for it.",
+      "when_drawn": "Face what has become clear and decide how you will use it."
+    },
+    {
+      "tarot_number": "XX",
+      "tarot_name": "Judgement",
+      "mythcards_name": "The Meteor Wakes Under Snow",
+      "card_type": "Event",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I am ready to answer the call.",
+      "upright_keywords": ["Awakening", "Reckoning", "Renewal"],
+      "shadow_keywords": ["Avoidance", "Regret", "Refusal"],
+      "narrative_heading": "Event",
+      "narrative": "Forty years after the meteor struck the Far North, the Closed City Incident reawakens something beneath its crater. Heat splits the frozen ground, and figures appear in the aurora carrying voices and memories from the time of the impact. The village elders recognize people they lost that winter. Watching from afar, Aksinya cannot yet tell whether these are the dead returning or something using their memories to be welcomed home.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The sky called back everyone the village had buried.",
+      "relationships": [
+        {
+          "subject": "Village elders",
+          "dynamic": "The elders recognize lost loved ones among the aurora figures, making the awakening a deeply personal temptation to welcome them home.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Aksinya Morozova",
+          "dynamic": "Aksinya watches from afar, uncertain whether the figures are returning souls or beings borrowing familiar memories.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "meteor_returning_dead_or_borrowed_memories",
+          "clue": "The aurora figures may use the village's grief to gain entry rather than truly restore the dead.",
+          "connects_to": ["Meteor Contact To The North", "Closed City Incident", "Meteor Lantern"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The waking meteor embodies Judgement as an unavoidable summons. The Closed City has not brought something entirely new to the Far North; it has called an older wound back into consequence. The village must now face what its survival required it to forget.",
+      "when_drawn": "Answer what is calling you and face what remains unfinished."
     }
   ]
 }

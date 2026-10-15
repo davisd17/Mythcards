@@ -8,3 +8,5 @@
 *.kra filter=lfs diff=lfs merge=lfs -text
 *.afphoto filter=lfs diff=lfs merge=lfs -text
 *.procreate filter=lfs diff=lfs merge=lfs -text
+*.ora filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text

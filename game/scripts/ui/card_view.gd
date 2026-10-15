@@ -72,11 +72,11 @@ func _ready() -> void:
 	_placeholder.add_child(_placeholder_label)
 	box.add_child(_placeholder)
 
-	_title.add_theme_font_size_override("font_size", 22 if compact else 30)
+	_title.add_theme_font_size_override("font_size", 30 if compact else 36)
 	_title.add_theme_color_override("font_color", Color("#f3e3b5"))
 	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(_title)
-	_subtitle.add_theme_font_size_override("font_size", 16 if compact else 20)
+	_subtitle.add_theme_font_size_override("font_size", 26 if compact else 28)
 	_subtitle.add_theme_color_override("font_color", Color("#b8ad92"))
 	_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(_subtitle)
@@ -84,8 +84,8 @@ func _ready() -> void:
 	_body.bbcode_enabled = true
 	_body.fit_content = true
 	_body.scroll_active = false
-	_body.add_theme_font_size_override("normal_font_size", 16 if compact else 20)
-	_body.add_theme_font_size_override("bold_font_size", 16 if compact else 20)
+	_body.add_theme_font_size_override("normal_font_size", 28)
+	_body.add_theme_font_size_override("bold_font_size", 28)
 	box.add_child(_body)
 
 

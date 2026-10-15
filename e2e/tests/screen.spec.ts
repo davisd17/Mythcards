@@ -14,9 +14,23 @@ async function ui(page: Page): Promise<Ui> {
 }
 
 async function clickButton(page: Page, text: string): Promise<void> {
-  const layout = await ui(page);
-  const b = layout.buttons.find((x) => x.text === text && !x.disabled);
+  if (text === 'Auto-place the rest') {
+    const viewport = page.viewportSize()!;
+    await page.mouse.move(viewport.width - 40, viewport.height - 50);
+    await page.mouse.wheel(0, -2000);
+    await page.waitForTimeout(150);
+  }
+  let layout = await ui(page);
+  let b = layout.buttons.find((x) => x.text === text && !x.disabled);
   expect(b, `button "${text}" among ${layout.buttons.map((x) => x.text).join(' | ')}`).toBeTruthy();
+  const viewport = page.viewportSize()!;
+  for (let i = 0; i < 12 && b!.center.y > viewport.height - 20; i++) {
+    await page.mouse.move(Math.min(b!.center.x, viewport.width - 20), viewport.height - 40);
+    await page.mouse.wheel(0, 100);
+    await page.waitForTimeout(100);
+    layout = await ui(page);
+    b = layout.buttons.find((x) => x.text === text && !x.disabled);
+  }
   await page.mouse.click(b!.center.x, b!.center.y);
   await page.waitForTimeout(150);
 }
@@ -113,6 +127,18 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   await clickTile(page, architect.position.x, architect.position.y);
   s = await state(page);
   expect(character(s, 'p2_a-flood-survivor-iset-nara').status_effects.map((e: any) => e.type)).toContain('memory');
+  for (const viewport of [{ width: 360, height: 640 }, { width: 1280, height: 720 }]) {
+    await page.setViewportSize(viewport);
+    await page.waitForTimeout(300);
+    await page.screenshot({ path: `test-results/readability-${viewport.width}.png` });
+    const layout = await ui(page);
+    for (const tile of Object.values(layout.tiles)) {
+      expect(tile.x).toBeGreaterThanOrEqual(0);
+      expect(tile.x).toBeLessThan(viewport.width);
+      expect(tile.y).toBeGreaterThanOrEqual(0);
+      expect(tile.y).toBeLessThan(viewport.height);
+    }
+  }
 });
 
 test('play Closed City against the AI with clicks', async ({ page }) => {

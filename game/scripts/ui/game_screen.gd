@@ -7,8 +7,8 @@ extends Control
 # scrolls, so no card is ever cut off (playtest 2026-10-06). All game logic lives in GameController and the engine.
 
 const DEBUG_SCENE := "res://scenes/debug_match.tscn"
-const BUTTON_FONT := 20
-const BUTTON_HEIGHT := 56.0
+const BUTTON_FONT := 28
+const BUTTON_HEIGHT := 78.0
 const SIDE_BUTTON_WIDTH := 280.0
 
 var controller := GameController.new()
@@ -65,17 +65,19 @@ func _ready() -> void:
 	var top := HBoxContainer.new()
 	_turn_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_turn_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_turn_label.add_theme_font_size_override("font_size", 24)
+	_turn_label.add_theme_font_size_override("font_size", 30)
 	_turn_label.add_theme_color_override("font_color", Color("#f3e3b5"))
 	top.add_child(_turn_label)
 	top.add_child(_ap_meter)
-	_primary = _button("End turn", _on_primary, false)
-	_primary.custom_minimum_size.x = 170
-	_accent(_primary)
-	top.add_child(_primary)
-	top.add_child(_button("Log", _toggle_log, false))
-	top.add_child(_button("Menu", _toggle_menu, false))
 	root.add_child(_margin(top))
+	var commands := HBoxContainer.new()
+	_primary = _button("End turn", _on_primary, false)
+	_primary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_accent(_primary)
+	commands.add_child(_primary)
+	commands.add_child(_button("Log", _toggle_log, false))
+	commands.add_child(_button("Menu", _toggle_menu, false))
+	root.add_child(_margin(commands))
 	_turn_bar.custom_minimum_size = Vector2(0, 3)
 	_turn_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(_turn_bar)
@@ -93,7 +95,7 @@ func _ready() -> void:
 
 	var prompt_box := VBoxContainer.new()
 	_prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_prompt.add_theme_font_size_override("font_size", 20)
+	_prompt.add_theme_font_size_override("font_size", 28)
 	_prompt.add_theme_color_override("font_color", Color("#f3e3b5"))
 	prompt_box.add_child(_prompt)
 	_options.add_theme_constant_override("h_separation", 6)
@@ -380,7 +382,7 @@ func _build_popup() -> void:
 	box.add_child(top_gap)
 	_popup_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_popup_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_popup_note.add_theme_font_size_override("font_size", 22)
+	_popup_note.add_theme_font_size_override("font_size", 30)
 	_popup_note.add_theme_color_override("font_color", Color("#f3e3b5"))
 	box.add_child(_margin(_popup_note, 40))
 	# The card scrolls inside the overlay, so a long card never runs off the screen. It sits
@@ -539,8 +541,8 @@ func _build_log() -> void:
 	_log_text.fit_content = true
 	_log_text.scroll_active = false
 	_log_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_log_text.add_theme_font_size_override("normal_font_size", 17)
-	_log_text.add_theme_font_size_override("bold_font_size", 19)
+	_log_text.add_theme_font_size_override("normal_font_size", 28)
+	_log_text.add_theme_font_size_override("bold_font_size", 28)
 	_log_scroll.add_child(_log_text)
 	box.add_child(_margin(_log_scroll))
 	box.add_child(_margin(_accent(_button("Close", _toggle_log))))
@@ -643,7 +645,7 @@ func _build_game_over() -> void:
 
 func _build_ui_theme() -> Theme:
 	var result := Theme.new()
-	result.default_font_size = 18
+	result.default_font_size = 28
 	result.set_color("font_color", "Label", Color("#e9e5db"))
 	result.set_color("font_color", "Button", Color("#e9e5db"))
 	result.set_color("font_hover_color", "Button", Color.WHITE)
@@ -709,8 +711,9 @@ func _accent(b: Button) -> Button:
 func _chip(text: String, color: Color) -> Button:
 	var b := Button.new()
 	b.text = text
-	b.custom_minimum_size = Vector2(0, 44)
-	b.add_theme_font_size_override("font_size", 16)
+	b.custom_minimum_size = Vector2(320, 60)
+	b.add_theme_font_size_override("font_size", 24)
+	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var style := StyleBoxFlat.new()
 	style.bg_color = color
 	style.set_corner_radius_all(12)
