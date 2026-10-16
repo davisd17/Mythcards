@@ -742,6 +742,141 @@
       ],
       "interpretation": "The waking meteor embodies Judgement as an unavoidable summons. The Closed City has not brought something entirely new to the Far North; it has called an older wound back into consequence. The village must now face what its survival required it to forget.",
       "when_drawn": "Answer what is calling you and face what remains unfinished."
+    },
+    {
+      "tarot_number": "XXI",
+      "tarot_name": "The World",
+      "mythcards_name": "Aal Luuk Mas Root",
+      "card_type": "Relic",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I belong, and my life has meaning.",
+      "upright_keywords": ["Completion", "Harmony", "Belonging"],
+      "shadow_keywords": ["Disconnection", "Incompletion", "Restlessness"],
+      "narrative_heading": "Legend",
+      "narrative": "The Aal Luuk Mas Root has remained alive through generations of northern keepers, connecting the upper, middle, and lower worlds. When the Closed City convergence reawakens the meteor site, its paths begin opening again. Nadia and Aksinya understand the danger: the Root could help displaced people like Pavel find their way home, but every passage could also admit something the village cannot shelter.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "Every branch reaches outward. Every root remembers home.",
+      "relationships": [
+        {
+          "subject": "Nadia Belaya and Aksinya Morozova",
+          "dynamic": "Both recognize the Root's potential to restore displaced people and the danger of admitting unwanted beings through its paths.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Pavel Sokolov",
+          "dynamic": "The Root offers Pavel a possible way home while forcing him to consider where he now belongs.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "root_paths_reawaken",
+          "clue": "The convergence reopens inherited paths through the Root, allowing passage in both directions.",
+          "connects_to": ["The Meteor Wakes Under Snow", "Pavel Sokolov", "Aurora Opens Like A Door"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The Root embodies the World as the joining of what has been scattered. Pavel's arrival, the northern healing traditions, and the realities opened by the convergence meet along its living paths. His journey reaches completion when he understands what he carries and chooses where he belongs; returning to his old life may no longer mean coming home.",
+      "when_drawn": "Recognize how far you have come and let yourself belong."
+    },
+    {
+      "tarot_number": "Ace",
+      "tarot_name": "Ace of Wands",
+      "mythcards_name": "Aurora Opens Like A Door",
+      "card_type": "Event",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I have the courage to begin.",
+      "upright_keywords": ["Inspiration", "Potential", "Initiative"],
+      "shadow_keywords": ["Hesitation", "Recklessness", "Frustration"],
+      "narrative_heading": "Event",
+      "narrative": "After Pavel arrives in the Far North carrying the Sky-Hide Mirror, the aurora opens a passage above an old ritual path. His escape from the Closed City has brought the convergence to a place already altered by the meteor forty years earlier. For the village and the circus, the opening offers a first chance to deliberately cross into the realities they have only glimpsed in dreams.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "For generations, they had rehearsed a door. Tonight, it opened.",
+      "relationships": [
+        {
+          "subject": "Pavel Sokolov",
+          "dynamic": "Pavel's arrival with the Sky-Hide Mirror links the Closed City convergence to the Far North's older meteor wound.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "northern_crossings_become_deliberate",
+          "clue": "The village and circus can now attempt intentional passage into realities previously encountered only in dreams.",
+          "connects_to": ["Sky-Hide Mirror", "The Meteor Wakes Under Snow", "The Circus Performs The Old Rite"],
+          "disclosure": "revealed"
+        }
+      ],
+      "interpretation": "The Ace of Wands marks the moment possibility becomes something you can act upon. The passage offers discovery, but no promise of a safe destination. This card asks you to notice what awakens your curiosity or desire, then give it a practical beginning. You do not need the whole journey planned to take a thoughtful first step.",
+      "when_drawn": "Choose what excites you and take one clear step toward it."
+    },
+    {
+      "tarot_number": "Two",
+      "tarot_name": "Two of Wands",
+      "mythcards_name": "Volkov's Red Map",
+      "card_type": "Relic",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I can choose where I go next.",
+      "upright_keywords": ["Planning", "Ambition", "Discovery"],
+      "shadow_keywords": ["Indecision", "Overreach", "Fear"],
+      "narrative_heading": "Legend",
+      "narrative": "General Volkov's campaign map begins changing after the enemy occult cache is opened. Among familiar roads and casualty marks, new routes appear, leading beyond the territory his army was ordered to hold. Volkov sees a chance to secure more than a military victory, and begins planning advances toward places his soldiers cannot find on any other map.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "He had been ordered to hold the line. The map offered him an empire.",
+      "relationships": [
+        {
+          "subject": "General Arkady Volkov",
+          "dynamic": "Volkov treats the map's impossible routes as an opportunity for personal conquest, leaving his soldiers to bear the cost.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "map_routes_beyond_the_front",
+          "clue": "Opening the enemy cache changes the map, offering routes outside ordinary military geography.",
+          "connects_to": ["Enemy Cache Unearthed", "Volkov Sends Another Wave"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The Two of Wands concerns deciding what to pursue beyond familiar ground. Volkov's map gives his ambition a direction, but he leaves others to bear the cost. For the reader, this card invites a wider view: consider what you want, what the journey requires, and who your plans will affect before committing.",
+      "when_drawn": "Choose your direction and make a realistic plan."
+    },
+    {
+      "tarot_number": "Three",
+      "tarot_name": "Three of Wands",
+      "mythcards_name": "Radio Snow Speaks",
+      "card_type": "Event",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I am open to possibilities beyond what I know.",
+      "upright_keywords": ["Foresight", "Expansion", "Opportunity"],
+      "shadow_keywords": ["Delays", "Doubt", "Limited Vision"],
+      "narrative_heading": "Event",
+      "narrative": "In 1942, a Winter Front field radio receives reactor warnings and security orders from the Closed City of 1982. Through the interference, Elena Morozova's voice reaches soldiers standing on the land where her facility will one day be built. The transmission reveals that their discoveries in the enemy occult cache have consequences extending forty years beyond the war.",
+      "flavor_heading": "Quote",
+      "flavor_text": "You drew this card. Did you think that meant you were only watching?",
+      "flavor_attribution": "Elena Morozova",
+      "breaks_fourth_wall": true,
+      "relationships": [
+        {
+          "subject": "Elena Morozova and the Winter Front soldiers",
+          "dynamic": "Elena's transmission links the soldiers' discoveries in 1942 to the Closed City Incident forty years later.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "elena_addresses_the_reader",
+          "clue": "This is the deck's only fourth-wall break. Elena addresses the person drawing the card; whether she warns, invites, or asks for help remains open.",
+          "connects_to": ["Elena Morozova", "Enemy Cache Unearthed", "Closed City Incident"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The Three of Wands asks you to consider how far your choices might reach. Elena's transmission crosses forty years, but her gaze reaches beyond the soldiers to you. Whether her words are a warning, an invitation, or a request remains unclear. Consider where you have been waiting for something to happen, and whether you are ready to take part.",
+      "when_drawn": "What are you ready to become part of?"
     }
   ]
 }
