@@ -1,0 +1,8 @@
+{
+  "ready": "docs/art-specs/attack-art/r-reactor-worker/sources/ready.png",
+  "raise": "docs/art-specs/attack-art/r-reactor-worker/sources/raise.png",
+  "brace": "docs/art-specs/attack-art/r-reactor-worker/sources/brace.png",
+  "fire": "docs/art-specs/attack-art/r-reactor-worker/sources/fire.png",
+  "recoil": "docs/art-specs/attack-art/r-reactor-worker/sources/recoil.png",
+  "recover": "docs/art-specs/attack-art/r-reactor-worker/sources/recover.png"
+}

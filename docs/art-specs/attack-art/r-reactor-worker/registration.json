@@ -1,0 +1,134 @@
+{
+  "character": "r-reactor-worker",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.47668393782383417,
+  "foot_anchor": [
+    256,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "ready",
+      "file": "attack-1-ready.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        614.0,
+        1495
+      ],
+      "offset": [
+        -37,
+        44
+      ],
+      "bounds": [
+        56,
+        69,
+        425,
+        757
+      ]
+    },
+    {
+      "pose": "raise",
+      "file": "attack-2-raise.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        602.0,
+        1510
+      ],
+      "offset": [
+        -31,
+        37
+      ],
+      "bounds": [
+        70,
+        59,
+        419,
+        757
+      ]
+    },
+    {
+      "pose": "brace",
+      "file": "attack-3-brace.png",
+      "ms": 130,
+      "impact": false,
+      "source_anchor": [
+        605.0,
+        1480
+      ],
+      "offset": [
+        -32,
+        51
+      ],
+      "bounds": [
+        65,
+        95,
+        422,
+        757
+      ]
+    },
+    {
+      "pose": "fire",
+      "file": "attack-4-fire.png",
+      "ms": 60,
+      "impact": true,
+      "source_anchor": [
+        511.5,
+        1493
+      ],
+      "offset": [
+        12,
+        45
+      ],
+      "bounds": [
+        48,
+        79,
+        486,
+        757
+      ]
+    },
+    {
+      "pose": "recoil",
+      "file": "attack-5-recoil.png",
+      "ms": 90,
+      "impact": false,
+      "source_anchor": [
+        544.0,
+        1503
+      ],
+      "offset": [
+        -3,
+        40
+      ],
+      "bounds": [
+        74,
+        66,
+        481,
+        757
+      ]
+    },
+    {
+      "pose": "recover",
+      "file": "attack-6-recover.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        655.0,
+        1484
+      ],
+      "offset": [
+        -56,
+        49
+      ],
+      "bounds": [
+        72,
+        68,
+        393,
+        757
+      ]
+    }
+  ]
+}

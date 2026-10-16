@@ -1,0 +1,134 @@
+{
+  "character": "r-elena-morozova",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.4149636300658123,
+  "foot_anchor": [
+    256,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "ready",
+      "file": "attack-1-ready.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        679.5,
+        1485
+      ],
+      "offset": [
+        -26,
+        140
+      ],
+      "bounds": [
+        27,
+        167,
+        372,
+        757
+      ]
+    },
+    {
+      "pose": "raise",
+      "file": "attack-2-raise.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        645.0,
+        1497
+      ],
+      "offset": [
+        -12,
+        136
+      ],
+      "bounds": [
+        71,
+        145,
+        387,
+        757
+      ]
+    },
+    {
+      "pose": "brace",
+      "file": "attack-3-brace.png",
+      "ms": 130,
+      "impact": false,
+      "source_anchor": [
+        669.5,
+        1489
+      ],
+      "offset": [
+        -22,
+        139
+      ],
+      "bounds": [
+        67,
+        164,
+        384,
+        757
+      ]
+    },
+    {
+      "pose": "fire",
+      "file": "attack-4-fire.png",
+      "ms": 60,
+      "impact": true,
+      "source_anchor": [
+        668.0,
+        1509
+      ],
+      "offset": [
+        -21,
+        131
+      ],
+      "bounds": [
+        41,
+        138,
+        394,
+        757
+      ]
+    },
+    {
+      "pose": "recoil",
+      "file": "attack-5-recoil.png",
+      "ms": 90,
+      "impact": false,
+      "source_anchor": [
+        671.5,
+        1463
+      ],
+      "offset": [
+        -23,
+        150
+      ],
+      "bounds": [
+        84,
+        165,
+        382,
+        757
+      ]
+    },
+    {
+      "pose": "recover",
+      "file": "attack-6-recover.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        645.5,
+        1483
+      ],
+      "offset": [
+        -12,
+        141
+      ],
+      "bounds": [
+        66,
+        152,
+        374,
+        757
+      ]
+    }
+  ]
+}

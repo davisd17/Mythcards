@@ -1,0 +1,134 @@
+{
+  "character": "r-vera-7",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.4017467248908297,
+  "foot_anchor": [
+    256,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "ready",
+      "file": "attack-1-ready.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        479.5,
+        1391
+      ],
+      "offset": [
+        63,
+        198
+      ],
+      "bounds": [
+        76,
+        396,
+        457,
+        757
+      ]
+    },
+    {
+      "pose": "raise",
+      "file": "attack-2-raise.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        506.0,
+        1359
+      ],
+      "offset": [
+        53,
+        210
+      ],
+      "bounds": [
+        59,
+        365,
+        460,
+        757
+      ]
+    },
+    {
+      "pose": "brace",
+      "file": "attack-3-brace.png",
+      "ms": 130,
+      "impact": false,
+      "source_anchor": [
+        486.0,
+        1362
+      ],
+      "offset": [
+        61,
+        209
+      ],
+      "bounds": [
+        64,
+        369,
+        464,
+        757
+      ]
+    },
+    {
+      "pose": "fire",
+      "file": "attack-4-fire.png",
+      "ms": 60,
+      "impact": true,
+      "source_anchor": [
+        440.5,
+        1371
+      ],
+      "offset": [
+        79,
+        206
+      ],
+      "bounds": [
+        81,
+        399,
+        486,
+        757
+      ]
+    },
+    {
+      "pose": "recoil",
+      "file": "attack-5-recoil.png",
+      "ms": 90,
+      "impact": false,
+      "source_anchor": [
+        505.0,
+        1371
+      ],
+      "offset": [
+        53,
+        206
+      ],
+      "bounds": [
+        57,
+        373,
+        451,
+        757
+      ]
+    },
+    {
+      "pose": "recover",
+      "file": "attack-6-recover.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        502.0,
+        1394
+      ],
+      "offset": [
+        54,
+        196
+      ],
+      "bounds": [
+        58,
+        355,
+        456,
+        757
+      ]
+    }
+  ]
+}

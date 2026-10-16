@@ -1,0 +1,134 @@
+{
+  "character": "r-mikhail-orlov",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.4216315307057745,
+  "foot_anchor": [
+    256,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "ready",
+      "file": "attack-1-ready.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        541.0,
+        1472
+      ],
+      "offset": [
+        28,
+        135
+      ],
+      "bounds": [
+        119,
+        179,
+        384,
+        757
+      ]
+    },
+    {
+      "pose": "raise",
+      "file": "attack-2-raise.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        530.0,
+        1494
+      ],
+      "offset": [
+        33,
+        126
+      ],
+      "bounds": [
+        124,
+        208,
+        439,
+        757
+      ]
+    },
+    {
+      "pose": "brace",
+      "file": "attack-3-brace.png",
+      "ms": 130,
+      "impact": false,
+      "source_anchor": [
+        529.0,
+        1462
+      ],
+      "offset": [
+        33,
+        140
+      ],
+      "bounds": [
+        115,
+        212,
+        393,
+        757
+      ]
+    },
+    {
+      "pose": "fire",
+      "file": "attack-4-fire.png",
+      "ms": 60,
+      "impact": true,
+      "source_anchor": [
+        444.5,
+        1477
+      ],
+      "offset": [
+        69,
+        133
+      ],
+      "bounds": [
+        112,
+        213,
+        486,
+        757
+      ]
+    },
+    {
+      "pose": "recoil",
+      "file": "attack-5-recoil.png",
+      "ms": 90,
+      "impact": false,
+      "source_anchor": [
+        534.5,
+        1455
+      ],
+      "offset": [
+        31,
+        142
+      ],
+      "bounds": [
+        127,
+        214,
+        376,
+        757
+      ]
+    },
+    {
+      "pose": "recover",
+      "file": "attack-6-recover.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        539.5,
+        1502
+      ],
+      "offset": [
+        29,
+        123
+      ],
+      "bounds": [
+        127,
+        207,
+        376,
+        757
+      ]
+    }
+  ]
+}
