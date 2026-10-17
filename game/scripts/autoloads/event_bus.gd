@@ -5,6 +5,8 @@ extends Node
 @warning_ignore_start("unused_signal")
 
 signal turn_started(player_id: String)
+signal match_started
+signal match_reset
 signal turn_ended(player_id: String)
 signal pool_ap_changed(player_id: String, remaining: int)
 signal character_ap_changed(character_id: String, remaining: int)

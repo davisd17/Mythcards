@@ -1,0 +1,15 @@
+{
+  "title": "Closed City \u2014 Behind the Gates",
+  "version": 2,
+  "bpm": 92,
+  "bars": 32,
+  "seconds": 83.47825,
+  "sample_rate": 32000,
+  "channels": 2,
+  "bit_depth": 16,
+  "peak_dbfs": -1.3101789237276062,
+  "rms_dbfs": -16.848190872368846,
+  "clipped_samples": 0,
+  "loop_endpoint_difference": 0,
+  "note_events": 1085
+}

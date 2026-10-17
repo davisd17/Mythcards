@@ -26,6 +26,7 @@ RelicEventDeck="*res://scripts/autoloads/relic_event_deck.gd"
 VictoryChecker="*res://scripts/autoloads/victory_checker.gd"
 TestBridge="*res://scripts/autoloads/test_bridge.gd"
 MatchLog="*res://scripts/autoloads/match_log.gd"
+MusicManager="*res://scripts/autoloads/music_manager.gd"
 
 [display]
 

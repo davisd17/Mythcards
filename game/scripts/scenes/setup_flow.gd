@@ -103,10 +103,10 @@ func start_match(deck_seed: int = -1) -> void:
 	state.players = [get_player("p1"), get_player("p2")]
 	state.board = board
 	state.phase = "setup"
+	state.first_player_id = "p1"   # a coin flip replaces this later (BR-018A)
 	GameState.start_match(state)
 	RelicEventDeck.build_deck(state.players[0].culture, state.players[1].culture,
 			deck_seed if deck_seed >= 0 else randi())
-	state.first_player_id = "p1"   # a coin flip replaces this later (BR-018A)
 	TurnManager.start_turn(state.first_player_id)
 
 

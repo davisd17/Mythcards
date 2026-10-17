@@ -8,6 +8,7 @@ var match_state: MatchState = null   # null until SetupFlow.start_match()
 func start_match(state: MatchState) -> void:
 	match_state = state
 	match_state.phase = "in_progress"
+	EventBus.match_started.emit()
 
 
 func is_match_active() -> bool:
@@ -16,3 +17,4 @@ func is_match_active() -> bool:
 
 func reset() -> void:
 	match_state = null
+	EventBus.match_reset.emit()
