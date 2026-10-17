@@ -14,6 +14,7 @@ const SIDE_BUTTON_WIDTH := 280.0
 var controller := GameController.new()
 
 var _turn_label := Label.new()
+var _deck_label := Label.new()
 var _ap_meter := ApMeter.new()
 var _turn_bar := ColorRect.new()     # the active player's color under the header (Phase 3)
 var _popup_box := VBoxContainer.new()
@@ -45,6 +46,7 @@ var _log_text := RichTextLabel.new()
 var _log_scroll := ScrollContainer.new()
 var _game_over := Control.new()
 var _game_over_label := Label.new()
+var _terms := TermPopup.new()        # definitions: tapped card terms, long-pressed pieces, glossary
 
 
 func _ready() -> void:
@@ -63,11 +65,17 @@ func _ready() -> void:
 	add_child(root)
 
 	var top := HBoxContainer.new()
+	top.add_theme_constant_override("separation", 10)
 	_turn_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_turn_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_turn_label.add_theme_font_size_override("font_size", 30)
 	_turn_label.add_theme_color_override("font_color", Color("#f3e3b5"))
 	top.add_child(_turn_label)
+	# The deck count sits in the header (mobile feedback 2026-10-17: the HUD took three rows).
+	_deck_label.add_theme_font_size_override("font_size", 24)
+	_deck_label.add_theme_color_override("font_color", Color("#b8ad92"))
+	_deck_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	top.add_child(_deck_label)
 	top.add_child(_ap_meter)
 	root.add_child(_margin(top))
 	var commands := HBoxContainer.new()
@@ -82,6 +90,7 @@ func _ready() -> void:
 	_turn_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(_turn_bar)
 
+	# One row: each player's relic and Ember score; active events wrap onto a second row.
 	_chips.add_theme_constant_override("h_separation", 6)
 	_chips.add_theme_constant_override("v_separation", 6)
 	root.add_child(_margin(_chips))
@@ -93,6 +102,7 @@ func _ready() -> void:
 	_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_board.size_flags_stretch_ratio = 3.0
 	_board.tile_tapped.connect(func(pos): controller.tap_tile(pos); _refresh())
+	_board.tile_long_pressed.connect(_explain_tile)
 	root.add_child(_board)
 
 	var prompt_box := VBoxContainer.new()
@@ -107,6 +117,7 @@ func _ready() -> void:
 
 	var bottom := HBoxContainer.new()
 	bottom.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bottom.custom_minimum_size.y = 220   # room for the strip's name, stats and status
 	bottom.add_theme_constant_override("separation", 8)
 	_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_summary.size_flags_stretch_ratio = 1.4
@@ -134,6 +145,8 @@ func _ready() -> void:
 	add_child(_ai_timer)
 	_ai_timer.start()
 	_build_game_over()
+	add_child(_terms)   # last, so a definition sits over every other overlay
+	_popup_card.term_pressed.connect(func(id): _terms.show_terms([id]))
 
 	EventBus.relic_drawn.connect(_on_card_drawn)
 	EventBus.turn_started.connect(_on_turn_started)
@@ -244,6 +257,7 @@ func _refresh() -> void:
 func _refresh_header() -> void:
 	for child in _chips.get_children():
 		child.queue_free()
+	_deck_label.text = ""
 	if controller.in_setup():
 		_turn_label.text = "Setup · %s" % _player_name(controller.placing_player)
 		_turn_label.add_theme_color_override("font_color", _bright(controller.placing_player))
@@ -259,26 +273,30 @@ func _refresh_header() -> void:
 	var state := GameState.match_state
 	if state == null:
 		return
-	_turn_label.text = "Turn %d · %s" % [state.turn_number, _player_name(state.active_player_id)]
+	# Short enough for one line beside the deck count and AP: the color says which player.
+	_turn_label.text = "Turn %d · %s" % [state.turn_number, _team_name(state.active_player_id)]
 	var player := state.get_player(state.active_player_id)
 	_turn_label.add_theme_color_override("font_color", _bright(state.active_player_id))
 	_turn_bar.color = Color(_bright(state.active_player_id), 0.8)
 	_ap_meter.set_ap(player.pool_ap_remaining, player.pool_ap_max)
+	_deck_label.text = "Deck %d" % state.shared_deck.size()
 	for p in state.players:
-		var label := "%s relic: %s" % [_short_name(p.id), _card_name(p.active_relic_id) if p.active_relic_id != "" else "none"]
+		# The chip's color says whose relic it is, so the label is just the card.
+		var label := _card_name(p.active_relic_id) if p.active_relic_id != "" else "%s: no relic" % _short_name(p.id)
 		var chip := _chip(label, _board.faction_color(p.id).darkened(0.35))
 		if p.active_relic_id != "":
 			var id := p.active_relic_id
 			chip.pressed.connect(func(): _show_card(id, "%s's active relic." % _player_name(p.id)))
 		_chips.add_child(chip)
+	for p in state.players:
+		var embers := "%s Embers %d/%d" % [_short_name(p.id), p.embers_delivered, VictoryChecker.EMBERS_TO_WIN]
+		var chip := _chip(embers, Color("#7a4a1c"))
+		chip.pressed.connect(func(): _terms.show_terms(["spirit_ember"]))
+		_chips.add_child(chip)
 	for card_id in RelicEventDeck.active_event_ids():
 		var chip := _chip("Event: " + _card_name(card_id), Color("#5b4a2e"))
 		chip.pressed.connect(func(): _show_card(card_id, "This event is in effect."))
 		_chips.add_child(chip)
-	for p in state.players:
-		var embers := "%s Embers %d/%d" % [_short_name(p.id), p.embers_delivered, VictoryChecker.EMBERS_TO_WIN]
-		_chips.add_child(_chip(embers, Color("#7a4a1c")))
-	_chips.add_child(_chip("Deck: %d" % state.shared_deck.size(), Color("#333333")))
 
 
 func _refresh_prompt() -> void:
@@ -367,6 +385,38 @@ func _show_character_card() -> void:
 		return
 	_popup_queue.push_front("char:%s|" % id)
 	_next_popup()
+
+
+# Long-press on the board: what everything on that tile means. A piece lists its type,
+# level, Embers, mount and statuses; an object or the center tile explains itself.
+func _explain_tile(pos: Vector2i) -> void:
+	var ids := []
+	var title := ""
+	var c: CharacterInstance = null
+	for each in controller.characters():
+		if not each.defeated and each.is_placed() and each.position == pos \
+				and (c == null or each.is_mounted_rider):
+			c = each
+	if c != null:
+		title = c.data.char_name
+		ids.append("type_" + c.data.type.to_lower())
+		if c.level > 1:
+			ids.append("level")
+		if c.spirit_ember_count > 0:
+			ids.append("spirit_ember")
+		if c.mounted_with_id != "":
+			ids.append("mounted")
+		for se in c.status_effects:
+			var id := Glossary.id_for("status", se.type)
+			if id != "" and not ids.has(id):
+				ids.append(id)
+	var board := controller.board()
+	var obj := board.get_placed_object(pos) if board != null else null
+	if obj != null:
+		ids.append(Glossary.id_for("object", obj.type_id))
+	if board != null and board.get_tile(pos).is_center:
+		ids.append("center")
+	_terms.show_terms(ids, title)
 
 
 # --- Drawn-card popup --------------------------------------------------------------------
@@ -474,9 +524,10 @@ func _dock(card_id: String, from: Vector2, hold: float) -> void:
 	for chip in _chips.get_children():
 		if chip.is_queued_for_deletion():
 			continue
-		if chip.text.contains(card_name) or (target == null and chip.text.begins_with("Deck")):
+		if chip.text.contains(card_name):
 			target = chip
-	var to := target.get_global_rect() if target != null else Rect2(_ap_meter.get_global_rect())
+	# A card that went back or already resolved docks into the deck count.
+	var to := target.get_global_rect() if target != null else Rect2(_deck_label.get_global_rect())
 	HudFx.card_flyer(self, card_id, from - get_global_position(), Rect2(to.position - get_global_position(), to.size), hold)
 
 
@@ -491,6 +542,7 @@ func _build_menu() -> void:
 	var box := VBoxContainer.new()
 	box.custom_minimum_size = Vector2(240, 0)
 	box.add_child(_button("New match", new_match))
+	box.add_child(_button("Glossary", func(): _menu.visible = false; _terms.show_glossary()))
 	box.add_child(_button("Debug view", func(): get_tree().change_scene_to_file(DEBUG_SCENE)))
 	# Phase 4 presentation toggles, saved across restarts.
 	box.add_child(_setting_toggle("Sound", "sound"))
@@ -720,14 +772,21 @@ func _accent(b: Button) -> Button:
 func _chip(text: String, color: Color) -> Button:
 	var b := Button.new()
 	b.text = text
-	b.custom_minimum_size = Vector2(320, 60)
-	b.add_theme_font_size_override("font_size", 24)
-	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	var style := StyleBoxFlat.new()
-	style.bg_color = color
-	style.set_corner_radius_all(12)
-	style.set_content_margin_all(8)
-	b.add_theme_stylebox_override("normal", style)
+	# Four to a row on a 720-wide screen; long names shrink to an ellipsis, and tapping
+	# the chip shows the whole card anyway.
+	b.custom_minimum_size = Vector2(160, 54)
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	b.add_theme_font_size_override("font_size", 22)
+	b.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	b.clip_text = true
+	for state in ["normal", "hover", "pressed", "focus"]:
+		var style := StyleBoxFlat.new()
+		style.bg_color = color.lightened(0.08) if state == "hover" else color
+		style.border_color = color.lightened(0.35)
+		style.set_border_width_all(1 if state != "pressed" else 2)
+		style.set_corner_radius_all(10)
+		style.set_content_margin_all(6)
+		b.add_theme_stylebox_override(state, style)
 	return b
 
 
@@ -755,6 +814,13 @@ func _player_name(player_id: String) -> String:
 	if controller.is_ai(player_id):
 		side = side + ", AI" if side != "" else "AI"
 	return "%s (%s)" % [n, side] if side != "" else n
+
+
+# "Closed City", "Flood Survivors (AI)": the header's short form of _player_name.
+func _team_name(player_id: String) -> String:
+	var player := GameState.match_state.get_player(player_id) if GameState.match_state != null else null
+	var team := str(ContentDB.get_team(player.team_id).get("name", player.culture)) if player != null else _short_name(player_id)
+	return team + " (AI)" if controller.is_ai(player_id) else team
 
 
 # The player's faction color, bright enough for text and banners on the dark page.

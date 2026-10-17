@@ -9,6 +9,7 @@ signal pressed
 
 var _art := TextureRect.new()
 var _placeholder := ColorRect.new()
+var _icon := TypeIcon.new()
 var _title := Label.new()
 var _body := RichTextLabel.new()
 
@@ -43,19 +44,52 @@ func _ready() -> void:
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(text)
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 8)
+	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_icon.custom_minimum_size = Vector2(34, 34)
+	_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.add_child(_icon)
 	_title.add_theme_font_size_override("font_size", 28)
 	_title.add_theme_color_override("font_color", Color("#f3e3b5"))
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_title.clip_text = true
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	text.add_child(_title)
+	title_row.add_child(_title)
+	text.add_child(title_row)
+	# The body clips; a fade over its last lines says there's more on the full card,
+	# rather than cutting a line in half (mobile feedback 2026-10-17).
+	var body_box := Control.new()
+	body_box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body_box.clip_contents = true
+	body_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text.add_child(body_box)
 	_body.bbcode_enabled = true
 	_body.scroll_active = false
-	_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_body.clip_contents = true
-	_body.add_theme_font_size_override("normal_font_size", 26)
-	_body.add_theme_font_size_override("bold_font_size", 26)
+	_body.fit_content = true
+	_body.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_body.add_theme_font_size_override("normal_font_size", 24)
+	_body.add_theme_font_size_override("bold_font_size", 24)
+	_body.add_theme_constant_override("table_h_separation", 18)
 	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	text.add_child(_body)
+	body_box.add_child(_body)
+	var fade := TextureRect.new()
+	var gradient := Gradient.new()
+	gradient.set_color(0, Color(0.086, 0.102, 0.098, 0.0))
+	gradient.set_color(1, Color(0.086, 0.102, 0.098, 1.0))
+	var fade_texture := GradientTexture2D.new()
+	fade_texture.gradient = gradient
+	fade_texture.fill_from = Vector2(0, 0)
+	fade_texture.fill_to = Vector2(0, 1)
+	fade.texture = fade_texture
+	fade.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	fade.stretch_mode = TextureRect.STRETCH_SCALE
+	fade.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	fade.offset_top = -34
+	fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	body_box.add_child(fade)
 	var hint := Label.new()
 	hint.text = "Tap for the full card"
 	hint.add_theme_font_size_override("font_size", 24)
@@ -66,8 +100,8 @@ func _ready() -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	var tapped: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
-			or (event is InputEventScreenTouch and event.pressed)
+	# Mouse only: touch is emulated as a click, so handling InputEventScreenTouch too fires twice.
+	var tapped: bool = event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT
 	if tapped:
 		pressed.emit()
 		accept_event()
@@ -81,7 +115,13 @@ func show_character(data: CharacterData, instance: CharacterInstance = null) -> 
 	_placeholder.color = CardView.FACTION_COLORS.get(data.culture, Color.DIM_GRAY).darkened(0.35)
 	var level := instance.level if instance != null else 1
 	_title.text = "%s  L%d" % [data.char_name, level]
-	var lines: Array[String] = [CardView.stat_line(data, instance)]
+	_icon.type = data.type
+	_icon.queue_redraw()
+	var s := CardView.stats(data, instance)
+	var lines: Array[String] = ["[b][table=2][cell]HP %s[/cell][cell]ATK %d[/cell][cell]MOVE %d[/cell][cell]RANGE %d[/cell][/table][/b]"
+			% [s.hp, s.atk, s.move, s.range]]
+	if s.defeated:
+		lines.append("[color=#e06666]DEFEATED[/color]")
 	if instance != null:
 		lines.append(CardView.status_text(instance))
 	# The upgrades build on the Level 1 ability, so show it plus every upgrade reached.

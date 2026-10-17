@@ -8,6 +8,7 @@ extends Control
 # GameController.highlights() and the model; nothing here decides legality.
 
 signal tile_tapped(pos: Vector2i)
+signal tile_long_pressed(pos: Vector2i)   # or right-clicked: show that tile's terms
 
 # --- Material -------------------------------------------------------------------------
 const BACKGROUND := Color("#0b0f0e")
@@ -40,10 +41,6 @@ const ROLE_COLORS := {
 	"Leader": Color("#ded6ba"), "Hero": Color("#d7b968"), "Specialist": Color("#98a6b2"),
 	"Mystic": Color("#a5a1c8"),
 }
-const ROLE_MARKS := {
-	"Common": "C", "Mount": "M", "Warrior": "W", "Leader": "L", "Hero": "H",
-	"Specialist": "S", "Mystic": "Y",
-}
 # --- State ----------------------------------------------------------------------------
 const MOVE := Color("#6cc08a")
 const ATTACK := Color("#d65a5a")
@@ -64,6 +61,12 @@ const MARGIN := 22.0
 const PULSE_PERIOD := 3.2
 const MAX_ANIMATION_STEP := 0.05   # seconds of animation per frame, at most
 const PULSE_FPS := 24.0       # also paces the Phase 4 ambience
+# --- Touch (mobile feedback 2026-10-17) -------------------------------------------------
+const LONG_PRESS_MSEC := 450
+const DRAG_SLOP := 14.0       # how far a press may wander and still be a tap
+const MAX_ZOOM := 2.5
+const WHEEL_STEP := 1.15
+const DOUBLE_TAP_MSEC := 300
 
 const OBJECT_ART := {
 	"barricade": "res://assets/objects/barricade.png",
@@ -97,6 +100,21 @@ var _time := 0.0           # drives the center pulse only
 var _since_redraw := 0.0
 static var _silhouettes: Dictionary = {}   # texture RID -> opaque Rect2 in texture pixels
 
+# Pinch zoom and pan. Zoom scales tile_px() and the pan shifts _origin(), so drawing, hit
+# testing and TestBridge's tile positions all follow without anything else knowing.
+var zoom := 1.0
+var _pan := Vector2.ZERO
+var _touches: Dictionary = {}      # touch index -> position
+var _pinch_from_dist := 0.0
+var _pinch_from_zoom := 1.0
+var _pinch_mid := Vector2.ZERO
+# A press becomes a tap on release unless it turned into a pan, pinch or long press.
+var _pressing := false
+var _press_at := Vector2.ZERO
+var _press_msec := 0
+var _gesture := false
+var _last_tap_msec := -DOUBLE_TAP_MSEC
+
 
 static func status_name(se: StatusEffect) -> String:
 	var label: String = STATUS.get(se.type, ["", se.type.capitalize()])[1]
@@ -105,7 +123,8 @@ static func status_name(se: StatusEffect) -> String:
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	resized.connect(queue_redraw)
+	clip_contents = true   # a zoomed board stays inside its area
+	resized.connect(func(): _clamp_pan(); queue_redraw())
 	fx.connect_signals()
 	fx.attack_art = attack_art_for
 	FigureCatalog.preload_attack_frames()
@@ -118,6 +137,9 @@ func _process(delta: float) -> void:
 		return
 	_time += delta
 	_since_redraw += delta
+	if _pressing and not _gesture and Time.get_ticks_msec() - _press_msec >= LONG_PRESS_MSEC:
+		_gesture = true
+		_long_press(_press_at)
 	var animating := fx.active()
 	# A slow frame (a stall, a backgrounded tab) can't skip past an animation.
 	fx.advance(minf(delta, MAX_ANIMATION_STEP))
@@ -126,14 +148,119 @@ func _process(delta: float) -> void:
 		queue_redraw()
 
 
+# Taps, drags and long presses come in as mouse events (Godot emulates the mouse from the
+# first finger), so desktop and phone share one path. Raw touch events only count fingers
+# for the pinch. A tap fires on release, so a pan or long press never also taps.
 func _gui_input(event: InputEvent) -> void:
-	var pressed: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) \
-			or (event is InputEventScreenTouch and event.pressed)
-	if pressed:
-		var pos := tile_at(event.position)
-		if pos.x >= 0:
-			tile_tapped.emit(pos)
-			accept_event()
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if event.index == 0:
+				_touches.clear()   # a fresh first finger: drop any touch whose release was lost
+			_touches[event.index] = event.position
+		else:
+			_touches.erase(event.index)
+		if _touches.size() >= 2:
+			_gesture = true
+			_begin_pinch()
+		return
+	if event is InputEventScreenDrag:
+		_touches[event.index] = event.position
+		if _touches.size() >= 2:
+			_update_pinch()
+		return
+	if event is InputEventMouseButton:
+		_mouse_button(event)
+		accept_event()
+	elif event is InputEventMouseMotion and _pressing and _touches.size() < 2:
+		if not _gesture and event.position.distance_to(_press_at) > DRAG_SLOP:
+			_gesture = true
+		if _gesture and zoom > 1.0:
+			_pan += event.relative
+			_clamp_pan()
+			queue_redraw()
+		accept_event()
+
+
+func _mouse_button(event: InputEventMouseButton) -> void:
+	if not event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			# The press position: a tap ends within DRAG_SLOP of it anyway, and a touch
+			# release can report a different spot than the finger lifted from.
+			if _pressing and not _gesture:
+				_tap(_press_at)
+			_pressing = false
+		return
+	match event.button_index:
+		MOUSE_BUTTON_WHEEL_UP:
+			set_zoom(zoom * WHEEL_STEP, event.position)
+		MOUSE_BUTTON_WHEEL_DOWN:
+			set_zoom(zoom / WHEEL_STEP, event.position)
+		MOUSE_BUTTON_RIGHT:
+			_long_press(event.position)
+		MOUSE_BUTTON_LEFT:
+			_pressing = true
+			_gesture = false
+			_press_at = event.position
+			_press_msec = Time.get_ticks_msec()
+
+
+func _tap(at: Vector2) -> void:
+	var now := Time.get_ticks_msec()
+	if zoom > 1.0 and (reset_zoom_rect().has_point(at) or now - _last_tap_msec < DOUBLE_TAP_MSEC):
+		_last_tap_msec = -DOUBLE_TAP_MSEC
+		set_zoom(1.0, size / 2.0)
+		return
+	_last_tap_msec = now
+	var pos := tile_at(at)
+	if pos.x >= 0:
+		tile_tapped.emit(pos)
+
+
+func _long_press(at: Vector2) -> void:
+	var pos := tile_at(at)
+	if pos.x >= 0:
+		tile_long_pressed.emit(pos)
+
+
+func _begin_pinch() -> void:
+	var points: Array = _touches.values()
+	_pinch_from_dist = maxf(1.0, points[0].distance_to(points[1]))
+	_pinch_from_zoom = zoom
+	_pinch_mid = (points[0] + points[1]) / 2.0
+
+
+func _update_pinch() -> void:
+	var points: Array = _touches.values()
+	var mid: Vector2 = (points[0] + points[1]) / 2.0
+	set_zoom(_pinch_from_zoom * points[0].distance_to(points[1]) / _pinch_from_dist, mid)
+	_pan += mid - _pinch_mid
+	_pinch_mid = mid
+	_clamp_pan()
+
+
+# Zooms to `new_zoom` (1 to MAX_ZOOM) keeping the board point under `focus` in place.
+func set_zoom(new_zoom: float, focus: Vector2) -> void:
+	new_zoom = clampf(new_zoom, 1.0, MAX_ZOOM)
+	var keep := focus - (focus - _origin()) * (new_zoom / zoom)
+	zoom = new_zoom
+	_pan += keep - _origin()
+	_clamp_pan()
+	queue_redraw()
+
+
+# The board can't be dragged further than its own edge plus the frame margin.
+func _clamp_pan() -> void:
+	if zoom <= 1.0:
+		_pan = Vector2.ZERO
+		return
+	var board_px := tile_px() * BoardModel.BOARD_SIZE
+	var limit := Vector2(maxf(0.0, (board_px - size.x) / 2.0 + MARGIN), maxf(0.0, (board_px - size.y) / 2.0 + MARGIN))
+	_pan = _pan.clamp(-limit, limit)
+
+
+# The "1:1" chip that undoes the zoom, top right; drawn only while zoomed.
+func reset_zoom_rect() -> Rect2:
+	return Rect2(Vector2(size.x - 104.0, 6.0), Vector2(98.0, 50.0))
 
 
 # --- Drawing ------------------------------------------------------------------------------
@@ -204,6 +331,11 @@ func _draw() -> void:
 		_draw_ghost(g)
 	for e in fx.effects:
 		_draw_effect(font, e)
+	if zoom > 1.0:
+		var chip := reset_zoom_rect()
+		draw_rect(chip, Color(0.03, 0.035, 0.035, 0.85))
+		draw_rect(chip, Color("#c9a45c"), false, 2.0)
+		_text(font, "1:1", chip, 26.0, Color("#f3e3b5"))
 
 
 # Back to front by screen row (Player 2's side at the top is "back"), then left to right,
@@ -750,26 +882,24 @@ func _draw_labels(font: Font, c: CharacterInstance, rect: Rect2) -> void:
 	draw_rect(pill, Color(0.02, 0.025, 0.024, 0.85))
 	draw_rect(pill, Color(faction, 0.9), false, 1.5)
 	_text(font, "%s %d/%d" % [DebugPanel.abbreviation(c.data), c.current_hp, hp_max], pill, px * 0.115, Color("#f1ede3"))
-	# Role (top-left), level (top-right), Embers (right, below level), statuses above the pill.
+	# Type symbol (top-left), level (top-right), Embers (right, below level), statuses down
+	# the left edge, beside the figure rather than across it. Long-press explains each.
 	var role: Color = ROLE_COLORS.get(c.data.type, Color("#b7b8b1"))
-	_badge(font, rect.position + Vector2(px * 0.13, px * 0.13), ROLE_MARKS.get(c.data.type, "?"), role, px)
+	TypeIcon.draw_badge(self, rect.position + Vector2(px * 0.14, px * 0.14), px * 0.14, c.data.type, role)
 	if c.level > 1:
-		_badge(font, rect.position + Vector2(px * 0.87, px * 0.13), "L%d" % c.level, Color("#c9a45c"), px)
+		_badge(font, rect.position + Vector2(px * 0.87, px * 0.13), "I".repeat(c.level), Color("#c9a45c"), px)
 	if c.spirit_ember_count > 0:
-		var ember := "E" if c.spirit_ember_count == 1 else "E%d" % c.spirit_ember_count
-		_badge(font, rect.position + Vector2(px * 0.87, px * 0.38), ember, EMBER, px)
-	var shorts: Array[String] = []
+		_draw_ember(font, rect.position + Vector2(px * 0.86, px * 0.42), c.spirit_ember_count, px)
+	var at := rect.position + Vector2(px * 0.12, px * 0.36)
+	var drawn := {}
 	for se in c.status_effects:
-		var short: String = STATUS.get(se.type, [se.type.left(2).capitalize()])[0]
-		if se.type == "shield":
-			short += str(se.value)
-		if not shorts.has(short):
-			shorts.append(short)
-	if not shorts.is_empty():
-		# Statuses sit at the left edge, beside the figure rather than across it.
-		var strip := Rect2(rect.position + Vector2(px * 0.02, px * 0.62), Vector2(px * 0.24, px * 0.12))
-		draw_rect(strip, Color(0, 0, 0, 0.72))
-		_text(font, " ".join(shorts), strip, px * 0.10, Color("#9fe0f5"))
+		if drawn.has(se.type):
+			continue
+		drawn[se.type] = true
+		_draw_status(font, at, se, px)
+		at.y += px * 0.2
+		if at.y > rect.position.y + px * 0.8:
+			break
 
 
 func outfit_id_for(c: CharacterInstance) -> String:
@@ -795,6 +925,55 @@ func _mount_ap(c: CharacterInstance) -> int:
 	return mount_char.character_ap_remaining if mount_char != null else 0
 
 
+# A carried Spirit Ember: a glowing flame, with the count in a dot when it's more than one.
+func _draw_ember(font: Font, at: Vector2, count: int, px: float) -> void:
+	var r := px * 0.11
+	draw_circle(at, r * 1.55, Color(EMBER, 0.18 + 0.22 * pulse(_time * 2.0)))
+	draw_circle(at, r * 1.05, Color(0.06, 0.03, 0.02, 0.88))
+	draw_colored_polygon(_flame(at, r * 0.95), EMBER)
+	draw_colored_polygon(_flame(at + Vector2(0, r * 0.28), r * 0.5), Color("#ffe3a3"))
+	if count > 1:
+		var dot := at + Vector2(r * 0.9, r * 0.9)
+		draw_circle(dot, r * 0.62, Color("#1a0f08"))
+		draw_arc(dot, r * 0.62, 0.0, TAU, 20, EMBER, maxf(1.0, r * 0.12), true)
+		_text(font, str(count), Rect2(dot - Vector2(r * 0.6, r * 0.6), Vector2(r * 1.2, r * 1.2)), r * 0.95, Color.WHITE)
+
+
+# A teardrop pointing up: round at the bottom, a tip at the top.
+static func _flame(at: Vector2, r: float) -> PackedVector2Array:
+	var pts := PackedVector2Array([at + Vector2(0, -r)])
+	var base := at + Vector2(0, r * 0.32)
+	for i in 13:
+		pts.append(base + Vector2.from_angle(deg_to_rad(-25.0 + i * 230.0 / 12.0)) * r * 0.62)
+	return pts
+
+
+# One status as a small icon: Shield (with its value), Marked, Memory; others as a short tag.
+func _draw_status(font: Font, at: Vector2, se: StatusEffect, px: float) -> void:
+	var r := px * 0.085
+	draw_circle(at, r * 1.15, Color(0.02, 0.025, 0.024, 0.85))
+	match se.type:
+		"shield":
+			var s := r * 0.95
+			var shape := PackedVector2Array([at + Vector2(-s * 0.8, -s * 0.75), at + Vector2(s * 0.8, -s * 0.75),
+					at + Vector2(s * 0.8, s * 0.05), at + Vector2(0, s * 0.95), at + Vector2(-s * 0.8, s * 0.05)])
+			draw_colored_polygon(shape, Color("#5aa9d6"))
+			_text(font, str(se.value), Rect2(at - Vector2(r, r * 0.95), Vector2(r * 2, r * 1.7)), r * 1.25, Color("#0b1a24"))
+		"marked":
+			var red := Color("#ff6b5e")
+			var w := maxf(1.2, r * 0.18)
+			draw_arc(at, r * 0.62, 0.0, TAU, 20, red, w, true)
+			for dir in [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]:
+				draw_line(at + dir * r * 0.3, at + dir * r * 1.0, red, w, true)
+		"memory":
+			var drop := _flame(at + Vector2(0, r * 0.1), r * 0.95)
+			draw_colored_polygon(drop, Color("#6fd3dc"))
+			draw_circle(at + Vector2(0, r * 0.3), r * 0.22, Color("#0b2226"))
+		_:
+			_text(font, STATUS.get(se.type, [se.type.left(2).capitalize()])[0],
+					Rect2(at - Vector2(r * 1.1, r * 1.1), Vector2(r * 2.2, r * 2.2)), r * 1.1, Color("#9fe0f5"))
+
+
 func _badge(font: Font, at: Vector2, text: String, color: Color, px: float) -> void:
 	draw_circle(at, px * 0.105, Color(0, 0, 0, 0.55))
 	draw_circle(at, px * 0.09, color)
@@ -813,12 +992,12 @@ func _text(font: Font, s: String, rect: Rect2, font_size: float, color: Color) -
 # --- Geometry (hit testing unchanged) --------------------------------------------------------
 
 func tile_px() -> float:
-	return (minf(size.x, size.y) - MARGIN * 2.0) / BoardModel.BOARD_SIZE
+	return (minf(size.x, size.y) - MARGIN * 2.0) / BoardModel.BOARD_SIZE * zoom
 
 
 func _origin() -> Vector2:
 	var board_px := tile_px() * BoardModel.BOARD_SIZE
-	return Vector2((size.x - board_px) / 2.0, (size.y - board_px) / 2.0)
+	return Vector2((size.x - board_px) / 2.0, (size.y - board_px) / 2.0) + _pan
 
 
 # Player 1's side (row 0) is drawn at the bottom.

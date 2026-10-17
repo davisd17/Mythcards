@@ -18,6 +18,9 @@ $aiDst = Join-Path $repo 'game\data\ai'
 New-Item -ItemType Directory -Force $aiDst | Out-Null
 Copy-Item (Join-Path $repo 'data\ai\*.json') $aiDst
 
+# Game terms for tap-to-define and the glossary (data/glossary.json).
+Copy-Item (Join-Path $repo 'data\glossary.json') (Join-Path $repo 'game\data\glossary.json')
+
 $count = (Get-ChildItem $dst -Recurse -Filter *.json).Count
 Write-Host "Synced $count card data files into game/data/cards"
 

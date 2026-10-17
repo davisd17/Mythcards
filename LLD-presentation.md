@@ -296,6 +296,14 @@ Built as HLD step 16 after the first hands-on playtest. **Designer ruling: the g
 - **The AI's draws don't stop play.** A card the AI draws shows as a notice under the top bar ("… drew X. Tap to view.") that disappears after 4 s; tapping it opens the card. Your own draws still pop up.
 - **Ember score** chips ("P1 Embers 2/4") sit with the relic and event chips. The game-over panel names the Ember win.
 
+**Mobile feedback (2026-10-17, Chrome on Android over local Wi-Fi).** The designer picked each option below from a short list.
+- **Taps fire once, on release.** Godot emulates the mouse from touch, so handling `InputEventScreenTouch` as well made one tap select and then deselect. The board and strip now read mouse events only. A board tap fires on release, at the press position, unless the press became a pan, a pinch or a long press.
+- **Game terms are defined.** `data/glossary.json` (synced to `game/data/`) holds terms with aliases. `Glossary.link` underlines each term once per card in full-card and relic/event text, and tapping one opens `TermPopup`. Long-pressing (or right-clicking) a board tile lists everything there: the character's type, level, Embers, mount and statuses, any placed object, and the center tile. Menu > Glossary lists every term. Definitions come from the PRD and the logged rulings. `[NEED: designer review of the glossary wording]`
+- **Type symbols, not letters** (the "Elemental set"): Leader circumpunct, Hero eight-point star, Warrior fire triangle, Mount spiral, Specialist square in a circle, Mystic vesica piscis, Common plain ring (`TypeIcon`). They're used on the board, the strip, the full card and the glossary. Embers are a glowing flame with a count. Shield, Marked and Memory are drawn icons; the rarer statuses keep short text. Levels show as II / III.
+- **Pinch zoom** up to 2.5×, centered on the fingers, plus the mouse wheel on desktop. While zoomed, a one-finger drag pans and a tap still acts. The "1:1" chip or a double-tap resets. Zoom scales `tile_px()` and the pan shifts `_origin()`, so hit-testing and `mythcards_ui()` follow automatically.
+- **Layout tidy:** the deck count moved into the header, and relic and Ember chips share one row (events wrap to a second). The full card's art is 380 tall, so L1–L3 fit without scrolling. The strip shows a type icon, a 2×2 stat grid and its statuses, and fades out at the bottom instead of cutting a line in half.
+- **Wi-Fi build size:** figure art imports as lossy WebP (85%), taking the .pck from 34 MB to 13 MB. `tools/serve_web_lan.mjs` serves the engine Brotli-compressed (38 MB to 8 MB), with ETag revalidation so unchanged files cost a 304.
+
 ## 10. Traceability
 
 | LLD Section | HLD Section | BRD/PRD IDs |

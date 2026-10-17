@@ -9,8 +9,12 @@ const ART_DIR := "res://data/card_art/"
 const FACTION_COLORS := {"Russian-inspired": Color("#8c2f39"), "Russian-Inspired": Color("#8c2f39"),
 		"Atlantean": Color("#1f6f8b")}
 
-const FULL_ART_HEIGHT := 600.0   # whole 2:3 art at 400 wide; with the text, fits a 1280-tall screen
+# Whole 2:3 art, small enough that a long card's L1-L3 text still fits a phone screen
+# under it without scrolling (mobile feedback 2026-10-17: L3 was cut off at 600).
+const FULL_ART_HEIGHT := 380.0
 const FULL_CARD_WIDTH := 600.0
+
+signal term_pressed(id: String)   # an underlined game term was tapped (Glossary)
 
 static var _art_cache: Dictionary = {}
 
@@ -20,6 +24,7 @@ var _art := TextureRect.new()
 var _placeholder := PanelContainer.new()
 var _placeholder_label := Label.new()
 var _title := Label.new()
+var _type_icon := TypeIcon.new()
 var _subtitle := Label.new()
 var _body := RichTextLabel.new()
 
@@ -76,14 +81,25 @@ func _ready() -> void:
 	_title.add_theme_color_override("font_color", Color("#f3e3b5"))
 	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(_title)
+	var subtitle_row := HBoxContainer.new()
+	subtitle_row.add_theme_constant_override("separation", 10)
+	_type_icon.custom_minimum_size = Vector2(40, 40)
+	_type_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	subtitle_row.add_child(_type_icon)
 	_subtitle.add_theme_font_size_override("font_size", 26 if compact else 28)
 	_subtitle.add_theme_color_override("font_color", Color("#b8ad92"))
 	_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(_subtitle)
+	_subtitle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	subtitle_row.add_child(_subtitle)
+	box.add_child(subtitle_row)
 
 	_body.bbcode_enabled = true
 	_body.fit_content = true
 	_body.scroll_active = false
+	_body.mouse_filter = Control.MOUSE_FILTER_PASS   # drags still scroll the popup
+	_body.meta_underlined = true
+	_body.add_theme_constant_override("paragraph_separation", 10)
+	_body.meta_clicked.connect(func(meta): term_pressed.emit(str(meta)))
 	_body.add_theme_font_size_override("normal_font_size", 28)
 	_body.add_theme_font_size_override("bold_font_size", 28)
 	box.add_child(_body)
@@ -94,16 +110,20 @@ func show_character(data: CharacterData, instance: CharacterInstance = null) -> 
 	_title.text = data.char_name
 	var level := instance.level if instance != null else 1
 	_subtitle.text = "%s · %s · Level %d" % [data.type, data.culture, level]
+	_type_icon.type = data.type
+	_type_icon.visible = true
+	_type_icon.queue_redraw()
 	var lines: Array[String] = []
 	lines.append(stat_line(data, instance))
 	if instance != null:
 		var extras := status_text(instance)
 		if extras != "":
 			lines.append(extras)
+	var linked := {}   # each term is underlined once per card
 	for i in 3:
-		var text: String = [data.l1, data.l2, data.l3][i]
+		var text := Glossary.link([data.l1, data.l2, data.l3][i], linked)
 		var marker := "[b][color=#f3e3b5]L%d (now)[/color][/b]" % (i + 1) if i + 1 == level else "[color=#8a826f]L%d[/color]" % (i + 1)
-		var color := "#e8e2d2" if i + 1 <= level else "#8a826f"
+		var color := "#e8e2d2" if i + 1 <= level else "#a39a85"
 		lines.append("%s [color=%s]%s[/color]" % [marker, color, text])
 	_body.text = "\n".join(lines)
 
@@ -118,7 +138,8 @@ func show_relic_event(card_id: String) -> void:
 	_set_art(card_id, card.card_name, card.kind, FACTION_COLORS.get(card.faction, Color.DIM_GRAY))
 	_title.text = card.card_name
 	_subtitle.text = "%s · %s · %s" % [card.kind, card.duration, card.sub_area]
-	_body.text = card.effect
+	_type_icon.visible = false
+	_body.text = Glossary.link(card.effect)
 
 
 func _set_art(card_id: String, card_name: String, kind: String, color: Color) -> void:
@@ -134,17 +155,25 @@ func _set_art(card_id: String, card_name: String, kind: String, color: Color) ->
 
 
 static func stat_line(data: CharacterData, instance: CharacterInstance) -> String:
-	if instance == null or GameState.match_state == null:
-		return "[b]HP %d · ATK %d · MOVE %d · RANGE %d[/b]" % [data.hp, data.atk, data.move, data.range]
-	var sys: AbilitySystem = RulesEngine.systems().ability
-	var hp_max := sys.get_effective_max_hp(instance)
-	var atk := instance.get_effective_atk() + sys.get_conditional_atk_bonus(instance)
-	var rng := instance.get_effective_range("attack", sys.get_conditional_range_bonus(instance, "attack"))
-	var line := "[b]HP %d/%d · ATK %d · MOVE %d · RANGE %d[/b]" % [instance.current_hp, hp_max, atk,
-			instance.get_effective_move(), rng]
-	if instance.defeated:
+	var s := stats(data, instance)
+	var line := "[b]HP %s · ATK %d · MOVE %d · RANGE %d[/b]" % [s.hp, s.atk, s.move, s.range]
+	if s.defeated:
 		line += "  [color=#e06666]DEFEATED[/color]"
 	return line
+
+
+# Live stats when there's a match, printed ones otherwise. hp is "3" or "2/3".
+static func stats(data: CharacterData, instance: CharacterInstance) -> Dictionary:
+	if instance == null or GameState.match_state == null:
+		return {"hp": str(data.hp), "atk": data.atk, "move": data.move, "range": data.range, "defeated": false}
+	var sys: AbilitySystem = RulesEngine.systems().ability
+	return {
+		"hp": "%d/%d" % [instance.current_hp, sys.get_effective_max_hp(instance)],
+		"atk": instance.get_effective_atk() + sys.get_conditional_atk_bonus(instance),
+		"move": instance.get_effective_move(),
+		"range": instance.get_effective_range("attack", sys.get_conditional_range_bonus(instance, "attack")),
+		"defeated": instance.defeated,
+	}
 
 
 static func status_text(instance: CharacterInstance) -> String:
