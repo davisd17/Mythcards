@@ -1,10 +1,21 @@
 extends GutTest
 
 const Fixture := preload("res://tests/helpers/match_fixture.gd")
+var _saved_sound := true
+
+
+func before_each() -> void:
+	_saved_sound = Settings.sound
+	Settings.sound = true
+	MusicManager.stop()
+	MusicManager.apply_settings()
 
 
 func after_each() -> void:
 	Fixture.teardown()
+	MusicManager.stop()
+	Settings.sound = _saved_sound
+	MusicManager.apply_settings()
 
 
 func test_setup_starts_approved_closed_city_theme_with_full_loop() -> void:
@@ -78,3 +89,64 @@ func test_missing_starting_leader_is_silent() -> void:
 	GameState.start_match(state)
 	assert_eq(MusicManager.current_sub_area, "")
 	assert_false((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).playing)
+
+
+func test_menu_loop_carries_across_team_selection() -> void:
+	MusicManager.play_menu()
+	var menu := MusicManager.get_node("MenuAmbience") as AudioStreamPlayer
+	assert_true(menu.playing)
+	var stream := menu.stream as AudioStreamWAV
+	assert_not_null(stream)
+	if stream == null:
+		return
+	assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD)
+	assert_eq(stream.loop_end, 2048000)
+	assert_almost_eq(stream.get_length(), 64.0, .001)
+	# Selecting a mode calls begin_setup/reset again; it must keep the ambient loop.
+	GameState.reset()
+	MusicManager.play_menu()
+	assert_same(menu.stream, stream)
+	MusicManager.close_menu()
+	assert_true(menu.playing, "Closing setup's options must keep the ambience")
+
+
+func test_match_start_fades_out_menu_ambience() -> void:
+	MusicManager.play_menu()
+	autofree(Fixture.start_teams_match())
+	var menu := MusicManager.get_node("MenuAmbience") as AudioStreamPlayer
+	assert_true((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).playing)
+	await wait_seconds(1.2)
+	assert_false(menu.playing, "No menu layer remains under the match after its fade")
+
+
+func test_in_match_menu_pauses_and_resumes_same_match_stream() -> void:
+	autofree(Fixture.start_teams_match())
+	var player := MusicManager.get_node("MatchMusic") as AudioStreamPlayer
+	var stream := player.stream
+	MusicManager.play_menu()
+	assert_true(player.stream_paused)
+	assert_true((MusicManager.get_node("MenuAmbience") as AudioStreamPlayer).playing)
+	MusicManager.close_menu()
+	assert_false(player.stream_paused)
+	assert_same(player.stream, stream)
+	# Reopening during the fade must cancel its delayed stop.
+	MusicManager.play_menu()
+	await wait_seconds(1.2)
+	assert_true((MusicManager.get_node("MenuAmbience") as AudioStreamPlayer).playing)
+	EventBus.match_ended.emit("p1", "test")
+	assert_false((MusicManager.get_node("MenuAmbience") as AudioStreamPlayer).playing)
+
+
+func test_sound_toggle_mutes_both_music_players() -> void:
+	MusicManager.play_menu()
+	Settings.sound = false
+	MusicManager.apply_settings()
+	var bus := AudioServer.get_bus_index(MusicManager.MUSIC_BUS)
+	assert_true(AudioServer.is_bus_mute(bus))
+	autofree(Fixture.start_teams_match())
+	assert_true(AudioServer.is_bus_mute(bus), "Starting a match must respect Sound: Off")
+	assert_eq((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).bus, MusicManager.MUSIC_BUS)
+	assert_eq((MusicManager.get_node("MenuAmbience") as AudioStreamPlayer).bus, MusicManager.MUSIC_BUS)
+	Settings.sound = true
+	MusicManager.apply_settings()
+	assert_false(AudioServer.is_bus_mute(bus))

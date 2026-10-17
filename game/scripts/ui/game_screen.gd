@@ -144,6 +144,7 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	MusicManager.stop()
 	# The SetupFlow node lives outside the tree until the match starts.
 	if controller.setup != null:
 		controller.setup.free()
@@ -189,6 +190,7 @@ func _start(ai_side: String) -> void:
 	_log.visible = false
 	_chooser.visible = false
 	controller.begin_setup("", "", ai_side)
+	MusicManager.play_menu()
 	_refresh()
 
 
@@ -508,6 +510,7 @@ func _setting_toggle(label: String, field: String) -> Button:
 		Settings.toggle(field)
 		relabel.call()
 		_sfx.apply_settings()
+		MusicManager.apply_settings()
 		_board.queue_redraw())
 	return b
 
@@ -618,6 +621,10 @@ func _build_chooser() -> void:
 
 func _toggle_menu() -> void:
 	_menu.visible = not _menu.visible
+	if _menu.visible:
+		MusicManager.play_menu()
+	else:
+		MusicManager.close_menu()
 
 
 func _build_game_over() -> void:

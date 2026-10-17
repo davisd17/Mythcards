@@ -36,10 +36,24 @@ func _deploy_both() -> void:
 
 func test_starts_in_setup_with_a_tray() -> void:
 	assert_true(screen.controller.in_setup())
+	assert_true((MusicManager.get_node("MenuAmbience") as AudioStreamPlayer).playing)
 	await wait_process_frames(2)
 	var labels := _buttons(screen._side).map(func(b): return b.text)
 	assert_true(labels.has("Dr. Mikhail Orlov"), str(labels))
 	assert_true(labels.has("Auto-place the rest"))
+
+
+func test_chooser_to_team_setup_keeps_ambience_and_menu_controls_music() -> void:
+	var menu := MusicManager.get_node("MenuAmbience") as AudioStreamPlayer
+	var stream := menu.stream
+	screen._start("p2")
+	assert_true(menu.playing)
+	assert_same(menu.stream, stream)
+	_deploy_both()
+	screen._toggle_menu()
+	assert_true((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).stream_paused)
+	screen._toggle_menu()
+	assert_false((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).stream_paused)
 
 
 func test_deploying_starts_the_match_and_shows_the_drawn_card() -> void:
