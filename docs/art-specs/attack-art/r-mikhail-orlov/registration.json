@@ -4,7 +4,7 @@
     512,
     768
   ],
-  "shared_scale": 0.4216315307057745,
+  "shared_scale": 0.47291361639824303,
   "foot_anchor": [
     256,
     756
@@ -20,15 +20,20 @@
         1472
       ],
       "offset": [
-        28,
-        135
+        0,
+        61
       ],
       "bounds": [
-        119,
-        179,
-        384,
+        101,
+        110,
+        399,
         757
-      ]
+      ],
+      "source_scale": 0.47291361639824303,
+      "body_landmarks": {
+        "crown_y": 106,
+        "sole_y": 1471
+      }
     },
     {
       "pose": "raise",
@@ -40,15 +45,20 @@
         1494
       ],
       "offset": [
-        33,
-        126
+        -8,
+        12
       ],
       "bounds": [
-        124,
-        208,
-        439,
+        100,
+        109,
+        471,
         757
-      ]
+      ],
+      "source_scale": 0.49807247494217427,
+      "body_landmarks": {
+        "crown_y": 197,
+        "sole_y": 1493
+      }
     },
     {
       "pose": "brace",
@@ -60,15 +70,20 @@
         1462
       ],
       "offset": [
-        33,
-        140
+        -9,
+        23
       ],
       "bounds": [
-        115,
-        212,
-        393,
+        89,
+        109,
+        419,
         757
-      ]
+      ],
+      "source_scale": 0.5011636927851048,
+      "body_landmarks": {
+        "crown_y": 173,
+        "sole_y": 1461
+      }
     },
     {
       "pose": "fire",
@@ -76,19 +91,24 @@
       "ms": 60,
       "impact": true,
       "source_anchor": [
-        444.5,
-        1477
+        475.5,
+        1431
       ],
       "offset": [
-        69,
-        133
+        39,
+        104
       ],
       "bounds": [
-        112,
-        213,
-        486,
+        81,
+        110,
+        413,
         757
-      ]
+      ],
+      "source_scale": 0.45589273112208895,
+      "body_landmarks": {
+        "crown_y": 14,
+        "sole_y": 1430
+      }
     },
     {
       "pose": "recoil",
@@ -100,15 +120,20 @@
         1455
       ],
       "offset": [
-        31,
-        142
+        -13,
+        24
       ],
       "bounds": [
-        127,
-        214,
-        376,
+        102,
+        110,
+        399,
         757
-      ]
+      ],
+      "source_scale": 0.5035074045206547,
+      "body_landmarks": {
+        "crown_y": 173,
+        "sole_y": 1455
+      }
     },
     {
       "pose": "recover",
@@ -120,15 +145,26 @@
         1502
       ],
       "offset": [
-        29,
-        123
+        -12,
+        10
       ],
       "bounds": [
-        127,
-        207,
-        376,
+        104,
+        109,
+        396,
         757
-      ]
+      ],
+      "source_scale": 0.4965411222136818,
+      "body_landmarks": {
+        "crown_y": 201,
+        "sole_y": 1501
+      }
     }
-  ]
+  ],
+  "body_height": 646,
+  "idle_landmarks": {
+    "crown_y": 106,
+    "sole_y": 751
+  },
+  "scale_policy": "anatomical-source-normalization"
 }

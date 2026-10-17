@@ -3,14 +3,28 @@
 # cross-origin-isolation headers a threaded build would require. The current
 # preset is thread-free, so they're only there so a later threaded build works too.
 #
-# Usage: tools/serve_web.ps1 [-Port 8060] [-Root build/web]   (Ctrl+C to stop)
+# Usage: tools/serve_web.ps1 [-Port 8060] [-Root build/web] [-LanAddress <local-IP>] [-Https]
 param(
     [int]$Port = 8060,
-    [string]$Root = (Join-Path (Split-Path $PSScriptRoot -Parent) 'build\web')
+    [string]$Root = (Join-Path (Split-Path $PSScriptRoot -Parent) 'build\web'),
+    [string]$LanAddress = '',
+    [switch]$Https
 )
 $ErrorActionPreference = 'Stop'
 
 $Root = (Resolve-Path $Root).Path
+if ($LanAddress) {
+    $tlsArgs = @()
+    if ($Https) {
+        $buildDir = Join-Path (Split-Path $PSScriptRoot -Parent) 'build'
+        $tlsArgs = @((Join-Path $buildDir 'wifi-cert.pem'), (Join-Path $buildDir 'wifi-key.pem'))
+        foreach ($tlsFile in $tlsArgs) {
+            if (-not (Test-Path -LiteralPath $tlsFile)) { throw "Missing local HTTPS certificate file: $tlsFile" }
+        }
+    }
+    & node (Join-Path $PSScriptRoot 'serve_web_lan.mjs') $LanAddress $Port $Root @tlsArgs
+    exit $LASTEXITCODE
+}
 $mime = @{
     '.html' = 'text/html; charset=utf-8'
     '.js'   = 'application/javascript'

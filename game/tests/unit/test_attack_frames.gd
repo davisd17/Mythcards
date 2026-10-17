@@ -1,12 +1,13 @@
 extends GutTest
 # Phase 6 (LLD-figure-animation.md 8): hand-drawn attack frames. Yuri Volkov is the pilot.
 # His six frames play from wardrobe.json at their delivered holds, crossfade, mirror for
-# leftward attacks, and hold the target's reaction until the shot. Everyone else keeps
-# the procedural wind-up. The rules resolve at once either way.
+# leftward attacks, and hold the target's reaction until the shot. Outfits without art
+# keep the procedural wind-up. The rules resolve at once either way.
 
 const Fixture := preload("res://tests/helpers/match_fixture.gd")
 const YURI := "p1_r-yuri-volkov"
 const NAIA := "p2_a-flood-survivor-naia"
+const NO_ART_OUTFIT := "test-no-attack-art"
 
 var view: GameBoardView
 
@@ -41,8 +42,8 @@ func test_yuri_has_six_frames_at_the_delivered_holds() -> void:
 
 
 func test_characters_without_art_keep_the_procedural_wind_up() -> void:
-	assert_eq(FigureCatalog.attack_timing("a-flood-survivor-naia", "default"), {})
-	assert_eq(FigureCatalog.attack_frames("r-zoya-miranova", "aurora-rite"), [])
+	assert_eq(FigureCatalog.attack_timing("a-flood-survivor-naia", NO_ART_OUTFIT), {})
+	assert_eq(FigureCatalog.attack_frames("r-zoya-miranova", NO_ART_OUTFIT), [])
 
 
 func test_frame_layers_crossfade_and_return_to_idle() -> void:
@@ -94,6 +95,7 @@ func test_a_procedural_attacker_hits_at_once_as_before() -> void:
 	Fixture.state().get_player("p2").pool_ap_remaining = 4
 	var naia := Fixture.put(NAIA, Vector2i(3, 3))
 	var yuri := Fixture.put(YURI, Vector2i(3, 2))
+	view.outfit_by_instance_id[naia.instance_id] = NO_ART_OUTFIT
 	assert_true(_attack(NAIA, YURI).success)
 	assert_false(view.fx.lunges[naia.instance_id].framed)
 	assert_almost_eq(view.fx.lunges[naia.instance_id].duration, BoardFx.LUNGE, 0.001)

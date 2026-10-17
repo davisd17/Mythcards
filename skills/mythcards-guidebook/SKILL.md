@@ -19,6 +19,7 @@ Work within the established concise format in `data/cards/review_drafts/tarot_gu
 ## Tarot Guidance
 
 - Interpret the traditional tarot archetype through the subject, then connect it to an ordinary human decision or experience. Do more than explain why the artwork fits the mapping.
+- Use one brief story connection to introduce the interpretation, then focus on what the card may mean in the reader's life and how they can respond. Avoid continuing to analyze the lore throughout the interpretation.
 - Let the reader understand how to use the card: what to notice, reconsider, accept, or begin. Avoid requiring the reader to identify with supernatural circumstances.
 - Write natural first-person affirmations people can comfortably say and relate to, such as "I trust that healing is possible" or "I have the courage to begin." Avoid grand declarations, lore terminology, and elaborate moral positions.
 - End with one simple, usable When Drawn sentence. Keep established headings and the concise rhythm of approved entries.

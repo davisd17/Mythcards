@@ -1,0 +1,10 @@
+{
+  "axis": "x",
+  "idle": {"left_x": 56, "right_x": 457},
+  "ready": {"left_x": 23, "right_x": 1011, "foot_center_x": 517},
+  "raise": {"left_x": 23, "right_x": 1004, "foot_center_x": 514},
+  "brace": {"left_x": 36, "right_x": 1014, "foot_center_x": 525},
+  "fire": {"left_x": 81, "right_x": 1000, "foot_center_x": 541},
+  "recoil": {"left_x": 62, "right_x": 998, "foot_center_x": 530},
+  "recover": {"left_x": 72, "right_x": 1000, "foot_center_x": 536}
+}

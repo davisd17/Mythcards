@@ -52,6 +52,9 @@ Use [references/pose-prompts.md](references/pose-prompts.md) for prompt scaffold
 Lock these invariants explicitly:
 
 - Same face, hair, costume, props, rendering, lighting, scale, and camera.
+- Same anatomical proportions: head size, shoulder width, torso length, leg
+  length and boot size relative to idle. A matching canvas or foot baseline
+  does not prove a matching body size. Do not shrink the character to fit a reach.
 - Head and eyes track the same target independently of torso rotation. Do not
   look at the viewer, weapon, palm, or photograph mid-attack.
 - Exactly the intended limbs and hands; inspect hand-to-sleeve connections.
@@ -90,8 +93,13 @@ The preparation helper emits runtime PNGs, registration metadata, a contact shee
 review GIF, and a layered OpenRaster file. The default runtime names are
 `game/assets/figures/CHARACTER/attack-N-POSE.png`.
 Canvas: 512x768 RGBA. Baseline: lowest visible pixel y756 (contract tolerance +/-4).
-Keep 24 px side and 18 px top margins. Use one common scale, then translation-only
-registration; never fit every frame independently. Verify both foot positions,
+Keep 24 px side and 18 px top margins. Preserve idle body size before optimizing
+canvas fit. Use one common scale for already proportion-matched sources; when
+sources differ in anatomical size, normalize reviewed body landmarks to idle
+first. Never fit frames independently to their full silhouette/effect bounds.
+Read [references/proportion-registration.md](references/proportion-registration.md)
+for landmark registration, margin conflicts, and proportion regression checks.
+Verify both foot positions,
 not just the lowest pixel. Rovers use wheel contacts; other nonhumanoids need an
 appropriate contact anchor, not an invented human stance.
 
@@ -99,6 +107,8 @@ On a narrow revision, compare registration metadata before and after packing.
 Changed glow bounds can change the helper's common scale and re-export every pose.
 Do not claim surrounding runtime frames are unchanged without checking them.
 Avoid a new scale/anchor jump; investigate any changed registration before delivery.
+If a reach or halo forces shrinkage, compact the arm motion or effect instead.
+Do not compensate by shrinking idle or changing the whole game's figure scale.
 
 Each outfit owns its attack list in `wardrobe.json`. Alternate-outfit filenames
 use `OUTFIT-attack-N-POSE.png`; the current preparation helper targets defaults,
@@ -117,11 +127,16 @@ Use required execution approvals. Wait for test sessions to finish. Verify six
 registered frames, one impact on pose 4, correct holds, transparency, canvas,
 baseline, safe margins, and a readable visual sequence. Technical contracts do
 not establish artistic correctness.
+Compare idle, all six attack poses, and return-to-idle at the same display scale
+and foot anchor. Check both overall body height and internal proportions. Add
+or extend a focused regression check for the character's reviewed dimensions;
+Orlov's idle-height test is an example, not a universal glow-bounds measurement.
 
 For a new character, adapt an existing focused browser test with legal movement
 for that character. Check start positions, movement restrictions, attack range,
 line of sight, AP, mounted state, and defenses instead of blindly copying a route.
-Capture anticipation/impact/follow-through, inspect screenshots, confirm damage
+Capture anticipation/impact/follow-through and idle at the same board position
+for a direct size comparison. Inspect screenshots and confirm damage
 or the expected block and absence of runtime errors. Abilities are separate;
 mounts attack alone, while a mounted rider uses the rider's attack.
 

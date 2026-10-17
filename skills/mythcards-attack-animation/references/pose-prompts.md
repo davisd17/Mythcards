@@ -14,6 +14,9 @@ Preserve: [face, hair, costume, lighting, props and their assigned hands].
 Facing: three-quarter screen-right; eyes and nose aimed at the same enemy.
 Stance: [describe both boot/wheel contacts and forward-foot ordering in viewer coordinates].
 Keep scale, canvas, leg length, foot contacts and camera unchanged.
+Match idle head-to-body ratio, shoulder width, torso length, limb lengths and
+boot size. Do not reduce body size to fit an extended arm, tool or effect.
+Use a compact motion inside the available margins instead.
 Pose: [one concrete action; which limb moves, where it begins/ends, and prop angle].
 Exactly [limb count]; no duplicated hands or disconnected wrists.
 Full figure and weapon in frame with safe margins; true alpha, no floor,
@@ -38,3 +41,7 @@ For foot drift, compare Ready, brace, impact and recoil rather than assuming the
 defect occurs in only the frame first noticed by the user.
 For impact brightness, describe core/rings/local spill separately and keep the
 effect bounded. Check that added alpha glow does not change registration scale.
+For apparent shrink/growth, compare idle and all poses at a common foot anchor.
+Distinguish an overall scale mismatch from changed body proportions; uniform
+scaling fixes the former, not a smaller head or longer legs. See
+[proportion-registration.md](proportion-registration.md) before repacking.

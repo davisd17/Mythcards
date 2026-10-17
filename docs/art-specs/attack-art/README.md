@@ -12,14 +12,14 @@ in `docs/art-specs/attack-windup-spec.html` and `LLD-figure-animation.md` Sectio
 | 3 | Irina Vasilievna Karpova | Stance correction approved; registered and tested |
 | 4 | Dr. Mikhail Orlov | Impact glow revision accepted; registered and tested |
 | 5 | Dr. Elena Morozova | Six-pose dream-signal attack registered; awaiting designer review |
-| 6 | Zoya Miranova | Queued |
-| 7 | Stone-Line Laborer | Queued |
-| 8 | Ahesu, the Stone-Current Serpent | Queued; clean idle export also required |
-| 9 | Naia of the Black Sarcophagus | Queued |
-| 10 | Queen Meret-Anu | Queued |
-| 11 | Sahu-Ren, Last Memory-Keeper | Queued |
-| 12 | Iset-Nara | Queued |
-| 13 | Thalassa-Nekh | Queued |
+| 6 | Zoya Miranova | Approved; registered and tested |
+| 7 | Stone-Line Laborer | Approved; registered and tested |
+| 8 | Ahesu, the Stone-Current Serpent | Approved; cleaned idle and six poses registered and tested |
+| 9 | Naia of the Black Sarcophagus | Stronger swing accepted; registered and tested |
+| 10 | Queen Meret-Anu | Approved; six-pose tide-palm cast registered and tested |
+| 11 | Sahu-Ren, Last Memory-Keeper | Approved; six-pose memory cast registered and tested |
+| 12 | Iset-Nara | Approved; six-pose divider pulse registered and tested |
+| 13 | Thalassa-Nekh | Partial Seraph revision approved; registered and tested |
 
 Each delivery folder contains master sources, prompts, registration metadata, a layered
 OpenRaster file, contact sheet, and review GIF. Runtime PNGs belong in the corresponding

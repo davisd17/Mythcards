@@ -7,7 +7,11 @@ Impact revision: brighter pale white/yellow-green core and reactor-green inner
 rings on Fire, retaining amber outer detail. Other source poses are unchanged.
 Exactly two hands; target-facing gaze and planted stance are continuity requirements.
 
-Runtime: six 512x768 RGBA PNGs, one shared scale, translation-only registration.
+Runtime: six 512x768 RGBA PNGs. Reviewed crown-to-sole source normalization
+keeps all six bodies at idle height (646 opaque pixels), then translation-only
+registration anchors the feet. This replaces width-constrained common packing,
+which previously shrank the whole sequence to fit the outstretched impact hand.
+The impact elbow is now bent to keep its bright green palm within the safe area.
 Holds: 100/100/130/60/90/120 ms, total 600 ms. Pose 4 is impact.
 Foot baseline y756; 24 px side and 18 px top safe margins.
 Leftward attacks mirror; vertical attacks reuse sideways art per the approved spec.
@@ -18,5 +22,5 @@ Sources and reproduction: `sources/`, `sources.json`, `prompts.md`, `registratio
 Built-in ImageGen used `game/assets/figures/r-mikhail-orlov/default.png` as identity reference.
 The generated palm glow stays close to the figure; no baked-in ground or target.
 
-Rebuild: `tools/prepare_attack_sequence.py r-mikhail-orlov docs/art-specs/attack-art/r-mikhail-orlov/sources.json`.
+Rebuild: `tools/prepare_attack_sequence.py r-mikhail-orlov docs/art-specs/attack-art/r-mikhail-orlov/sources.json --body-landmarks docs/art-specs/attack-art/r-mikhail-orlov/body-landmarks.json`.
 Register: `node tools/register_attack_frames.js r-mikhail-orlov`.

@@ -1,0 +1,9 @@
+{
+  "idle": {"crown_y": 23, "sole_y": 753},
+  "ready": {"crown_y": 47, "sole_y": 1490},
+  "raise": {"crown_y": 43, "sole_y": 1495},
+  "brace": {"crown_y": 53, "sole_y": 1492},
+  "fire": {"crown_y": 44, "sole_y": 1475},
+  "recoil": {"crown_y": 43, "sole_y": 1477},
+  "recover": {"crown_y": 48, "sole_y": 1489}
+}

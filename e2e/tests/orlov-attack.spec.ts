@@ -31,6 +31,7 @@ test('Mikhail Orlov reactor pulse attack renders through impact', async ({ page 
   }
   await page.waitForTimeout(600);
   const before = character(await state(page), enemy).current_hp;
+  await page.screenshot({ path: 'test-results/orlov-attack-idle.png' });
   expect((await act(page, 'attack', worker, { target_id: enemy })).success).toBe(true);
   await page.waitForTimeout(220);
   await page.screenshot({ path: 'test-results/orlov-attack-brace.png' });

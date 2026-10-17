@@ -36,6 +36,7 @@ Use this order for every guidebook entry:
 - Use exactly three upright and three shadow keywords unless a later deck-wide editorial decision changes the standard.
 - Treat `shadow` as the card's difficult, blocked, distorted, or reversed expression. Do not make every shadow meaning purely evil.
 - Keep the tarot interpretation grounded in both the traditional archetype and the actual MythCards narrative.
+- Begin the interpretation with one brief story connection, then focus on what the card may mean in the reader's life and how they can respond. Keep further lore analysis out of the reader guidance.
 - Relationship information and hidden story clues should be woven naturally into the existing `Backstory`, interpretation, or `When Drawn` sections. Do not add visible `Relationships` or `Hidden Thread` headings to the guidebook entry.
 - In structured data, keep `relationships` and `hidden_threads` as separate arrays for continuity tracking even though they are not rendered as guidebook headings. Use an empty array when an entry has no relevant thread rather than inventing one.
 - End with practical, concise `When Drawn` guidance. Prefer one direct sentence and avoid explaining the entire card again.

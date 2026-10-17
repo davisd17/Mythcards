@@ -31,11 +31,29 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("character")
     parser.add_argument("manifest", type=Path)
+    parser.add_argument("--body-landmarks", type=Path,
+                        help="Reviewed anatomical landmarks for body-size normalization (not effect bounds)")
+    parser.add_argument("--idle-source", type=Path,
+                        help="Authorized cleaned idle source to resize/register to the existing idle canvas")
     args = parser.parse_args()
     output = (ROOT / "game/assets/figures" / args.character).resolve()
     if output.parent != (ROOT / "game/assets/figures").resolve():
         raise ValueError("Invalid character id")
     idle = clean_alpha(Image.open(output / "default.png"))
+    if args.idle_source:
+        source = clean_alpha(Image.open(args.idle_source))
+        if source.width * idle.height != source.height * idle.width:
+            raise ValueError("Clean idle source must match the idle canvas aspect ratio")
+        source = clean_alpha(source.resize(idle.size, Image.Resampling.LANCZOS))
+        bound = source.getchannel("A").getbbox()
+        if bound is None:
+            raise ValueError("Clean idle source is empty")
+        idle = Image.new("RGBA", idle.size)
+        idle.alpha_composite(source, (round(256 - (bound[0] + bound[2]) * 0.5), 757 - bound[3]))
+        bound = idle.getchannel("A").getbbox()
+        if bound[0] < 24 or bound[2] > 488 or bound[1] < 18 or bound[3] != 757:
+            raise ValueError(f"Unsafe cleaned idle: {bound}")
+        idle.save(output / "default.png", optimize=True)
     review = ROOT / "docs/art-specs/attack-art" / args.character
     (review / "sources").mkdir(parents=True, exist_ok=True)
     sources = json.loads(args.manifest.read_text(encoding="utf-8"))
@@ -60,10 +78,31 @@ def main():
     scale = min((idle_bound[3] - idle_bound[1]) / statistics.median(b[3] - b[1] for b in bounds),
         min(min(230 / max(1, ax - b[0]), 230 / max(1, b[2] - ax), 736 / max(1, ay - b[1]))
             for (ax, ay), b in zip(anchors, bounds)))
+    pose_scales = [scale] * len(POSES)
+    landmarks = None
+    target_anchor_x = 256
+    if args.body_landmarks:
+        landmarks = json.loads(args.body_landmarks.read_text(encoding="utf-8"))
+        target_anchor_x = float(landmarks.get("target_anchor_x", 256))
+        axis = landmarks.get("axis", "y")
+        if axis not in ("x", "y"):
+            raise ValueError("Body landmark axis must be x or y")
+        low, high = ("left_x", "right_x") if axis == "x" else ("crown_y", "sole_y")
+        target_height = landmarks["idle"][high] - landmarks["idle"][low] + 1
+        if target_height <= 0:
+            raise ValueError("Idle body landmarks must describe a positive height")
+        spans = [landmarks[name][high] - landmarks[name][low] + 1 for name in POSES]
+        if any(span <= 0 for span in spans):
+            raise ValueError("Pose body landmarks must describe positive heights")
+        # Normalize anatomical source units first; effects never determine body size.
+        scale = target_height / spans[0]
+        pose_scales = [target_height / span for span in spans]
+        anchors = [(float(landmarks[name].get("foot_center_x", ax)), ay)
+                   for name, (ax, ay) in zip(POSES, anchors)]
     frames, registrations = [], []
-    for name, image, (ax, ay), ms in zip(POSES, originals, anchors, HOLDS):
-        scaled = clean_alpha(image.resize((round(image.width * scale), round(image.height * scale)), Image.Resampling.LANCZOS))
-        offset = (round(256 - ax * scale), 757 - scaled.getchannel("A").getbbox()[3])
+    for name, image, (ax, ay), ms, source_scale in zip(POSES, originals, anchors, HOLDS, pose_scales):
+        scaled = clean_alpha(image.resize((round(image.width * source_scale), round(image.height * source_scale)), Image.Resampling.LANCZOS))
+        offset = (round(target_anchor_x - ax * source_scale), 757 - scaled.getchannel("A").getbbox()[3])
         frame = Image.new("RGBA", (512, 768))
         frame.alpha_composite(scaled, offset)
         visible = frame.getchannel("A").getbbox()
@@ -74,10 +113,14 @@ def main():
         frame.save(output / filename, optimize=True)
         frames.append(frame)
         registrations.append({"pose": name, "file": filename, "ms": ms, "impact": name == "fire",
-                              "source_anchor": [ax, ay], "offset": offset, "bounds": visible})
+                              "source_anchor": [ax, ay], "offset": offset, "bounds": visible,
+                              **({"source_scale": source_scale, "body_landmarks": landmarks[name]} if landmarks else {})})
     (review / "registration.json").write_text(json.dumps({"character": args.character,
-        "canvas": [512, 768], "shared_scale": scale, "foot_anchor": [256, 756],
-        "frames": registrations}, indent=2) + "\n", encoding="utf-8", newline="\n")
+        "canvas": [512, 768], "shared_scale": scale, "foot_anchor": [target_anchor_x, 756],
+        "frames": registrations,
+        **({"body_width" if axis == "x" else "body_height": target_height,
+            "normalization_axis": axis, "idle_landmarks": landmarks["idle"],
+            "scale_policy": "anatomical-source-normalization"} if landmarks else {})}, indent=2) + "\n", encoding="utf-8", newline="\n")
     root = ET.Element("image", {"w": "512", "h": "768", "name": args.character + " attack"})
     stack = ET.SubElement(root, "stack")
     with zipfile.ZipFile(review / f"{args.character}-attack.ora", "w") as archive:

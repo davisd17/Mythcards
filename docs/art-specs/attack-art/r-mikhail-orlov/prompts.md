@@ -1,5 +1,11 @@
 # Orlov Prompts
 
+## Compact Impact Revision
+
+Built-in ImageGen edit of the green impact source to permit idle-sized packing.
+
+Precise animation pose correction. Edit only extended LEFT arm on viewer RIGHT and its compact glow. BEND casting elbow about 80 degrees and bring glowing hand back toward his shoulder: palm centered around x720,y440 on this1024x1536 canvas, all fingertips/glow inside x850. Upper arm extends only slightly right; forearm pushes outward with elbow bent, NOT a straight full-length arm. Palm still faces target at SCREEN-RIGHT and releases same brilliant WHITE-GREEN core with amber outer rings. Glow confined closely to palm, no large halo. Preserve everything else EXACTLY: torso position, face/rightward gaze, hair, instrument and holding hand, lab coat, trousers, boots, leg stance and all body proportions, same canvas1024x1536 true alpha transparency. Do NOT move body or feet to make room; shorten reach by elbow bend only. Exactly two hands. No floor/shadow/background. Purpose: compact attack silhouette that can be packed at full idle body size.
+
 ## Impact Glow Revision
 
 Built-in ImageGen edit of the Fire source only:

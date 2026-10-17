@@ -1,0 +1,170 @@
+{
+  "character": "a-flood-survivor-stone-line-laborer",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.5062326869806094,
+  "foot_anchor": [
+    256,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "ready",
+      "file": "attack-1-ready.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        573.0,
+        1490
+      ],
+      "offset": [
+        -34,
+        1
+      ],
+      "bounds": [
+        65,
+        24,
+        417,
+        757
+      ],
+      "source_scale": 0.5062326869806094,
+      "body_landmarks": {
+        "crown_y": 47,
+        "sole_y": 1490
+      }
+    },
+    {
+      "pose": "raise",
+      "file": "attack-2-raise.png",
+      "ms": 100,
+      "impact": false,
+      "source_anchor": [
+        570.5,
+        1496
+      ],
+      "offset": [
+        -31,
+        3
+      ],
+      "bounds": [
+        77,
+        23,
+        472,
+        757
+      ],
+      "source_scale": 0.5030970406056435,
+      "body_landmarks": {
+        "crown_y": 43,
+        "sole_y": 1495
+      }
+    },
+    {
+      "pose": "brace",
+      "file": "attack-3-brace.png",
+      "ms": 130,
+      "impact": false,
+      "source_anchor": [
+        579.5,
+        1493
+      ],
+      "offset": [
+        -38,
+        -2
+      ],
+      "bounds": [
+        24,
+        23,
+        475,
+        757
+      ],
+      "source_scale": 0.5076388888888889,
+      "body_landmarks": {
+        "crown_y": 53,
+        "sole_y": 1492
+      }
+    },
+    {
+      "pose": "fire",
+      "file": "attack-4-fire.png",
+      "ms": 60,
+      "impact": true,
+      "source_anchor": [
+        557.0,
+        1476
+      ],
+      "offset": [
+        -28,
+        3
+      ],
+      "bounds": [
+        57,
+        25,
+        440,
+        757
+      ],
+      "source_scale": 0.5104748603351955,
+      "body_landmarks": {
+        "crown_y": 44,
+        "sole_y": 1475
+      }
+    },
+    {
+      "pose": "recoil",
+      "file": "attack-5-recoil.png",
+      "ms": 90,
+      "impact": false,
+      "source_anchor": [
+        558.0,
+        1478
+      ],
+      "offset": [
+        -28,
+        4
+      ],
+      "bounds": [
+        57,
+        25,
+        439,
+        757
+      ],
+      "source_scale": 0.5094076655052264,
+      "body_landmarks": {
+        "crown_y": 43,
+        "sole_y": 1477
+      }
+    },
+    {
+      "pose": "recover",
+      "file": "attack-6-recover.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        571.0,
+        1490
+      ],
+      "offset": [
+        -33,
+        1
+      ],
+      "bounds": [
+        37,
+        24,
+        418,
+        757
+      ],
+      "source_scale": 0.5069348127600555,
+      "body_landmarks": {
+        "crown_y": 48,
+        "sole_y": 1489
+      }
+    }
+  ],
+  "body_height": 731,
+  "idle_landmarks": {
+    "crown_y": 23,
+    "sole_y": 753
+  },
+  "scale_policy": "anatomical-source-normalization"
+}

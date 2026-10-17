@@ -1,0 +1,36 @@
+{
+  "idle": {
+    "crown_y": 77,
+    "sole_y": 748
+  },
+  "ready": {
+    "crown_y": 48,
+    "sole_y": 1491,
+    "foot_center_x": 525
+  },
+  "raise": {
+    "crown_y": 48,
+    "sole_y": 1492,
+    "foot_center_x": 525
+  },
+  "brace": {
+    "crown_y": 35,
+    "sole_y": 1472,
+    "foot_center_x": 525
+  },
+  "fire": {
+    "crown_y": 47,
+    "sole_y": 1476,
+    "foot_center_x": 525
+  },
+  "recoil": {
+    "crown_y": 46,
+    "sole_y": 1492,
+    "foot_center_x": 525
+  },
+  "recover": {
+    "crown_y": 48,
+    "sole_y": 1492,
+    "foot_center_x": 525
+  }
+}

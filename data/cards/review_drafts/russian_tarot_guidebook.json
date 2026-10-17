@@ -877,6 +877,152 @@
       ],
       "interpretation": "The Three of Wands asks you to consider how far your choices might reach. Elena's transmission crosses forty years, but her gaze reaches beyond the soldiers to you. Whether her words are a warning, an invitation, or a request remains unclear. Consider where you have been waiting for something to happen, and whether you are ready to take part.",
       "when_drawn": "What are you ready to become part of?"
+    },
+    {
+      "tarot_number": "Four",
+      "tarot_name": "Four of Wands",
+      "mythcards_name": "Hearthstone Antler Crown",
+      "card_type": "Relic",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I deserve to feel at home.",
+      "upright_keywords": ["Celebration", "Community", "Stability"],
+      "shadow_keywords": ["Isolation", "Discord", "Insecurity"],
+      "narrative_heading": "Legend",
+      "narrative": "The northern village grew around an ancient crown of stone and antler, left by keepers whose names have been forgotten. Generations have gathered beside it to celebrate marriages, welcome travelers, and mark another winter survived. When the convergence unsettles the village, Vera keeps the celebration alive: sharing food, music, and warmth renews the promise that no household faces the darkness alone.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "We stayed because someone always kept a place for us.",
+      "relationships": [
+        {
+          "subject": "Vera Kargina and the northern village",
+          "dynamic": "Vera preserves the communal celebration around the Crown as a promise of mutual care during the convergence.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "The Four of Wands celebrates the security people build together. The Crown gives the village a gathering place, but its promise lives through those who show up for one another. This card invites you to recognize a milestone, welcome support, or strengthen the relationships that make a place feel like home. Joy deserves time even when life remains uncertain.",
+      "when_drawn": "Celebrate what you have built and the people who helped you build it."
+    },
+    {
+      "tarot_number": "Five",
+      "tarot_name": "Five of Wands",
+      "mythcards_name": "Volkov Sends Another Wave",
+      "card_type": "Event",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I can stand my ground without losing myself.",
+      "upright_keywords": ["Conflict", "Competition", "Resistance"],
+      "shadow_keywords": ["Hostility", "Confusion", "Wasted Effort"],
+      "narrative_heading": "Event",
+      "narrative": "General Volkov orders another advance across ground the winter has made nearly impassable. Stepan Kuznetsov goes forward beside replacements whose names he learned that morning, trying to keep them together as shouted orders dissolve into gunfire. Volkov measures success in territory held; Stepan measures it in men who return.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The order was simple. Surviving it required everyone.",
+      "relationships": [
+        {
+          "subject": "General Arkady Volkov and Private Stepan Kuznetsov",
+          "dynamic": "Volkov's territorial ambition conflicts with Stepan's effort to keep the men beside him alive.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "The Five of Wands brings competing aims into collision. Volkov's ambition and the soldiers' need to survive pull the same advance in different directions. In your own conflicts, consider whether disagreement is helping people find a better way or simply exhausting them. Stand up for what matters while looking for a purpose others can share.",
+      "when_drawn": "Choose which struggle deserves your energy and what you want it to achieve."
+    },
+    {
+      "tarot_number": "Six",
+      "tarot_name": "Six of Wands",
+      "mythcards_name": "Alexei Vranov",
+      "card_type": "Character",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I can take pride in how far I have come.",
+      "upright_keywords": ["Victory", "Recognition", "Confidence"],
+      "shadow_keywords": ["Pride", "Dependence", "False Triumph"],
+      "narrative_heading": "Backstory",
+      "narrative": "Alexei Vranov emerges from the enemy occult cache carrying a black-and-gold Atlantean standard, and the exhausted soldiers greet him as a hero. Through it, he glimpses ancient Atlantis, the northern meteor, and a city that will not exist for forty years. Marya Zima witnesses his transformation and realizes that the power they are celebrating has chosen someone to carry it onward.",
+      "flavor_heading": "Quote",
+      "flavor_text": "They called it victory before they saw what followed.",
+      "relationships": [
+        {
+          "subject": "Marya Zima",
+          "dynamic": "Marya recognizes the burden of Alexei's transformation while the soldiers celebrate his emergence as a victory.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "standard_chooses_a_courier",
+          "clue": "The Atlantean standard connects Alexei to ancient Atlantis, the meteor, and the future Closed City, turning public triumph into an obligation to carry its power onward.",
+          "connects_to": ["Enemy Cache Unearthed", "Meteor Contact To The North", "Closed City Incident"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The Six of Wands recognizes achievement and the confidence that comes from being seen. The soldiers' acclaim gives Alexei influence, even as Marya sees a responsibility they have overlooked. Accept recognition for what you have accomplished, while remembering that praise cannot decide your next step for you.",
+      "when_drawn": "Accept your success and choose how you will carry it forward."
+    },
+    {
+      "tarot_number": "Seven",
+      "tarot_name": "Seven of Wands",
+      "mythcards_name": "The Ridge Rifle",
+      "card_type": "Relic",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I have the right to stand my ground.",
+      "upright_keywords": ["Courage", "Defense", "Perseverance"],
+      "shadow_keywords": ["Exhaustion", "Defensiveness", "Overwhelm"],
+      "narrative_heading": "Legend",
+      "narrative": "Irina Sokolova holds a snowy ridge alone against advancing shapes after the enemy occult cache awakens. Her rifle survives the encounter changed: through its sight, the ridge remains visible even when she aims elsewhere. The weapon preserves the place where she refused to yield, binding her protection of others to a moment she cannot leave behind.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The ridge held because she did.",
+      "relationships": [
+        {
+          "subject": "Irina Sokolova",
+          "dynamic": "The rifle preserves Irina's solitary defense of the ridge, linking her protection of others to the burden of remaining on guard.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "rifle_remembers_the_ridge",
+          "clue": "After the cache awakens, the rifle's sight retains the ridge regardless of where it is aimed.",
+          "connects_to": ["Enemy Cache Unearthed", "Irina Sokolova"],
+          "disclosure": "revealed"
+        }
+      ],
+      "interpretation": "The Seven of Wands concerns defending something important under pressure. Irina's stand protects others, but the rifle also carries the cost of remaining constantly on guard. Consider which boundaries deserve your resolve and where you need support. Courage can mean holding your position without treating every approach as an attack.",
+      "when_drawn": "Protect what matters, and be clear about what you are defending."
+    },
+    {
+      "tarot_number": "Eight",
+      "tarot_name": "Eight of Wands",
+      "mythcards_name": "Signal Array Turns",
+      "card_type": "Event",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I am ready to move forward.",
+      "upright_keywords": ["Momentum", "Communication", "Swift Change"],
+      "shadow_keywords": ["Haste", "Miscommunication", "Delays"],
+      "narrative_heading": "Event",
+      "narrative": "Before the Closed City Incident, the cosmonaut relay array turns without an operator's command, aiming at a patch of sky where no scheduled satellite should be. Elena suspects it has found contact beyond the realities explored in her dream research. Karpova sees the value of that contact immediately, putting pressure on the scientists to understand and use it before they know what has answered.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The receiver moved before anyone knew where to listen.",
+      "relationships": [
+        {
+          "subject": "Elena Morozova and Irina Karpova",
+          "dynamic": "Elena investigates the unexpected contact while Karpova presses the scientists to exploit its value before they understand its source.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "array_answers_unknown_contact",
+          "clue": "The array points beyond scheduled satellite traffic toward an unidentified contact connected to Elena's dream research.",
+          "connects_to": ["Dream Monitors Synchronize", "Reactor Prayer", "Closed City Incident"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The array's sudden turn marks the end of waiting: contact has been made, and events begin moving quickly. In your life, this may appear as an unexpected message, a long-awaited reply, or plans suddenly gathering momentum. Like the researchers receiving the signal, you may need to respond before you understand everything. Act on what is clear, ask direct questions, and check that excitement or pressure is not rushing you into a commitment.",
+      "when_drawn": "Respond to what is arriving, and clarify what you need to know before committing."
     }
   ]
 }
