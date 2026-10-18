@@ -1,9 +1,12 @@
 extends Node
-# One theme per match, chosen from the starting player's Leader, not the active turn.
-# Add approved sub-area tracks here as they become available. No culture fallback:
+# One theme per match: the starting Leader's specific theme, then their area base.
+# Area bases remain available for eventual single-player exploration. No culture fallback:
 # an unscored sub-area must not inherit another area's musical identity.
 const THEMES := {
 	"Closed City": "res://assets/music/closed-city-v2.wav",
+}
+const LEADER_THEMES := {
+	"r-irina-karpova": "res://assets/music/irina-private-favors-a-v2.wav",
 }
 const MENU_THEME := "res://assets/music/the-threshold-menu-v1.wav"
 const MUSIC_BUS := "Music"
@@ -11,6 +14,8 @@ const MENU_DB := -7.0
 const FADE_SECONDS := 1.0
 
 var current_sub_area := ""
+var current_leader_id := ""
+var current_theme_path := ""
 var _player: AudioStreamPlayer
 var _menu_player: AudioStreamPlayer
 var _menu_fade: Tween
@@ -50,10 +55,12 @@ func _on_match_started() -> void:
 	for character in starter.characters:
 		if character.data != null and character.data.type == "Leader":
 			current_sub_area = character.data.sub_area
+			current_leader_id = character.data.id
 			break
-	if not THEMES.has(current_sub_area):
+	current_theme_path = LEADER_THEMES.get(current_leader_id, THEMES.get(current_sub_area, ""))
+	if current_theme_path == "":
 		return
-	_player.stream = _loop_stream(THEMES[current_sub_area])
+	_player.stream = _loop_stream(current_theme_path)
 	if _player.stream == null:
 		return
 	_player.stream_paused = false
@@ -73,6 +80,8 @@ func _stop_match() -> void:
 	_player.stream_paused = false
 	_player.stream = null
 	current_sub_area = ""
+	current_leader_id = ""
+	current_theme_path = ""
 
 
 func play_menu() -> void:

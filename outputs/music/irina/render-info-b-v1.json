@@ -1,0 +1,22 @@
+{
+  "title": "Irina \u2014 Private Favors: After Hours",
+  "version": 1,
+  "loop": "B: jam and breakdown",
+  "bpm": 69,
+  "bars": 24,
+  "seconds": 83.47825,
+  "sample_rate": 32000,
+  "channels": 2,
+  "bit_depth": 16,
+  "peak_dbfs": -5.130095963904212,
+  "rms_dbfs": -18.416367706924813,
+  "clipped_samples": 0,
+  "loop_endpoint_difference": 0,
+  "note_events": 674,
+  "section_rms_dbfs": {
+    "piano_jam": -17.768981599293877,
+    "chip_exchange": -18.144805581344364,
+    "breakdown": -21.56544989644051,
+    "rebuild": -18.1434819649172
+  }
+}
