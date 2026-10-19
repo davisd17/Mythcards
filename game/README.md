@@ -2,6 +2,10 @@
 
 Godot 4.7.2 project for PRD Milestone 002 (Digital Rules Prototype). Architecture: `HLD.md`; per-module specs: `LLD-*.md` at the repo root.
 
+The current playtest is Closed City vs Flood Survivors. Its shared deck has 30 cards:
+each side supplies 2 copies of each of 5 events and 1 copy of each of 5 unique relics.
+The reviewed lineup and effects are in `data/cards/relic_events.json`.
+
 ## Play (debug match)
 
 ```powershell

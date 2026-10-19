@@ -662,9 +662,9 @@ This set contains exactly **6 Closed City relic cards**. Only **Chintamani Fragm
 | # | Card | Type | Narrative Function | Possible Mechanical Direction |
 | --- | --- | --- | --- | --- |
 | 1 | Chintamani Fragment | Rare Relic | Karpova's confiscated mystical anchor, based on the esoteric Chintamani/Shambhala stone tradition. It reacts before the breach and may be older than the Closed City records. | The only Closed City relic that views or manipulates the shared relic/event deck: once per turn, reveal the top card; leave it or place it on the bottom. |
-| 2 | Reactor Core Fragment | Relic | A sealed shard of the inward-opening reactor. Dangerous proof that the incident was not only radiation. | Stat/risk relic: Specialist and Mystic gain +1 ATK, but the first time each enters a Leak tile each turn, it takes 1 damage. |
-| 3 | Cosmonaut Helmet With A Second Shadow | Relic | Returned-space omen and signal receiver; something came back in the reflection. | Defensive stat relic: Mount and Warrior gain +1 maximum HP and ignore the first harmful temporary combat marker placed on one of them each round. |
-| 4 | Lead-Sealed Notebook | Relic | Elena's hidden notes on dream coordinates, remote viewing, and forbidden subject results. | Range stat relic: Leader and Specialist gain +1 RANGE on AP abilities. |
+| 2 | Reactor Core Fragment | Relic | A sealed shard of the inward-opening reactor. Dangerous proof that the incident was not only radiation. | Specialist and Mystic gain +1 ATK and ignore Leak damage. |
+| 3 | Cosmonaut Helmet With A Second Shadow | Relic | Returned-space omen and signal receiver; something came back in the reflection. | Mount and Warrior gain +1 maximum HP and cannot be Marked. |
+| 4 | Lead-Sealed Notebook | Relic | Elena's hidden notes on dream coordinates, remote viewing, and forbidden subject results. | Leader and Specialist gain +1 RANGE on attacks and abilities. |
 | 5 | Redacted Incident Tape | Relic | A recording that changes each time it is watched; proof Semyonov and Karpova cannot fully control. | Suppression relic: enemies within 2 of your placed objects have -1 RANGE on their first attack or AP ability each turn. |
 | 6 | Karpova's Black Key | Relic | Karpova's private access key to doors not listed on any map. It replaces the Light-Burn Diagram as the coveted access relic for this set. | Movement stat relic: Leader and Common gain +1 MOVE; once each turn, one of them may move through a placed object or allied occupied tile. |
 
@@ -718,7 +718,7 @@ Structured draft data is captured in `data/cards/review_drafts/flood_survivor_ev
 | 3 | The Vault Chooses A Witness | Event | A sealed archive opens for one character and brands them with forbidden knowledge. | Single-character AP ability range boost with Marked cost; does not create a Vault marker. |
 | 4 | The Flood Reaches The Walls | Event | The old Flood returns at the board edges and exposes anyone at the walls. | Each character on an outer edge tile becomes Marked. |
 | 5 | Ley Stones Align | Event | Ancient stones reveal geometry built to hide a crime. | Measure the first AP ability from an allied Stone marker or placed object. |
-| 6 | The Drowned Seraph Speaks | Event | Thalassa-Nekh's entity speaks a judgment no ruler can redact. | The first enemy that damages your Mystic becomes Marked. |
+| 6 | The Drowned Seraph Speaks | Event | Thalassa-Nekh's entity speaks a judgment no ruler can redact. | Your Mystic gains Shield until used and +1 ATK this turn. |
 | 7 | Tide-Sealed Archive Opens | Event | Meret-Anu's records reveal a controlled truth, but the full archive wants release. | Choose safe Shield or stronger Shield/+RANGE with Marked cost. |
 | 8 | Exiles Walk Beneath Egypt | Event | Survivors carry edited Atlantean memory into tomb geometry and later mystery traditions. | Reposition allies adjacent to placed objects. |
 
@@ -730,11 +730,11 @@ Structured draft data is captured in `data/cards/review_drafts/flood_survivor_re
 
 | # | Card | Type | Narrative Function | Possible Mechanical Direction |
 | --- | --- | --- | --- | --- |
-| 1 | The Emerald Tablet | Rare Relic | A green stone tablet saved from Atlantis and carried toward Egypt, later remembered through Hermetic and alchemical tradition. | Convert Memory or placed-stone positioning into Shield or +RANGE. |
+| 1 | The Emerald Tablet | Rare Relic | A green stone tablet saved from Atlantis and carried toward Egypt, later remembered through Hermetic and alchemical tradition. | Convert Memory or placed-stone positioning into Shield. |
 | 2 | The Black Sarcophagus | Relic | Naia's sealed black-stone tomb, prison, archive, or body container. | Warrior/Hero max HP and attacker Marking near placed objects. |
-| 3 | Tide-Sealed Archive | Relic | Meret-Anu's sealed casket of witness fragments, bloodline proofs, drowned records, and edited truths. | Leader/Specialist AP range bonus and Memory-linked repositioning. |
+| 3 | Tide-Sealed Archive | Relic | Meret-Anu's sealed casket of witness fragments, bloodline proofs, drowned records, and edited truths. | At the start of your turn, every character adjacent to any placed object heals 1 HP, up to maximum HP. |
 | 4 | Seraphic Burial Veil | Relic | Funerary veil from the water-burial rite that changed Thalassa-Nekh. | Mystic max HP and limited conversion of Marked into Shield. |
-| 5 | Basalt Ley Compass | Relic | Surveying instrument for living routes under floodwater, desert, and tomb foundations. | Common/Specialist movement bonus and traversal through Stone markers or placed objects. |
+| 5 | Basalt Ley Compass | Relic | Surveying instrument for living routes under floodwater, desert, and tomb foundations. | Common/Specialist gain +1 MOVE and may pass through 1 allied placed object per movement, ending on an empty tile. |
 | 6 | Pearl Of The Lower Vault | Relic | Luminous pearl containing a memory too sorrowful to speak. | Hero/Mystic AP range bonus and Marking attackers when damage is prevented. |
 
 ## Generated Assets Inventory

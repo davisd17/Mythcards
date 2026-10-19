@@ -41,7 +41,7 @@ export async function resolvePending(page: Page): Promise<void> {
   const s = await state(page);
   const spec = s.pending_choice;
   if (!spec || !spec.pick) return;
-  const player = s.active_player_id;
+  const player = s.decision_player_id ?? s.active_player_id;
   const r = await act(page, 'deck_choice', player, firstChoice(spec));
   expect(r.success, JSON.stringify(r)).toBe(true);
 }

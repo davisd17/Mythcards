@@ -80,21 +80,21 @@ func test_c6a_committed_sub_areas_are_single_values() -> void:
 	assert_eq(db.get_character("a-harmonic").sub_area, "First Mind")
 
 
-func test_c4_loads_14_playable_relic_events_with_no_review_status() -> void:
+func test_c4_loads_20_unique_playable_relic_events_with_no_review_status() -> void:
 	_load_real_data()
-	assert_eq(db.relic_events.size(), 14)
+	assert_eq(db.relic_events.size(), 20)
 	for r: RelicEventData in db.relic_events.values():
 		assert_eq(r.review_status, "", r.id)
 		assert_eq(db.get_relic_event(r.id), r)
 
 
-func test_each_faction_contributes_3_relics_and_4_events() -> void:
+func test_each_faction_has_5_unique_relics_and_5_unique_events() -> void:
 	# PRD Section 9 deck construction (BR-027A).
 	_load_real_data()
 	for faction in ["Russian-Inspired", "Atlantean"]:
 		var cards: Array[RelicEventData] = db.get_playable_relic_events_by_faction(faction)
-		assert_eq(cards.filter(func(r): return r.is_relic()).size(), 3, "%s relics" % faction)
-		assert_eq(cards.filter(func(r): return r.is_event()).size(), 4, "%s events" % faction)
+		assert_eq(cards.filter(func(r): return r.is_relic()).size(), 5, "%s relics" % faction)
+		assert_eq(cards.filter(func(r): return r.is_event()).size(), 5, "%s events" % faction)
 
 
 func test_c5_review_drafts_load_separately_from_playable() -> void:

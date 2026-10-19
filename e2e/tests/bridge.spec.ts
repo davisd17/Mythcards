@@ -12,7 +12,7 @@ test('the web build boots a match and exposes the bridge', async ({ page }) => {
   expect(s.players.p1.characters).toHaveLength(7);
   expect(s.players.p2.characters).toHaveLength(7);
   expect(s.players.p1.pool_ap_max).toBe(2);        // the first turn of the match has 2 AP
-  expect(s.deck_size).toBe(13);                    // p1 drew on turn 1
+  expect(s.deck_size).toBe(29);                    // p1 drew on turn 1 from 30 cards
   expect(character(s, 'p1_r-reactor-worker').position).toEqual({ x: 0, y: 0 });
   await expect(page.locator('canvas')).toBeVisible();
 });

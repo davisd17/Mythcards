@@ -1,6 +1,6 @@
 extends Node
 # Autoload name: RelicEventDeck — the shared relic/event deck (LLD-relic-event-deck.md).
-# Each player contributes their culture's 3 relics + 4 events; the 14 cards are shuffled
+# Each side contributes 5 unique relics and two copies of 5 events (30 total cards), shuffled
 # with a seed, and the active player draws one at the start of each turn. Relics fill
 # the player's single slot (a full slot means a keep-or-replace choice); events resolve
 # at once or last their duration. Anything needing a decision becomes a pending choice,
@@ -10,14 +10,65 @@ extends Node
 # Every pending choice and relic power describes itself (choice_spec / power_spec) so a
 # tap UI can offer exactly the legal picks.
 
-const RELICS_PER_PLAYER := 3
-const EVENTS_PER_PLAYER := 4
+const RELICS_PER_PLAYER := 5
+const EVENTS_PER_PLAYER := 10
+const EVENT_COPIES := 2
 
 var _match: MatchState = null
-var _active: Dictionary = {}    # card id -> {player_id, remaining, drawn_on_turn, data}
+var _active: Dictionary = {}    # event instance id -> {card_id, player_id, remaining, drawn_on_turn, data}
+var _next_event_id := 0
 var _pending: Dictionary = {}   # player id -> {kind: "relic"|"event"|"power", card_id, ...}
 var _relic_state: Dictionary = {}   # "<player>:<card>" -> Dictionary, match-scoped relic memory
 var _handlers: Dictionary = {}
+var _veil_queue: Array[Dictionary] = []
+
+
+# An optional relic reaction interrupts the active side until its owner answers.
+func decision_player() -> String:
+	if not _is_current():
+		return GameState.match_state.active_player_id if GameState.match_state != null else ""
+	return str(_veil_queue[0].player_id) if not _veil_queue.is_empty() else _match.active_player_id
+
+
+func offer_veil_protection(target: CharacterInstance, value: int, expires: String, source: CharacterInstance) -> bool:
+	const CARD := "a-flood-survivor-seraphic-burial-veil"
+	if target.defeated or not has_relic(target.player_id, CARD):
+		return false
+	var round_id: int = (_match.turn_number - 1) / 2
+	if relic_state(target.player_id, CARD).get("used_round", -1) == round_id:
+		return false
+	_veil_queue.append({"player_id": target.player_id, "target": target, "value": value,
+		"expires": expires, "source": source, "round": round_id})
+	return true
+
+
+func _resolve_veil(player_id: String, payload: Dictionary) -> Dictionary:
+	if _veil_queue.is_empty() or decision_player() != player_id or not payload.get("protect") is bool:
+		return {"success": false, "reason": "choose Shield or accept Marked"}
+	var entry: Dictionary = _veil_queue.pop_front()
+	var target: CharacterInstance = entry.target
+	var state := relic_state(player_id, "a-flood-survivor-seraphic-burial-veil")
+	if payload.protect and not target.defeated:
+		state["used_round"] = entry.round
+		_sys().add_status(target, "shield", 1, "until_used")
+	else:
+		_apply_queued_mark(entry)
+	# Other Marks from the same action still apply after this round's protection is used.
+	for queued in _veil_queue.duplicate():
+		if queued.player_id == player_id and state.get("used_round", -1) == queued.round:
+			_veil_queue.erase(queued)
+			_apply_queued_mark(queued)
+	return {"success": true}
+
+
+func _apply_queued_mark(entry: Dictionary) -> void:
+	var c: CharacterInstance = entry.target
+	if c.defeated:
+		return
+	var se := StatusEffect.new("marked", entry.value, entry.expires, _match.turn_number)
+	se.source_character_id = entry.source.instance_id if entry.source != null else ""
+	c.status_effects.append(se)
+	EventBus.status_added.emit(c.instance_id, "marked", se.value, se.source_character_id)
 
 
 func _ready() -> void:
@@ -68,23 +119,28 @@ func draw_for(player_id: String) -> void:
 		outcome = handler.resolve_immediate(_sys(), player_id)
 	else:
 		outcome = handler.on_activate(_sys(), player_id)
-		_active[card_id] = {
+		_next_event_id += 1
+		_active[str(_next_event_id)] = {
+			"card_id": card_id,
 			"player_id": player_id,
 			"remaining": 2 if card.duration == "1 round" else 1,   # a round = 2 individual turns
 			"drawn_on_turn": _match.turn_number,
 			"data": outcome,
 		}
 	if outcome.get("needs_choice", false):
-		_pending[player_id] = {"kind": "event", "card_id": card_id}
+		_pending[player_id] = outcome.duplicate()
+		_pending[player_id].merge({"kind": "event", "card_id": card_id}, true)
 		return
 	EventBus.event_resolved.emit(card_id)
 
 
 func has_pending_choice(player_id: String) -> bool:
-	return _is_current() and _pending.has(player_id)
+	return _is_current() and ((not _veil_queue.is_empty() and decision_player() == player_id) or _pending.has(player_id))
 
 
 func get_pending_choice(player_id: String) -> Dictionary:
+	if _is_current() and not _veil_queue.is_empty() and decision_player() == player_id:
+		return {"kind": "veil", "card_id": "a-flood-survivor-seraphic-burial-veil"}
 	return _pending.get(player_id, {}) if _is_current() else {}
 
 
@@ -94,6 +150,11 @@ func choice_spec(player_id: String) -> Dictionary:
 	var pending := get_pending_choice(player_id)
 	if pending.is_empty():
 		return {}
+	if pending.kind == "veil":
+		return {"kind": "veil", "card_id": pending.card_id, "pick": "option",
+			"prompt": "Seraphic Burial Veil: protect %s from Marked?" % _veil_queue[0].target.data.char_name,
+			"options": [{"label": "Gain Shield instead", "payload": {"protect": true}},
+				{"label": "Accept Marked", "payload": {"protect": false}}]}
 	var spec: Dictionary
 	if pending.kind == "relic":
 		var old := ContentDB.get_relic_event(_match.get_player(player_id).active_relic_id)
@@ -110,6 +171,8 @@ func choice_spec(player_id: String) -> Dictionary:
 
 # RulesEngine's "deck_choice" action. Relic: {"keep_new": bool}. Others: card-specific.
 func resolve_choice(player_id: String, payload: Dictionary) -> Dictionary:
+	if not _veil_queue.is_empty():
+		return _resolve_veil(player_id, payload)
 	if not has_pending_choice(player_id):
 		return {"success": false, "reason": "nothing to choose"}
 	var pending: Dictionary = _pending[player_id]
@@ -122,6 +185,9 @@ func resolve_choice(player_id: String, payload: Dictionary) -> Dictionary:
 		return {"success": true}
 	var result := _handler(pending.card_id).resolve_choice(_sys(), player_id, payload)
 	if result.get("success", false):
+		if result.has("pending"):
+			_pending[player_id] = result.pending
+			return result
 		_pending.erase(player_id)
 		if pending.kind == "event":
 			EventBus.event_resolved.emit(pending.card_id)
@@ -175,20 +241,24 @@ func has_relic(player_id: String, card_id: String) -> bool:
 
 
 func is_active(card_id: String) -> bool:
-	return _is_current() and _active.has(card_id)
+	return _is_current() and _active.values().any(func(e): return e.card_id == card_id)
 
 
 # A running duration event's live data (what its on_activate returned).
 func active_data(card_id: String) -> Dictionary:
-	return _active.get(card_id, {}).get("data", {}) if _is_current() else {}
+	if _is_current():
+		for entry in _active.values():
+			if entry.card_id == card_id:
+				return entry.data
+	return {}
 
 
 # Currently running duration events, for inspection (DebugPanel).
 func active_event_ids() -> Array[String]:
 	var result: Array[String] = []
 	if _is_current():
-		for id in _active.keys():
-			result.append(id)
+		for entry in _active.values():
+			result.append(entry.card_id)
 	return result
 
 
@@ -240,7 +310,7 @@ func _on_turn_started(player_id: String) -> void:
 		entry.remaining -= 1
 		if entry.remaining <= 0:
 			_active.erase(card_id)
-			_handler(card_id).on_expire(_sys(), entry.player_id, entry.data)
+			_handler(entry.card_id).on_expire(_sys(), entry.player_id, entry.data)
 	var player := _match.get_player(player_id)
 	if player != null and player.active_relic_id != "":
 		_handler(player.active_relic_id).on_owner_turn_started(_sys(), player_id)
@@ -260,7 +330,7 @@ func _forward(method: String, args: Array) -> void:
 	for card_id in _active.keys():
 		var entry: Dictionary = _active.get(card_id, {})
 		if not entry.is_empty():
-			_handler(card_id).callv(method, [sys, entry.player_id] + args)
+			_handler(entry.card_id).callv(method, [sys, entry.player_id] + args)
 
 
 func _sum_relics(query: Callable) -> int:
@@ -283,7 +353,7 @@ func _set_relic(player: PlayerState, card_id: String) -> void:
 		for c in p.characters:
 			if not c.defeated:
 				c.current_hp = mini(c.current_hp, sys.get_effective_max_hp(c))
-	_handler(card_id).on_owner_turn_started(sys, player.id)   # a once-per-turn power is ready now
+	_handler(card_id).on_equipped(sys, player.id)
 
 
 func _contribution(culture: String) -> Array[String]:
@@ -297,7 +367,8 @@ func _contribution(culture: String) -> Array[String]:
 		if card.is_relic():
 			relics.append(card.id)
 		else:
-			events.append(card.id)
+			for _copy in EVENT_COPIES:
+				events.append(card.id)
 	if relics.size() != RELICS_PER_PLAYER or events.size() != EVENTS_PER_PLAYER:
 		push_error("RelicEventDeck: %s contributes %d relics and %d events; expected %d and %d"
 				% [culture, relics.size(), events.size(), RELICS_PER_PLAYER, EVENTS_PER_PLAYER])
@@ -325,6 +396,8 @@ func _sync() -> void:
 func _reset_for(state: MatchState) -> void:
 	_match = state
 	_active.clear()
+	_veil_queue.clear()
+	_next_event_id = 0
 	_pending.clear()
 	_relic_state.clear()
 

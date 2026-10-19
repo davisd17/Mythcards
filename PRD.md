@@ -375,7 +375,9 @@ Relic and event cards are faction-themed, but they are still mixed into one shar
 
 Design intent (decided): the shared draw is not incidental variance to be minimized — it is a deliberate pillar. Both players adapting to the same unpredictable pull, regardless of faction, is meant to add randomness and forced tactical thinking each turn. Balance and playtesting should tune this pull (frequency, power level, active-slot rules), not replace it with private per-culture decks.
 
-Deck construction (decided): each player selects 3 relic cards and 4 event cards (7 cards) to contribute to the match's shared deck. The two players' contributions combine into one shared 14-card relic/event deck, shuffled together, for that match. In the 2-culture paper prototype, each culture's full relic/event set is exactly 3 relics and 4 events, so each player's "selection" is simply their own culture's complete set — see the Russian-inspired and Atlantean tables below. This resolves PRD-OQ-006 at 14 cards for the paper prototype. Once more cultures or a larger relic/event pool exist, this 3-relic/4-event contribution becomes a real pre-match choice rather than an automatic default.
+Deck construction (designer decision, 2026-10-18): each player contributes exactly 10 event cards from their side and up to 5 unique relics from their side. An event may appear at most twice in that player's contribution, and a second copy requires ownership of that second copy. Copies count toward the 10 event slots; the rule does not require 10 different event names. Relics cannot repeat within one player's contribution. Both contributions are shuffled into one shared deck: exactly 20 event cards and up to 10 relics, for 20-30 cards total (30 when both players select 5 relics). The five-relic limit is a deckbuilding limit; each player still has only one active relic slot.
+
+Implementation status (2026-10-19): Godot now plays the approved fixed 30-card lineup: five unique events per side, two copies of each, and five unique relics per side. The catalogue contains 20 unique definitions; duplicates are generated when the deck is built. A collection-based deckbuilder and ownership enforcement remain future work. The older prototype card tables below are historical; data/cards/relic_events.json is the current playable source.
 
 Russian-inspired relics:
 
@@ -678,7 +680,7 @@ The first playable prototype should prove the core game is fun before adding col
 - 7 character types
 - 1 version of each type per culture
 - 14 total character cards (playtest matchup: Closed City vs Flood Survivors, see Section 8)
-- 14 shared relic/event cards (each player contributes 3 relics and 4 events from their own culture; see Section 9)
+- Expanded shared relic/event deck: 10 event cards and up to 5 unique relics per player; 20-30 cards total, including up to 2 owned copies of an event (see Section 9; current Godot playtest uses the full 30-card fixed lineup)
 - No fixed starting formation — each player deploys their 7 characters on their own back row in their own chosen arrangement
 - First-pass story framing around the Closed City accident and convergence dream
 - Design notes for the six faction sub-areas, while only a representative 14-card roster is implemented for the first prototype
@@ -800,7 +802,7 @@ Design as fair-to-play first. Decide monetization after the core game is fun.
 | PRD-OQ-003 | Are units permanently defeated, revived, or returned to hand? | Affects victory pacing, comeback mechanics, and event/relic design. |
 | PRD-OQ-004 | Should cultures be historically named, myth-inspired, or fully fictional? | Affects naming, research burden, audience expectations, and sensitivity review. |
 | PRD-OQ-005 | Is the tone serious, stylized, heroic, dark, or family-friendly? | Affects art direction, Spirit Ember framing, story presentation, and content rating. |
-| PRD-OQ-006 | Resolved: 14 shared relic/event cards for the paper prototype, formed by each player contributing 3 relics and 4 events from their culture. | Determines prototype content workload and event frequency; matches the existing Russian-inspired and Atlantean relic/event tables exactly. |
+| PRD-OQ-006 | Resolved 2026-10-18: each side contributes 10 event cards and up to 5 unique relics. Events allow up to 2 owned copies, counted within the 10 slots. | Shared deck has exactly 20 events and up to 10 relics (20-30 cards); requires expanded content and pre-match contribution selection. |
 | PRD-OQ-007 | What exact story role does the Closed City scientist play: protagonist, narrator, gate, victim, antagonist, or all of these at different times? | Determines campaign framing, tutorial voice, and long-term narrative structure. |
 | PRD-OQ-008 | Resolved: represented as a status/counter on the carrying character (icon such as a wisp, spark, or fractured-glass mark), not a separate physical board object. | Simplifies UI; avoids adding another placed-object type alongside barricades/pylons/frost tiles. |
 | PRD-OQ-009 | Resolved: no darker body-part language in any version of the product, including prototype notes. `Spirit Ember` is the only name used. | Removes the sensitivity risk in PRD-RISK-006 outright rather than deferring it to a later tone decision. |
@@ -817,7 +819,7 @@ Validate basic rules with physical cards or a spreadsheet.
 Deliverables:
 - Board sketch
 - 14 character cards
-- 14 shared relic/event cards (3 relics + 4 events per player)
+- Shared relic/event deck of 20 events plus up to 10 relics, using the contribution and copy limits in Section 9
 - 1-page rules sheet
 - Draft story premise for the Closed City accident and convergence
 - Sub-area design notes for Russian-inspired and Atlantean factions

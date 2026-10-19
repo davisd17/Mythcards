@@ -6,8 +6,7 @@
     "name": "Chintamani Fragment",
     "kind": "Rare Relic",
     "duration": "Persistent",
-    "effect": "Once each turn, you may reveal the top card of the shared relic/event deck. You may leave it on top or place it on the bottom.",
-    "note": "Closed City relic. Keeps the prototype ratio at 3 relics and 4 events per side."
+    "effect": "Once each turn, you may reveal the top card of the shared relic/event deck. You may leave it on top or place it on the bottom."
   },
   {
     "id": "r-reactor-core-fragment",
@@ -16,8 +15,7 @@
     "name": "Reactor Core Fragment",
     "kind": "Relic",
     "duration": "Persistent",
-    "effect": "Your Specialist and Mystic each gain +1 ATK. When one of them takes Leak damage, it gains +1 RANGE on its next AP ability this turn.",
-    "note": "Closed City relic for Elena/Zoya pressure and visible stat tracking."
+    "effect": "Your Specialist and Mystic each gain +1 ATK and ignore Leak damage."
   },
   {
     "id": "r-karpovas-black-key",
@@ -26,8 +24,25 @@
     "name": "Karpova's Black Key",
     "kind": "Relic",
     "duration": "Persistent",
-    "effect": "Your Leader and Common each gain +1 MOVE. Once each turn, one of them may move through 1 placed object or allied occupied tile, but must end on an empty tile.",
-    "note": "Closed City relic for access and movement."
+    "effect": "Your Leader and Common each gain +1 MOVE. Once each turn, one of them may move through 1 placed object or allied occupied tile, but must end on an empty tile."
+  },
+  {
+    "id": "r-cosmonaut-helmet-second-shadow",
+    "faction": "Russian-Inspired",
+    "sub_area": "Closed City",
+    "name": "Cosmonaut Helmet With A Second Shadow",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Mount and Warrior each gain +1 maximum HP and cannot be Marked."
+  },
+  {
+    "id": "r-lead-sealed-notebook",
+    "faction": "Russian-Inspired",
+    "sub_area": "Closed City",
+    "name": "Lead-Sealed Notebook",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Leader and Specialist each gain +1 RANGE."
   },
   {
     "id": "r-signal-array-turns",
@@ -36,8 +51,7 @@
     "name": "Signal Array Turns",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "If there is a placed object on the board, move one of your characters to an empty tile adjacent to it, if possible.",
-    "note": "Closed City event."
+    "effect": "If there is a placed object on the board, move one of your characters to an empty tile adjacent to it, if possible."
   },
   {
     "id": "r-reactor-prayer",
@@ -46,8 +60,7 @@
     "name": "Reactor Prayer",
     "kind": "Event",
     "duration": "1 turn",
-    "effect": "Choose one of your characters. It takes 1 damage and gains +1 character AP this turn.",
-    "note": "Closed City event."
+    "effect": "Choose one of your characters. It takes 1 damage and gains +1 character AP this turn."
   },
   {
     "id": "r-closed-city-incident",
@@ -56,8 +69,7 @@
     "name": "Closed City Incident",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Place 2 Leak markers on different empty tiles within 2 of the center tile.",
-    "note": "Closed City event."
+    "effect": "Place 2 Leak markers on different empty tiles within 2 of the center tile."
   },
   {
     "id": "r-seventeen-seconds",
@@ -66,8 +78,16 @@
     "name": "Seventeen Seconds",
     "kind": "Event",
     "duration": "1 turn",
-    "effect": "This turn, each of your characters may move through 1 occupied tile or placed object, but must end on an empty tile.",
-    "note": "Closed City event."
+    "effect": "This turn, each of your characters may move through 1 occupied tile or placed object, but must end on an empty tile."
+  },
+  {
+    "id": "r-dream-monitors-synchronize",
+    "faction": "Russian-Inspired",
+    "sub_area": "Closed City",
+    "name": "Dream Monitors Synchronize",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "You may swap the positions of the two Common characters if both are still on the board."
   },
   {
     "id": "a-flood-survivor-emerald-tablet",
@@ -76,8 +96,7 @@
     "name": "The Emerald Tablet",
     "kind": "Rare Relic",
     "duration": "Persistent",
-    "effect": "Once each turn, after one of your characters gains Memory or starts movement adjacent to a placed object, choose one allied character within 2 tiles of a placed object. It gains Shield or +1 RANGE on its next AP ability this turn.",
-    "note": "Flood Survivors relic. Keeps the prototype ratio at 3 relics and 4 events per side."
+    "effect": "Once each turn, after one of your characters gains Memory or starts movement adjacent to a placed object, choose one allied character within 2 tiles of a placed object. It gains Shield."
   },
   {
     "id": "a-flood-survivor-black-sarcophagus",
@@ -86,8 +105,7 @@
     "name": "The Black Sarcophagus",
     "kind": "Relic",
     "duration": "Persistent",
-    "effect": "Your Warrior and Hero each gain +1 maximum HP. Once each round, when an enemy adjacent to one of your placed objects attacks, Mark that enemy after the attack resolves.",
-    "note": "Flood Survivors relic."
+    "effect": "Your Warrior and Hero each gain +1 maximum HP. Once each round, when an enemy adjacent to one of your placed objects attacks, Mark that enemy after the attack resolves."
   },
   {
     "id": "a-flood-survivor-tide-sealed-archive",
@@ -96,8 +114,25 @@
     "name": "Tide-Sealed Archive",
     "kind": "Relic",
     "duration": "Persistent",
-    "effect": "Your Leader and Specialist each gain +1 RANGE on AP abilities. Once each turn, when an ally gains Memory, you may move that ally 1 tile. It must end on an empty tile.",
-    "note": "Flood Survivors relic."
+    "effect": "At the start of your turn, every character adjacent to a placed object heals 1 HP, up to its maximum HP."
+  },
+  {
+    "id": "a-flood-survivor-seraphic-burial-veil",
+    "faction": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "name": "Seraphic Burial Veil",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Mystic gains +1 maximum HP. Once each round, when one of your allies would become Marked, you may prevent that Marked condition and give that ally Shield instead."
+  },
+  {
+    "id": "a-flood-survivor-basalt-ley-compass",
+    "faction": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "name": "Basalt Ley Compass",
+    "kind": "Relic",
+    "duration": "Persistent",
+    "effect": "Your Common and Specialist each gain +1 MOVE. They may move through 1 allied placed object, but must end on an empty tile."
   },
   {
     "id": "a-flood-survivor-the-causeway-breathes",
@@ -106,8 +141,7 @@
     "name": "The Causeway Breathes",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Place 2 allied Stone markers on different empty tiles within 2 tiles of the center.",
-    "note": "Flood Survivors event."
+    "effect": "Place 2 allied Stone markers on different empty tiles within 2 tiles of the center."
   },
   {
     "id": "a-flood-survivor-black-water-remembers",
@@ -116,8 +150,7 @@
     "name": "Black Water Remembers",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Choose a character on or adjacent to the center tile. Give it 1 Memory marker.",
-    "note": "Flood Survivors event."
+    "effect": "Choose a character on or adjacent to the center tile. Give it 1 Memory marker."
   },
   {
     "id": "a-flood-survivor-the-flood-reaches-the-walls",
@@ -126,8 +159,7 @@
     "name": "The Flood Reaches The Walls",
     "kind": "Event",
     "duration": "Immediate",
-    "effect": "Each character on an outer edge tile becomes Marked.",
-    "note": "Flood Survivors event."
+    "effect": "Each character on an outer edge tile becomes Marked."
   },
   {
     "id": "a-flood-survivor-the-drowned-seraph-speaks",
@@ -135,8 +167,16 @@
     "sub_area": "Flood Survivors",
     "name": "The Drowned Seraph Speaks",
     "kind": "Event",
-    "duration": "1 round",
-    "effect": "The first enemy that damages your Mystic becomes Marked.",
-    "note": "Flood Survivors event."
+    "duration": "1 turn",
+    "effect": "Your Mystic gains Shield. It also gains +1 ATK this turn. Shield remains until used."
+  },
+  {
+    "id": "a-flood-survivor-exiles-walk-beneath-egypt",
+    "faction": "Atlantean",
+    "sub_area": "Flood Survivors",
+    "name": "Exiles Walk Beneath Egypt",
+    "kind": "Event",
+    "duration": "Immediate",
+    "effect": "Move up to 2 allied characters that are adjacent to placed objects up to 1 tile each. They must end on empty tiles."
   }
 ]

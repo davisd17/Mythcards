@@ -184,7 +184,10 @@ func _validate_common(action_type: String, actor_id: String) -> String:
 		return "match not active"
 	var state := GameState.match_state
 	# A drawn card waiting on a decision (keep a relic? heal whom?) comes first.
-	if action_type != "deck_choice" and RelicEventDeck.has_pending_choice(state.active_player_id):
+	var decision_player := RelicEventDeck.decision_player()
+	if action_type == "deck_choice" and RelicEventDeck.has_pending_choice(actor_id) and actor_id == decision_player:
+		return ""
+	if action_type != "deck_choice" and RelicEventDeck.has_pending_choice(decision_player):
 		return "resolve the drawn card first"
 	# An off-board character (Slumber, Missing In The Signal) comes back before anything else.
 	var returning := action_type == "reactive_bonus" and _is_returning(actor_id)

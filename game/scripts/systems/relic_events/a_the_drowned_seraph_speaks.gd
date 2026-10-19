@@ -1,22 +1,18 @@
 extends RelicEventHandler
-# The Drowned Seraph Speaks (Event, 1 round): the first enemy that damages your Mystic
-# becomes Marked.
-
-const CARD := "a-flood-survivor-the-drowned-seraph-speaks"
+# The Mystic keeps Shield until used; only the +1 ATK expires this turn.
 
 
 func on_activate(sys, player_id: String) -> Dictionary:
+	var grants := []
 	for c in own_live(sys, player_id):
 		if c.data.type == "Mystic":
-			return {"mystic_id": c.instance_id, "triggered": false}
-	return {}
+			sys.add_status(c, "shield", 1, "until_used")
+			grants.append({"character": c,
+				"atk": sys.add_status(c, "temp_atk", 1, "this_turn")})
+	return {"grants": grants}
 
 
-func on_attack_resolved(sys, owner_id: String, attacker_id: String, target_id: String, damage: int, _defeated: bool) -> void:
-	var data := RelicEventDeck.active_data(CARD)
-	if data.is_empty() or data.get("triggered", true) or target_id != data.get("mystic_id", "") or damage <= 0:
-		return
-	var attacker: CharacterInstance = sys.find(attacker_id)
-	if attacker != null and attacker.player_id != owner_id:
-		data["triggered"] = true
-		sys.add_status(attacker, "marked", 1, "until_used")
+func on_expire(_sys, _player_id: String, data: Dictionary) -> void:
+	# Remove only this event's attack bonus; Shield persists until consumed.
+	for grant in data.get("grants", []):
+		grant.character.status_effects.erase(grant.atk)

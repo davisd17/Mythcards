@@ -28,7 +28,7 @@ func _init(p_player_id: String, p_personality: AIPersonality = null, seed_value:
 
 func is_my_turn() -> bool:
 	var state := GameState.match_state
-	return state != null and GameState.is_match_active() and state.active_player_id == player_id
+	return state != null and GameState.is_match_active() and RelicEventDeck.decision_player() == player_id
 
 
 func next_action() -> Dictionary:
