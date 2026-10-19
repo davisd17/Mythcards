@@ -14,6 +14,7 @@ Work within the established concise format in `data/cards/review_drafts/tarot_gu
 - Use atmosphere to support concrete information. A growl, mysterious response, or lyrical reference to an ancient rite is insufficient unless it clarifies the story.
 - Preserve uncertainty about motives and hidden identities while making the observable event understandable. Do not hide basic causality behind vague mysteries.
 - Weave relationships, attraction, grief, loyalty, and conflicting desires into existing narrative sections when established and relevant. Do not invent ties merely to fill a field.
+- Limit a character backstory to no more than two supporting characters' perspectives. Keep the subject central instead of listing an ensemble's reactions.
 - Keep legends inside the story world. Avoid introductory phrases such as "Inspired by" in reader-facing lore. Preserve cultural-source information separately in research or provenance records.
 
 ## Tarot Guidance
