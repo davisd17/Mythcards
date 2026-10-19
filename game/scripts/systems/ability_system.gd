@@ -86,6 +86,16 @@ func movement_rules(mover: CharacterInstance, actor: CharacterInstance = null) -
 	var max_char_passes := handler_for(mover).get_movement_max_char_passes(self, mover)
 	if not pass_char.is_valid() and not pass_obj.is_valid():
 		max_passes = 0
+	if RelicEventDeck.has_relic(actor.player_id, "a-flood-survivor-basalt-ley-compass") \
+			and ["Common", "Specialist"].has(actor.data.type):
+		var prior_obj := pass_obj
+		pass_obj = func(pos: Vector2i) -> bool:
+			var obj := board.get_placed_object(pos)
+			return (prior_obj.is_valid() and prior_obj.call(pos)) or (obj != null and obj.owner_player_id == actor.player_id)
+		if max_passes >= 0:
+			max_passes += 1
+	if not pass_char.is_valid() and not pass_obj.is_valid():
+		max_passes = 0
 	var grants := movement_grants(actor)
 	if grants.is_empty():
 		return {"pass_char": pass_char, "pass_obj": pass_obj, "max_passes": max_passes,
@@ -455,6 +465,11 @@ func first_ally_on_line(instance: CharacterInstance, from: Vector2i, to: Vector2
 
 func add_status(target: CharacterInstance, type: String, value: int, expires: String,
 		source: CharacterInstance = null, consume_on_attack: bool = false) -> StatusEffect:
+	if type == "marked" and RelicEventDeck.has_relic(target.player_id, "r-cosmonaut-helmet-second-shadow") \
+			and ["Mount", "Warrior"].has(target.data.type):
+		return null
+	if type == "marked" and RelicEventDeck.offer_veil_protection(target, value, expires, source):
+		return null
 	var se := StatusEffect.new(type, value, expires, _match.turn_number)
 	se.source_character_id = source.instance_id if source != null else ""
 	se.consume_on_attack = consume_on_attack
@@ -676,7 +691,8 @@ func _enter_tiles(c: CharacterInstance, tiles: Array[Vector2i]) -> void:
 		if not has_leak(pos):
 			continue
 		# Leak-immune characters (Reactor Worker, Access Granted L2) leave the Leak in place.
-		if handler_for(c).ignores_leaks(self, c) or c.has_status("ignore_leak_move"):
+		if handler_for(c).ignores_leaks(self, c) or c.has_status("ignore_leak_move") \
+				or (RelicEventDeck.has_relic(c.player_id, "r-reactor-core-fragment") and ["Specialist", "Mystic"].has(c.data.type)):
 			continue
 		if c.ability_uses_this_turn.get("ignore_leak_once", false):
 			c.ability_uses_this_turn.erase("ignore_leak_once")

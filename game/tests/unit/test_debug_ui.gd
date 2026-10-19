@@ -187,13 +187,15 @@ func test_debug_match_scene_plays_through_the_whole_deck() -> void:
 	var scene: Control = autofree(DebugMatchScript.new())
 	add_child(scene)
 	scene.start_new_match(42)
+	TurnManager.victory_checker = Fixture.NullChecker.new()   # exercise the deck, not Hero capture
 	var state := GameState.match_state
 	assert_eq(state.deck_seed, 42)
 	var turns := 0
-	while turns < 20 and state.phase == "in_progress":
-		if RelicEventDeck.has_pending_choice(state.active_player_id):
-			var spec := RelicEventDeck.choice_spec(state.active_player_id)
-			var result := RulesEngine.request_action("deck_choice", state.active_player_id, _first_choice(spec))
+	while turns < 35 and state.phase == "in_progress":
+		while RelicEventDeck.has_pending_choice(RelicEventDeck.decision_player()):
+			var decision_player := RelicEventDeck.decision_player()
+			var spec := RelicEventDeck.choice_spec(decision_player)
+			var result := RulesEngine.request_action("deck_choice", decision_player, _first_choice(spec))
 			assert_true(result.success, "%s %s" % [spec, result])
 		assert_eq(scene.controller.run_command("end"), "OK", "turn %d" % state.turn_number)
 		turns += 1

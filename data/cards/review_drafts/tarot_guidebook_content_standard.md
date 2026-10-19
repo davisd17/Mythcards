@@ -50,6 +50,7 @@ Use this order for every guidebook entry:
 - Use a direct quotation spoken by the character.
 - The quote should reveal personality, desire, fear, contradiction, or worldview while reinforcing the tarot archetype.
 - Keep the backstory very brief, generally 2–3 sentences.
+- Include no more than two supporting characters' perspectives in a backstory so the central character stays clear.
 
 ### Event Cards
 

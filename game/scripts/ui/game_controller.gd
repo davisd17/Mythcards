@@ -233,7 +233,7 @@ func relic_power_label() -> String:
 
 func is_ai_turn() -> bool:
 	var state := GameState.match_state
-	return setup == null and state != null and GameState.is_match_active() and ai_players.has(state.active_player_id)
+	return setup == null and state != null and GameState.is_match_active() and ai_players.has(RelicEventDeck.decision_player())
 
 
 func is_ai(player_id: String) -> bool:
@@ -244,7 +244,7 @@ func is_ai(player_id: String) -> bool:
 func ai_step() -> Dictionary:
 	if not is_ai_turn():
 		return {}
-	var ai: AIPlayer = ai_players[GameState.match_state.active_player_id]
+	var ai: AIPlayer = ai_players[RelicEventDeck.decision_player()]
 	var action := ai.next_action()
 	if action.is_empty():
 		return {}
@@ -389,9 +389,11 @@ static func spec_step(spec: Dictionary, payload: Dictionary) -> Dictionary:
 				return step
 		"character_tile":
 			if not payload.has("target_id"):
-				var step := AbilityHandler.target_step("target_id", prompt, spec.get("characters", []))
+				var step := AbilityHandler.target_step("target_id", prompt, spec.get("characters", []), spec.get("optional", false))
 				step["pick"] = "character"
 				return step
+			if payload.target_id == null:
+				return {}
 			var tiles: Array = spec.get("tiles_by_character", {}).get(payload.target_id, [])
 			if payload.has("to") or tiles.is_empty():
 				return {}
@@ -507,7 +509,7 @@ func _start_pending_choice() -> void:
 	var state := GameState.match_state
 	if state == null or not flow.is_empty() or not GameState.is_match_active():
 		return
-	var player := state.active_player_id
+	var player := RelicEventDeck.decision_player()
 	if ai_players.has(player):
 		return   # the AI answers its own choices
 	if RelicEventDeck.has_pending_choice(player):

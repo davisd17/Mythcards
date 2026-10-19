@@ -18,9 +18,11 @@ func after_each() -> void:
 	MusicManager.apply_settings()
 
 
-func test_setup_starts_approved_closed_city_theme_with_full_loop() -> void:
+func test_setup_starts_irinas_leader_theme_with_full_loop() -> void:
 	autofree(Fixture.start_teams_match())
 	assert_eq(MusicManager.current_sub_area, "Closed City")
+	assert_eq(MusicManager.current_leader_id, "r-irina-karpova")
+	assert_eq(MusicManager.current_theme_path, MusicManager.LEADER_THEMES["r-irina-karpova"])
 	var player := MusicManager.get_node("MatchMusic") as AudioStreamPlayer
 	assert_true(player.playing)
 	var stream := player.stream as AudioStreamWAV
@@ -65,6 +67,25 @@ func test_player_two_can_select_closed_city_by_leader_not_team() -> void:
 	state.first_player_id = "p2"
 	GameState.start_match(state)
 	assert_eq(MusicManager.current_sub_area, "Closed City")
+	assert_eq(MusicManager.current_leader_id, "r-irina-karpova")
+	assert_true((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).playing)
+
+
+func test_another_closed_city_leader_falls_back_to_area_base() -> void:
+	autofree(Fixture.start_teams_match())
+	var state := GameState.match_state
+	for character in state.get_player("p1").characters:
+		if character.data.type == "Leader":
+			# Use a fresh Resource so the ContentDB's shared Irina card stays unchanged.
+			var data := CharacterData.new()
+			data.id = "test-unscored-leader"
+			data.type = "Leader"
+			data.sub_area = "Closed City"
+			character.data = data
+			break
+	GameState.start_match(state)
+	assert_eq(MusicManager.current_leader_id, "test-unscored-leader")
+	assert_eq(MusicManager.current_theme_path, MusicManager.THEMES["Closed City"])
 	assert_true((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).playing)
 
 

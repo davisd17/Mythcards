@@ -1,4 +1,5 @@
 extends GutTest
+const Fixture := preload("res://tests/helpers/match_fixture.gd")
 # The game screen as a whole (LLD-presentation.md Section 8, adapted in its 9A): it builds,
 # setup hands over to a match, drawn cards pop up, and a seeded match plays through the
 # whole deck with every choice answered by the same taps and buttons a player uses.
@@ -73,10 +74,11 @@ func test_character_art_loads_for_both_playable_cultures() -> void:
 
 func test_a_seeded_match_plays_through_the_whole_deck_by_taps() -> void:
 	_deploy_both()
+	TurnManager.victory_checker = Fixture.NullChecker.new()   # exercise all 30 draws
 	var gc: GameController = screen.controller
 	var state := GameState.match_state
 	var turns := 0
-	while turns < 20 and state.phase == "in_progress":
+	while turns < 35 and state.phase == "in_progress":
 		while not gc.flow.is_empty():
 			var step := gc.current_step()
 			match step.pick:

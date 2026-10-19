@@ -66,9 +66,10 @@ func _range(c: CharacterInstance, context: String) -> int:
 func test_deck_holds_both_contributions() -> void:
 	RelicEventDeck.build_deck("Russian-inspired", "Atlantean", 42)
 	var deck := Fixture.state().shared_deck
-	assert_eq(deck.size(), 14)
+	assert_eq(deck.size(), 30)
 	for id in RelicEventRegistry.HANDLERS.keys():
 		assert_true(deck.has(id), id)
+		assert_eq(deck.count(id), 2 if ContentDB.get_relic_event(id).is_event() else 1, id)
 
 
 func test_every_card_in_the_data_has_a_handler() -> void:
@@ -195,7 +196,9 @@ func test_reactor_core_fragment() -> void:
 	assert_eq(sys.get_conditional_atk_bonus(Fixture.put(SNIPER, Vector2i(0, 0))), 0)
 	_leak(Vector2i(3, 1))
 	_act("move", SEER, {"to": Vector2i(3, 2)})
-	assert_eq(sys.ability_reach(seer, 3), 4, "+1 RANGE on its next AP ability after Leak damage")
+	assert_eq(seer.current_hp, seer.base_max_hp, "relic grants Leak immunity")
+	assert_true(sys.has_leak(Vector2i(3, 1)), "immune movement leaves the Leak")
+	assert_eq(sys.ability_reach(seer, 3), 3, "no old RANGE trigger")
 
 
 func test_karpovas_black_key_move_and_one_pass() -> void:
@@ -280,9 +283,24 @@ func test_emerald_tablet_after_gaining_memory() -> void:
 	assert_eq(RelicEventDeck.power_spec("p2"), {}, "not ready until triggered")
 	sys.give_memory(guard)
 	assert_true(RelicEventDeck.power_spec("p2").characters.has(GUARD))
-	assert_true(_act("use_relic", "p2", {"target_id": GUARD, "boost": "shield"}).success)
+	assert_false(RelicEventDeck.power_spec("p2").has("options"), "no extra bonus choice")
+	assert_true(_act("use_relic", "p2", {"target_id": GUARD}).success)
 	assert_eq(guard.sum_status("shield"), 1)
+	assert_false(guard.has_status("temp_ability_range"))
 	assert_eq(RelicEventDeck.power_spec("p2"), {}, "once each turn")
+	_act("end_turn", "p2")
+	_act("end_turn", "p1")
+	assert_eq(guard.sum_status("shield"), 1, "Shield persists until used")
+
+
+func test_emerald_tablet_after_movement_near_an_object() -> void:
+	_relic("p1", "a-flood-survivor-emerald-tablet")
+	var seer := Fixture.put(SEER, Vector2i(3, 3))
+	Fixture.board().place_object(Vector2i(3, 4), "stone", "p1")
+	assert_true(_act("move", SEER, {"to": Vector2i(4, 3)}).success)
+	assert_true(RelicEventDeck.power_spec("p1").characters.has(SEER))
+	assert_true(_act("use_relic", "p1", {"target_id": SEER}).success)
+	assert_eq(seer.sum_status("shield"), 1)
 
 
 func test_black_sarcophagus() -> void:
@@ -298,11 +316,20 @@ func test_black_sarcophagus() -> void:
 
 func test_tide_sealed_archive() -> void:
 	_relic("p2", "a-flood-survivor-tide-sealed-archive")
-	var conductor := Fixture.put(CONDUCTOR, Vector2i(3, 3))    # Leader RANGE 3
-	assert_eq(sys.ability_reach(conductor, 3), 4)
-	var guard := Fixture.put(GUARD, Vector2i(5, 5))
-	sys.give_memory(guard)
-	assert_true(guard.ability_uses_this_turn.get("free_move_available", false), "may move 1 tile")
+	var ally := Fixture.put(GUARD, Vector2i(3, 3))
+	var enemy := Fixture.put(SNIPER, Vector2i(2, 4))
+	var far := Fixture.put(HARMONIC, Vector2i(6, 6))
+	Fixture.board().place_object(Vector2i(3, 4), "stone", "p1")
+	Fixture.board().place_object(Vector2i(4, 3), "stone", "p2")
+	ally.current_hp -= 2
+	enemy.current_hp -= 1
+	far.current_hp -= 1
+	_act("end_turn", "p1")
+	assert_eq(ally.current_hp, ally.base_max_hp - 1, "one heal even next to two objects")
+	assert_eq(enemy.current_hp, enemy.base_max_hp, "heals enemies too")
+	assert_eq(far.current_hp, far.base_max_hp - 1, "must be adjacent")
+	_act("end_turn", "p2")
+	assert_eq(ally.current_hp, ally.base_max_hp - 1, "only owner's turn start")
 
 
 # --- Flood Survivors events ----------------------------------------------------------------
@@ -352,13 +379,30 @@ func test_the_flood_reaches_the_walls() -> void:
 
 func test_the_drowned_seraph_speaks() -> void:
 	_act("end_turn", "p1")
-	Fixture.put(HARMONIC, Vector2i(3, 3))
+	var mystic := Fixture.put(HARMONIC, Vector2i(3, 3))
+	var ally := Fixture.put(GUARD, Vector2i(0, 6))
+	var enemy_mystic := Fixture.put(SEER, Vector2i(0, 0))
+	var enemy := Fixture.put(GYMNAST, Vector2i(3, 4))
+	var atk_before := mystic.get_effective_atk()
+	sys.add_status(mystic, "shield", 2, "until_used")
 	_draw("a-flood-survivor-the-drowned-seraph-speaks", "p2")
+	assert_eq(mystic.sum_status("shield"), 3)
+	assert_eq(mystic.get_effective_atk(), atk_before + 1)
+	assert_false(ally.has_status("shield"))
+	assert_false(enemy_mystic.has_status("temp_atk"))
+	assert_eq(_act("attack", HARMONIC, {"target_id": GYMNAST}).damage, atk_before + 1)
+	assert_false(enemy.has_status("marked"), "no longer marks enemies")
 	_act("end_turn", "p2")
-	var sniper := Fixture.put(SNIPER, Vector2i(3, 1))
-	var gymnast := Fixture.put(GYMNAST, Vector2i(3, 4))
-	_act("attack", SNIPER, {"target_id": HARMONIC})
-	assert_true(sniper.has_status("marked"), "the first enemy to damage the Mystic")
-	assert_eq(sniper.status_effects.filter(func(se): return se.type == "marked")[0].expires, "until_used")
-	_act("attack", GYMNAST, {"target_id": HARMONIC})
-	assert_false(gymnast.has_status("marked"), "only the first")
+	assert_eq(mystic.get_effective_atk(), atk_before, "attack bonus ends with this turn")
+	assert_eq(mystic.sum_status("shield"), 3, "event Shield survives the end of the turn")
+	_act("end_turn", "p1")
+	assert_eq(mystic.sum_status("shield"), 3, "event Shield survives into the Mystic's next turn")
+	assert_eq(_combat().apply_damage(enemy_mystic, mystic, 1, true).damage, 0)
+	assert_eq(mystic.sum_status("shield"), 2, "event Shield is consumed before older shields")
+
+
+func test_the_drowned_seraph_speaks_without_a_mystic() -> void:
+	_draw("a-flood-survivor-the-drowned-seraph-speaks")
+	assert_false(RelicEventDeck.has_pending_choice("p1"))
+	_act("end_turn", "p1")
+	assert_eq(Fixture.state().active_player_id, "p2")

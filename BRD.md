@@ -72,7 +72,7 @@ Each culture is designed around three future story sub-areas (21 character cards
 - 7x7 board with one visually marked center tile.
 - Two playable cultures: Russian-inspired and Atlantean.
 - 14 total character cards (one of each of the 7 types per culture), sourced from `data/cards/characters.json` — see Section 12.
-- 14 total shared relic/event cards: each player contributes 3 relics and 4 events from their own culture into one shared match deck (BR-027A) — see Section 13.
+- 30 shared relic/event cards in the current fixed playtest: each side contributes 10 event copies (5 unique events twice each) and 5 unique relics (BR-027A/B).
 - No fixed starting formation: each player deploys their own 7 characters onto their own back row, in an arrangement of their own choosing (BR-007A).
 - Three character levels per character; Level 2 via reaching the opponent's edge, Level 3 via Spirit Ember collection and center-square delivery.
 - Turn-level AP pool: 4 AP, except the match's first turn, which is 2 AP and only for the player who goes first (BR-018); each character has its own AP stat (default 1).
@@ -202,7 +202,8 @@ Each culture is designed around three future story sub-areas (21 character cards
 | ID | Rule |
 | --- | --- |
 | BR-027 | Relic and event cards are mixed into one shared non-character deck used by both players. |
-| BR-027A | Deck construction: each player selects 3 relic cards and 4 event cards (7 cards total) from their own culture to contribute to the match's shared deck. The two players' contributions combine into one shared 14-card deck, shuffled together. In the 2-culture prototype, each culture's full relic/event set is exactly 3 relics and 4 events (Section 13), so each player's "selection" is simply their entire culture's set; this becomes a real pre-match choice once a larger relic/event pool exists. This resolves PRD-OQ-006 at 14 cards for the paper prototype. |
+| BR-027A | Deck construction (superseded 2026-10-18): each player selects exactly 10 event cards and up to 5 unique relics from their own side. Combine and shuffle both contributions into one shared deck of exactly 20 events and up to 10 relics (20-30 cards total). This replaces the earlier 3-relic/4-event contribution. The one-active-relic-slot rule is unchanged. |
+| BR-027B | Each event may appear at most twice in a player's contribution, limited by the copies that player owns. A second copy counts toward the same 10-event allotment. Each relic may appear at most once in that player's contribution. Validate copies per player before combining the contributions. |
 | BR-028 | The active player draws one shared relic/event card each turn. |
 | BR-028A | If the shared deck runs out, no card is drawn for the rest of the match and play continues normally (decided 2026-09-25). There is no reshuffle. Deck exhaustion is addressed by growing the shared deck as the relic/event pool grows, not by recycling spent cards. |
 | BR-029 | Each player may have only one active relic at a time. |
@@ -271,7 +272,8 @@ Each culture is designed around three future story sub-areas (21 character cards
 | FR-007B | The system shall restrict player-controlled placement to each player's own back row, with no fixed designer formation elsewhere on the board. | Must |
 | FR-008 | The system shall support configurable board layouts for future non-standard boards. | Should |
 | FR-009 | The system shall initialize a shared relic/event deck at match start. | Must |
-| FR-009A | The system shall build the match's shared relic/event deck from each player's 3-relic/4-event contribution (auto-populated from the player's culture in the 2-culture prototype). | Must |
+| FR-009A | The system shall build and seed-shuffle the shared deck from two validated contributions of exactly 10 events and up to 5 unique relics each (BR-027A/B). Godot's current fixed playtest contributes 5 unique relics and two copies of each of 5 events per side, for 30 total cards; collection-based selection remains future work. | Must |
+| FR-009B | Before a match, the system shall allow contribution selection and reject a contribution with an invalid event count, more than 5 relics, a repeated relic, more than 2 copies of an event, a card outside the player's side, or a copy count exceeding owned copies. | Must |
 
 ### 9.2 Board And Movement
 
@@ -528,7 +530,7 @@ Each character record (`data/cards/characters.json`) should include: character I
 
 ### 11.2 Match Data
 
-Each match record should track: player cultures, starting board layout (including each player's chosen back-row arrangement), character positions, character HP, character levels, Spirit Ember possession status per character, mounted pair state, pool AP remaining, each character's remaining AP, active relic for each player, active or most recent event effects, shared relic/event deck order and each player's 3-relic/4-event contribution, turn number, current player, defeated characters, victory condition (Hero capture vs. army defeat).
+Each match record should track: player cultures, starting board layout (including each player's chosen back-row arrangement), character positions, character HP, character levels, Spirit Ember possession status per character, mounted pair state, pool AP remaining, each character's remaining AP, active relic for each player, active or most recent event effects, shared relic/event deck order and each player's 10-event/up-to-5-unique-relic contribution, turn number, current player, defeated characters, victory condition (Hero capture vs. army defeat).
 
 ### 11.3 Relic/Event Data
 
@@ -573,7 +575,7 @@ Two cards changed on 2026-09-25 during the LLD review, and the change is carried
 
 ## 13. Initial Relic And Event Inventory
 
-Source of truth: `data/cards/relic_events.json`. Relic and event cards are culture-themed but mixed into one shared non-character deck used by both players (BR-027, BR-033). Each player contributes their full culture set — 3 relics and 4 events — to build the shared 14-card deck (BR-027A). Each player may have only one active relic; drawing a new relic while one is already active allows that player to replace it or ignore the new draw (BR-029, BR-030).
+Source of truth: `data/cards/relic_events.json`. Relic and event cards are culture-themed but mixed into one shared non-character deck used by both players (BR-027, BR-033). Each player currently contributes 5 unique relics plus two copies of each of 5 approved events, building a 30-card shared deck (BR-027A/B). Older tables below are historical; the JSON file contains the current approved effects. Each player may have only one active relic; drawing a new relic while one is already active allows that player to replace it or ignore the new draw (BR-029, BR-030).
 
 ### 13.1 Russian-Inspired Relics (3)
 
@@ -648,7 +650,7 @@ Per BR-043A, a full Closed City relic/event set is drafted in `data/cards/review
 | D-008 | Paper prototype materials or spreadsheet, and a configured Godot environment. | FR-085 through FR-090 |
 | D-009 | Placeholder art or simple readable tokens. | NFR-035, AS-005 |
 | D-010 | Playtest feedback from at least 3-5 matches, specifically tracking leveling frequency, AP-pool first-move mitigation, turtling under the new Hero capture rule (R-004), and per-card rules overload. | NFR-013, BR-021, R-003, R-004 |
-| D-011 | MVP-scale relic/event contribution model (still 3+4 per player from a larger pool, or something else) is undecided. | Section 6.2 MVP Scope `[NEED]` |
+| D-011 | Resolved 2026-10-18: exactly 10 events and up to 5 unique relics per player; up to 2 owned copies of an event. Earlier 3+4 descriptions and content tables are historical until implementation is updated. | BR-027A/B, FR-009A/B, PRD Section 9 |
 
 ## 16. Acceptance Criteria
 
@@ -658,7 +660,7 @@ The first paper prototype is acceptable when:
 - Players can identify legal movement, attack targets, and line-of-sight blocking — including for non-damage support abilities.
 - Hero capture (no-legal-move condition, BR-034) and army defeat victories can both occur, and playtest notes record whether the checkmate-style capture rule reads clearly to new players.
 - At least one character reaches Level 2, and playtest notes record whether Level 3 was attempted and why or why not (R-003).
-- Shared relic/event draws (built from each player's 3 relics + 4 events) affect decisions without dominating the match.
+- Shared relic/event draws (built from each player's 10 events + up to 5 unique relics) affect decisions without dominating the match.
 - Playtest notes explicitly flag whether matches trend toward turtling under the new Hero capture rule (R-004, SM-009).
 - Playtest notes identify balance issues for revision, including whether the 2-AP first turn meaningfully offset first-move advantage.
 

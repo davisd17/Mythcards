@@ -67,12 +67,13 @@ func serialize_state() -> Dictionary:
 						"current_hp": obj.current_hp, "max_hp": obj.max_hp, "owner": obj.owner_player_id})
 			if state.board.get_tile(Vector2i(x, y)).terrain_type == "frost":
 				frost.append(_pos(Vector2i(x, y)))
-	var choice := RelicEventDeck.choice_spec(state.active_player_id)
+	var choice := RelicEventDeck.choice_spec(RelicEventDeck.decision_player())
 	var power := RelicEventDeck.power_spec(state.active_player_id)
 	return {
 		"phase": state.phase,
 		"turn_number": state.turn_number,
 		"active_player_id": state.active_player_id,
+		"decision_player_id": RelicEventDeck.decision_player(),
 		"winner_id": state.winner_id,
 		"win_condition": state.win_condition,
 		"players": players,

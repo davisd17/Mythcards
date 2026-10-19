@@ -18,7 +18,7 @@ func _init(p_player_id: String) -> void:
 func generate() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var state := GameState.match_state
-	if state == null or not GameState.is_match_active() or state.active_player_id != player_id:
+	if state == null or not GameState.is_match_active() or RelicEventDeck.decision_player() != player_id:
 		return result
 	# A drawn card waiting on a decision comes first, then an off-board return.
 	if RelicEventDeck.has_pending_choice(player_id):

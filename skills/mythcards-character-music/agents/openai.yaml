@@ -1,0 +1,4 @@
+interface:
+  display_name: "MythCards Character Music"
+  short_description: "Compose retro lo-fi leader themes and jam loops"
+  default_prompt: "Use $mythcards-character-music to compose or revise a MythCards character theme with playable audio and compatible loops."

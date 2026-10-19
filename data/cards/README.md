@@ -4,6 +4,7 @@ This folder is the start of the shared card data structure for collaborators.
 
 - `characters.json` is the source data for prototype character cards.
 - `relic_events.json` is the Closed City / Flood Survivors relic and event set. **The Godot rules prototype plays this set** (designer decision 2026-09-27, after the first playtest). Card rulings are in `LLD-relic-event-deck.md` Section 9B.
+- The current fixed lineup has **20 unique card definitions**: 5 relics and 5 events per side. Godot supplies **2 copies of every event** and **1 copy of every relic**, building a **30-card shared deck: 20 events and 10 relics**. Do not duplicate JSON definitions or change their IDs to represent copies. Collection-based deck selection and ownership validation are not enabled yet.
 - `prototype_relic_events.json` is the original 14 relic/event cards from the PRD. The game no longer loads it; it is kept for reference.
 - `teams.json` names the teams the game can field and the matchup it plays (Closed City vs Flood Survivors, decided 2026-10-07). Listing a card in a team makes it playable even when its text lives in `review_drafts/`. The original 14 teams are kept but hidden (`"offered": false`). It also holds the 2-letter board tags.
 - `card_art.json` maps card ids to art under `assets/` for the game screen. Cards not listed show a text card. `tools/sync_game_content.ps1` copies small versions into the game.

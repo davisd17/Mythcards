@@ -28,6 +28,10 @@ func get_move_bonus(_sys, _owner_id: String, _instance: CharacterInstance) -> in
 
 
 # At each of the owner's turn starts while the relic is active (and when it's gained).
+func on_equipped(sys, owner_id: String) -> void:
+	on_owner_turn_started(sys, owner_id)
+
+
 func on_owner_turn_started(_sys, _owner_id: String) -> void:
 	pass
 

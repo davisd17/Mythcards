@@ -13,9 +13,15 @@ version 1.
 
 ## Game integration
 
+October 18 direction: this recording is the Closed City exploration/base theme
+for eventual single-player play. It is preserved unchanged. Irina now has a
+separate leader theme, `Irina — Private Favors`, which takes priority for her
+matches. The current game has no single-player exploration scene yet.
+
 The approved WAV is copied to `game/assets/music/closed-city-v2.wav`.
 `MusicManager` starts it when the match begins, using the Leader belonging to
-`MatchState.first_player_id` to select the sub-area. Setup currently gives p1
+`MatchState.first_player_id` to select their leader theme, falling back to the
+sub-area base when no leader-specific theme exists. Setup currently gives p1
 the first turn. The theme loops for the match and stays the same across turns;
 resetting or ending the match stops it. Unscored sub-areas are silent. Future
 approved themes belong in `MusicManager.THEMES`.

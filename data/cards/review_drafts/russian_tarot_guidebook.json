@@ -1023,6 +1023,105 @@
       ],
       "interpretation": "The array's sudden turn marks the end of waiting: contact has been made, and events begin moving quickly. In your life, this may appear as an unexpected message, a long-awaited reply, or plans suddenly gathering momentum. Like the researchers receiving the signal, you may need to respond before you understand everything. Act on what is clear, ask direct questions, and check that excitement or pressure is not rushing you into a commitment.",
       "when_drawn": "Respond to what is arriving, and clarify what you need to know before committing."
+    },
+    {
+      "tarot_number": "Nine",
+      "tarot_name": "Nine of Wands",
+      "mythcards_name": "Oleg Baranov",
+      "card_type": "Character",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I can keep going and accept support.",
+      "upright_keywords": ["Resilience", "Persistence", "Vigilance"],
+      "shadow_keywords": ["Exhaustion", "Suspicion", "Stubbornness"],
+      "narrative_heading": "Backstory",
+      "narrative": "Oleg Baranov hauls timber, raises circus poles, and carries injured villagers through storms that barely seem to chill him. Vera trusts him to hold the village boundary when others must retreat. Aksinya suspects his extraordinary endurance began with the meteor's influence before he was born, and fears what returning to its crater might awaken.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Stand behind me. Then decide if you are afraid.",
+      "relationships": [
+        {
+          "subject": "Vera Kargina",
+          "dynamic": "Vera trusts Oleg to hold the village boundary while others retreat.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Aksinya Morozova",
+          "dynamic": "Aksinya suspects Oleg's endurance comes from the meteor's influence and fears the consequences of his return to its crater.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "oleg_meteor_inheritance",
+          "clue": "The meteor may have affected Oleg before birth; returning to its crater could awaken more than his unusual endurance.",
+          "connects_to": ["The Meteor Wakes Under Snow", "Aksinya Morozova"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Oleg's endurance reflects the Nine of Wands: strength tested by repeated demands. You may feel worn down, wary of another setback, or close to finishing something that has taken more than expected. Draw on what experience has taught you, protect your remaining energy, and accept help. Persistence works best when you give yourself a chance to recover.",
+      "when_drawn": "Decide what will help you continue without wearing yourself out."
+    },
+    {
+      "tarot_number": "Ten",
+      "tarot_name": "Ten of Wands",
+      "mythcards_name": "Rifle Company Soldier",
+      "card_type": "Character",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I do not have to carry everything alone.",
+      "upright_keywords": ["Responsibility", "Burden", "Endurance"],
+      "shadow_keywords": ["Overload", "Burnout", "Self-Neglect"],
+      "narrative_heading": "Backstory",
+      "narrative": "Private Stepan Kuznetsov carries extra ammunition for men who no longer live to use it, marching because stopping in the cold could kill him. General Volkov keeps sending his company forward, while Stepan's hidden love for field nurse Marya Zima gives him a reason to imagine life beyond the next order. On the ground where the Closed City will someday stand, ordinary soldiers bear the cost of ambitions they never chose.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Every time someone falls, the rest of us carry more.",
+      "relationships": [
+        {
+          "subject": "General Arkady Volkov",
+          "dynamic": "Volkov's repeated advances impose growing burdens on Stepan and the surviving soldiers.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Marya Zima",
+          "dynamic": "Stepan's hidden love for Marya gives him a reason to imagine a life beyond the war.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "Stepan's load reflects the Ten of Wands: responsibility that has grown heavier than one person can reasonably carry. You may be keeping everything moving while neglecting your own needs, or holding obligations that others have quietly left with you. Consider what truly requires your effort, what can be shared, and what no longer needs to be done. Being dependable does not mean being endlessly available.",
+      "when_drawn": "Put down, share, or renegotiate one burden before taking on another."
+    },
+    {
+      "tarot_number": "Page",
+      "tarot_name": "Page of Wands",
+      "mythcards_name": "Mila Vetrova",
+      "card_type": "Character",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I am free to discover what excites me.",
+      "upright_keywords": ["Curiosity", "Enthusiasm", "Exploration"],
+      "shadow_keywords": ["Restlessness", "Insecurity", "Lack of Direction"],
+      "narrative_heading": "Backstory",
+      "narrative": "Mila Vetrova performs with the Deep North Circus, practicing movements passed down long before anyone called them acrobatics. As the convergence awakens the old northern crossings, her routines begin to reveal their ritual purpose. Pavel's attraction offers the possibility of a life beyond the circus, but Mila wants to discover whether its inheritance is a duty she would choose for herself.",
+      "flavor_heading": "Quote",
+      "flavor_text": "I know the routine. I want to know where it leads.",
+      "relationships": [
+        {
+          "subject": "Pavel Sokolov",
+          "dynamic": "Pavel's attraction offers Mila a possible life beyond the circus, while she seeks to choose her own relationship to its inherited duty.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "mila_inherits_movement_rites",
+          "clue": "Mila's inherited routines preserve ritual movements whose purpose becomes apparent as the northern crossings awaken.",
+          "connects_to": ["The Circus Performs The Old Rite", "Aurora Opens Like A Door"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Mila's curiosity about her inherited art reflects the Page of Wands' desire to explore. You may feel drawn toward a new interest, experience, or version of yourself before knowing where it will lead. Give that excitement room to develop through small experiments. You can learn by trying without deciding your entire future at once.",
+      "when_drawn": "Follow your curiosity and try something you have been eager to explore."
     }
   ]
 }

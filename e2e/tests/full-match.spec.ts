@@ -12,7 +12,7 @@ for (const seed of [42, 7, 2026]) {
     console.log(`seed ${seed}:`, JSON.stringify(summary));
     expect(summary.violations).toEqual([]);
     expect(summary.phase, `still going after ${summary.turns} turns`).toBe('ended');
-    expect(['hero_capture', 'army_defeat']).toContain(summary.winCondition);
+    expect(['hero_capture', 'army_defeat', 'ember_delivery']).toContain(summary.winCondition);
     expect(summary.actions).toBeGreaterThan(0);
   });
 }
@@ -57,7 +57,7 @@ function playMatch({ maxTurns }: { maxTurns: number }) {
       payload.target_id = spec.characters[0];
       payload.to = spec.tiles_by_character[spec.characters[0]][0];
     }
-    const r = act('deck_choice', s.active_player_id, payload);
+    const r = act('deck_choice', s.decision_player_id ?? s.active_player_id, payload);
     if (!r.success) violations.push(`turn ${s.turn_number}: choice failed: ${r.reason}`);
   };
 

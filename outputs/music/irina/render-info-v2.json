@@ -1,0 +1,16 @@
+{
+  "title": "Irina \u2014 Private Favors",
+  "version": 2,
+  "loop": "A: main theme",
+  "bpm": 69,
+  "bars": 24,
+  "seconds": 83.47825,
+  "sample_rate": 32000,
+  "channels": 2,
+  "bit_depth": 16,
+  "peak_dbfs": -5.246117087774882,
+  "rms_dbfs": -18.416646119469014,
+  "clipped_samples": 0,
+  "loop_endpoint_difference": 0,
+  "note_events": 743
+}

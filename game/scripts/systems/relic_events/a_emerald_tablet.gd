@@ -1,8 +1,8 @@
 extends RelicEventHandler
 # The Emerald Tablet (Rare Relic): once each turn, after one of your characters gains
 # Memory or starts movement adjacent to a placed object, choose one allied character
-# within 2 tiles of a placed object. It gains Shield or +1 RANGE on its next AP ability
-# this turn. Power payload: {"target_id": id, "boost": "shield"|"range"}.
+# within 2 tiles of a placed object. It gains Shield until used.
+# Power payload: {"target_id": id}.
 
 const CARD := "a-flood-survivor-emerald-tablet"
 const REACH := 2
@@ -32,23 +32,17 @@ func power_available(sys, owner_id: String) -> bool:
 
 
 func power_spec(sys, owner_id: String) -> Dictionary:
-	return {"prompt": "Emerald Tablet: choose an ally within 2 of a placed object.", "pick": "character",
-			"characters": _targets(sys, owner_id),
-			"options": [{"label": "Shield", "payload": {"boost": "shield"}},
-					{"label": "+1 RANGE on next ability", "payload": {"boost": "range"}}]}
+	return {"prompt": "Emerald Tablet: give Shield to an ally within 2 of a placed object.", "pick": "character",
+			"characters": _targets(sys, owner_id)}
 
 
 func use_power(sys, owner_id: String, payload: Dictionary) -> Dictionary:
 	var target_id := str(payload.get("target_id", ""))
-	if not _targets(sys, owner_id).has(target_id) or not ["shield", "range"].has(payload.get("boost")):
-		return {"success": false, "reason": "choose an ally within 2 of a placed object, and Shield or RANGE"}
+	if not _targets(sys, owner_id).has(target_id):
+		return {"success": false, "reason": "choose an ally within 2 of a placed object"}
 	RelicEventDeck.relic_state(owner_id, CARD)["used_turn"] = sys.state().turn_number
 	var target: CharacterInstance = sys.find(target_id)
-	if payload.boost == "shield":
-		sys.add_status(target, "shield", 1, "this_turn")
-	else:
-		var se: StatusEffect = sys.add_status(target, "temp_ability_range", 1, "this_turn")
-		se.consume_on_ability = true
+	sys.add_status(target, "shield", 1, "until_used")
 	return {"success": true}
 
 

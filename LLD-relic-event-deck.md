@@ -14,6 +14,14 @@
 
 ## 1. Purpose & Scope
 
+### Approved Expansion (Implemented Fixed Lineup 2026-10-19)
+
+PRD Section 9 and BRD BR-027A/B supersede the fixed 3-relic/4-event construction below. Each player must select 10 event cards and may select up to 5 distinct relics from their side. Allow at most 2 copies of an event, and never more copies than that player owns. Copies occupy event slots, not additional slots. Combine the validated contributions before seeded shuffling: 20 events plus 0-10 relics, or 20-30 cards total. This does not change the one-active-relic slot or the existing draw cadence.
+
+The current Godot pool contains 10 unique event definitions and 10 unique relic definitions. The playtest automatically supplies two copies of each side's five selected events and one copy of its five selected relics, for 30 total cards. Each duration draw has a distinct runtime record, so repeated event IDs do not overwrite earlier effects. Dream Monitors Synchronize swaps the two Commons optionally; Exiles Walk Beneath Egypt offers up to two distinct free moves. Seraphic Burial Veil queues an optional Marked-to-Shield choice for its owner, including outside their turn, before other actions continue. Collection ownership and custom pre-match deck selection remain future work. Sections below retain historical implementation examples; actual handlers and data/cards/relic_events.json define the playable lineup.
+
+Acceptance checks: accept 10 events plus 0-5 distinct relics; accept two owned copies within the 10 slots; reject a third copy, an unowned second copy, a duplicate relic, 6 relics, an incorrect event total, or a card from the wrong side. Verify 30 total cards when both sides use all 5 relic slots and seeded shuffle retains every selected copy.
+
 This LLD specs the shared 14-card deck: construction from each player's 3-relic/4-event culture contribution (BR-027A), seeded shuffling, one draw per turn, the relic-slot replace/discard choice (BR-030), and immediate-vs-duration event resolution (BR-032) — plus concrete effect implementations for all 14 cards currently in the playable pool (BRD Section 13.1–13.4), using the same per-card dispatch-handler pattern `AbilitySystem` established (LLD-ability-system.md), for the same reason (NFR-016/017: no card's effect is hardcoded into a shared `if` chain).
 
 **Explicitly out of scope**: the Closed City draft relic/event set (`review_status: draft_for_review`) — excluded from `ContentDB.get_playable_relic_events_by_culture()` by design (BR-043A, already enforced by LLD-content-board.md) and therefore never reaches this module at all.

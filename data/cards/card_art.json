@@ -21,6 +21,7 @@
   "r-engineer": "assets/characters/yakov-antonov-winter-engineer-eight-of-pentacles-character-card-art-v2.png",
   "r-seer": "assets/characters/aksinya-morozova-frost-seer-queen-of-cups-character-card-art-v4.png",
   "r-chintamani-fragment": "assets/relics/closed-city-chintamani-fragment-ace-of-pentacles-relic-art-corrected.png",
+  "r-lead-sealed-notebook": "assets/relics/closed-city-lead-sealed-notebook-four-of-pentacles-relic-art.png",
   "r-reactor-core-fragment": "assets/relics/closed-city-reactor-core-fragment-king-of-pentacles-relic-art.png",
   "r-karpovas-black-key": "assets/relics/closed-city-karpovas-black-key-the-hierophant-relic-art-v2.png",
   "r-signal-array-turns": "assets/events/closed-city-signal-array-turns-eight-of-wands-event-art.png",
@@ -33,5 +34,10 @@
   "a-flood-survivor-the-causeway-breathes": "assets/events/flood-survivors-the-causeway-breathes-ace-of-wands-event-art-v2.png",
   "a-flood-survivor-black-water-remembers": "assets/events/flood-survivors-black-water-remembers-the-moon-event-art-v2.png",
   "a-flood-survivor-the-flood-reaches-the-walls": "assets/events/flood-survivors-the-flood-reaches-the-walls-the-tower-event-art.png",
-  "a-flood-survivor-the-drowned-seraph-speaks": "assets/events/flood-survivors-the-drowned-seraph-speaks-justice-event-art.png"
+  "a-flood-survivor-the-drowned-seraph-speaks": "assets/events/flood-survivors-the-drowned-seraph-speaks-justice-event-art.png",
+  "r-cosmonaut-helmet-second-shadow": "assets/relics/closed-city-cosmonaut-helmet-second-shadow-nine-of-pentacles-relic-art.png",
+  "r-dream-monitors-synchronize": "assets/events/closed-city-dream-monitors-synchronize-three-of-pentacles-event-art.png",
+  "a-flood-survivor-seraphic-burial-veil": "assets/relics/flood-survivors-seraphic-burial-veil-temperance-relic-art.png",
+  "a-flood-survivor-basalt-ley-compass": "assets/relics/flood-survivors-basalt-ley-compass-two-of-wands-relic-art.png",
+  "a-flood-survivor-exiles-walk-beneath-egypt": "assets/events/flood-survivors-exiles-walk-beneath-egypt-six-of-swords-event-art.png"
 }

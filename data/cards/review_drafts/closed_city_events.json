@@ -41,9 +41,9 @@
     "kind": "Event",
     "tarot_mapping": "Three of Pentacles",
     "duration": "Immediate",
-    "effect": "Move 1 temporary combat marker, such as Shield, +ATK, +MOVE, Pounce, Slow, or Marked, from one character to another character within 3 tiles. Spirit Ember cannot be moved this way.",
+    "effect": "You may swap the positions of the two Common characters if both are still on the board.",
     "role": "Elena's dream work stops being observation and becomes connection. Private symbols begin moving through machines and bodies.",
-    "mechanical_lane": "Status-marker transfer that supports Elena and Zoya without touching Spirit Ember.",
+    "mechanical_lane": "Optional position swap between the allied and opposing Common, regardless of distance.",
     "narrative": {
       "arc_phase": "The Synchronization",
       "summary": "Three sleeping subjects produce the same waveform. The machines are not recording dreams anymore. They are letting dreams touch one another.",
@@ -56,7 +56,7 @@
     "review_notes": [
       "Draft event card, not yet added to the playable prototype shared relic/event deck.",
       "Part of the clearly defined 9-card Closed City event set.",
-      "Explicitly excludes Spirit Ember to protect Level 3 progression rules."
+      "Approved for the expanded event lineup: swaps both Commons instead of moving status markers; requires both Commons on the board."
     ]
   },
   {
