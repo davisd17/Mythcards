@@ -183,7 +183,7 @@ func _arrow(from: Vector2i, to: Vector2i, color: Color) -> void:
 # The seven types as a key: each symbol over its name, 4 on top and 3 below.
 func _draw_squad() -> void:
 	var font := ThemeDB.fallback_font
-	var font_size := UiStyle.FONT_SECONDARY - 6
+	var font_size := UiStyle.FONT_SECONDARY
 	var col_w := size.x / 4.0
 	var row_h := size.y / 2.0
 	var radius := minf(col_w * 0.3, row_h * 0.28)
