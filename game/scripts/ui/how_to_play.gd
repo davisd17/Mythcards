@@ -20,6 +20,7 @@ const PAGES := [
 		"Tap Next to learn the basics. It takes about two minutes."]},
 	{"title": "Your squad", "scene": "squad",
 	 "body": ["Each side has 7 characters, one of each type: Leader, Hero, Mount, Specialist, Warrior, Common and Mystic.",
+		"Each type has its own symbol, shown on its piece and on its card.",
 		"Your Hero is your most important piece. Keep it safe and keep it free to move.",
 		"Every character has HP (how much damage it can take), ATK (its attack damage), MOVE and RANGE. Its card also lists its abilities.",
 		"Tap any character to read its card."]},

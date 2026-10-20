@@ -9,7 +9,7 @@ var scene := ""
 const N := BoardModel.BOARD_SIZE
 const P1 := GameBoardView.CITY_RED
 const P2 := GameBoardView.FLOOD_CYAN
-const TYPE_TAGS := ["Co", "Mo", "Wa", "Le", "He", "Sp", "My"]
+const TYPES := ["Common", "Mount", "Warrior", "Leader", "Hero", "Specialist", "Mystic"]
 
 
 func _ready() -> void:
@@ -25,55 +25,54 @@ func _draw() -> void:
 		"cards":
 			_draw_cards()
 			return
+		"squad":
+			_draw_squad()
+			return
 		"":
 			return
 	_draw_board()
 	match scene:
 		"board":
 			for x in N:
-				_token(Vector2i(x, 6), P1, TYPE_TAGS[x])
-				_token(Vector2i(x, 0), P2, TYPE_TAGS[x])
-		"squad":
-			for x in N:
-				_token(Vector2i(x, 6), P1, TYPE_TAGS[x])
-			_ring(Vector2i(4, 6), GameBoardView.SELECTED)
+				_token(Vector2i(x, 6), P1, TYPES[x])
+				_token(Vector2i(x, 0), P2, TYPES[x])
 		"setup":
 			_row(6, GameBoardView.PICK)
 			for x in [0, 1, 4]:
-				_token(Vector2i(x, 6), P1, TYPE_TAGS[x])
+				_token(Vector2i(x, 6), P1, TYPES[x])
 			for x in [2, 3, 5, 6]:
 				_brackets(Vector2i(x, 6), GameBoardView.PICK)
 		"move":
 			_selected(Vector2i(2, 4))
-			_token(Vector2i(2, 4), P1, "Wa")
-			_token(Vector2i(4, 4), P1, "Co")
+			_token(Vector2i(2, 4), P1, "Warrior")
+			_token(Vector2i(4, 4), P1, "Common")
 			for t in [Vector2i(2, 3), Vector2i(2, 2), Vector2i(1, 4), Vector2i(0, 4),
 					Vector2i(3, 4), Vector2i(2, 5), Vector2i(2, 6)]:
 				_dot(t)
-			_token(Vector2i(2, 1), P2, "Wa")
+			_token(Vector2i(2, 1), P2, "Warrior")
 		"attack":
 			_selected(Vector2i(1, 5))
-			_token(Vector2i(1, 5), P1, "Sp")
-			_token(Vector2i(1, 2), P2, "Wa")
+			_token(Vector2i(1, 5), P1, "Specialist")
+			_token(Vector2i(1, 2), P2, "Warrior")
 			_ring(Vector2i(1, 2), GameBoardView.ATTACK)
-			_token(Vector2i(3, 5), P1, "Co")
-			_token(Vector2i(5, 5), P2, "Mo")
+			_token(Vector2i(3, 5), P1, "Common")
+			_token(Vector2i(5, 5), P2, "Mount")
 			_cross(Vector2i(5, 5))
 		"level":
 			_row(0, GameBoardView.PICK)
-			_token(Vector2i(3, 2), P1, "Wa")
+			_token(Vector2i(3, 2), P1, "Warrior")
 			_arrow(Vector2i(3, 2), Vector2i(3, 0), GameBoardView.PICK)
 		"embers":
-			_token(Vector2i(3, 5), P1, "Mo")
+			_token(Vector2i(3, 5), P1, "Mount")
 			_ember(Vector2i(3, 5))
 			_arrow(Vector2i(3, 5), Vector2i(3, 3), GameBoardView.EMBER)
-			_token(Vector2i(5, 2), P2, "Wa")
+			_token(Vector2i(5, 2), P2, "Warrior")
 		"capture":
-			_token(Vector2i(0, 6), P1, "He")
+			_token(Vector2i(0, 6), P1, "Hero")
 			_ring(Vector2i(0, 6), GameBoardView.ATTACK)
-			_token(Vector2i(1, 6), P1, "Le")
-			_token(Vector2i(0, 5), P2, "Wa")
-			_token(Vector2i(4, 6), P1, "Co")
+			_token(Vector2i(1, 6), P1, "Leader")
+			_token(Vector2i(0, 5), P2, "Warrior")
+			_token(Vector2i(4, 6), P1, "Common")
 
 
 # --- Board -----------------------------------------------------------------------------
@@ -109,17 +108,15 @@ func _draw_board() -> void:
 	draw_arc(c.get_center(), c.size.x * 0.36, 0.0, TAU, 32, GameBoardView.CENTER_GLOW, 2.0, true)
 
 
-func _token(pos: Vector2i, color: Color, tag: String) -> void:
+# A piece: a disc in its team's color with its type's symbol (TypeIcon, as on the board).
+func _token(pos: Vector2i, color: Color, type: String) -> void:
 	var r := _tile(pos)
 	var center := r.get_center()
-	var radius := r.size.x * 0.38
-	draw_circle(center, radius, color.darkened(0.35))
-	draw_arc(center, radius, 0.0, TAU, 32, color.lightened(0.3), 2.0, true)
-	var font := ThemeDB.fallback_font
-	var font_size := int(r.size.x * 0.34)
-	var text_size := font.get_string_size(tag, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-	draw_string(font, center + Vector2(-text_size.x / 2.0, font_size * 0.36), tag,
-			HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, UiStyle.TEXT)
+	var radius := r.size.x * 0.4
+	draw_circle(center, radius, color.darkened(0.55))
+	draw_arc(center, radius, 0.0, TAU, 32, color.lightened(0.2), maxf(1.5, radius * 0.12), true)
+	TypeIcon.draw_symbol(self, type, center, radius * 0.56, GameBoardView.ROLE_COLORS.get(type, UiStyle.TEXT),
+			maxf(1.2, radius * 0.13))
 
 
 func _selected(pos: Vector2i) -> void:
@@ -182,6 +179,26 @@ func _arrow(from: Vector2i, to: Vector2i, color: Color) -> void:
 
 
 # --- Other pictures ----------------------------------------------------------------------
+
+# The seven types as a key: each symbol over its name, 4 on top and 3 below.
+func _draw_squad() -> void:
+	var font := ThemeDB.fallback_font
+	var font_size := UiStyle.FONT_SECONDARY - 6
+	var col_w := size.x / 4.0
+	var row_h := size.y / 2.0
+	var radius := minf(col_w * 0.3, row_h * 0.28)
+	var order := ["Leader", "Hero", "Mount", "Specialist", "Warrior", "Common", "Mystic"]
+	for i in order.size():
+		var row := 0 if i < 4 else 1
+		var col := i if row == 0 else i - 4
+		var x := col_w * (col + 0.5) + (col_w * 0.5 if row == 1 else 0.0)
+		var center := Vector2(x, row_h * row + row_h * 0.42)
+		var type: String = order[i]
+		TypeIcon.draw_badge(self, center, radius, type, GameBoardView.ROLE_COLORS[type])
+		var tw := font.get_string_size(type, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+		draw_string(font, Vector2(x - tw / 2.0, center.y + radius + font_size * 1.1), type,
+				HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, UiStyle.TEXT)
+
 
 # The header's AP pips, large: 3 left of 4, one spent on a move.
 func _draw_ap() -> void:
