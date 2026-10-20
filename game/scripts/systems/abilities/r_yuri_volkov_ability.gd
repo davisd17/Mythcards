@@ -1,7 +1,8 @@
 extends AbilityHandler
 # Major Yuri Volkov (Closed City Warrior) — LLD-closed-city-flood-roster.md 4.
 # L1 Containment Shot (AP): 1 damage to an enemy within 3. If the target is adjacent to
-#    a Leak marker, it also becomes Marked. Payload: {"target": enemy id}.
+#    a placed object (any owner, a Leak included; balance pass 2026-10-19), it also becomes
+#    Marked. Payload: {"target": enemy id}.
 # L2 Pressure-Sealed Armor: +1 HP.
 # L3 Seal The Breach: +1 ATK; Containment Shot may also target along diagonal lines
 #    (within 3, nothing in between).
@@ -41,10 +42,10 @@ func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Di
 
 func execute(sys, instance: CharacterInstance, _ability_id: String, payload: Dictionary) -> Dictionary:
 	var target: CharacterInstance = sys.find(str(payload.target))
-	var near_leak: bool = sys.neighbors(target.position).any(func(pos): return sys.has_leak(pos))
+	var near_object := _near_placed_object(sys, target)
 	var hit: Dictionary = sys.combat().apply_damage(instance, target, SHOT_DAMAGE,
 			sys.distance(instance.position, target.position) > 1)
-	if near_leak and not hit.defeated:
+	if near_object and not hit.defeated:
 		sys.add_status(target, "marked", 1, "until_used", instance)
 	return {"success": true, "damage": hit.damage, "defeated": hit.defeated}
 
@@ -73,6 +74,10 @@ func ai_value(sys, instance: CharacterInstance, _ability_id: String, payload: Di
 	if target == null:
 		return 0.0
 	var v: float = ai.damage_value(instance, target, ai.preview(instance, target, SHOT_DAMAGE))
-	if sys.neighbors(target.position).any(func(pos): return sys.has_leak(pos)):
+	if _near_placed_object(sys, target):
 		v += 0.5   # it also becomes Marked
 	return v
+
+
+static func _near_placed_object(sys, target: CharacterInstance) -> bool:
+	return sys.neighbors(target.position).any(func(pos): return sys.board.get_placed_object(pos) != null)

@@ -948,30 +948,9 @@ static func _flame(at: Vector2, r: float) -> PackedVector2Array:
 	return pts
 
 
-# One status as a small icon: Shield (with its value), Marked, Memory; others as a short tag.
+# One status as a small icon (StatusIcon draws it, so the glossary shows the same one).
 func _draw_status(font: Font, at: Vector2, se: StatusEffect, px: float) -> void:
-	var r := px * 0.085
-	draw_circle(at, r * 1.15, Color(0.02, 0.025, 0.024, 0.85))
-	match se.type:
-		"shield":
-			var s := r * 0.95
-			var shape := PackedVector2Array([at + Vector2(-s * 0.8, -s * 0.75), at + Vector2(s * 0.8, -s * 0.75),
-					at + Vector2(s * 0.8, s * 0.05), at + Vector2(0, s * 0.95), at + Vector2(-s * 0.8, s * 0.05)])
-			draw_colored_polygon(shape, Color("#5aa9d6"))
-			_text(font, str(se.value), Rect2(at - Vector2(r, r * 0.95), Vector2(r * 2, r * 1.7)), r * 1.25, Color("#0b1a24"))
-		"marked":
-			var red := Color("#ff6b5e")
-			var w := maxf(1.2, r * 0.18)
-			draw_arc(at, r * 0.62, 0.0, TAU, 20, red, w, true)
-			for dir in [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]:
-				draw_line(at + dir * r * 0.3, at + dir * r * 1.0, red, w, true)
-		"memory":
-			var drop := _flame(at + Vector2(0, r * 0.1), r * 0.95)
-			draw_colored_polygon(drop, Color("#6fd3dc"))
-			draw_circle(at + Vector2(0, r * 0.3), r * 0.22, Color("#0b2226"))
-		_:
-			_text(font, STATUS.get(se.type, [se.type.left(2).capitalize()])[0],
-					Rect2(at - Vector2(r * 1.1, r * 1.1), Vector2(r * 2.2, r * 2.2)), r * 1.1, Color("#9fe0f5"))
+	StatusIcon.draw_status(self, font, at, se.type, se.value, px * 0.085)
 
 
 func _badge(font: Font, at: Vector2, text: String, color: Color, px: float) -> void:
@@ -981,18 +960,14 @@ func _badge(font: Font, at: Vector2, text: String, color: Color, px: float) -> v
 
 
 func _text(font: Font, s: String, rect: Rect2, font_size: float, color: Color) -> void:
-	var fs := int(maxf(16.0, font_size))
-	while fs > 9 and font.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > rect.size.x - 2.0:
-		fs -= 1
-	var w := font.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
-	var baseline := rect.position + Vector2((rect.size.x - w) / 2.0, rect.size.y / 2.0 + fs * 0.35)
-	draw_string(font, baseline, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, color)
+	StatusIcon.fit_text(self, font, s, rect, font_size, color)
 
 
 # --- Geometry (hit testing unchanged) --------------------------------------------------------
 
 func tile_px() -> float:
-	return (minf(size.x, size.y) - MARGIN * 2.0) / BoardModel.BOARD_SIZE * zoom
+	# Never negative: the board can be briefly smaller than its margins while the layout changes.
+	return maxf(0.0, minf(size.x, size.y) - MARGIN * 2.0) / BoardModel.BOARD_SIZE * zoom
 
 
 func _origin() -> Vector2:

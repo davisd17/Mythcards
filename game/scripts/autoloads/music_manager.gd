@@ -109,8 +109,9 @@ func close_menu() -> void:
 	_fade_menu_out()
 
 
+# Music has its own toggle, separate from Sound (designer 2026-10-17).
 func apply_settings() -> void:
-	AudioServer.set_bus_mute(AudioServer.get_bus_index(MUSIC_BUS), not Settings.sound)
+	AudioServer.set_bus_mute(AudioServer.get_bus_index(MUSIC_BUS), not Settings.music)
 
 
 func _fade_menu_out() -> void:

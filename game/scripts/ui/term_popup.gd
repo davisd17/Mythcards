@@ -28,18 +28,18 @@ func _ready() -> void:
 	style.bg_color = Color("#1b1f1e")
 	style.border_color = Color("#c9a45c")
 	style.set_border_width_all(2)
-	style.set_corner_radius_all(10)
-	style.set_content_margin_all(18)
+	style.set_corner_radius_all(UiStyle.RADIUS)
+	style.set_content_margin_all(UiStyle.SECTION_GAP)
 	style.shadow_color = Color(0, 0, 0, 0.6)
 	style.shadow_size = 12
 	_panel.add_theme_stylebox_override("panel", style)
 	add_child(_panel)   # _fit() centers it
 
 	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 12)
+	box.add_theme_constant_override("separation", UiStyle.GAP)
 	_panel.add_child(box)
-	_title.add_theme_font_size_override("font_size", 30)
-	_title.add_theme_color_override("font_color", Color("#f3e3b5"))
+	_title.add_theme_font_size_override("font_size", UiStyle.FONT_HEADING)
+	_title.add_theme_color_override("font_color", UiStyle.HEADING)
 	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(_title)
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -47,12 +47,7 @@ func _ready() -> void:
 	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll.add_child(_list)
 	box.add_child(_scroll)
-	var close_button := Button.new()
-	close_button.text = "Close"
-	close_button.custom_minimum_size = Vector2(0, 72)
-	close_button.add_theme_font_size_override("font_size", 28)
-	close_button.pressed.connect(close)
-	box.add_child(close_button)
+	box.add_child(UiStyle.command("Close", close))
 	resized.connect(_fit)
 	_list.minimum_size_changed.connect(_fit)
 
@@ -92,10 +87,10 @@ func close() -> void:
 func _entry(t: Dictionary, with_heading: bool) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
-	var type := str(t.get("type", ""))
-	if type != "":
-		var icon := TypeIcon.new()
-		icon.type = type
+	# The same icon the board shows for it: a type, status, Ember, or placed object.
+	if StatusIcon.has_icon(t):
+		var icon := StatusIcon.new()
+		icon.term = t
 		icon.custom_minimum_size = Vector2(44, 44)
 		icon.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 		row.add_child(icon)
@@ -105,8 +100,8 @@ func _entry(t: Dictionary, with_heading: bool) -> Control:
 	text.scroll_active = false
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text.mouse_filter = Control.MOUSE_FILTER_PASS
-	text.add_theme_font_size_override("normal_font_size", 26)
-	text.add_theme_font_size_override("bold_font_size", 26)
+	text.add_theme_font_size_override("normal_font_size", UiStyle.FONT_BODY)
+	text.add_theme_font_size_override("bold_font_size", UiStyle.FONT_BODY)
 	var body := str(t.definition)
 	text.text = ("[b][color=#f3e3b5]%s[/color][/b]\n%s" % [t.term, body]) if with_heading else body
 	row.add_child(text)
@@ -117,9 +112,9 @@ func _entry(t: Dictionary, with_heading: bool) -> Control:
 func _fit() -> void:
 	if not visible:
 		return
-	var w := minf(PANEL_WIDTH, size.x - 40.0)
-	_scroll.custom_minimum_size = Vector2(w - 36.0, 0)
+	var w := minf(PANEL_WIDTH, size.x - UiStyle.PAGE_INSET * 2.0)
+	_scroll.custom_minimum_size = Vector2(w - UiStyle.SECTION_GAP * 2.0, 0)
 	var content := _list.get_combined_minimum_size().y
-	_scroll.custom_minimum_size.y = minf(content, size.y * 0.8 - 160.0)
+	_scroll.custom_minimum_size.y = minf(content, size.y * 0.8 - 200.0)
 	_panel.reset_size()
 	_panel.position = (size - _panel.size) / 2.0

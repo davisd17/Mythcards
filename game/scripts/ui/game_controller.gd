@@ -329,6 +329,18 @@ func cancel() -> void:
 		message = ""
 
 
+# The player's Hero is on the board with no legal move: if that's still true when they end
+# their turn, they lose by Hero capture (BR-034). The same query VictoryChecker uses.
+func hero_trapped(player_id: String) -> bool:
+	var state := GameState.match_state
+	if state == null or setup != null or state.phase == "ended":
+		return false
+	for c in state.get_player(player_id).characters:
+		if c.data.type == "Hero":
+			return not c.defeated and c.is_placed() and RulesEngine.get_legal_move_tiles(c.instance_id).is_empty()
+	return false
+
+
 func end_turn() -> void:
 	var state := GameState.match_state
 	if state == null or setup != null or not flow.is_empty() or is_ai_turn():

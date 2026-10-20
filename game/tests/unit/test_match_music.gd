@@ -2,11 +2,14 @@ extends GutTest
 
 const Fixture := preload("res://tests/helpers/match_fixture.gd")
 var _saved_sound := true
+var _saved_music := true
 
 
 func before_each() -> void:
 	_saved_sound = Settings.sound
+	_saved_music = Settings.music
 	Settings.sound = true
+	Settings.music = true
 	MusicManager.stop()
 	MusicManager.apply_settings()
 
@@ -15,6 +18,7 @@ func after_each() -> void:
 	Fixture.teardown()
 	MusicManager.stop()
 	Settings.sound = _saved_sound
+	Settings.music = _saved_music
 	MusicManager.apply_settings()
 
 
@@ -158,16 +162,25 @@ func test_in_match_menu_pauses_and_resumes_same_match_stream() -> void:
 	assert_false((MusicManager.get_node("MenuAmbience") as AudioStreamPlayer).playing)
 
 
-func test_sound_toggle_mutes_both_music_players() -> void:
+func test_music_toggle_mutes_both_music_players() -> void:
 	MusicManager.play_menu()
-	Settings.sound = false
+	Settings.music = false
 	MusicManager.apply_settings()
 	var bus := AudioServer.get_bus_index(MusicManager.MUSIC_BUS)
 	assert_true(AudioServer.is_bus_mute(bus))
 	autofree(Fixture.start_teams_match())
-	assert_true(AudioServer.is_bus_mute(bus), "Starting a match must respect Sound: Off")
+	assert_true(AudioServer.is_bus_mute(bus), "Starting a match must respect Music: Off")
 	assert_eq((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).bus, MusicManager.MUSIC_BUS)
 	assert_eq((MusicManager.get_node("MenuAmbience") as AudioStreamPlayer).bus, MusicManager.MUSIC_BUS)
-	Settings.sound = true
+	Settings.music = true
 	MusicManager.apply_settings()
 	assert_false(AudioServer.is_bus_mute(bus))
+
+
+# Designer 2026-10-17: music has its own toggle; Sound: Off leaves it playing.
+func test_sound_off_does_not_mute_music() -> void:
+	Settings.sound = false
+	MusicManager.apply_settings()
+	autofree(Fixture.start_teams_match())
+	assert_false(AudioServer.is_bus_mute(AudioServer.get_bus_index(MusicManager.MUSIC_BUS)))
+	assert_true((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).playing)

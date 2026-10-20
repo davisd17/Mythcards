@@ -4,8 +4,10 @@ extends AbilityHandler
 #    can be entered (a Leak there is triggered; "can't be moved" effects stop it).
 #    Payload: {"target": enemy id}.
 # L2 Subject Three: +1 RANGE; an enemy Voice Under Static moved becomes Marked.
-# L3 Too Many Names: +1 HP. Once per match, after Voice Under Static moves an enemy, Zoya
-#    may use it again without spending AP (the "too_many_names" bonus, {"target": id}).
+# L3 Too Many Names: +1 HP. Once per match, Voice Under Static also charms a target that
+#    isn't a Hero: after the pull it joins Zoya's side for the rest of the match. A mounted
+#    pair goes together unless it carries a Hero. Spent on the first use whose target can
+#    be charmed (balance pass 2026-10-19, replacing the free second pull).
 
 const REACH := 3
 const TAG := "too_many_names"
@@ -30,48 +32,45 @@ func get_legal_targets(sys, instance: CharacterInstance, _ability_id: String) ->
 func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:
 	if payload.has("target"):
 		return {}
-	return target_step("target", "Voice Under Static: pull which enemy?", get_legal_targets(sys, instance, ability_id))
+	var verb := "Voice Under Static: pull and charm which enemy?" if _charm_ready(sys, instance) \
+			else "Voice Under Static: pull which enemy?"
+	return target_step("target", verb, get_legal_targets(sys, instance, ability_id))
 
 
 func execute(sys, instance: CharacterInstance, _ability_id: String, payload: Dictionary) -> Dictionary:
-	return _voice(sys, instance, sys.find(str(payload.target)))
-
-
-func bonus_label(tag: String) -> String:
-	return "Too Many Names (again)" if tag == TAG else super(tag)
-
-
-func bonus_step(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
-	if tag != TAG or payload.has("target"):
-		return {}
-	return target_step("target", "Too Many Names: pull which enemy?", get_legal_targets(sys, instance, ""))
-
-
-func execute_reactive_bonus(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
-	if tag != TAG:
-		return super(sys, instance, tag, payload)
-	if not get_legal_targets(sys, instance, "").has(str(payload.get("target", ""))):
-		return {"success": false, "reason": "needs an enemy in range"}
-	sys.consume_bonus(instance, TAG)
-	return _voice(sys, instance, sys.find(str(payload.target)))
-
-
-func _voice(sys, instance: CharacterInstance, enemy: CharacterInstance) -> Dictionary:
+	var enemy: CharacterInstance = sys.find(str(payload.target))
 	var before := enemy.position
 	var after: Vector2i = sys.combat().apply_pull(enemy, instance.position, 1)
 	var moved := after != before
-	if moved and instance.level >= 2 and not enemy.defeated:
+	if enemy.defeated:
+		return {"success": true, "moved": moved}
+	if _charm_ready(sys, instance) and can_charm(sys, enemy):
+		instance.ability_uses_this_match[TAG + "_used"] = true
+		sys.change_side(enemy)
+		return {"success": true, "moved": moved, "charmed": true}
+	if moved and instance.level >= 2:
 		sys.add_status(enemy, "marked", 1, "until_used", instance)
-	if moved and instance.level >= 3 and not sys.used_this_match(instance, "too_many_names_used"):
-		instance.ability_uses_this_match["too_many_names_used"] = true
-		sys.offer_bonus(instance, TAG)
 	return {"success": true, "moved": moved}
 
 
-func ai_value(sys, instance: CharacterInstance, _ability_id: String, payload: Dictionary, _ai) -> float:
+func _charm_ready(sys, instance: CharacterInstance) -> bool:
+	return instance.level >= 3 and not sys.used_this_match(instance, TAG + "_used")
+
+
+# Any type but a Hero, and not half of a pair that carries one.
+static func can_charm(sys, enemy: CharacterInstance) -> bool:
+	if enemy.data.type == "Hero":
+		return false
+	var partner: CharacterInstance = sys.find(enemy.mounted_with_id) if enemy.mounted_with_id != "" else null
+	return partner == null or partner.data.type != "Hero"
+
+
+func ai_value(sys, instance: CharacterInstance, _ability_id: String, payload: Dictionary, ai) -> float:
 	var enemy: CharacterInstance = sys.find(str(payload.get("target", "")))
 	if enemy == null:
 		return 0.0
+	if _charm_ready(sys, instance) and can_charm(sys, enemy):
+		return ai.personality.w("defeat") * ai.value_of(enemy) * 2.0   # it leaves them and joins us
 	var step := Vector2i(signi(instance.position.x - enemy.position.x), signi(instance.position.y - enemy.position.y))
 	var v := 0.4
 	if sys.has_leak(enemy.position + step):

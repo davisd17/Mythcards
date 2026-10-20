@@ -40,9 +40,18 @@ for (const vp of VIEWPORTS) {
     expect((await act(page, 'move', 'p1_r-reactor-worker', { to: { x: 0, y: 2 } })).success).toBe(true);
     expect((await act(page, 'end_turn', 'p1')).success).toBe(true);
     await resolvePending(page);
-    // Player 2: a Stone, and Naia advances into Yuri's lane.
+    // Player 2: a Stone, and Naia advances into Yuri's lane. The drawn card may have moved
+    // the Laborer (the 30-card deck), so the Stone goes on the first empty tile beside it.
+    const before = await state(page);
+    const laborer = character(before, 'p2_a-flood-survivor-stone-line-laborer').position;
+    const taken = new Set(Object.values<any>(before.players).flatMap((p: any) => p.characters)
+      .filter((c: any) => !c.defeated && c.position).map((c: any) => `${c.position.x},${c.position.y}`));
+    const stone = [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }]
+      .map((d) => ({ x: laborer.x + d.x, y: laborer.y + d.y }))
+      .find((t) => t.x >= 0 && t.x < 7 && t.y >= 0 && t.y < 7 && !taken.has(`${t.x},${t.y}`)
+        && !(before.objects ?? []).some((o: any) => o.position?.x === t.x && o.position?.y === t.y));
     expect((await act(page, 'ability', 'p2_a-flood-survivor-stone-line-laborer',
-      { ability_id: 'a-flood-survivor-stone-line-laborer', target: { x: 0, y: 5 } })).success).toBe(true);
+      { ability_id: 'a-flood-survivor-stone-line-laborer', target: stone })).success).toBe(true);
     expect((await act(page, 'move', 'p2_a-flood-survivor-naia', { to: { x: 2, y: 3 } })).success).toBe(true);
     expect((await act(page, 'end_turn', 'p2')).success).toBe(true);
     await resolvePending(page);

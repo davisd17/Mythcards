@@ -211,9 +211,10 @@ func test_ember_score_shows_in_the_top_bar() -> void:
 	GameState.match_state.get_player("p1").embers_delivered = 2
 	screen._refresh()
 	await wait_process_frames(1)
-	var chips: Array = screen._chips.get_children().filter(func(c): return not c.is_queued_for_deletion()).map(func(c): return c.text)
-	assert_true(chips.has("P1 Embers 2/4"), str(chips))
-	assert_true(chips.has("P2 Embers 0/4"))
+	# A passive counter beside the relic chips (UI style guide 7), one line per player.
+	assert_true(screen._embers.is_visible_in_tree())
+	assert_string_contains(screen._embers.text, "P1 Embers 2/4")
+	assert_string_contains(screen._embers.text, "P2 Embers 0/4")
 
 
 # Playtest 2026-10-13: a player picking a formation never sees the other one.
@@ -243,3 +244,29 @@ func test_an_ai_that_deploys_first_stays_hidden() -> void:
 	assert_eq(gc.placing_player, "p2")
 	assert_true(gc.setup.is_player_ready("p1"), "the AI has deployed")
 	assert_true(gc.characters().all(func(c): return c.player_id == "p2"), "but its formation is hidden")
+
+
+# Designer 2026-10-19: warn before a Hero capture, and confirm an End turn that loses.
+func test_a_trapped_hero_warns_and_end_turn_asks_first() -> void:
+	TurnManager.victory_checker = null   # the real capture check (an earlier suite may leave a stub)
+	_deploy_both()
+	screen._popup_queue.clear()
+	screen._next_popup()
+	var gc: GameController = screen.controller
+	gc.flow = {}
+	var orlov := GameState.match_state.find_character("p1_r-mikhail-orlov")
+	var front := orlov.position + Vector2i(0, 1)
+	for pos in [front, orlov.position + Vector2i(1, 0), orlov.position + Vector2i(-1, 0)]:
+		if Fixture.board().is_in_bounds(pos) and not Fixture.board().is_occupied_by_character(pos):
+			Fixture.board().place_object(pos, "stone", "p2")
+	assert_true(gc.hero_trapped("p1"))
+	screen._refresh()
+	assert_string_contains(screen._prompt.text, "your Hero can't move")
+	screen._on_primary()
+	assert_true(screen._capture_confirm.visible, "asks before losing")
+	assert_eq(GameState.match_state.active_player_id, "p1", "the turn hasn't ended")
+	for b in screen._capture_confirm.find_children("*", "Button", true, false):
+		if b.text == "End turn and lose":
+			b.pressed.emit()
+	assert_eq(GameState.match_state.phase, "ended")
+	assert_eq(GameState.match_state.win_condition, "hero_capture")

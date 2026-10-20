@@ -1,5 +1,5 @@
 {
-  "_comment": "Game terms players can look up: tap an underlined term in card text, long-press a piece on the board, or open Menu > Glossary. 'aliases' are the words underlined in card text (whole words, any case; each term is linked once per card). 'link': false keeps a term out of card text. 'status' and 'object' tie a term to an engine status type or placed-object type for the board's long-press. tools/sync_game_content.ps1 copies this file into game/data/.",
+  "_comment": "Game terms players can look up: tap an underlined term in card text, long-press a piece on the board, or open Menu > Glossary. 'aliases' are the words underlined in card text (whole words, any case; each term is linked once per card). 'link': false keeps a term out of card text. 'status' and 'object' tie a term (and its icon) to an engine status type or placed-object type for the board's long-press. tools/sync_game_content.ps1 copies this file into game/data/.",
   "terms": [
     {"id": "leak", "term": "Leak marker", "object": "leak", "aliases": ["Leak markers", "Leak marker", "Leak tile", "Leak damage", "Leaks", "Leak"],
      "definition": "A radiation hazard on a tile. The first character to enter it, by moving, being pushed or teleporting, takes 2 damage, and then the Leak is removed. Leaks belong to no one, can't be attacked and don't block movement or line of sight. A Leak tile isn't empty, and a Leak counts as a placed object."},
@@ -19,8 +19,10 @@
      "definition": "The next allied attack against a Marked enemy deals +1 damage, and then Marked is removed."},
     {"id": "shield", "term": "Shield", "status": "shield", "aliases": ["1-damage shield", "shields", "Shield"],
      "definition": "Prevents damage up to its value and is then used up. If a character has several shields, the newest is used first. A shield lasts as long as the card that gave it says."},
-    {"id": "spirit_ember", "term": "Spirit Ember", "aliases": ["Spirit Embers", "Spirit Ember", "Embers", "Ember"],
+    {"id": "spirit_ember", "term": "Spirit Ember", "icon": "ember", "aliases": ["Spirit Embers", "Spirit Ember", "Embers", "Ember"],
      "definition": "When a character defeats an enemy, it takes that enemy's Ember plus any Embers the enemy was carrying. Carry them to the center tile to bank them. The first team to bank 4 wins. A carrier defeated by a Leak or another hazard loses its Embers."},
+    {"id": "charmed", "term": "Charmed", "aliases": ["charms", "charmed"],
+     "definition": "The character switches sides for the rest of the match. It keeps its level, HP and carried Spirit Embers, loses Marked, and can act from its new owner's next turn. A mounted pair is charmed together. Made by Zoya Miranova's Level 3, once per match; a Hero can't be charmed."},
     {"id": "center", "term": "Center tile", "aliases": ["center tile"],
      "definition": "The marked tile in the middle of the board. A character carrying Spirit Embers banks all of them when it reaches the center."},
     {"id": "ap", "term": "AP (action points)", "aliases": ["character AP", "AP"],

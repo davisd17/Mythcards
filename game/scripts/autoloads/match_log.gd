@@ -32,6 +32,7 @@ func _ready() -> void:
 	EventBus.relic_drawn.connect(_on_drawn)
 	EventBus.relic_slot_changed.connect(func(player, card): _detail("%s's relic is now %s" % [_player(player), _card(card)]) if card != "" else null)
 	EventBus.character_repositioned.connect(_on_repositioned)
+	EventBus.character_charmed.connect(func(id, _from, to): _detail("%s is charmed and joins %s" % [_name(id), _player(to)]))
 	EventBus.match_ended.connect(func(winner, how): _entry("%s wins by %s" % [_player(winner), how.replace("_", " ")]))
 
 

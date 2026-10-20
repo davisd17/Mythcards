@@ -1,6 +1,7 @@
 extends AbilityHandler
 # VERA-7 (Closed City Mount) — LLD-closed-city-flood-roster.md 4.
-# L1 Protected Passenger: the character mounted on VERA-7 has +1 maximum HP.
+# L1 Protected Passenger: the character mounted on VERA-7 has +2 maximum HP (balance pass
+#    2026-10-19; was +1).
 # L2 No Map Confirms This Corridor: +1 MOVE; may move through one placed object or allied
 #    occupied tile per move, ending on an empty tile (a mounted pair moves the same way).
 # L3 Passenger Signal Retained: once per turn, free: move 1 adjacent ally to another empty
@@ -9,7 +10,7 @@ extends AbilityHandler
 #    carrying a rider (a ridden Mount takes no separate actions).
 #    Payload: {"target_id": ally, "to": pos}.
 
-const PASSENGER_HP := 1
+const PASSENGER_HP := 2
 const TAG := "passenger_signal"
 
 

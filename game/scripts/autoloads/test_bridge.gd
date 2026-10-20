@@ -119,6 +119,10 @@ func ui_layout() -> Dictionary:
 	var xf := get_viewport().get_final_transform()
 	for b in ui.buttons:
 		b.center = _px(xf * b.center)
+		if b.has("rect"):
+			b.rect = _rect(xf * (b.rect as Rect2))
+	if ui.has("board"):
+		ui.board = _rect(xf * (ui.board as Rect2))
 	ui.summary = _px(xf * ui.summary)
 	for key in ui.tiles:
 		ui.tiles[key] = _px(xf * ui.tiles[key])
@@ -127,6 +131,10 @@ func ui_layout() -> Dictionary:
 
 static func _px(v: Vector2) -> Dictionary:
 	return {"x": roundi(v.x), "y": roundi(v.y)}
+
+
+static func _rect(r: Rect2) -> Dictionary:
+	return {"x": snappedf(r.position.x, 0.1), "y": snappedf(r.position.y, 0.1), "w": snappedf(r.size.x, 0.1), "h": snappedf(r.size.y, 0.1)}
 
 
 # --- JS glue ---------------------------------------------------------------------------

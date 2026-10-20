@@ -12,6 +12,7 @@ const EMBERS_TO_WIN := 4
 func _ready() -> void:
 	EventBus.character_defeated.connect(_on_character_defeated)
 	EventBus.spirit_ember_delivered.connect(_on_spirit_ember_delivered)
+	EventBus.character_charmed.connect(_on_character_charmed)
 
 
 func check_hero_capture(player_id: String) -> void:
@@ -43,6 +44,16 @@ func _on_character_defeated(character_id: String, _defeated_by_id: String, _caus
 	var side := state.get_player(fallen.player_id)
 	if side.characters.all(func(c: CharacterInstance) -> bool: return c.defeated):
 		_end_match(state.get_other_player_id(fallen.player_id), "army_defeat")
+
+
+# A charmed character leaves its old side; if that was the side's last live piece, the
+# side has no army left (Zoya L3, balance pass 2026-10-19).
+func _on_character_charmed(_character_id: String, from_player_id: String, to_player_id: String) -> void:
+	var state := GameState.match_state
+	if state == null or state.phase == "ended":
+		return
+	if state.get_player(from_player_id).characters.all(func(c: CharacterInstance) -> bool: return c.defeated):
+		_end_match(to_player_id, "army_defeat")
 
 
 func _on_spirit_ember_delivered(character_id: String) -> void:

@@ -552,6 +552,28 @@ func reposition_character(instance: CharacterInstance, to: Vector2i, cause: Stri
 	EventBus.character_repositioned.emit(instance.instance_id, from, to, cause)
 
 
+# Moves a live character, and its mounted partner, to the other side for the rest of the
+# match (Zoya's charm, balance pass 2026-10-19). Level, HP, and carried Embers stay with
+# it; Marked is cleared (its new allies placed it), and it can't act until its new owner's
+# next turn.
+func change_side(instance: CharacterInstance) -> void:
+	var group: Array[CharacterInstance] = [instance]
+	if instance.mounted_with_id != "":
+		var partner := _match.find_character(instance.mounted_with_id)
+		if partner != null:
+			group.append(partner)
+	for c in group:
+		var from_id := c.player_id
+		var to_id := _match.get_other_player_id(from_id)
+		_match.get_player(from_id).characters.erase(c)
+		_match.get_player(to_id).characters.append(c)
+		c.player_id = to_id
+		c.character_ap_remaining = 0
+		remove_status(c, "marked")
+		EventBus.character_charmed.emit(c.instance_id, from_id, to_id)
+	sync_all_max_hp()
+
+
 # Legal destinations for a move of `budget` tiles with the character's movement rules.
 func moves_for(instance: CharacterInstance, budget: int) -> Array[Vector2i]:
 	var rules := movement_rules(instance)

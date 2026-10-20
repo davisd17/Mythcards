@@ -303,6 +303,29 @@ Built as HLD step 16 after the first hands-on playtest. **Designer ruling: the g
 - **Pinch zoom** up to 2.5×, centered on the fingers, plus the mouse wheel on desktop. While zoomed, a one-finger drag pans and a tap still acts. The "1:1" chip or a double-tap resets. Zoom scales `tile_px()` and the pan shifts `_origin()`, so hit-testing and `mythcards_ui()` follow automatically.
 - **Layout tidy:** the deck count moved into the header, and relic and Ember chips share one row (events wrap to a second). The full card's art is 380 tall, so L1–L3 fit without scrolling. The strip shows a type icon, a 2×2 stat grid and its statuses, and fades out at the bottom instead of cutting a line in half.
 - **Wi-Fi build size:** figure art imports as lossy WebP (85%), taking the .pck from 34 MB to 13 MB. `tools/serve_web_lan.mjs` serves the engine Brotli-compressed (38 MB to 8 MB), with ETag revalidation so unchanged files cost a 304.
+- **Music toggle:** Menu > Music mutes the Music bus (match theme and menu ambience) on its own; Sound now covers only effects.
+
+**UI style guide, phase 1 (2026-10-17, [`docs/UI_STYLE_GUIDE.md`](docs/UI_STYLE_GUIDE.md)).**
+- **One source for tokens and roles:** `UiStyle` holds the guide's tokens and builds every control: `command()` (88 tall, one line, ellipsis), `primary()` (brass; color only, never size), `choice()` (128 tall, two lines), `icon_button()` (88 square, drawn `UiGlyph`, the tooltip is its name), `chip()`, and `counter()`. Every state keeps the same content margins, and focus is a ring drawn inside the control.
+- **Equal-width slots:** `ActionGrid` lays out the actions, the setup tray and a choice's answers in one or two equal columns. It picks two only when every label fits. Rows keep a fixed height, and a lone last button keeps the column width.
+- **Layout modes** come from the rendered size (`UiStyle.mode_for`, CSS pixels on the web):
+  - Narrow and medium stack the page with a square board sized to the width. The actions widen to fit their longest label, between 40% and 60% of the page.
+  - Wide and short put the board on the left. Everything else goes in a right-hand column of 480–720 units that scrolls under End turn.
+  - Short (landscape phone) also sets one fixed UI scale, 2 units per pixel, so controls stay at least 44 px.
+  - `_arrange()` moves the same nodes between the layouts, so resizing keeps the selection, any open dialog and the match.
+- **Status row:** relic chips are buttons; the Ember score is a passive two-line counter (tap still explains Embers). Active events get their own row. (Superseded 2026-10-19 by the face-up table row below.)
+- **Dialogs:** the menu is a centered, scrolling panel, and its toggles show their state in words and a pressed look. Dialog commands are at most 640 wide. The notice is a two-line row at the button font, no longer 18.
+- **Tests:**
+  - `test_ui_style.gd` checks the roles, the equal slots, the mode thresholds, and the narrow, wide and back resize.
+  - `e2e/tests/responsive.spec.ts` covers the guide's seven QA sizes, checking 44 px targets, equal same-role heights and widths, and a square board. Set `RESPONSIVE_TAG=before|after` to save screenshots.
+  - `ui_snapshot()` reports each button's `rect`, `role` and `clipped` state, plus the board's rect and the layout mode.
+
+**Tabletop look and definition icons (designer 2026-10-19).**
+- **Relics and events lie face up** (`TableCard`), replacing the relic and event chips. The row holds Player 1's relic, any events in effect, then Player 2's relic, followed by the Ember counter. Each card shows its art, name and a caption ("Relic · P1", "Event · 1 turn") on a card frame in its owner's color (brass for events). It casts a shadow and sits a little askew, the same angle every time. An empty relic slot is a dashed outline. Tap a card for the full card. With three or more cards in the row, each card switches to full-bleed art with its name on a band.
+- **The board never shrinks for them** (designer: "do not make smaller"). The row is 88 units (a command's height) when the board is height-bound, and grows to 136 only into height the square board can't use. Events used to add a second row, which shrank the board; they now share the one row. In the side-by-side layouts the row is 136.
+- **The card face is artwork:** a name can drop to 16 units to fit the mini card, below the guide's 28 for secondary text. The full card is one tap away. `[NEED: designer review on the phone]`
+- **Definitions show the board's icon** (`StatusIcon`): a status (Shield, Marked, Memory, short tags), a carried Ember, a type badge, or a placed object's art. The board's status badges call the same `StatusIcon.draw_status`, so the two always match. A glossary term gets an icon from its `type`, `status` or `object`, or from `"icon": "ember"`. The new "Charmed" term covers Zoya's Level 3.
+- Tests: `test_ui_style.gd` (cards in order, empty slot, board size unchanged with a relic and an event) and `test_mobile_feedback.gd` (icons on definitions).
 
 ## 10. Traceability
 

@@ -131,3 +131,17 @@ func test_the_reset_chip_unzooms() -> void:
 	_click(board, chip, true)
 	_click(board, chip, false)
 	assert_almost_eq(board.zoom, 1.0, 0.001)
+
+
+# Designer 2026-10-19: a definition shows the icon the board uses for that term.
+func test_definitions_show_the_terms_board_icon() -> void:
+	for id in ["marked", "shield", "leak", "spirit_ember", "type_hero"]:
+		screen._terms.show_terms([id])
+		var row: Node = screen._terms._list.get_child(screen._terms._list.get_child_count() - 1)
+		var icon: StatusIcon = row.get_child(0) as StatusIcon
+		assert_not_null(icon, "%s has an icon" % id)
+		if icon != null:
+			assert_eq(icon.term.id, id)
+	screen._terms.show_terms(["center"])
+	var plain: Node = screen._terms._list.get_child(screen._terms._list.get_child_count() - 1)
+	assert_false(plain.get_child(0) is StatusIcon, "a term with nothing on the board has no icon")

@@ -27,6 +27,7 @@ signal memory_gained(character_id: String)
 signal damage_resolved(attacker_id: String, target_id: String, amount: int, lines: Array)
 signal status_added(target_id: String, status_type: String, value: int, source_id: String)
 signal leak_triggered(character_id: String, pos: Vector2i)
+signal character_charmed(character_id: String, from_player_id: String, to_player_id: String)  # switched sides (Zoya L3)
 signal character_defeated(character_id: String, defeated_by_id: String, cause: String)  # cause: "direct" | "mount_propagation"
 
 signal character_leveled_up(character_id: String, new_level: int)

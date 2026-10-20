@@ -7,7 +7,7 @@
 | Source document(s) | BRD.md (v3, resynced 2026-08-28), PRD.md (resynced 2026-08-28) |
 | Scope tier | Digital Rules Prototype — PRD-MILESTONE-002 / BRD Section 9.12 (FR-085–FR-090A) |
 | Target stack | Godot 4.7.x (latest stable minor as of 2026-08; currently patch 4.7.2 — re-verify exact patch version at implementation time), GDScript |
-| Version | 4 (v3 added GUT and BR-011A; v4 — designer LLD review 2026-09-25: four-bucket ability classification and its AP rule in Section 4.6, `next-turn` status duration, `MatchState.first_player_id`, and `CharacterInstance.spirit_ember_count` as a count rather than a flag) |
+| Version | 4 (v3 added GUT and BR-011A; v4 — designer LLD review 2026-09-25: four-bucket ability classification and its AP rule in Section 4.6, `next-turn` status duration, `MatchState.first_player_id`, and `CharacterInstance.spirit_ember_count` as a count rather than a flag; v5 — 2026-10-19: networked turn-based PvP decided as a deterministic action-log relay, Section 4.14 and Section 9) |
 | Date | 2026-09-25 |
 | Status | Draft |
 | Prepared by | Drew Davis (solo developer/designer, acting as own PM) |
@@ -129,6 +129,10 @@ Coordinate-based canvas clicks remain available for the smaller set of true UI s
 **Satisfies:** BRD FR-090A, NFR-031A.
 
 **Unit-level testing (decided 2026-09-07):** module-level logic (e.g., `BoardModel` queries, `ContentDB` parsing/validation) is tested with **GUT** (Gut Unit Test, the standard GDScript testing addon), independent of the Web export — GUT runs inside the editor/headless Godot, not a browser. `TestBridge`/Playwright is reserved for full-match browser integration coverage; GUT covers everything a browser isn't needed for. Per-module LLDs specify their own GUT test cases (see the Content Loader & Board/Grid LLD for the first example).
+
+### 4.14 Network Match (`NetSession`, relay server) — added v5, 2026-10-19
+Turn-based PvP between two players over the internet (designer 2026-10-19: turns now, live Blitz later; free-tier hosting; web or Windows client). Both clients run the full rules engine. A match is a deck seed, two teams, and an ordered action log kept by a small relay server. Each client rebuilds the match by replaying the log through `RulesEngine.request_action` and appends its own actions. The server orders and stores actions and hides each deployment until both are in. It never runs game rules. Determinism (the deck seed is the match's only randomness) is what makes the two clients agree, and every action carries a state hash to detect any divergence. Spec: `LLD-network-match.md`.
+**Satisfies:** BRD BO-006, NFR-031; PRD Section 15 (Future Modes: Standard/Asynchronous PvP).
 
 ## 5. Engine-Specific Structure
 
@@ -272,7 +276,7 @@ All IDs (`character_id`, `player_id`, `card_id`) are plain `String`/`int` values
 | Growth vector (BRD §6.2) | Prototype tier (now) | MVP seam (later, not built now) |
 | --- | --- | --- |
 | More cultures (4+) | `ContentDB` parses whatever cultures exist in `characters.json`; no module hardcodes "2 cultures" or "14 cards." | Add culture entries to the JSON; `SetupFlow`'s culture list is already data-driven, so no code change is expected — only verify no accidental hardcoding creeps in during prototype build. |
-| Networked/async PvP | Single process, both players on one screen; `RulesEngine` is already the sole mutator of `MatchState`, reached only via `action_requested` → `action_resolved`. | A network layer intercepts `action_requested`, round-trips it to the authoritative peer/server, and only applies `RulesEngine`'s result locally — the request/response signal shape was chosen specifically so this doesn't require restructuring `RulesEngine` itself. Requires the `deck_seed` (Section 6) to be synced, since shuffle order must match. |
+| Networked/async PvP | Decided 2026-10-19 (Section 4.14): a deterministic action-log relay. | Each client applies its own action locally through `RulesEngine`, then appends it to the server's log. The other client replays it through the same gate. This replaces the earlier "apply the authoritative peer's result" sketch: no peer is authoritative, and the server stores and orders actions without running rules. `deck_seed` (Section 6) is shared through the room. Blitz (live) adds a WebSocket push to the same log. |
 | AI opponent | N/A — both sides are human input. | AI is just another producer of `action_requested`. Requires exposing a `RulesEngine.get_legal_actions(character_id)` query (not yet built) so AI doesn't need to guess-and-check against validation failures. |
 | Analytics | Not collected. | An `AnalyticsLogger` autoload subscribes to `EventBus` (Section 5.3) — every event already needed for UI/debug (`character_moved`, `match_ended`, etc.) is exactly what analytics needs; no gameplay code changes. |
 | Save/profile data | Not persisted (Section 8). | A `SaveManager` autoload serializes `MatchState` — feasible without a rewrite specifically because `CharacterInstance`/`MatchState` already avoid embedding Node references (Section 6). |

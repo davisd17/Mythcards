@@ -43,7 +43,7 @@
     "type": "Hero",
     "unique": true,
     "stats": [5, 1, 2, 3],
-    "l1": "AP Ability: Reactor Leak places a Leak marker on an empty tile within 2. The first character to enter a Leak tile takes 2 damage, then remove that marker.",
+    "l1": "AP Ability: Reactor Leak places a Leak marker on an empty tile within 2.",
     "l2": "Containment Pattern: +1 RANGE. Reactor Leak may place 2 Leak markers instead of 1. The markers must be on different empty tiles within range.",
     "l3": "Slumber: +1 HP. Once per match, remove Orlov from the board until your next turn. When he returns, place him on any empty tile within 2 of where he left. Then place 1 Leak marker on an adjacent empty tile.",
     "role": "Closed City coma-gate hero. Controls dangerous reactor leaks while his Level 3 turns his coma into a story-first disappearance and return.",
@@ -146,8 +146,8 @@
     "unique": true,
     "stats": [3, 1, 2, 3],
     "l1": "AP Ability: Voice Under Static chooses an enemy within 3 tiles. Move that enemy 1 tile toward Zoya if the destination is empty.",
-    "l2": "Subject Three: +1 RANGE. After Voice Under Static moves an enemy, mark that enemy. The next allied attack against it deals +1 damage, then remove Marked.",
-    "l3": "Too Many Names: +1 HP. Once per match, after Voice Under Static moves an enemy, Zoya may use Voice Under Static again without spending AP.",
+    "l2": "Subject Three: +1 RANGE. After Voice Under Static moves an enemy, mark that enemy.",
+    "l3": "Too Many Names: +1 HP. Once per match, Voice Under Static also charms its target if it is not a Hero: after the pull, that enemy joins your side for the rest of the match. A mounted pair is charmed together unless it carries a Hero.",
     "role": "Closed City mystic and remote-viewing subject. Pulls enemies out of position through dream-static pressure and turns attraction, confession, and breach contact into repeatable board control.",
     "narrative": {
       "public_role": "Sleep-study participant and remote-viewing subject.",
@@ -164,7 +164,7 @@
       "Not added to the playable 14-card prototype deck yet.",
       "Designed to avoid Atlantean deck-reveal mechanics and stay in Closed City board-pressure space.",
       "Level 2 is intended to be a clear power spike by adding range and explicit Marked pressure.",
-      "Level 3 is intended to be transformative by letting Zoya chain her signature pull once per match instead of depending on three enemies lining up."
+      "Level 3 is intended to be transformative by letting Zoya pull and permanently charm one non-Hero enemy once per match (designer balance pass 2026-10-19, replacing the second free pull)."
     ]
   },
   {
@@ -178,7 +178,7 @@
     "unique": true,
     "tarot_mapping": "Queen of Pentacles",
     "stats": [4, 1, 3, 1],
-    "l1": "Passive: Protected Passenger gives the character mounted on VERA-7 +1 maximum HP.",
+    "l1": "Passive: Protected Passenger gives the character mounted on VERA-7 +2 maximum HP.",
     "l2": "No Map Confirms This Corridor: +1 MOVE. VERA-7 may move through one placed object or allied occupied tile during movement, but must end on an empty tile.",
     "l3": "Passenger Signal Retained: Once per turn, VERA-7 may move 1 adjacent allied character 1 tile to an empty tile adjacent to VERA-7.",
     "role": "Closed City protective mount and hazardous-environment rover. Reinforces its passenger and turns sealed routes into controlled tactical repositioning.",
@@ -198,7 +198,7 @@
       "Added from the latest narrative notes for VERA-7 / Lunar Rover Drone.",
       "Not added to the playable 14-card prototype deck yet.",
       "Base MOVE reduced from 4 to 3 so VERA-7 plays as a slower protective mount rather than a fast traversal piece.",
-      "Level 1 gives the mounted character +1 maximum HP.",
+      "Level 1 gives the mounted character +2 maximum HP (raised from +1 in the 2026-10-19 balance pass).",
       "Level 2 is intended to be a clear power spike by letting VERA-7 navigate blocked industrial spaces.",
       "Level 3 lets VERA-7 reposition one adjacent ally every turn."
     ]
@@ -213,10 +213,10 @@
     "type": "Warrior",
     "unique": true,
     "stats": [4, 2, 2, 2],
-    "l1": "AP Ability: Containment Shot deals 1 damage to an enemy within 3. If the target is adjacent to a Leak marker, also mark that enemy.",
+    "l1": "AP Ability: Containment Shot deals 1 damage to an enemy within 3. If the target is adjacent to a placed object, also mark that enemy.",
     "l2": "Pressure-Sealed Armor: +1 HP.",
     "l3": "Seal The Breach: +1 ATK. Containment Shot may target along diagonal lines.",
-    "role": "Closed City warrior and containment responder. Punishes enemies near Leak zones, withstands pressure, and expands his firing geometry at Level 3.",
+    "role": "Closed City warrior and containment responder. Punishes enemies near placed objects and Leak zones, withstands pressure, and expands his firing geometry at Level 3.",
     "narrative": {
       "public_role": "Armored containment responder.",
       "private_hunger": "To save Elena from the program, from Orlov, from the breach, and from the part of herself that wants the impossible to answer.",
@@ -230,7 +230,7 @@
     "review_notes": [
       "Added from the latest narrative notes for Major Yuri Volkov / Containment Cosmonaut.",
       "Not added to the playable 14-card prototype deck yet.",
-      "Designed to connect Leak markers with Marked enemies without adding extra rule load.",
+      "Designed to connect placed objects (Leak markers, barricades, pylons, stones) with Marked enemies without adding extra rule load. Widened from Leak markers only in the 2026-10-19 balance pass.",
       "Level 2 is a direct +1 HP increase with no additional rule.",
       "Level 3 adds +1 ATK and allows Containment Shot to target diagonally within its normal range."
     ]
@@ -246,7 +246,7 @@
     "unique": true,
     "stats": [4, 1, 2, 3],
     "l1": "AP Ability: Access Granted chooses an allied character within 3. That ally gains +1 ATK this turn.",
-    "l2": "Private Favors: Access Granted may target 2 allies within 3. Each target gains +1 ATK this turn and may ignore Leak damage during its next movement this turn.",
+    "l2": "Private Favors: +1 HP. Access Granted may target any allied character on the board, ignoring range and line of sight.",
     "l3": "The Price of Access: +1 HP. Once per game, when Irina delivers a Spirit Ember, she may defeat one enemy character anywhere on the board. This costs no additional AP.",
     "role": "Closed City leader and patron of the sealed city. Turns access, permissions, and favors into controlled movement through dangerous infrastructure.",
     "narrative": {
@@ -263,7 +263,7 @@
       "Added from the latest narrative notes replacing Colonel Viktor Semyonov as the primary Closed City Leader card.",
       "Not added to the playable 14-card prototype deck yet.",
       "Designed to make Closed City movement through hazards feel political and infrastructural rather than heroic command.",
-      "Level 2 is intended to be a clear power spike by expanding safe access to two allies.",
+      "Level 2 is intended to be a clear power spike: +1 HP and board-wide Access Granted (2026-10-19 balance pass, replacing two targets and Leak immunity).",
       "Level 3 turns Irina's own Ember delivery into a once-per-game direct enemy defeat anywhere on the board, with no additional AP."
     ]
   },

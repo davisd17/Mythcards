@@ -202,6 +202,8 @@ Playtest roster (decided 2026-10-07): the next playtests use a full Closed City 
 
 Card text lives in `data/cards/review_drafts/closed_city_characters.json` and `flood_survivor_characters.json`; `data/cards/teams.json` names the teams. Rules decisions for these cards (2026-10-07): once-per-match Level 3 abilities cost 1 AP; Dr. Elena Morozova's Dream Link can move Memory markers; the Reactor Worker never triggers Leaks, and its Level 3 AP gain has no per-turn limit. Interpretations awaiting confirmation are listed in `LLD-closed-city-flood-roster.md`.
 
+Closed City balance pass (decided 2026-10-19; playtests found Closed City still weak): VERA-7's Protected Passenger gives its rider +2 maximum HP (was +1). Irina Karpova's Level 2 is +1 HP, and Access Granted may target any ally on the board, ignoring range and line of sight (replacing two targets and Leak immunity). Zoya Miranova's Level 3 charms instead of pulling twice: once per match, Voice Under Static pulls, then permanently moves the target to her side; a Hero can't be charmed. Major Yuri Volkov's Containment Shot Marks a target next to any placed object, not only a Leak.
+
 Russian-inspired starting roster:
 
 | Type | Character | Initial Gameplay Idea |

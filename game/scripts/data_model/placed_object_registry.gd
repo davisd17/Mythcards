@@ -10,9 +10,9 @@ static func get_def(type_id: String) -> PlacedObjectDef:
 		"pylon":
 			return PlacedObjectDef.new("pylon", false, true, 1)     # no movement block; 1 HP at L1 (designer ruling 2026-09-27), 2 from Architect L2
 		"stone":
-			return PlacedObjectDef.new("stone", true, true, 1)      # Stone-Line Laborer: "placed objects with 1 HP that block movement"
+			return PlacedObjectDef.new("stone", true, true, 1)      # Stone-Line Laborer's Stone: 1 HP, blocks movement (glossary "stone")
 		"vault":
-			# Iset-Nara L3: "The Hidden Vault is a placed object with 3 HP." Blocks movement and
+			# Iset-Nara L3's Hidden Vault: a placed object with 3 HP (glossary "vault"). Blocks movement and
 			# line of sight like other solid objects.
 			return PlacedObjectDef.new("vault", true, true, 3)
 		"leak":

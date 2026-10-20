@@ -1,17 +1,38 @@
 extends Control
 # The game screen (HLD build step 16, LLD-presentation.md): a local hotseat match that is
 # played entirely by tapping. Portrait, mobile-first. From top to bottom: turn and AP,
-# relic and event chips, the board, the prompt bar (what to pick next, with option
+# the face-up relic and event cards on the table, the board, the prompt bar (what to pick next, with option
 # buttons), then a summary strip of the inspected character beside the action buttons
 # (tap it for the full card). Drawn relic and event cards pop up full size; the popup
 # scrolls, so no card is ever cut off (playtest 2026-10-06). All game logic lives in GameController and the engine.
 
 const DEBUG_SCENE := "res://scenes/debug_match.tscn"
-const BUTTON_FONT := 28
-const BUTTON_HEIGHT := 78.0
-const SIDE_BUTTON_WIDTH := 280.0
+const DETAILS_RESERVE := 360.0   # stacked layouts keep this much height under the board
+const DIALOG_WIDTH := 640.0      # menus, notices and dialog commands are at most this wide
+const WARNING := Color("#ff9d6b")   # the capture warning's text
+const TABLE_MIN := 88.0          # the face-up card row's height: a command's height, taller
+const TABLE_MAX := 136.0         # only when the board can't use the room (it never shrinks)
 
 var controller := GameController.new()
+
+# Layout (docs/UI_STYLE_GUIDE.md section 7). Stacked (narrow, medium): header, commands,
+# status chips, the board, then the prompt and the summary beside the actions. Side by side
+# (wide, short): the board on the left, everything else in one scrolling column on the
+# right. _arrange() moves the same nodes between the two, so a resize keeps every state.
+var _mode := ""
+var _page := MarginContainer.new()
+var _root := VBoxContainer.new()
+var _header := HBoxContainer.new()
+var _commands := HBoxContainer.new()
+var _body := BoxContainer.new()          # the board and the details
+var _details := VBoxContainer.new()
+var _detail_scroll := ScrollContainer.new()   # side by side: everything under the commands
+var _detail_list := VBoxContainer.new()
+var _prompt_box := VBoxContainer.new()
+var _bottom := HBoxContainer.new()       # stacked: the summary beside the actions
+var _side_scroll := ScrollContainer.new()
+var _layout_queued := false
+var px_override := 0.0   # tests: rendered pixels per unit, instead of the real window's
 
 var _turn_label := Label.new()
 var _deck_label := Label.new()
@@ -20,13 +41,15 @@ var _turn_bar := ColorRect.new()     # the active player's color under the heade
 var _popup_box := VBoxContainer.new()
 var _popup_card_id := ""             # the relic/event card the popup shows, to dock on close
 var _sfx := Sfx.new()                # Phase 4 sound and haptics
-var _chips := HFlowContainer.new()
+var _chips := HBoxContainer.new()    # the table: both relics and active events face up, then the Ember score
+var _embers := Label.new()           # passive: "P1 Embers 0/4" over "P2 Embers 0/4"
+var _table_h := TABLE_MIN
 var _board := GameBoardView.new()
 var _prompt := Label.new()
-var _options := HFlowContainer.new()
+var _options := ActionGrid.new()     # a pending choice's answers, as two-line choice rows
 var _summary := CardSummary.new()
 var _primary: Button               # "Done placing" in setup, "End turn" in the match
-var _side := HFlowContainer.new()   # action buttons; two per row when the card is hidden
+var _side := ActionGrid.new()        # the selected character's actions, or the setup tray
 var _popup := Control.new()
 var _popup_card := CardView.new()
 var _popup_scroll := ScrollContainer.new()
@@ -34,7 +57,9 @@ var _popup_button: Button
 var _popup_note := Label.new()
 var _popup_queue: Array[String] = []   # card ids waiting to be shown, oldest first
 var _shown_reveal := ""                # the revealed card already shown for the current choice
-var _menu := PanelContainer.new()
+var _menu := Control.new()          # a centered settings panel over a dim
+var _menu_panel := PanelContainer.new()
+var _menu_scroll := ScrollContainer.new()
 var _chooser := Control.new()        # New match: vs AI as either team, or hotseat
 var _notice_button := Button.new()  # a passing notice (e.g. the AI drew a card); fades on its own
 var _notice_timer := Timer.new()
@@ -46,95 +71,96 @@ var _log_text := RichTextLabel.new()
 var _log_scroll := ScrollContainer.new()
 var _game_over := Control.new()
 var _game_over_label := Label.new()
+var _capture_confirm := Control.new()   # "End turn and lose?" when your Hero can't move
 var _terms := TermPopup.new()        # definitions: tapped card terms, long-pressed pieces, glossary
 
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = _build_ui_theme()
+	theme = UiStyle.theme()
 	Settings.load_saved()
 	add_child(_sfx)
 	var background := ColorRect.new()
-	background.color = Color("#0b0f0e")
+	background.color = UiStyle.BG
 	background.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(background)
 
-	var root := VBoxContainer.new()
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
-	root.add_theme_constant_override("separation", 6)
-	add_child(root)
+	_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side in ["left", "right", "top", "bottom"]:
+		_page.add_theme_constant_override("margin_" + side, UiStyle.PAGE_INSET)
+	add_child(_page)
+	_root.add_theme_constant_override("separation", UiStyle.GAP)
+	_page.add_child(_root)
 
-	var top := HBoxContainer.new()
-	top.add_theme_constant_override("separation", 10)
+	_header.add_theme_constant_override("separation", UiStyle.GAP)
 	_turn_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_turn_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_turn_label.add_theme_font_size_override("font_size", 30)
-	_turn_label.add_theme_color_override("font_color", Color("#f3e3b5"))
-	top.add_child(_turn_label)
+	_turn_label.add_theme_font_size_override("font_size", UiStyle.FONT_BODY)
+	_turn_label.add_theme_color_override("font_color", UiStyle.HEADING)
+	_header.add_child(_turn_label)
 	# The deck count sits in the header (mobile feedback 2026-10-17: the HUD took three rows).
-	_deck_label.add_theme_font_size_override("font_size", 24)
-	_deck_label.add_theme_color_override("font_color", Color("#b8ad92"))
+	_deck_label.add_theme_font_size_override("font_size", UiStyle.FONT_SECONDARY)
+	_deck_label.add_theme_color_override("font_color", UiStyle.MUTED)
 	_deck_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	top.add_child(_deck_label)
-	top.add_child(_ap_meter)
-	root.add_child(_margin(top))
-	var commands := HBoxContainer.new()
-	_primary = _button("End turn", _on_primary, false)
+	_header.add_child(_deck_label)
+	_header.add_child(_ap_meter)
+	# End turn takes the rest of the row; Log and Menu are square utility buttons.
+	_commands.add_theme_constant_override("separation", UiStyle.GAP)
+	_primary = UiStyle.primary(UiStyle.command("End turn", _on_primary, "command:primary"))
 	_primary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_accent(_primary)
-	commands.add_child(_primary)
-	commands.add_child(_button("Log", _toggle_log, false))
-	commands.add_child(_button("Menu", _toggle_menu, false))
-	root.add_child(_margin(commands))
+	_commands.add_child(_primary)
+	_commands.add_child(UiStyle.icon_button("log", "Log", _toggle_log))
+	_commands.add_child(UiStyle.icon_button("menu", "Menu", _toggle_menu))
 	_turn_bar.custom_minimum_size = Vector2(0, 3)
 	_turn_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(_turn_bar)
 
-	# One row: each player's relic and Ember score; active events wrap onto a second row.
-	_chips.add_theme_constant_override("h_separation", 6)
-	_chips.add_theme_constant_override("v_separation", 6)
-	root.add_child(_margin(_chips))
+	# One row, like cards set down beside a board (designer 2026-10-19): Player 1's relic,
+	# any active events, Player 2's relic, all face up and tappable, then the Ember score.
+	_chips.add_theme_constant_override("separation", UiStyle.GAP)
+	_embers.add_theme_font_size_override("font_size", UiStyle.FONT_SECONDARY)
+	_embers.add_theme_color_override("font_color", Color("#e0a35a"))
+	_embers.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_embers.mouse_filter = Control.MOUSE_FILTER_STOP   # tap for what Embers are
+	_embers.gui_input.connect(func(e: InputEvent):
+		if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+			_terms.show_terms(["spirit_ember"]))
 
 	_board.controller = controller
 	# Phase 6: an art attack's hit sounds wait for its impact frame, as its visuals do.
 	_sfx.impact_for = func(id: String) -> float: return float(_board.attack_art_for(id).get("impact", 0.0))
-	_board.custom_minimum_size = Vector2(0, 560)
-	_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_board.size_flags_stretch_ratio = 3.0
 	_board.tile_tapped.connect(func(pos): controller.tap_tile(pos); _refresh())
 	_board.tile_long_pressed.connect(_explain_tile)
-	root.add_child(_board)
 
-	var prompt_box := VBoxContainer.new()
 	_prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_prompt.add_theme_font_size_override("font_size", 28)
-	_prompt.add_theme_color_override("font_color", Color("#f3e3b5"))
-	prompt_box.add_child(_prompt)
-	_options.add_theme_constant_override("h_separation", 6)
-	_options.add_theme_constant_override("v_separation", 6)
-	prompt_box.add_child(_options)
-	root.add_child(_margin(prompt_box))
+	_prompt.add_theme_color_override("font_color", UiStyle.HEADING)
+	_prompt_box.add_theme_constant_override("separation", UiStyle.GAP)
+	_prompt_box.add_child(_prompt)
+	_options.row_height = UiStyle.CHOICE_ROW_HEIGHT
+	_options.lines = 2
+	_prompt_box.add_child(_options)
 
-	var bottom := HBoxContainer.new()
-	bottom.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	bottom.custom_minimum_size.y = 220   # room for the strip's name, stats and status
-	bottom.add_theme_constant_override("separation", 8)
+	_body.add_theme_constant_override("separation", UiStyle.GAP)
+	_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_details.add_theme_constant_override("separation", UiStyle.GAP)
+	_detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_detail_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_detail_list.add_theme_constant_override("separation", UiStyle.GAP)
+	_detail_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_detail_scroll.add_child(_detail_list)
+	_bottom.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_bottom.add_theme_constant_override("separation", UiStyle.GAP)
+	_summary.custom_minimum_size.y = 220   # room for the strip's name, stats and status
 	_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_summary.size_flags_stretch_ratio = 1.4
+	_summary.size_flags_stretch_ratio = 1.2
 	_summary.pressed.connect(_show_character_card)
-	bottom.add_child(_summary)
-	var side_scroll := ScrollContainer.new()
-	side_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_side_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_side_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_side.add_theme_constant_override("h_separation", 6)
-	_side.add_theme_constant_override("v_separation", 6)
-	side_scroll.add_child(_side)
-	bottom.add_child(side_scroll)
-	root.add_child(_margin(bottom))
+	_side_scroll.add_child(_side)
+	# Every node starts in the stacked layout; _layout() rearranges them for the window.
+	_arrange(false)
 
-	resized.connect(_fit_board)
-	_fit_board()
+	resized.connect(_queue_layout)
 	_build_popup()
 	_build_log()
 	_build_menu()
@@ -145,8 +171,10 @@ func _ready() -> void:
 	add_child(_ai_timer)
 	_ai_timer.start()
 	_build_game_over()
+	_build_capture_confirm()
 	add_child(_terms)   # last, so a definition sits over every other overlay
 	_popup_card.term_pressed.connect(func(id): _terms.show_terms([id]))
+	_layout()
 
 	EventBus.relic_drawn.connect(_on_card_drawn)
 	EventBus.turn_started.connect(_on_turn_started)
@@ -176,17 +204,36 @@ func start_new_match(deck_seed: int = -1) -> void:
 # Where things are on screen, for TestBridge's click-driven browser tests: visible buttons
 # and every tile's center, in this viewport's coordinates.
 func ui_snapshot() -> Dictionary:
+	# Each button also reports its rect, its style-guide role, and whether its list has
+	# scrolled it out of view ("clipped"), for the responsive tests.
 	var buttons := []
 	for b in find_children("*", "Button", true, false):
-		if b.is_visible_in_tree() and not b.is_queued_for_deletion():
-			buttons.append({"text": b.text, "center": b.get_global_rect().get_center(), "disabled": b.disabled})
+		if not b.is_visible_in_tree() or b.is_queued_for_deletion():
+			continue
+		var rect: Rect2 = b.get_global_rect()
+		buttons.append({"text": b.text if b.text != "" else b.tooltip_text, "center": rect.get_center(),
+				"disabled": b.disabled, "rect": rect, "role": str(b.get_meta("ui_role", "")), "clipped": not _on_screen(b)})
 	var tiles := {}
 	for y in BoardModel.BOARD_SIZE:
 		for x in BoardModel.BOARD_SIZE:
 			tiles["%d,%d" % [x, y]] = _board.get_global_transform() * _board.tile_rect(Vector2i(x, y)).get_center()
 	var summary := _summary.get_global_rect().get_center() if _summary.is_visible_in_tree() else Vector2(-1, -1)
+	var corner := _board.tile_rect(Vector2i(0, BoardModel.BOARD_SIZE - 1))
+	var board := Rect2(_board.get_global_transform() * corner.position,
+			corner.size * BoardModel.BOARD_SIZE)
 	return {"buttons": buttons, "tiles": tiles, "summary": summary, "prompt": _prompt.text, "popup": _popup.visible,
-			"setup": controller.in_setup()}
+			"setup": controller.in_setup(), "board": board, "mode": _mode}
+
+
+# Whether a control's center is inside every scrolling list that holds it.
+func _on_screen(c: Control) -> bool:
+	var at := c.get_global_rect().get_center()
+	var parent := c.get_parent()
+	while parent != null and parent != self:
+		if parent is ScrollContainer and not (parent as Control).get_global_rect().has_point(at):
+			return false
+		parent = parent.get_parent()
+	return true
 
 
 # Shows the New match chooser; a hotseat setup waits underneath until a choice is made.
@@ -207,9 +254,117 @@ func _start(ai_side: String) -> void:
 	_refresh()
 
 
-# Landscape windows give the board more of the height (LLD-board-visual-phase1.md 3.4).
-func _fit_board() -> void:
-	_board.size_flags_stretch_ratio = 4.5 if size.x > size.y * 1.1 else 3.0
+# --- Layout (docs/UI_STYLE_GUIDE.md section 7) --------------------------------------------
+
+# Resizes arrive in bursts; the layout is worked out once per frame.
+func _queue_layout() -> void:
+	if not _layout_queued:
+		_layout_queued = true
+		_layout.call_deferred()
+
+
+func _layout() -> void:
+	_layout_queued = false
+	if not is_inside_tree():
+		return
+	var px := px_override if px_override > 0.0 else UiStyle.px_per_unit(get_viewport())
+	var mode := UiStyle.mode_for(size * px)
+	# Short (landscape phone) windows get one fixed UI scale so controls stay touchable. Only
+	# when this screen owns the window: never inside the test runner.
+	if get_tree().current_scene == self:
+		var window := get_window()
+		var factor := 1.0
+		if mode == UiStyle.SHORT:
+			var base := px / window.content_scale_factor
+			factor = clampf(1.0 / (UiStyle.SHORT_UNITS_PER_PX * base), 1.0, 3.0)
+		if not is_equal_approx(window.content_scale_factor, factor):
+			window.content_scale_factor = factor
+			return   # the resize this causes lays out again
+	var side := mode == UiStyle.WIDE or mode == UiStyle.SHORT
+	if mode != _mode:
+		_mode = mode
+		_arrange(side)
+	var inner := size - Vector2.ONE * UiStyle.PAGE_INSET * 2.0
+	if side:
+		# The board gets a full-height square; the column takes what is left, between 480
+		# units and one portrait page (720), and its action buttons stay within 360 rendered px.
+		var column := clampf(inner.x - inner.y - UiStyle.GAP, 480.0, 720.0)
+		_details.custom_minimum_size = Vector2(column, 0)
+		_set_table_height(TABLE_MAX)   # the column scrolls
+		_side.max_width = 360.0 / px if 360.0 / px < column else 0.0
+		_board.custom_minimum_size = Vector2.ZERO
+	else:
+		# The board is square: as wide as the page, unless that leaves too little below it.
+		_details.custom_minimum_size = Vector2.ZERO
+		_side.max_width = 0.0
+		var above := _header.get_combined_minimum_size().y + _commands.get_combined_minimum_size().y \
+				+ (TABLE_MIN if _chips.visible else 0.0) + 3.0 + UiStyle.GAP * 5.0
+		var board := minf(inner.x, inner.y - above - DETAILS_RESERVE)
+		# The cards grow only into height the square board can't use, so it never shrinks.
+		_set_table_height(clampf(TABLE_MIN + inner.y - above - DETAILS_RESERVE - inner.x, TABLE_MIN, TABLE_MAX))
+		_board.custom_minimum_size = Vector2(0, maxf(board, 320.0))
+		# The actions widen to fit their longest label (style guide 5, "Long Labels"), between
+		# 40% and 60% of the page; the summary takes the rest and its card is a tap away.
+		var longest := 0.0
+		for b in _side.items():
+			longest = maxf(longest, _side.label_width(b))
+		_side_scroll.custom_minimum_size.x = clampf(longest + 4.0, inner.x * 0.4, inner.x * 0.6)
+		_side_scroll.size_flags_horizontal = Control.SIZE_FILL
+	var dialog := minf(DIALOG_WIDTH, size.x - UiStyle.PAGE_INSET * 2.0)
+	_menu_panel.custom_minimum_size.x = dialog
+	_menu_scroll.custom_minimum_size.y = minf(_menu_scroll.get_child(0).get_combined_minimum_size().y,
+			size.y - UiStyle.PAGE_INSET * 4.0 - UiStyle.SECTION_GAP * 2.0)
+	_notice_button.offset_left = -dialog / 2.0
+	_notice_button.offset_right = dialog / 2.0
+	for c in find_children("*", "Button", true, false):
+		if c.has_meta("dialog_command"):
+			(c as Control).custom_minimum_size.x = dialog
+
+
+# Puts each node where the layout wants it. Stacked: everything in one column under the
+# page header. Side by side: the board, then a column with the header, the commands and a
+# scrolling list of the rest. Nodes are moved, never rebuilt.
+func _arrange(side: bool) -> void:
+	_body.vertical = not side
+	if side:
+		_put(_details, [_header, _commands, _turn_bar, _detail_scroll, _bottom])
+		_put(_detail_list, [_chips, _prompt_box, _summary, _side])
+		_put(_root, [_body])
+		_bottom.visible = false
+		_detail_scroll.visible = true
+		_board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_details.size_flags_horizontal = Control.SIZE_FILL
+		_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	else:
+		_put(_root, [_header, _commands, _turn_bar, _chips, _body])
+		_put(_bottom, [_summary, _side_scroll])
+		_put(_side_scroll, [_side])
+		_put(_details, [_prompt_box, _bottom, _detail_scroll])
+		_bottom.visible = true
+		_detail_scroll.visible = false
+		_board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_board.size_flags_vertical = Control.SIZE_FILL
+		_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_put(_body, [_board, _details])
+
+
+func _set_table_height(h: float) -> void:
+	_table_h = h
+	for c in _chips.get_children():
+		if c is TableCard:
+			(c as Control).custom_minimum_size.y = h
+
+
+func _put(parent: Node, children: Array) -> void:
+	for i in children.size():
+		var c: Node = children[i]
+		if c.get_parent() != parent:
+			if c.get_parent() != null:
+				c.get_parent().remove_child(c)
+			parent.add_child(c)
+		parent.move_child(c, i)
 
 
 # A short banner whenever the turn passes (Phase 3); it ignores input and fades on its own.
@@ -246,6 +401,7 @@ func _refresh() -> void:
 	_refresh_prompt()
 	_refresh_side()
 	_refresh_card()
+	_queue_layout()   # the table row may have appeared or gone
 	var state := GameState.match_state
 	_game_over.visible = state != null and state.phase == "ended" and controller.setup == null
 	if _game_over.visible:
@@ -256,8 +412,10 @@ func _refresh() -> void:
 
 func _refresh_header() -> void:
 	for child in _chips.get_children():
-		child.queue_free()
+		if child != _embers:
+			child.queue_free()
 	_deck_label.text = ""
+	_chips.visible = not controller.in_setup() and GameState.match_state != null
 	if controller.in_setup():
 		_turn_label.text = "Setup · %s" % _player_name(controller.placing_player)
 		_turn_label.add_theme_color_override("font_color", _bright(controller.placing_player))
@@ -280,23 +438,31 @@ func _refresh_header() -> void:
 	_turn_bar.color = Color(_bright(state.active_player_id), 0.8)
 	_ap_meter.set_ap(player.pool_ap_remaining, player.pool_ap_max)
 	_deck_label.text = "Deck %d" % state.shared_deck.size()
+	# Each relic lies face up in its owner's color, Player 1's first and Player 2's last;
+	# the events in effect lie between them.
+	var cards: Array[TableCard] = []
 	for p in state.players:
-		# The chip's color says whose relic it is, so the label is just the card.
-		var label := _card_name(p.active_relic_id) if p.active_relic_id != "" else "%s: no relic" % _short_name(p.id)
-		var chip := _chip(label, _board.faction_color(p.id).darkened(0.35))
-		if p.active_relic_id != "":
-			var id := p.active_relic_id
-			chip.pressed.connect(func(): _show_card(id, "%s's active relic." % _player_name(p.id)))
-		_chips.add_child(chip)
-	for p in state.players:
-		var embers := "%s Embers %d/%d" % [_short_name(p.id), p.embers_delivered, VictoryChecker.EMBERS_TO_WIN]
-		var chip := _chip(embers, Color("#7a4a1c"))
-		chip.pressed.connect(func(): _terms.show_terms(["spirit_ember"]))
-		_chips.add_child(chip)
+		var id := p.active_relic_id
+		cards.append(TableCard.make(id, "Relic · %s" % _short_name(p.id), _board.faction_color(p.id),
+				"%s: no relic" % _short_name(p.id), func():
+					if id != "":
+						_show_card(id, "%s's active relic." % _player_name(p.id))))
 	for card_id in RelicEventDeck.active_event_ids():
-		var chip := _chip("Event: " + _card_name(card_id), Color("#5b4a2e"))
-		chip.pressed.connect(func(): _show_card(card_id, "This event is in effect."))
-		_chips.add_child(chip)
+		var card := ContentDB.get_relic_event(card_id)
+		cards.insert(cards.size() - 1, TableCard.make(card_id, "Event · %s" % (card.duration if card != null else ""),
+				UiStyle.BRASS, "", func(): _show_card(card_id, "This event is in effect.")))
+	for i in cards.size():
+		cards[i].custom_minimum_size.y = _table_h
+		_chips.add_child(cards[i])
+		_chips.move_child(cards[i], i)
+	# The Ember score is a passive counter, not a button: tapping it still explains Embers.
+	var lines := []
+	for p in state.players:
+		lines.append("%s Embers %d/%d" % [_short_name(p.id), p.embers_delivered, VictoryChecker.EMBERS_TO_WIN])
+	_embers.text = "\n".join(lines)
+	if _embers.get_parent() != _chips:
+		_chips.add_child(_embers)
+	_chips.move_child(_embers, -1)
 
 
 func _refresh_prompt() -> void:
@@ -320,12 +486,18 @@ func _refresh_prompt() -> void:
 		_prompt.text = prompt
 		for i in step.get("options", []).size():
 			var index: int = i
-			_options.add_child(_button(step.options[i].label, func(): controller.press_option(index); _refresh()))
+			_options.add_child(UiStyle.choice(step.options[i].label, func(): controller.press_option(index); _refresh(), "choice:option"))
 		if step.get("optional", false):
-			_options.add_child(_button("Skip", func(): controller.skip(); _refresh()))
+			_options.add_child(UiStyle.choice("Skip", func(): controller.skip(); _refresh(), "choice:option"))
 		if controller.can_cancel():
-			_options.add_child(_button("Cancel", func(): controller.cancel(); _refresh()))
+			_options.add_child(UiStyle.choice("Cancel", func(): controller.cancel(); _refresh(), "choice:option"))
 		return
+	var warning := _capture_warning()
+	if warning != "" and not controller.is_ai_turn():
+		_prompt.text = warning + ("\n" + controller.message if controller.message != "" else "")
+		_prompt.add_theme_color_override("font_color", WARNING)
+		return
+	_prompt.add_theme_color_override("font_color", UiStyle.HEADING)
 	if controller.is_ai_turn():
 		_prompt.text = "%s is playing. %s" % [_player_name(GameState.match_state.active_player_id), controller.message]
 	elif controller.message != "":
@@ -341,14 +513,17 @@ func _refresh_prompt() -> void:
 func _refresh_side() -> void:
 	for child in _side.get_children():
 		child.queue_free()
+	# The setup tray is a choice list (two-line rows, for long names); a character's actions
+	# are one-line commands.
+	_side.row_height = UiStyle.CHOICE_ROW_HEIGHT if controller.in_setup() else UiStyle.CONTROL_HEIGHT
+	_side.lines = 2 if controller.in_setup() else 1
 	if controller.in_setup():
 		if not controller.tray().is_empty():
-			_side.add_child(_button("Auto-place the rest", func(): controller.auto_place(); _refresh()))
+			_side.add_child(UiStyle.choice("Auto-place the rest", func(): controller.auto_place(); _refresh(), "choice:action"))
 		for c in controller.tray():
 			var id := c.instance_id
-			var b := _button(c.data.char_name, func(): controller.pick_from_tray(id); _refresh())
-			if id == controller.placing_id:
-				b.modulate = Color("#ffe14d")
+			var b := UiStyle.choice(c.data.char_name, func(): controller.pick_from_tray(id); _refresh(), "choice:action")
+			UiStyle.mark_selected(b, id == controller.placing_id)
 			_side.add_child(b)
 		return
 	if GameState.match_state == null or not GameState.is_match_active():
@@ -356,16 +531,16 @@ func _refresh_side() -> void:
 	for action in controller.actions():
 		var kind: String = action.kind
 		var id: String = action.id
-		var b := _button(action.label, func(): controller.start_action(kind, id); _refresh())
+		var b := UiStyle.command(action.label, func(): controller.start_action(kind, id); _refresh(), "command:action")
 		b.disabled = not action.enabled
 		_side.add_child(b)
 	var selected := controller.find(controller.selected_id)
 	if selected != null and FigureCatalog.outfits(selected.data.id).size() > 1:
 		var label := "Outfit: %s" % _board.outfit_name(selected)
-		_side.add_child(_button(label, func(): _board.cycle_outfit(selected); _refresh()))
+		_side.add_child(UiStyle.command(label, func(): _board.cycle_outfit(selected); _refresh(), "command:action"))
 	var relic := controller.relic_power_label()
 	if relic != "":
-		_side.add_child(_button(relic, func(): controller.use_relic(); _refresh()))
+		_side.add_child(UiStyle.command(relic, func(): controller.use_relic(); _refresh(), "command:action"))
 
 
 func _refresh_card() -> void:
@@ -430,14 +605,13 @@ func _build_popup() -> void:
 	_popup.add_child(dim)
 	var box := _popup_box
 	box.set_anchors_preset(Control.PRESET_FULL_RECT)
-	box.add_theme_constant_override("separation", 10)
+	box.add_theme_constant_override("separation", UiStyle.GAP)
 	var top_gap := Control.new()
-	top_gap.custom_minimum_size = Vector2(0, 30)
+	top_gap.custom_minimum_size = Vector2(0, UiStyle.SECTION_GAP)
 	box.add_child(top_gap)
 	_popup_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_popup_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_popup_note.add_theme_font_size_override("font_size", 30)
-	_popup_note.add_theme_color_override("font_color", Color("#f3e3b5"))
+	_popup_note.add_theme_color_override("font_color", UiStyle.HEADING)
 	box.add_child(_margin(_popup_note, 40))
 	# The card scrolls inside the overlay, so a long card never runs off the screen. It sits
 	# centered, at a card's width, below the note rather than against the top edge
@@ -452,11 +626,11 @@ func _build_popup() -> void:
 	_popup_card.custom_minimum_size.x = CardView.FULL_CARD_WIDTH
 	column.add_child(_popup_card)
 	_popup_scroll.add_child(column)
-	box.add_child(_margin(_popup_scroll, 50))
-	_popup_button = _accent(_button("Continue", _next_popup))
-	box.add_child(_margin(_popup_button, 50))
+	box.add_child(_margin(_popup_scroll, UiStyle.PAGE_INSET))
+	_popup_button = UiStyle.primary(UiStyle.command("Continue", _next_popup, "command:primary"))
+	box.add_child(_dialog_command(_popup_button))
 	var bottom_gap := Control.new()
-	bottom_gap.custom_minimum_size = Vector2(0, 30)
+	bottom_gap.custom_minimum_size = Vector2(0, UiStyle.SECTION_GAP)
 	box.add_child(bottom_gap)
 	_popup.add_child(box)
 	add_child(_popup)
@@ -516,13 +690,13 @@ func _next_popup() -> void:
 	_popup.visible = true
 
 
-# Flies a card from `from` into the HUD chip that now holds it: the player's relic chip,
-# an active event's chip, or the deck chip for a card that went back or already resolved.
+# Flies a card from `from` onto the table card that now holds it: the player's relic, an
+# active event, or the deck count for a card that went back or already resolved.
 func _dock(card_id: String, from: Vector2, hold: float) -> void:
 	var card_name := _card_name(card_id)
 	var target: Control = null
 	for chip in _chips.get_children():
-		if chip.is_queued_for_deletion():
+		if chip.is_queued_for_deletion() or not chip is Button:
 			continue
 		if chip.text.contains(card_name):
 			target = chip
@@ -534,29 +708,51 @@ func _dock(card_id: String, from: Vector2, hold: float) -> void:
 # --- Menu and game over --------------------------------------------------------------------
 
 func _build_menu() -> void:
+	# A centered panel over a dim (style guide 7: dialogs fit the window and scroll).
 	_menu.visible = false
-	_menu.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	_menu.offset_left = -270
-	_menu.offset_right = -10
-	_menu.offset_top = 60
+	_menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.6)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dim.gui_input.connect(func(e: InputEvent):
+		if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+			_toggle_menu())
+	_menu.add_child(dim)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_menu.add_child(center)
+	center.add_child(_menu_panel)
+	var outer := VBoxContainer.new()
+	outer.add_theme_constant_override("separation", UiStyle.GAP)
+	_menu_panel.add_child(outer)
+	outer.add_child(UiStyle.heading("Menu"))
+	_menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	outer.add_child(_menu_scroll)
 	var box := VBoxContainer.new()
-	box.custom_minimum_size = Vector2(240, 0)
-	box.add_child(_button("New match", new_match))
-	box.add_child(_button("Glossary", func(): _menu.visible = false; _terms.show_glossary()))
-	box.add_child(_button("Debug view", func(): get_tree().change_scene_to_file(DEBUG_SCENE)))
+	box.add_theme_constant_override("separation", UiStyle.GAP)
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_menu_scroll.add_child(box)
+	box.add_child(UiStyle.command("New match", new_match))
+	box.add_child(UiStyle.command("Glossary", func(): _toggle_menu(); _terms.show_glossary()))
+	box.add_child(UiStyle.command("Debug view", func(): get_tree().change_scene_to_file(DEBUG_SCENE)))
 	# Phase 4 presentation toggles, saved across restarts.
 	box.add_child(_setting_toggle("Sound", "sound"))
+	box.add_child(_setting_toggle("Music", "music"))
 	box.add_child(_setting_toggle("Motion", "motion"))
 	box.add_child(_setting_toggle("Vibration", "haptics"))
-	box.add_child(_button("Close", _toggle_menu))
-	_menu.add_child(box)
+	outer.add_child(UiStyle.command("Close", _toggle_menu))
 	add_child(_menu)
 
 
-# A menu button showing "Sound: On" that flips the Settings field and saves it.
+# A toggle showing "Sound: On" that flips the Settings field and saves it. The word and the
+# pressed look both say the state, not color alone.
 func _setting_toggle(label: String, field: String) -> Button:
-	var b := _button("", func(): pass)
-	var relabel := func(): b.text = "%s: %s" % [label, "On" if Settings.value(field) else "Off"]
+	var b := UiStyle.command("", func(): pass, "command:toggle")
+	b.toggle_mode = true
+	var relabel := func():
+		b.text = "%s: %s" % [label, "On" if Settings.value(field) else "Off"]
+		b.set_pressed_no_signal(Settings.value(field))
 	relabel.call()
 	b.pressed.connect(func():
 		Settings.toggle(field)
@@ -570,9 +766,61 @@ func _setting_toggle(label: String, field: String) -> Button:
 func _on_primary() -> void:
 	if controller.in_setup():
 		controller.confirm_placement()
+	elif controller.hero_trapped(GameState.match_state.active_player_id) and not controller.is_ai_turn():
+		_capture_confirm.visible = true   # ending the turn now loses: ask first
+		return
 	else:
 		controller.end_turn()
 	_refresh()
+
+
+# Warnings about the capture rule (designer 2026-10-19): your Hero can't move, so ending the
+# turn now loses; or the other Hero can't move, so it loses if it's still stuck when its
+# player ends their turn.
+func _capture_warning() -> String:
+	var state := GameState.match_state
+	if state == null or controller.in_setup() or not GameState.is_match_active():
+		return ""
+	var lines := []
+	if controller.hero_trapped(state.active_player_id):
+		lines.append("Warning: your Hero can't move. Free it before you end the turn, or you lose by Hero capture.")
+	if controller.hero_trapped(state.get_other_player_id(state.active_player_id)):
+		lines.append("Their Hero can't move. If it's still stuck when they end their turn, you win.")
+	return "\n".join(lines)
+
+
+func _build_capture_confirm() -> void:
+	_capture_confirm.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_capture_confirm.visible = false
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.6)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_capture_confirm.add_child(dim)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", UiStyle.panel())
+	var inner := VBoxContainer.new()
+	inner.add_theme_constant_override("separation", UiStyle.GAP)
+	var label := Label.new()
+	label.text = "Your Hero can't move. Ending the turn now loses the match by Hero capture."
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.custom_minimum_size.x = 480
+	label.add_theme_color_override("font_color", WARNING)
+	inner.add_child(label)
+	var keep := UiStyle.primary(UiStyle.command("Keep playing", func(): _capture_confirm.visible = false, "command:primary"))
+	keep.set_meta("dialog_command", true)
+	inner.add_child(keep)
+	var lose := UiStyle.command("End turn and lose", func():
+		_capture_confirm.visible = false
+		controller.end_turn()
+		_refresh())
+	lose.set_meta("dialog_command", true)
+	inner.add_child(lose)
+	panel.add_child(inner)
+	center.add_child(panel)
+	_capture_confirm.add_child(center)
+	add_child(_capture_confirm)
 
 
 # --- Action log ----------------------------------------------------------------------------
@@ -586,12 +834,11 @@ func _build_log() -> void:
 	_log.add_child(dim)
 	var box := VBoxContainer.new()
 	box.set_anchors_preset(Control.PRESET_FULL_RECT)
-	box.add_theme_constant_override("separation", 8)
-	var title := Label.new()
-	title.text = "Action log"
-	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", Color("#f3e3b5"))
-	box.add_child(_margin(title))
+	box.add_theme_constant_override("separation", UiStyle.GAP)
+	var top_gap := Control.new()
+	top_gap.custom_minimum_size = Vector2(0, UiStyle.SECTION_GAP)
+	box.add_child(top_gap)
+	box.add_child(_margin(UiStyle.heading("Action log"), UiStyle.PAGE_INSET))
 	_log_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_log_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_log_text.bbcode_enabled = true
@@ -601,10 +848,10 @@ func _build_log() -> void:
 	_log_text.add_theme_font_size_override("normal_font_size", 28)
 	_log_text.add_theme_font_size_override("bold_font_size", 28)
 	_log_scroll.add_child(_log_text)
-	box.add_child(_margin(_log_scroll))
-	box.add_child(_margin(_accent(_button("Close", _toggle_log))))
+	box.add_child(_margin(_log_scroll, UiStyle.PAGE_INSET))
+	box.add_child(_dialog_command(UiStyle.command("Close", _toggle_log)))
 	var gap := Control.new()
-	gap.custom_minimum_size = Vector2(0, 16)
+	gap.custom_minimum_size = Vector2(0, UiStyle.SECTION_GAP)
 	box.add_child(gap)
 	_log.add_child(box)
 	add_child(_log)
@@ -620,13 +867,16 @@ func _toggle_log() -> void:
 
 func _build_notice() -> void:
 	_notice_button.visible = false
+	# A two-line choice row at the normal button font (style guide 9: no 18-unit text).
 	_notice_button.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	_notice_button.offset_left = -320
-	_notice_button.offset_right = 320
+	_notice_button.offset_left = -DIALOG_WIDTH / 2.0
+	_notice_button.offset_right = DIALOG_WIDTH / 2.0
 	_notice_button.offset_top = 120
-	_notice_button.custom_minimum_size = Vector2(0, BUTTON_HEIGHT)
-	_notice_button.add_theme_font_size_override("font_size", 18)
+	_notice_button.custom_minimum_size = Vector2(0, UiStyle.CHOICE_ROW_HEIGHT)
 	_notice_button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_notice_button.clip_text = true
+	_notice_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_notice_button.set_meta("ui_role", "choice:notice")
 	_notice_button.pressed.connect(func():
 		_notice_button.visible = false
 		if _notice_card != "":
@@ -654,19 +904,17 @@ func _build_chooser() -> void:
 	var box := VBoxContainer.new()
 	box.set_anchors_preset(Control.PRESET_FULL_RECT)
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_theme_constant_override("separation", 14)
-	var title := Label.new()
-	title.text = "New match"
+	box.add_theme_constant_override("separation", UiStyle.GAP)
+	var title := UiStyle.heading("New match")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 34)
-	title.add_theme_color_override("font_color", Color("#f3e3b5"))
 	box.add_child(title)
 	var teams := ContentDB.get_matchup()
 	var p1_name := str(ContentDB.get_team(teams[0]).get("name", "Player 1"))
 	var p2_name := str(ContentDB.get_team(teams[1]).get("name", "Player 2"))
-	box.add_child(_margin(_accent(_button("Play %s vs the AI" % p1_name, func(): _start("p2"))), 60))
-	box.add_child(_margin(_accent(_button("Play %s vs the AI" % p2_name, func(): _start("p1"))), 60))
-	box.add_child(_margin(_button("Hotseat: play both sides", func(): _start("")), 60))
+	# Three equal choices, so none is the brass primary.
+	box.add_child(_dialog_command(UiStyle.command("Play %s vs the AI" % p1_name, func(): _start("p2"))))
+	box.add_child(_dialog_command(UiStyle.command("Play %s vs the AI" % p2_name, func(): _start("p1"))))
+	box.add_child(_dialog_command(UiStyle.command("Hotseat: play both sides", func(): _start(""))))
 	_chooser.add_child(box)
 	add_child(_chooser)
 
@@ -689,11 +937,15 @@ func _build_game_over() -> void:
 	box.grow_vertical = Control.GROW_DIRECTION_BOTH
 	var panel := PanelContainer.new()
 	var inner := VBoxContainer.new()
-	_game_over_label.add_theme_font_size_override("font_size", 32)
-	_game_over_label.add_theme_color_override("font_color", Color("#f3e3b5"))
+	inner.add_theme_constant_override("separation", UiStyle.GAP)
+	_game_over_label.add_theme_font_size_override("font_size", UiStyle.FONT_HEADING)
+	_game_over_label.add_theme_color_override("font_color", UiStyle.HEADING)
 	_game_over_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_game_over_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	inner.add_child(_game_over_label)
-	inner.add_child(_button("New match", new_match))
+	var again := UiStyle.primary(UiStyle.command("New match", new_match, "command:primary"))
+	again.set_meta("dialog_command", true)
+	inner.add_child(again)
 	panel.add_child(inner)
 	box.add_child(panel)
 	_game_over.add_child(box)
@@ -702,92 +954,14 @@ func _build_game_over() -> void:
 
 # --- Helpers ---------------------------------------------------------------------------------
 
-
-
-func _build_ui_theme() -> Theme:
-	var result := Theme.new()
-	result.default_font_size = 28
-	result.set_color("font_color", "Label", Color("#e9e5db"))
-	result.set_color("font_color", "Button", Color("#e9e5db"))
-	result.set_color("font_hover_color", "Button", Color.WHITE)
-	result.set_color("font_pressed_color", "Button", Color("#f3e3b5"))
-	result.set_color("font_disabled_color", "Button", Color("#777d79"))
-	result.set_stylebox("normal", "Button", _button_style("#222928", "#4b5552"))
-	result.set_stylebox("hover", "Button", _button_style("#303937", "#769080"))
-	result.set_stylebox("pressed", "Button", _button_style("#151a19", "#c9a45c"))
-	result.set_stylebox("focus", "Button", _button_style("#252d2b", "#c9a45c"))
-	result.set_stylebox("disabled", "Button", _button_style("#171b1a", "#303634"))
-	result.set_stylebox("panel", "PanelContainer", _panel_style())
-	return result
-
-
-func _button_style(fill: String, border: String) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(fill)
-	style.border_color = Color(border)
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(6)
-	style.set_content_margin_all(8)
-	return style
-
-
-func _panel_style() -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#171c1b")
-	style.border_color = Color("#3e4744")
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(6)
-	style.set_content_margin_all(8)
-	return style
-
-
-func _button(text: String, on_press: Callable, wide: bool = true) -> Button:
-	var b := Button.new()
-	b.text = text
-	b.custom_minimum_size = Vector2(0, BUTTON_HEIGHT)
-	b.add_theme_font_size_override("font_size", BUTTON_FONT)
-	if wide:
-		b.custom_minimum_size.x = SIDE_BUTTON_WIDTH
-		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	b.pressed.connect(on_press)
-	return b
-
-
-# Gold, for the one button that moves the game on.
-func _accent(b: Button) -> Button:
-	var colors := {"normal": "#c9a45c", "hover": "#d6b36c", "pressed": "#a8883f", "focus": "#c9a45c", "disabled": "#4d4535"}
-	for state in colors:
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color(colors[state])
-		style.set_corner_radius_all(8)
-		style.set_content_margin_all(8)
-		b.add_theme_stylebox_override(state, style)
-	b.add_theme_color_override("font_color", Color("#1a1916"))
-	b.add_theme_color_override("font_hover_color", Color("#1a1916"))
-	b.add_theme_color_override("font_pressed_color", Color("#1a1916"))
-	return b
-
-
-func _chip(text: String, color: Color) -> Button:
-	var b := Button.new()
-	b.text = text
-	# Four to a row on a 720-wide screen; long names shrink to an ellipsis, and tapping
-	# the chip shows the whole card anyway.
-	b.custom_minimum_size = Vector2(160, 54)
-	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	b.add_theme_font_size_override("font_size", 22)
-	b.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	b.clip_text = true
-	for state in ["normal", "hover", "pressed", "focus"]:
-		var style := StyleBoxFlat.new()
-		style.bg_color = color.lightened(0.08) if state == "hover" else color
-		style.border_color = color.lightened(0.35)
-		style.set_border_width_all(1 if state != "pressed" else 2)
-		style.set_corner_radius_all(10)
-		style.set_content_margin_all(6)
-		b.add_theme_stylebox_override(state, style)
-	return b
+# A dialog's command: centered, as wide as a dialog (_layout() keeps the width in step with
+# the window), never the whole screen.
+func _dialog_command(b: Button) -> CenterContainer:
+	b.set_meta("dialog_command", true)
+	b.custom_minimum_size.x = DIALOG_WIDTH
+	var center := CenterContainer.new()
+	center.add_child(b)
+	return center
 
 
 func _margin(child: Control, side: int = 10) -> MarginContainer:
