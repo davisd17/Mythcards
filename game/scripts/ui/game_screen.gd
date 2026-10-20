@@ -73,6 +73,7 @@ var _game_over := Control.new()
 var _game_over_label := Label.new()
 var _capture_confirm := Control.new()   # "End turn and lose?" when your Hero can't move
 var _terms := TermPopup.new()        # definitions: tapped card terms, long-pressed pieces, glossary
+var _how_to := HowToPlay.new()       # the beginner walkthrough, from New match or Menu
 
 
 func _ready() -> void:
@@ -172,6 +173,8 @@ func _ready() -> void:
 	_ai_timer.start()
 	_build_game_over()
 	_build_capture_confirm()
+	add_child(_how_to)
+	_how_to.term_pressed.connect(func(id): _terms.show_terms([id]))
 	add_child(_terms)   # last, so a definition sits over every other overlay
 	_popup_card.term_pressed.connect(func(id): _terms.show_terms([id]))
 	_layout()
@@ -386,7 +389,7 @@ func _on_turn_started(player_id: String) -> void:
 
 
 func _on_ai_tick() -> void:
-	if controller.is_ai_turn() and not _chooser.visible:
+	if controller.is_ai_turn() and not _chooser.visible and not _how_to.visible:
 		controller.ai_step()
 		_refresh()
 
@@ -734,6 +737,7 @@ func _build_menu() -> void:
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_menu_scroll.add_child(box)
 	box.add_child(UiStyle.command("New match", new_match))
+	box.add_child(UiStyle.command("How to play", func(): _toggle_menu(); _how_to.open()))
 	box.add_child(UiStyle.command("Glossary", func(): _toggle_menu(); _terms.show_glossary()))
 	box.add_child(UiStyle.command("Debug view", func(): get_tree().change_scene_to_file(DEBUG_SCENE)))
 	# Phase 4 presentation toggles, saved across restarts.
@@ -915,6 +919,11 @@ func _build_chooser() -> void:
 	box.add_child(_dialog_command(UiStyle.command("Play %s vs the AI" % p1_name, func(): _start("p2"))))
 	box.add_child(_dialog_command(UiStyle.command("Play %s vs the AI" % p2_name, func(): _start("p1"))))
 	box.add_child(_dialog_command(UiStyle.command("Hotseat: play both sides", func(): _start(""))))
+	# New players start here; a gap sets it apart from the three ways to play.
+	var gap := Control.new()
+	gap.custom_minimum_size = Vector2(0, UiStyle.SECTION_GAP)
+	box.add_child(gap)
+	box.add_child(_dialog_command(UiStyle.command("How to play", _how_to.open)))
 	_chooser.add_child(box)
 	add_child(_chooser)
 

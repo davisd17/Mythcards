@@ -154,12 +154,12 @@ func test_log_overlay_shows_the_match_so_far() -> void:
 	assert_false(screen._log.visible)
 
 
-func test_new_match_offers_ai_or_hotseat() -> void:
+func test_new_match_offers_ai_hotseat_or_how_to_play() -> void:
 	assert_true(screen._chooser.visible, "the game opens on the New match chooser")
 	var labels := []
 	for b in screen._chooser.find_children("*", "Button", true, false):
 		labels.append(b.text)
-	assert_eq(labels, ["Play Closed City vs the AI", "Play Flood Survivors vs the AI", "Hotseat: play both sides"])
+	assert_eq(labels, ["Play Closed City vs the AI", "Play Flood Survivors vs the AI", "Hotseat: play both sides", "How to play"])
 
 
 func test_the_ai_plays_its_turn_and_hands_back() -> void:
