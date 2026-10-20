@@ -101,3 +101,22 @@ func test_ai_waits_while_the_walkthrough_is_open() -> void:
 	var before := MatchLog.entries.size()
 	screen._on_ai_tick()
 	assert_eq(MatchLog.entries.size(), before, "no AI step while reading")
+
+
+func test_arrow_keys_page_even_with_a_footer_button_focused() -> void:
+	var how: HowToPlay = screen._how_to
+	how.open()
+	await wait_process_frames(1)
+	how._next.grab_focus()
+	var right := InputEventAction.new()
+	right.action = "ui_right"
+	right.pressed = true
+	Input.parse_input_event(right)
+	await wait_process_frames(2)
+	assert_eq(how.page, 1)
+	var left := InputEventAction.new()
+	left.action = "ui_left"
+	left.pressed = true
+	Input.parse_input_event(left)
+	await wait_process_frames(2)
+	assert_eq(how.page, 0)

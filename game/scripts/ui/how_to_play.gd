@@ -185,16 +185,23 @@ func _on_next() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not visible:
-		return
-	if event.is_action_pressed("ui_cancel"):
+	if visible and event.is_action_pressed("ui_cancel"):
 		close()
-	elif event.is_action_pressed("ui_right"):
-		_on_next()
-	elif event.is_action_pressed("ui_left"):
-		show_page(page - 1)
-	else:
+		get_viewport().set_input_as_handled()
+
+
+# Arrows page even when Back or Next has focus (buttons would otherwise take them as focus
+# moves), but not while focus is somewhere else, such as a glossary popup over the page.
+func _input(event: InputEvent) -> void:
+	if not visible or not (event.is_action_pressed("ui_left") or event.is_action_pressed("ui_right")):
 		return
+	var focus := get_viewport().gui_get_focus_owner()
+	if focus != null and not is_ancestor_of(focus):
+		return
+	if event.is_action_pressed("ui_right"):
+		_on_next()
+	else:
+		show_page(page - 1)
 	get_viewport().set_input_as_handled()
 
 
