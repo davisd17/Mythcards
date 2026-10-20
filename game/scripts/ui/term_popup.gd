@@ -84,6 +84,13 @@ func close() -> void:
 	visible = false
 
 
+# Esc closes the definitions first, before any page underneath (such as How to play).
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("ui_cancel"):
+		close()
+		get_viewport().set_input_as_handled()
+
+
 func _entry(t: Dictionary, with_heading: bool) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)

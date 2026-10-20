@@ -120,3 +120,19 @@ func test_arrow_keys_page_even_with_a_footer_button_focused() -> void:
 	Input.parse_input_event(left)
 	await wait_process_frames(2)
 	assert_eq(how.page, 0)
+
+
+func test_esc_closes_a_glossary_popup_before_the_walkthrough() -> void:
+	var how: HowToPlay = screen._how_to
+	how.open()
+	how.term_pressed.emit("spirit_ember")
+	var esc := InputEventAction.new()
+	esc.action = "ui_cancel"
+	esc.pressed = true
+	Input.parse_input_event(esc)
+	await wait_process_frames(2)
+	assert_false(screen._terms.visible)
+	assert_true(how.visible, "the walkthrough stays open under the closed popup")
+	Input.parse_input_event(esc)
+	await wait_process_frames(2)
+	assert_false(how.visible)
