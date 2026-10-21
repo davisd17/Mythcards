@@ -1122,6 +1122,216 @@
       ],
       "interpretation": "Mila's curiosity about her inherited art reflects the Page of Wands' desire to explore. You may feel drawn toward a new interest, experience, or version of yourself before knowing where it will lead. Give that excitement room to develop through small experiments. You can learn by trying without deciding your entire future at once.",
       "when_drawn": "Follow your curiosity and try something you have been eager to explore."
+    },
+    {
+      "tarot_number": "Knight",
+      "tarot_name": "Knight of Wands",
+      "mythcards_name": "Buran",
+      "card_type": "Character",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I can act boldly and with purpose.",
+      "upright_keywords": ["Courage", "Passion", "Adventure"],
+      "shadow_keywords": ["Impulsiveness", "Restlessness", "Recklessness"],
+      "narrative_heading": "Backstory",
+      "narrative": "Buran, the great white tiger of the Deep North Circus, crossed into the Far North through the convergence. He recognizes paths around the meteor site that people have forgotten, and reacts to the Sky-Hide Mirror before Pavel understands what he carries. Vera's long friendship with Buran allows her to ride beside that instinct, though trust gives her no guarantee that he will follow her chosen road.",
+      "flavor_heading": "Witness",
+      "flavor_text": "You can ride him. That does not mean you choose the way.",
+      "flavor_attribution": "A saying among the circus performers",
+      "relationships": [
+        {
+          "subject": "Vera Kargina",
+          "dynamic": "Vera rides Buran through mutual trust rather than command, accepting that his recognition of old paths may differ from her intentions.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Pavel Sokolov",
+          "dynamic": "Buran reacts to Pavel's Sky-Hide Mirror before Pavel understands its significance.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "buran_recognizes_old_crossings",
+          "clue": "Buran's recognition of the meteor paths and mirror suggests knowledge of crossings beyond human memory.",
+          "connects_to": ["Sky-Hide Mirror", "Aurora Opens Like A Door", "Buran Breaks The Boundary"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Buran's charge into uncertain territory reflects the Knight of Wands' bold, restless energy. You may feel ready to pursue an attraction, begin an adventure, or act on an idea that has become impossible to ignore. Use that confidence to move forward, while checking that your enthusiasm can survive the effort that follows. A strong beginning needs direction and follow-through.",
+      "when_drawn": "Take bold action toward something you are willing to keep working for."
+    },
+    {
+      "tarot_number": "Queen",
+      "tarot_name": "Queen of Wands",
+      "mythcards_name": "Vera Kargina",
+      "card_type": "Character",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I trust myself to lead.",
+      "upright_keywords": ["Confidence", "Warmth", "Independence"],
+      "shadow_keywords": ["Jealousy", "Control", "Self-Doubt"],
+      "narrative_heading": "Backstory",
+      "narrative": "Vera Kargina earned the village's trust as a hunter who followed strange tracks when others barred their doors. Now its leader, she carries a meteor-glass spear and rides Buran through a friendship neither mistakes for obedience. As the convergence draws strangers north, her visible authority sometimes clashes with Aksinya's hidden influence over the people both women protect.",
+      "flavor_heading": "Quote",
+      "flavor_text": "The snow keeps tracks. So do I.",
+      "relationships": [
+        {
+          "subject": "Buran",
+          "dynamic": "Vera rides Buran through friendship and mutual trust rather than obedience.",
+          "visibility": "revealed"
+        },
+        {
+          "subject": "Aksinya Morozova",
+          "dynamic": "Vera's public leadership sometimes clashes with Aksinya's hidden influence despite their shared desire to protect the village.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "Vera's earned authority reflects the Queen of Wands' confidence and independence. You may be ready to take the lead, express yourself more openly, or trust an ability you have been keeping small. Let your enthusiasm draw people in, and give them room to contribute. You can be decisive without controlling every outcome or winning everyone's approval.",
+      "when_drawn": "Trust your abilities and take a visible role in something you care about."
+    },
+    {
+      "tarot_number": "King",
+      "tarot_name": "King of Wands",
+      "mythcards_name": "Ilya Voronin - Bogatyr Champion",
+      "card_type": "Character",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I can turn my vision into action.",
+      "upright_keywords": ["Leadership", "Vision", "Courage"],
+      "shadow_keywords": ["Domination", "Impatience", "Pride"],
+      "narrative_heading": "Backstory",
+      "narrative": "Before the war, Ilya Voronin was a timber worker, known for taking the dangerous end of a job without making a speech about it. He defeats an enemy champion in single combat, giving exhausted soldiers a victory they can believe in. Stories of his survival begin borrowing from old bogatyr legends until the man and the myth become difficult to separate.",
+      "flavor_heading": "Quote",
+      "flavor_text": "If they follow me, I owe them more than courage.",
+      "relationships": [],
+      "hidden_threads": [
+        {
+          "thread_id": "ilya_man_and_myth",
+          "clue": "Stories of Ilya's survival increasingly merge a living soldier with older bogatyr legends.",
+          "connects_to": ["Bogatyr Walks Through Smoke"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Ilya's influence reflects the King of Wands' ability to turn conviction into shared action. You may be ready to lead a project, commit to a larger ambition, or help others see what is possible. Give your ideas a clear direction and take responsibility for the people who trust you. Confidence becomes effective leadership when it creates room for others to succeed.",
+      "when_drawn": "Set a clear direction and take responsibility for bringing it to life."
+    },
+    {
+      "tarot_number": "Ace",
+      "tarot_name": "Ace of Cups",
+      "mythcards_name": "Hospital Orderly",
+      "card_type": "Character",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I am open to giving and receiving care.",
+      "upright_keywords": ["Compassion", "Connection", "Emotional Beginnings"],
+      "shadow_keywords": ["Withdrawal", "Repression", "Emotional Exhaustion"],
+      "narrative_heading": "Backstory",
+      "narrative": "Before the incident, Galina Reznik's night shifts meant changing sheets, carrying meals, and learning which patients needed someone to sit beside them. Afterward, the sealed ward fills with survivors whose injuries defy explanation. When she discovers that one is to be removed from care, she records them as dead and keeps them hidden among the living.",
+      "flavor_heading": "Quote",
+      "flavor_text": "No one dies quietly on my ward.",
+      "relationships": [],
+      "hidden_threads": [
+        {
+          "thread_id": "galina_hides_a_survivor",
+          "clue": "Galina falsifies a death record to protect an unnamed living survivor from removal from care.",
+          "connects_to": ["Closed City Incident", "Semyonov Orders Silence"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Galina's care reflects the Ace of Cups' invitation to open your heart. You may be beginning a relationship, finding room for feelings you have held back, or discovering that kindness can change an encounter. Allow connection to develop without demanding certainty about where it will lead. Receiving care matters as much as offering it.",
+      "when_drawn": "Make room for an honest feeling or a simple act of care."
+    },
+    {
+      "tarot_number": "Two",
+      "tarot_name": "Two of Cups",
+      "mythcards_name": "Tent Lights In The Whiteout",
+      "card_type": "Event",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I am worthy of mutual love and respect.",
+      "upright_keywords": ["Connection", "Reciprocity", "Attraction"],
+      "shadow_keywords": ["Imbalance", "Misunderstanding", "Disconnection"],
+      "narrative_heading": "Event",
+      "narrative": "During a whiteout, Pavel finds Mila beside the circus tent's lantern glow. They share vodka from two humble metal cups and, for the first time, speak beyond the distance between performer and admirer. Their attraction is mutual, but the Sky-Hide Mirror stirs between them, leaving open how much of their meeting belongs to chance.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "For a moment, neither asked where the other would go tomorrow.",
+      "relationships": [
+        {
+          "subject": "Pavel Sokolov and Mila Vetrova",
+          "dynamic": "Their first meaningful exchange turns distant admiration into mutual attraction and the possibility of a relationship.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "mirror_shapes_the_meeting",
+          "clue": "The Sky-Hide Mirror responds during Pavel and Mila's encounter, raising uncertainty about the forces shaping their meeting.",
+          "connects_to": ["Sky-Hide Mirror", "Pavel Sokolov", "Mila Vetrova"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Pavel and Mila's shared moment reflects the Two of Cups' promise of mutual connection. You may be finding affection, repairing trust, or entering a partnership where both people feel seen. Notice whether interest, honesty, and effort flow in both directions. Attraction opens a possibility; listening and reciprocity help it become a relationship.",
+      "when_drawn": "Meet someone with honesty and notice how they meet you in return."
+    },
+    {
+      "tarot_number": "Three",
+      "tarot_name": "Three of Cups",
+      "mythcards_name": "The Circus Performs The Old Rite",
+      "card_type": "Event",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I make room for friendship and joy.",
+      "upright_keywords": ["Friendship", "Celebration", "Shared Support"],
+      "shadow_keywords": ["Exclusion", "Excess", "Disconnection"],
+      "narrative_heading": "Event",
+      "narrative": "As the circus performs, acrobatics, knife throws, and music fall into an unusually precise rhythm. The crowd joins in, clapping and passing cups while the lanterns burn steadily despite the wind outside. Beneath the applause, a few older villagers recognize a pattern they remember from somewhere other than a circus.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "They remembered the celebration long after they forgot what it protected.",
+      "relationships": [],
+      "hidden_threads": [
+        {
+          "thread_id": "circus_preserves_atlantean_rite",
+          "clue": "The communal performance preserves an old Atlantean convergence-stabilizing rite, hinted at through familiar patterns and steady lanterns rather than explained to the reader.",
+          "connects_to": ["Circus Convergence Rings", "The Cabin Rite", "Aurora Opens Like A Door"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The circus's shared celebration reflects the Three of Cups' friendship and mutual support. You may have something worth celebrating, need time with people who understand you, or find encouragement through a group. Make room for connection without needing a grand occasion. Notice who helps you feel included, and offer that welcome in return.",
+      "when_drawn": "Reach out to people who lift your spirits and share something good."
+    },
+    {
+      "tarot_number": "Four",
+      "tarot_name": "Four of Cups",
+      "mythcards_name": "The Village Refuses The Signal",
+      "card_type": "Event",
+      "sub_area": "Far North",
+      "review_status": "draft_for_review",
+      "affirmation": "I give myself time to know what I need.",
+      "upright_keywords": ["Reflection", "Withdrawal", "Discernment"],
+      "shadow_keywords": ["Apathy", "Avoidance", "Missed Opportunity"],
+      "narrative_heading": "Event",
+      "narrative": "As unfamiliar voices emerge from the radios and the aurora brightens, the villagers close their shutters. Sets are switched off, charms turned inward, and children called away from windows. Pavel sees people refusing the very mysteries he needs to understand, but the older residents remember what happened the last time someone answered.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "No one touched the dial. Everyone heard the invitation.",
+      "relationships": [
+        {
+          "subject": "Pavel Sokolov and the northern villagers",
+          "dynamic": "Pavel's need to understand the convergence conflicts with the villagers' decision to refuse its invitation.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "village_remembers_answering",
+          "clue": "Older villagers remember consequences of answering an earlier invitation, but do not yet reveal what happened.",
+          "connects_to": ["The Meteor Wakes Under Snow", "Meteor Lantern"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The village's refusal reflects the Four of Cups' pause before accepting what is offered. You may need distance from distractions to recognize what you actually want, or feel too disappointed or tired to notice a worthwhile connection. Give yourself time to reflect, then consider whether your withdrawal is restoring you or keeping you stuck. An offer deserves attention without requiring acceptance.",
+      "when_drawn": "Pause and ask whether you need rest, a different opportunity, or a more open mind."
     }
   ]
 }
