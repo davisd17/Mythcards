@@ -72,31 +72,31 @@ The total board motion is about 1.1 s, and the line is gone by 1.9 s.
 
 ### 4C. Text: 2 lines
 
-- **Claim line** and **big-claim line**, each 6 words or fewer.
+- **Claim line** and **big-claim line**, normally 6 words or fewer. Designer exception: preserve the Reactor Worker's approved 9-word big-claim line verbatim.
 - Written in the character's voice, drawn from their narrative in `data/cards/review_drafts/*.json`.
 - No accent spelling, fake-Cyrillic letters or stock "comrade" clichés. No gore, and no body-part language for Embers.
 - A creature or machine can use a non-verbal line in its own style (a telemetry readout or a stage direction).
 
 ## 5. Character sheet
 
-The lines below are **drafts for designer approval**. Writers may replace them. The sound direction is a starting brief, not a requirement.
+The lines below are **designer-approved wording**. Preserve capitalization and punctuation as supplied, including VERA-7's exuberant readouts and Thalassa-Nekh's elongated hiss. The machine-readable source is `data/ember_lines.json`. Art and sound remain separate review items; the sound direction is a starting brief, not a requirement.
 
-| Character | Claim hold-pose idea | Sting direction | Claim line (draft) | Big-claim line (draft) |
+| Character | Claim hold-pose idea | Sting direction | Claim line | Big-claim line |
 | --- | --- | --- | --- | --- |
-| Reactor Worker | Pockets the Ember like a token, glances back | Wrench tap on pipe, steam hiss | "One more shift survived." | "That's overtime, then." |
-| VERA-7 | Sample arm stows the Ember in its hull | Telemetry chirp, servo whir | "SAMPLE ACQUIRED." | "PAYLOAD UP. ROUTE CONTINUES." |
-| Major Yuri Volkov | Seals the Ember in a gauntlet, visor glints | Pressure-seal clunk, Geiger click | "Contained." | "Area secured. Moving on." |
-| Irina Karpova | Lifts it between two fingers, appraising | Pen click, low brass note | "Consider it a favor." | "You'll owe me for that." |
-| Dr. Mikhail Orlov | Holds it up like a reading, reactor glow | Reactor hum swell, needle tick | "Not my fault. Not this time." | "The readings were right." |
-| Dr. Elena Morozova | Cups it close, eyes half-closed | Detuned radio, soft chime | "Not random. Never random." | "The symbol answered." |
-| Zoya Miranova | The Ember drifts to her temple | Static burst into whisper-texture (no words) | "I saw you coming." | "The voices go quiet." |
-| Stone-Line Laborer | Sets it like a stone in a path | Stone knock, grit pour | "Another stone set." | "The road's clearer now." |
-| Ahesu | The coils tighten around the Ember | Deep stone rumble, water rush | *(the stone-current hisses)* | *(the deep routes open)* |
-| Naia | Lays it on the sarcophagus lid | Heavy lid scrape, low drum | "The vault keeps you now." | "Rest. I'll guard what remains." |
-| Queen Meret-Anu | Closes it into the Tide-Sealed Archive | Tide swell, casket latch | "Preserved." | "Mercy can wait." |
-| Sahu-Ren | Presses it to his chest, eyes shut | Reed tone, layered echo | "I will remember you." | "Another memory to carry." |
-| Iset-Nara | Measures it against her divider, then seals it | Ratio chime (fifth interval), stone slide | "Measured. Sealed." | "Exactly as designed." |
-| Thalassa-Nekh | The Ember sinks into her as black water glows | Underwater choir pad (no words), bubble rise | "The deep receives you." | "We drink your light." |
+| Reactor Worker | Pockets the Ember like a token, glances back | Wrench tap on pipe, steam hiss | "I made it" | "Time to go before I push my luck" |
+| VERA-7 | Sample arm stows the Ember in its hull | Telemetry chirp, servo whir | "BOOM" | "POWER!!!" |
+| Major Yuri Volkov | Seals the Ember in a gauntlet, visor glints | Pressure-seal clunk, Geiger click | "Breach contained. Stay behind me." | "Nothing else gets through." |
+| Irina Karpova | Lifts it between two fingers, appraising | Pen click, low brass note | "Your loss. My opportunity." | "A nice collection even for me" |
+| Dr. Mikhail Orlov | Holds it up like a reading, reactor glow | Reactor hum swell, needle tick | "perfectly calculated" | "I'm so powerful i'm fading" |
+| Dr. Elena Morozova | Cups it close, eyes half-closed | Detuned radio, soft chime | "The pattern continues." | "I see you now!" |
+| Zoya Miranova | The Ember drifts to her temple | Static burst into whisper-texture (no words) | "Which of us did that?" | "I collect followers" |
+| Stone-Line Laborer | Sets it like a stone in a path | Stone knock, grit pour | "The others still need a road." | "This time, everyone gets through." |
+| Ahesu | The coils tighten around the Ember | Deep stone rumble, water rush | *(a low rumble beneath the stone)* | *(the sealed depths answer)* |
+| Naia | Lays it on the sarcophagus lid | Heavy lid scrape, low drum | "No one will use you now." | "May you all serve life!" |
+| Queen Meret-Anu | Closes it into the Tide-Sealed Archive | Tide swell, casket latch | "Nothing more will be lost." | "Atlantis survives because I choose." |
+| Sahu-Ren | Presses it to his chest, eyes shut | Reed tone, layered echo | "I will remember you." | "So many lives. None forgotten." |
+| Iset-Nara | Measures it against her divider, then seals it | Ratio chime (fifth interval), stone slide | "Every force needs an exit." | "No crown can seal this truth." |
+| Thalassa-Nekh | The Ember sinks into her as black water glows | Underwater choir pad (no words), bubble rise | "Yessss....." | "Feed us!" |
 
 ## 6. Review and done
 
@@ -116,7 +116,7 @@ The lines below are **drafts for designer approval**. Writers may replace them. 
 ## 8. Open questions
 
 - [NEED: who takes art, audio and writing, and the target date]
-- [NEED: designer approval of the 28 draft lines, plus a sensitivity read of the Closed City lines (CLAUDE.md guardrail)]
+- Text wording approved by the designer; retain a sensitivity read of the Closed City lines (CLAUDE.md guardrail) during implementation review.
 - Sam's stretch goal: **rival lines**, a special line when one specific character defeats another. Leave it out of v1, since the current roster has no cross-faction rivalries written yet.
 - Should a later outfit (Zoya's Aurora Rite, Thalassa-Nekh's Seraph) need its own claim poses, or reuse the default's? The attack-art rule says outfits never borrow, which means every outfit needs its own claim poses.
 - Is a claim moment of about 1.1 s every defeat too long for the 5–12 minute mobile match target? Time it in playtests. The hold pose (360 ms) is the first thing to trim.
