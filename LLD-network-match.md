@@ -327,6 +327,7 @@ Only one engine runs per Godot process (the autoloads are singletons), so GUT ca
   - "Your matches" works out whose turn it is by counting `end_turn` entries (p1 starts), not by replaying the match. While a card choice is owed, the list can name the wrong player.
   - `?room=CODE` opens the match if this device holds that seat. Otherwise it opens the menu with the code filled into Join. On returning to the app (`NOTIFICATION_APPLICATION_FOCUS_IN`) the screen polls at once.
   - Not done: entries that arrive in one poll are applied together, not paced at `AI_STEP_SECONDS` (4.3). Their animations overlap. Pacing them needs `_apply_entries` to await between entries. `[NEED: designer call after the first real match]` on whether that matters.
+- **2026-10-22, step 5 built.** `tools/stamp_version.ps1` writes the version into `project.godot` and hands back the original text. `export_web.ps1` and a new `export_windows.ps1` (there was no Windows script before) put the original back in a `finally` block, so the stamp exists only inside the build. Both builds of `9bc30cd` read `9bc30cd-dirty`. "-dirty" ignores untracked files, but the modified figure `.import` files count, so every build counts as dirty until they're committed or reverted. The 33 Playwright tests pass on the stamped web build.
 
 ## 10. Traceability
 

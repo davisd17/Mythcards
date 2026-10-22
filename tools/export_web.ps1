@@ -15,11 +15,17 @@ $out = Join-Path $repo 'build\web'
 if (Test-Path $out) { Remove-Item $out -Recurse -Force }
 New-Item -ItemType Directory -Force $out | Out-Null
 
+$projectFile = Join-Path $game 'project.godot'
+$original = & (Join-Path $PSScriptRoot 'stamp_version.ps1')
 $ErrorActionPreference = 'Continue'  # Godot writes progress to stderr
-& $Godot --headless --path $game --import 2>&1 | Out-Null
-$mode = if ($Release) { '--export-release' } else { '--export-debug' }
-$log = & $Godot --headless --path $game $mode 'Web (test)' (Join-Path $out 'index.html') 2>&1 | ForEach-Object { "$_" }
-$exitCode = $LASTEXITCODE
+try {
+    & $Godot --headless --path $game --import 2>&1 | Out-Null
+    $mode = if ($Release) { '--export-release' } else { '--export-debug' }
+    $log = & $Godot --headless --path $game $mode 'Web (test)' (Join-Path $out 'index.html') 2>&1 | ForEach-Object { "$_" }
+    $exitCode = $LASTEXITCODE
+} finally {
+    [IO.File]::WriteAllText($projectFile, $original)   # the stamp lives only in the build
+}
 
 $problems = $log | Select-String -Pattern 'ERROR|SCRIPT ERROR|No export template'
 if ($exitCode -ne 0 -or $problems -or -not (Test-Path (Join-Path $out 'index.pck'))) {
