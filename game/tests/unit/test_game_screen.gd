@@ -159,7 +159,7 @@ func test_new_match_offers_ai_hotseat_or_how_to_play() -> void:
 	var labels := []
 	for b in screen._chooser.find_children("*", "Button", true, false):
 		labels.append(b.text)
-	assert_eq(labels, ["Play Closed City vs the AI", "Play Flood Survivors vs the AI", "Hotseat: play both sides", "How to play"])
+	assert_eq(labels, ["Play Closed City vs the AI", "Play Flood Survivors vs the AI", "Hotseat: play both sides", "Play a friend online", "How to play"])
 
 
 func test_the_ai_plays_its_turn_and_hands_back() -> void:

@@ -162,6 +162,14 @@ func is_remote_turn() -> bool:
 	return net != null and setup == null and GameState.is_match_active() and not net.is_my_decision()
 
 
+# Input is off: the AI or the friend online is deciding, this device's formation is in and
+# the other isn't yet, or the online match is out of sync (LLD-network-match.md 3.5).
+func is_waiting() -> bool:
+	if net != null and (net.desynced or (setup != null and not net.is_my_decision())):
+		return true
+	return is_ai_turn() or is_remote_turn()
+
+
 func _tap_setup(pos: Vector2i) -> void:
 	var occupant := _setup_occupant(pos)
 	if occupant != null:
@@ -302,7 +310,7 @@ func ai_step() -> Dictionary:
 
 
 func tap_tile(pos: Vector2i) -> void:
-	if is_ai_turn():
+	if is_waiting():
 		return
 	message = ""
 	if setup != null:
@@ -337,7 +345,7 @@ func tap_tile(pos: Vector2i) -> void:
 
 
 func start_action(kind: String, id: String = "") -> void:
-	if _selected() == null:
+	if _selected() == null or is_waiting():
 		return
 	flow = {"kind": kind, "actor": selected_id, "id": id, "payload": {}}
 	message = ""
@@ -346,7 +354,7 @@ func start_action(kind: String, id: String = "") -> void:
 
 func use_relic() -> void:
 	var state := GameState.match_state
-	if relic_power_label() == "":
+	if relic_power_label() == "" or is_waiting():
 		return
 	flow = {"kind": "power", "actor": state.active_player_id, "id": "", "payload": {},
 			"spec": RelicEventDeck.power_spec(state.active_player_id)}
@@ -390,7 +398,7 @@ func hero_trapped(player_id: String) -> bool:
 
 func end_turn() -> void:
 	var state := GameState.match_state
-	if state == null or setup != null or not flow.is_empty() or is_ai_turn():
+	if state == null or setup != null or not flow.is_empty() or is_waiting():
 		return
 	selected_id = ""
 	_send("end_turn", state.active_player_id, {})

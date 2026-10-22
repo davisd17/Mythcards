@@ -11,6 +11,7 @@ extends Node
 signal log_applied(count: int)
 signal desync(seq: int, expected: String, actual: String)
 signal room_error(message: String)
+signal rebuilt                      # a rebuild from the log finished (the screen drops replayed effects)
 
 const POLL_SECONDS := 5.0
 
@@ -203,6 +204,7 @@ func _rebuild(entries: Array) -> void:
 	_apply_entries(entries)
 	replaying = false
 	controller.sync()
+	rebuilt.emit()
 
 
 # 4.2: applies entries in seq order and stops at the first gap or mismatch.

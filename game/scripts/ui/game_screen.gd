@@ -75,6 +75,9 @@ var _game_over_label := Label.new()
 var _capture_confirm := Control.new()   # "End turn and lose?" when your Hero can't move
 var _terms := TermPopup.new()        # definitions: tapped card terms, long-pressed pieces, glossary
 var _how_to := HowToPlay.new()       # the beginner walkthrough, from New match or Menu
+var _online := OnlineMenu.new()      # Play a friend online: create, join, your matches
+var _net: NetSession = null          # the online match on this screen, if any (LLD-network-match.md)
+var _notice_note := ""               # the drawn card's note when its notice is tapped
 
 
 func _ready() -> void:
@@ -87,6 +90,7 @@ func _ready() -> void:
 	add_child(_environment)
 	_board.resized.connect(_environment.queue_redraw)
 	_details.resized.connect(_environment.queue_redraw)
+	_sfx.muted_if = func() -> bool: return _net != null and _net.replaying
 
 	_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
@@ -175,6 +179,10 @@ func _ready() -> void:
 	_ai_timer.start()
 	_build_game_over()
 	_build_capture_confirm()
+	add_child(_online)
+	_online.create_requested.connect(_online_create)
+	_online.join_requested.connect(_online_join)
+	_online.open_requested.connect(_online_open)
 	add_child(_how_to)
 	_how_to.term_pressed.connect(func(id): _terms.show_terms([id]))
 	add_child(_terms)   # last, so a definition sits over every other overlay
@@ -187,6 +195,13 @@ func _ready() -> void:
 	for s in ["action_resolved", "turn_started", "relic_slot_changed", "character_defeated"]:
 		EventBus.connect(s, func(_a = null, _b = null, _c = null): _refresh.call_deferred())
 	new_match()
+	# An invite link (?room=CODE) opens that match if this device holds a seat, or fills in Join.
+	var room := OnlineMenu.room_param()
+	if room != "":
+		if not NetStore.get_seat(room).is_empty():
+			_online_open(room)
+		else:
+			_open_online_menu(room)
 
 
 func _exit_tree() -> void:
@@ -254,9 +269,118 @@ func _start(ai_side: String) -> void:
 	_menu.visible = false
 	_log.visible = false
 	_chooser.visible = false
+	_end_online()
 	controller.begin_setup("", "", ai_side)
 	MusicManager.play_menu()
 	_refresh()
+
+
+# --- Online (LLD-network-match.md 3.6) ---------------------------------------------------------
+
+func _open_online_menu(code: String = "") -> void:
+	_online.transport = HttpTransport.new(self)
+	_online.open(code)
+
+
+# A session for one request. It replaces the screen's session only once the request works,
+# so a failed join leaves the match underneath as it was.
+func _make_session() -> NetSession:
+	var s := NetSession.new(null, controller)
+	s.transport = HttpTransport.new(s)
+	add_child(s)
+	s.room_error.connect(func(m: String):
+		if _online.visible:
+			_online.show_message(m)
+		else:
+			_notice(m))
+	return s
+
+
+func _adopt(s: NetSession) -> void:
+	if _net != null and _net != s:
+		_net.queue_free()
+	_net = s
+	s.log_applied.connect(func(_n): _refresh())
+	s.desync.connect(func(_seq, _expected, _actual): _refresh())
+	s.rebuilt.connect(_on_rebuilt)
+	_on_rebuilt()
+
+
+func _on_rebuilt() -> void:
+	# A rebuild replays the whole match at once: drop its effects, banners and card popups.
+	_board.fx.clear()
+	_popup_queue.clear()
+	_popup.visible = false
+	for old in find_children("TurnBanner", "", false, false):
+		old.queue_free()
+	_chooser.visible = false
+	_refresh()
+
+
+func _end_online() -> void:
+	if _net != null:
+		_net.queue_free()
+		_net = null
+
+
+func _online_create(team_id: String) -> void:
+	var s := _make_session()
+	if await s.create(team_id):
+		_adopt(s)
+		_online.show_invite(s.code)
+	else:
+		s.queue_free()
+
+
+func _online_join(code: String) -> void:
+	var s := _make_session()
+	if await s.join(code):
+		_adopt(s)
+		_online.close()
+	else:
+		s.queue_free()
+
+
+# The menu stays up until the match is open, so a refusal (another build) shows there.
+func _online_open(code: String) -> void:
+	if not _online.visible:
+		_open_online_menu()
+	var s := _make_session()
+	if await s.open(code):
+		_adopt(s)
+		_online.close()
+	else:
+		s.queue_free()
+
+
+# Coming back to the app checks for your friend's moves at once.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_IN and _net != null:
+		_net.poll()
+
+
+# The online prompt while this device waits, or "" when it's this device's move.
+func _online_prompt() -> String:
+	if _net == null:
+		return ""
+	if _net.desynced:
+		return "Out of sync at action %d. Copy the log and send it to Drew." % _net.applied
+	var state := GameState.match_state
+	if controller.in_setup():
+		if _net.room.get("status", "") == "waiting_for_join":
+			return "Waiting for your friend to join with code %s." % _net.code if _net.deploys.has(_net.seat) else ""
+		return "Waiting for your friend to deploy (code %s)." % _net.code if _net.deploys.has(_net.seat) else ""
+	if state == null or not GameState.is_match_active() or not controller.is_remote_turn():
+		return ""
+	if state.active_player_id == _net.seat:
+		return "Waiting for your friend to choose…"
+	return "Their turn. Their moves appear here when they play (code %s)." % _net.code
+
+
+func _copy_log() -> void:
+	DisplayServer.clipboard_set("MythCards match %s, seat %s, build %s, out of sync at action %d\n\n%s" % [
+			_net.code, _net.seat, NetSession.version(), _net.applied, MatchLog.as_text()])
+	_notice("Log copied.")
 
 
 # --- Layout (docs/UI_STYLE_GUIDE.md section 7) --------------------------------------------
@@ -377,13 +501,15 @@ func _put(parent: Node, children: Array) -> void:
 # A short banner whenever the turn passes (Phase 3); it ignores input and fades on its own.
 func _on_turn_started(player_id: String) -> void:
 	var state := GameState.match_state
-	if state == null or controller.setup != null:
+	if state == null or controller.setup != null or (_net != null and _net.replaying):
 		return
 	var player := state.get_player(player_id)
 	var team := str(ContentDB.get_team(player.team_id).get("name", player.culture)) if player != null else ""
 	var text := "Turn %d · %s" % [state.turn_number, team]
 	if controller.is_ai(player_id):
 		text += " (AI)"
+	elif _net != null:
+		text = ("Your turn · " if player_id == _net.seat else "Their turn · ") + text
 	elif not controller.ai_players.is_empty():
 		text = "Your turn · " + text
 	for old in find_children("TurnBanner", "", false, false):
@@ -429,17 +555,20 @@ func _refresh_header() -> void:
 		_turn_bar.color = Color(_bright(controller.placing_player), 0.8)
 		_ap_meter.set_ap(0, 0)
 		_primary.text = "Done placing"
-		_primary.disabled = not controller.placement_done()
+		_primary.disabled = not controller.placement_done() or controller.is_waiting()
 		_primary.visible = true
 		return
 	_primary.text = "End turn"
-	_primary.disabled = not controller.flow.is_empty() or controller.is_ai_turn()
+	_primary.disabled = not controller.flow.is_empty() or controller.is_waiting()
 	_primary.visible = GameState.is_match_active()
 	var state := GameState.match_state
 	if state == null:
 		return
 	# Short enough for one line beside the deck count and AP: the color says which player.
 	_turn_label.text = "Turn %d · %s" % [state.turn_number, _team_name(state.active_player_id)]
+	if _net != null and GameState.is_match_active():
+		_turn_label.text = "%s · %s" % ["Your turn" if state.active_player_id == _net.seat else "Their turn",
+				_team_name(state.active_player_id)]
 	var player := state.get_player(state.active_player_id)
 	_turn_label.add_theme_color_override("font_color", _bright(state.active_player_id))
 	_turn_bar.color = Color(_bright(state.active_player_id), 0.8)
@@ -475,6 +604,20 @@ func _refresh_header() -> void:
 func _refresh_prompt() -> void:
 	for child in _options.get_children():
 		child.queue_free()
+	_refresh_prompt_text()
+	# Online: an unsent move is the one thing worth saying over any prompt.
+	if _net != null and _net.offline and not _net.outbox.is_empty():
+		_prompt.text = "Can't reach the server. Your move is saved and will be sent.\n" + _prompt.text
+
+
+func _refresh_prompt_text() -> void:
+	var online := _online_prompt()
+	if online != "":
+		_prompt.add_theme_color_override("font_color", WARNING if _net.desynced else UiStyle.HEADING)
+		_prompt.text = online
+		if _net.desynced:
+			_options.add_child(UiStyle.choice("Copy log", _copy_log, "choice:option"))
+		return
 	var step := controller.current_step()
 	# A card revealed from the deck (Chintamani Fragment, Foresight) is shown in full,
 	# once, before the top-or-bottom choice (playtest 2026-10-09).
@@ -500,7 +643,7 @@ func _refresh_prompt() -> void:
 			_options.add_child(UiStyle.choice("Cancel", func(): controller.cancel(); _refresh(), "choice:option"))
 		return
 	var warning := _capture_warning()
-	if warning != "" and not controller.is_ai_turn():
+	if warning != "" and not controller.is_waiting():
 		_prompt.text = warning + ("\n" + controller.message if controller.message != "" else "")
 		_prompt.add_theme_color_override("font_color", WARNING)
 		return
@@ -533,7 +676,7 @@ func _refresh_side() -> void:
 			UiStyle.mark_selected(b, id == controller.placing_id)
 			_side.add_child(b)
 		return
-	if GameState.match_state == null or not GameState.is_match_active():
+	if GameState.match_state == null or not GameState.is_match_active() or (_net != null and controller.is_waiting()):
 		return
 	for action in controller.actions():
 		var kind: String = action.kind
@@ -647,10 +790,15 @@ func _on_card_drawn(player_id: String, card_id: String) -> void:
 	var card := ContentDB.get_relic_event(card_id)
 	var kind := card.kind.to_lower() if card != null else "card"
 	var article := "an" if kind.begins_with("e") else "a"
-	if controller.is_ai(player_id):
+	if _net != null and _net.replaying:
+		return
+	var remote := _net != null and player_id != _net.seat
+	if controller.is_ai(player_id) or remote:
 		# The AI's draws don't stop play (playtest 2026-10-11): a notice you can tap to view,
 		# and the card itself flies in over the board and docks into the HUD (Phase 3).
-		_notice("%s drew %s. Tap to view." % [_player_name(player_id), card.card_name if card != null else card_id], card_id)
+		# A friend's draws online show the same way.
+		_notice("%s drew %s. Tap to view." % [_player_name(player_id), card.card_name if card != null else card_id], card_id,
+				"Drawn by your friend." if remote else "Drawn by the AI.")
 		_dock.call_deferred(card_id, _board.get_global_rect().get_center(), HudFx.FLY_HOLD)
 		return
 	_popup_queue.append("%s|%s drew %s %s." % [card_id, _player_name(player_id), article, kind])
@@ -774,7 +922,7 @@ func _setting_toggle(label: String, field: String) -> Button:
 func _on_primary() -> void:
 	if controller.in_setup():
 		controller.confirm_placement()
-	elif controller.hero_trapped(GameState.match_state.active_player_id) and not controller.is_ai_turn():
+	elif controller.hero_trapped(GameState.match_state.active_player_id) and not controller.is_waiting():
 		_capture_confirm.visible = true   # ending the turn now loses: ask first
 		return
 	else:
@@ -888,7 +1036,7 @@ func _build_notice() -> void:
 	_notice_button.pressed.connect(func():
 		_notice_button.visible = false
 		if _notice_card != "":
-			_show_card(_notice_card, "Drawn by the AI."))
+			_show_card(_notice_card, _notice_note))
 	add_child(_notice_button)
 	_notice_timer.one_shot = true
 	_notice_timer.wait_time = 4.0
@@ -896,9 +1044,10 @@ func _build_notice() -> void:
 	add_child(_notice_timer)
 
 
-func _notice(text: String, card_id: String = "") -> void:
+func _notice(text: String, card_id: String = "", note: String = "") -> void:
 	_notice_button.text = text
 	_notice_card = card_id
+	_notice_note = note
 	_notice_button.visible = true
 	_notice_timer.start()
 
@@ -923,6 +1072,7 @@ func _build_chooser() -> void:
 	box.add_child(_dialog_command(UiStyle.command("Play %s vs the AI" % p1_name, func(): _start("p2"))))
 	box.add_child(_dialog_command(UiStyle.command("Play %s vs the AI" % p2_name, func(): _start("p1"))))
 	box.add_child(_dialog_command(UiStyle.command("Hotseat: play both sides", func(): _start(""))))
+	box.add_child(_dialog_command(UiStyle.command("Play a friend online", _open_online_menu)))
 	# New players start here; a gap sets it apart from the three ways to play.
 	var gap := Control.new()
 	gap.custom_minimum_size = Vector2(0, UiStyle.SECTION_GAP)

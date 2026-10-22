@@ -318,6 +318,15 @@ Only one engine runs per Godot process (the autoloads are singletons), so GUT ca
   - Network calls run one at a time (`_busy`), and polling waits while anything is unsent. This keeps `applied` equal to the number of server entries applied.
   - A deploy that hits `seq_conflict` (the other formation went in first) fetches the new entries, renumbers the outbox and retries. An action's `seq_conflict` still clears the outbox and resyncs (Section 7).
   - Part of step 4 came with it, because `NetSession` drives the controller: `GameController.net`, `begin_online`, `place_deploy`, `apply_remote_deploys`, `is_remote_turn`, `_send` → `submit`, and remote choices skipped in `_start_pending_choice`. `apply_remote_deploys` calls a new `_start_from_setup(seed)`, not `confirm_placement`, because online "Done placing" now submits the deploy instead. Still to do in step 4: `is_waiting()` at the input gates, `OnlineMenu`, banners, and polling on the game screen.
+- **2026-10-22, step 4 built.** 623 GUT tests, all passing. 7 are new, in `test_online_screen.gd`.
+  - `is_waiting()` also covers online setup after this device's deploy is sent, and a desynced match. It gates `tap_tile`, `end_turn`, `start_action`, `use_relic`, Done placing / End turn, the capture warning and confirm, and (online only) the action list.
+  - The banners are lines in the prompt bar, not separate overlays. "Out of sync" replaces the prompt and offers a "Copy log" option, which copies the code, seat, build, the failing action number, and `MatchLog`. "Can't reach the server…" goes above whatever the prompt says.
+  - Waiting prompts: "Waiting for your friend to join with code X", "…to deploy (code X)", "Their turn…", and "Waiting for your friend to choose…" when the other seat owes a card choice during your turn.
+  - A rebuild is silent. `Sfx.muted_if` skips sounds while `replaying`. A new `NetSession.rebuilt` signal makes the screen clear `BoardFx`, the drawn-card popups and the turn banners. A friend's draw shows as a notice, the same way an AI draw does.
+  - The screen replaces its session only after create, join or open succeeds, so a failed join leaves the current match as it was.
+  - "Your matches" works out whose turn it is by counting `end_turn` entries (p1 starts), not by replaying the match. While a card choice is owed, the list can name the wrong player.
+  - `?room=CODE` opens the match if this device holds that seat. Otherwise it opens the menu with the code filled into Join. On returning to the app (`NOTIFICATION_APPLICATION_FOCUS_IN`) the screen polls at once.
+  - Not done: entries that arrive in one poll are applied together, not paced at `AI_STEP_SECONDS` (4.3). Their animations overlap. Pacing them needs `_apply_entries` to await between entries. `[NEED: designer call after the first real match]` on whether that matters.
 
 ## 10. Traceability
 

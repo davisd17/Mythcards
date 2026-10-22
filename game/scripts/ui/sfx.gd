@@ -23,6 +23,8 @@ var _last_ms := {}
 # such an attack resolves, the sounds it causes wait for the shot. Set by the game screen.
 var impact_for: Callable = Callable()
 var _delay := 0.0
+# True while sounds should be skipped: an online match replaying its log. Set by the game screen.
+var muted_if: Callable = Callable()
 const AT_IMPACT := ["hit", "blocked", "defeat", "ember", "level"]
 var _next := 0
 const CLAIM_LANDING_SECONDS := 0.5
@@ -113,6 +115,8 @@ func _cancel_claim() -> void:
 
 
 func play(sound: String) -> void:
+	if muted_if.is_valid() and muted_if.call():
+		return
 	if _delay > 0.0 and AT_IMPACT.has(sound) and is_inside_tree():
 		var wait := _delay
 		get_tree().create_timer(wait).timeout.connect(func(): _play_now(sound))
