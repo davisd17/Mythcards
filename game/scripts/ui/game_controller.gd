@@ -19,6 +19,7 @@ var inspect_id := ""              # whichever character's card is shown
 var flow: Dictionary = {}         # {kind, actor, id, payload}, or {} when none
 var message := ""
 var ai_players: Dictionary = {}   # player_id -> AIPlayer for sides the computer plays (LLD-ai-opponent.md 5)
+var net: NetSession = null        # an online match (LLD-network-match.md 3.5); null for hotseat and AI
 
 
 # --- Setup -------------------------------------------------------------------------
@@ -28,6 +29,7 @@ var ai_players: Dictionary = {}   # player_id -> AIPlayer for sides the computer
 func begin_setup(p1_team: String = "", p2_team: String = "", ai_side: String = "") -> Node:
 	GameState.reset()
 	ai_players = {}
+	net = null
 	if ai_side != "":
 		ai_players[ai_side] = AIPlayer.new(ai_side, null, randi())
 	if setup != null:
@@ -99,6 +101,14 @@ func confirm_placement(deck_seed: int = -1) -> void:
 		message = "Place all 7 characters first."
 		return
 	placing_id = ""
+	if net != null:
+		if not net.deploys.has(placing_player):
+			message = "Waiting for your friend to deploy."
+			var placements := {}
+			for c in setup.get_player(placing_player).characters:
+				placements[c.instance_id] = c.position
+			net.submit_deploy(placements)
+		return
 	if placing_player == "p1" and ai_players.has("p2"):
 		ai_players.p2.place_squad(setup)
 		placing_player = "p2"
@@ -107,12 +117,49 @@ func confirm_placement(deck_seed: int = -1) -> void:
 		message = "Player 2: pick a character below, then tap a highlighted tile on your back row."
 		_pick_first()
 		return
+	_start_from_setup(deck_seed)
+
+
+func _start_from_setup(deck_seed: int) -> void:
 	var flow_node := setup
 	setup = null
 	flow_node.start_match(deck_seed)
 	flow_node.free()
 	message = "Player 1's turn. Tap one of your characters."
 	_start_pending_choice()
+
+
+# --- Online setup (LLD-network-match.md 3.5) -------------------------------------------------
+
+# Setup with the room's teams; this device places only its own seat.
+func begin_online(session: NetSession) -> Node:
+	begin_setup(str(session.room.teams.p1), str(session.room.teams.p2))
+	net = session
+	placing_player = session.seat
+	placing_id = ""
+	message = "Pick a character below, then tap a highlighted tile on your back row."
+	_pick_first()
+	return setup
+
+
+# placements: {instance_id: Vector2i}. A piece already on its tile stays put.
+func place_deploy(player_id: String, placements: Dictionary) -> void:
+	for id in placements:
+		setup.place_character(player_id, id, placements[id])
+	if player_id == placing_player:
+		placing_id = ""
+		message = "Waiting for your friend to deploy."
+
+
+# Both formations are in: start exactly as hotseat does, with the room's seed.
+func apply_remote_deploys(deploys: Dictionary, deck_seed: int) -> void:
+	for player_id in deploys:
+		place_deploy(player_id, deploys[player_id])
+	_start_from_setup(deck_seed)
+
+
+func is_remote_turn() -> bool:
+	return net != null and setup == null and GameState.is_match_active() and not net.is_my_decision()
 
 
 func _tap_setup(pos: Vector2i) -> void:
@@ -476,6 +523,8 @@ func _advance() -> void:
 
 func _send(action: String, actor: String, payload: Dictionary) -> void:
 	var result := RulesEngine.request_action(action, actor, payload)
+	if net != null and result.get("success", false):
+		net.submit(action, actor, payload)   # failed actions are never sent
 	if not result.get("success", false):
 		message = str(result.get("reason", "That didn't work.")).capitalize() + "."
 	elif action == "attack" and payload.has("target_id"):
@@ -522,8 +571,8 @@ func _start_pending_choice() -> void:
 	if state == null or not flow.is_empty() or not GameState.is_match_active():
 		return
 	var player := RelicEventDeck.decision_player()
-	if ai_players.has(player):
-		return   # the AI answers its own choices
+	if ai_players.has(player) or (net != null and player != net.seat):
+		return   # the AI, or the friend online, answers their own choices
 	if RelicEventDeck.has_pending_choice(player):
 		flow = {"kind": "deck", "actor": player, "id": "", "payload": {}, "spec": RelicEventDeck.choice_spec(player)}
 		return

@@ -312,6 +312,12 @@ Only one engine runs per Godot process (the autoloads are singletons), so GUT ca
   - An entry whose `kind` isn't `deploy` or `action` is `400 unknown_kind`.
   - Tests: `npm test` in `server/` runs 17 tests. A smoke run against `wrangler dev` (real SQLite DO) covered create, version mismatch, join, `not_started`, deploy hiding, `seq_conflict`, append, fetch since and `401`.
   - npm's allow-scripts policy skipped workerd's postinstall. `wrangler dev` still runs, because the binary ships in `@cloudflare/workerd-windows-64`.
+- **2026-10-22, step 3 built.** `NetTransport`, `HttpTransport`, `LoopbackTransport`, `NetStore` and `NetSession` are in, with 13 tests in `test_net_session.gd` (616 GUT total, all passing).
+  - The outbox is saved in the seat's own section of `user://net_matches.cfg` (`NetStore.set_outbox`), not in a separate `net_outbox.cfg`. Each queued entry keeps the `seq` it was given, and `open` sends the outbox before it rebuilds.
+  - `NetStore.save` also stores the build `version`, so `open` can refuse a match from another build (4.5).
+  - Network calls run one at a time (`_busy`), and polling waits while anything is unsent. This keeps `applied` equal to the number of server entries applied.
+  - A deploy that hits `seq_conflict` (the other formation went in first) fetches the new entries, renumbers the outbox and retries. An action's `seq_conflict` still clears the outbox and resyncs (Section 7).
+  - Part of step 4 came with it, because `NetSession` drives the controller: `GameController.net`, `begin_online`, `place_deploy`, `apply_remote_deploys`, `is_remote_turn`, `_send` → `submit`, and remote choices skipped in `_start_pending_choice`. `apply_remote_deploys` calls a new `_start_from_setup(seed)`, not `confirm_placement`, because online "Done placing" now submits the deploy instead. Still to do in step 4: `is_waiting()` at the input gates, `OnlineMenu`, banners, and polling on the game screen.
 
 ## 10. Traceability
 
