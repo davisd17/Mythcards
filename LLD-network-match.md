@@ -52,8 +52,10 @@ game/tests/unit/
 server/                  # new top-level folder, deployed with wrangler
   wrangler.toml
   package.json
-  src/index.ts           # Worker: routing, CORS, token check
-  src/room.ts            # Durable Object Room: SQLite tables, append, deploy hiding
+  src/index.ts           # Worker entry: re-exports handle() and Room
+  src/api.ts             # routing, CORS, size and token checks (9A)
+  src/room_logic.ts      # RoomLogic: append, deploy hiding, expiry, over a RoomStore (9A)
+  src/room.ts            # Durable Object Room: SQLite store, cleanup alarm
   test/room.test.ts      # node --test against Room with an in-memory storage stub
 e2e/tests/online.spec.ts # two browser pages, one match, against `wrangler dev`
 ```
@@ -297,6 +299,19 @@ Only one engine runs per Godot process (the autoloads are singletons), so GUT ca
 - `[NEED: verify free-tier limits at setup]` Workers Free: about 100,000 requests a day. Durable Objects with SQLite storage on the Free plan. Polling a 5-second interval for an hour is 720 requests. Confirm the current limits in the Cloudflare dashboard before relying on them.
 - `[NEED: web host]` Cloudflare Pages and Workers static assets cap single files at 25 MiB, and `index.wasm` is 37 MB. Host the web build on itch.io (free; a draft page with a secret link) or GitHub Pages (if the repo can be public), and keep only the API on Cloudflare.
 - `[NEED: Blitz]` Live play adds a WebSocket to the same `Room` DO (hibernatable sockets, so an idle match costs nothing) and a turn timer in `TurnManager.start_turn` (HLD Section 9). The timer length is still PRD-OQ-010.
+
+### 9A. Implementation Notes (deviations from this spec)
+
+- **2026-10-22, steps 1–2 built.**
+  - Step 1: `ActionCodec` and `test_replay_determinism.gd` pass (603 GUT). Replay is exact for seeds 7, 42 and 2026, both directly and through the JSON round trip. Seed 2026 runs to the 120-turn cap without a winner and still replays 291 actions exactly.
+  - Step 2: the room rules live in `server/src/room_logic.ts` (`RoomLogic` over a `RoomStore` interface). `room.ts` is only the Durable Object wrapper (SQLite `SqlStore`, cleanup alarm), and routing is in `api.ts`. `index.ts` re-exports both.
+    - Why: `node --test` can't load `cloudflare:workers`, so the tested code must not import it.
+    - The Worker calls the DO over RPC (`stub.create(...)`), not by forwarding HTTP.
+  - `create` returns `409 code_taken` from a used DO, and the Worker retries with a new code up to 5 times (`503 no_free_code` after that).
+  - Fetch responses also carry `seed`, `teams` and `version`, so `open` gets the room in the same call.
+  - An entry whose `kind` isn't `deploy` or `action` is `400 unknown_kind`.
+  - Tests: `npm test` in `server/` runs 17 tests. A smoke run against `wrangler dev` (real SQLite DO) covered create, version mismatch, join, `not_started`, deploy hiding, `seq_conflict`, append, fetch since and `401`.
+  - npm's allow-scripts policy skipped workerd's postinstall. `wrangler dev` still runs, because the binary ships in `@cloudflare/workerd-windows-64`.
 
 ## 10. Traceability
 

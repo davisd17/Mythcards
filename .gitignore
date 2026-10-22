@@ -10,3 +10,7 @@ __pycache__/
 /sites/mythcards/qa/
 /sites/mythcards/
 /docs/art-specs/form-change/**/qa/*.log
+
+# Relay server (server/)
+/server/node_modules/
+/server/.wrangler/

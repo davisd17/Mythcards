@@ -163,38 +163,15 @@ func _expose(name: String, body: Callable) -> void:
 	_window.set(name, callback)
 
 
-# --- Conversions -------------------------------------------------------------------------
+# --- Conversions (ActionCodec, LLD-network-match.md 3.1) ---------------------------------
 
-# {"x": int, "y": int} -> Vector2i, recursively (JSON has no Vector2i).
 static func _to_engine(value):
-	if value is Dictionary:
-		if value.size() == 2 and value.has("x") and value.has("y") and _is_number(value.x) and _is_number(value.y):
-			return Vector2i(int(value.x), int(value.y))
-		var out := {}
-		for k in value.keys():
-			out[k] = _to_engine(value[k])
-		return out
-	if value is Array:
-		return value.map(func(v): return _to_engine(v))
-	return value
+	return ActionCodec.to_engine(value)
 
 
 static func _to_json_safe(value):
-	if value is Vector2i:
-		return _pos(value)
-	if value is Dictionary:
-		var out := {}
-		for k in value.keys():
-			out[k] = _to_json_safe(value[k])
-		return out
-	if value is Array:
-		return value.map(func(v): return _to_json_safe(v))
-	return value
+	return ActionCodec.to_json_safe(value)
 
 
 static func _pos(pos: Vector2i) -> Dictionary:
-	return {"x": pos.x, "y": pos.y}
-
-
-static func _is_number(v) -> bool:
-	return v is int or v is float
+	return ActionCodec.pos(pos)
