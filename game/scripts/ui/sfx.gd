@@ -1,15 +1,16 @@
 class_name Sfx
 extends Node
 # Visual Polish Phase 4 (LLD-atmosphere-phase4.md 4): lightweight sound and haptics. Every
-# sound is synthesized once at startup (no audio files to ship or license), played from a
-# small pool on EventBus signals, and kept short and quiet. A low drone loop gives the
-# convergence an ambience. Presentation only: nothing here reads back into the rules.
+# general sound is synthesized once at startup and played from a small pool.
+# Character claim stings are original WAVs with provenance in the claim spec.
+# A low drone loop gives the convergence an ambience.
+# Presentation only: nothing here reads back into the rules.
 
 const RATE := 22050
 const POOL := 8
 const REPEAT_GAP_MS := 45       # the same sound twice within this is dropped (AI bursts)
 const DRONE_DB := -27.0
-const HAPTIC_MS := {"hit": 25, "defeat": 60, "level": 40}
+const HAPTIC_MS := {"hit": 25, "defeat": 60, "level": 40, "claim": 40}
 const VOLUME_DB := {"move": -14.0, "hit": -8.0, "blocked": -12.0, "shield": -13.0, "cast": -14.0,
 	"defeat": -9.0, "level": -10.0, "ember": -12.0, "draw": -13.0, "turn": -15.0, "leak": -12.0, "win": -8.0}
 
@@ -24,6 +25,11 @@ var impact_for: Callable = Callable()
 var _delay := 0.0
 const AT_IMPACT := ["hit", "blocked", "defeat", "ember", "level"]
 var _next := 0
+const CLAIM_LANDING_SECONDS := 0.5
+const CLAIM_DB := -8.0  # Same output gain as a hit; source peaks retain headroom.
+var claim_streams: Dictionary = {}
+var _claim_player := AudioStreamPlayer.new()
+var _claim_serial := 0
 
 
 func _ready() -> void:
@@ -35,6 +41,8 @@ func _ready() -> void:
 	_drone.stream = _wav(_drone_samples(), true)
 	_drone.volume_db = DRONE_DB
 	add_child(_drone)
+	_claim_player.name = "CharacterClaim"
+	add_child(_claim_player)
 	apply_settings()
 	EventBus.character_moved.connect(func(_id, _f, _t): play("move"))
 	EventBus.character_repositioned.connect(_on_repositioned)
@@ -44,12 +52,14 @@ func _ready() -> void:
 	EventBus.action_resolved.connect(_on_action)
 	EventBus.character_defeated.connect(_on_defeated)
 	EventBus.character_leveled_up.connect(func(_id, _l): play("level"))
-	EventBus.spirit_ember_picked_up.connect(func(_id): play("ember"))
+	EventBus.spirit_ember_picked_up.connect(_on_ember_claimed)
 	EventBus.spirit_ember_delivered.connect(func(_id): play("ember"))
 	EventBus.relic_drawn.connect(func(_p, _c): play("draw"))
 	EventBus.turn_started.connect(func(_p): play("turn"))
 	EventBus.leak_triggered.connect(func(_id, _pos): play("leak"))
 	EventBus.match_ended.connect(func(_w, _c): play("win"))
+	EventBus.match_reset.connect(_cancel_claim)
+	EventBus.match_started.connect(_cancel_claim)
 
 
 # Starts or stops the drone to match Settings.sound.
@@ -58,6 +68,48 @@ func apply_settings() -> void:
 		_drone.play()
 	elif not Settings.sound:
 		_drone.stop()
+		_cancel_claim()
+
+
+func _on_ember_claimed(character_id: String) -> void:
+	var state := GameState.match_state
+	if state == null:
+		return
+	var character := state.find_character(character_id)
+	if character == null or character.data == null:
+		return
+	# Rules credit the rider and emit no pickup for hazard defeats. Both normal
+	# and multi-Ember claims use the same sound; no gained-count change is needed.
+	_cancel_claim()
+	get_tree().create_timer(_delay + CLAIM_LANDING_SECONDS).timeout.connect(
+			_play_claim.bind(_claim_serial, state, character.data.id))
+
+
+func _play_claim(serial: int, state: MatchState, data_id: String) -> void:
+	if serial != _claim_serial or state != GameState.match_state:
+		return
+	# Ended matches still hear their final claim; reset/new match cancels old timers.
+	if Settings.haptics:
+		Input.vibrate_handheld(HAPTIC_MS.claim)
+	if not Settings.sound:
+		return
+	if not claim_streams.has(data_id):
+		var path := "res://assets/sfx/%s/claim.wav" % data_id
+		if ResourceLoader.exists(path):
+			claim_streams[data_id] = load(path)
+	var custom := claim_streams.has(data_id)
+	_claim_player.stream = claim_streams[data_id] if custom else streams["ember"]
+	_claim_player.pitch_scale = 1.0
+	_claim_player.volume_db = CLAIM_DB if custom else VOLUME_DB.ember
+	_claim_player.play()
+	played.append("claim:%s" % data_id if custom else "ember")
+	if played.size() > 50:
+		played.pop_front()
+
+
+func _cancel_claim() -> void:
+	_claim_serial += 1
+	_claim_player.stop()
 
 
 func play(sound: String) -> void:

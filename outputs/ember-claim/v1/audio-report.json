@@ -1,0 +1,114 @@
+{
+  "r-reactor-worker": {
+    "seconds": 0.55,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -15.06554524142522,
+    "attack_ms": 0.22675736961451248,
+    "tail_sample": 0,
+    "sha256": "d63f6535e5b477d8607dd6024f690a7268ff6b332103db78e08e7d7c90e9920e"
+  },
+  "r-vera-7": {
+    "seconds": 0.65,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -15.759410235997196,
+    "attack_ms": 0.27210884353741494,
+    "tail_sample": 0,
+    "sha256": "72ca14652651fb17a3bd79f83e8bc81be7cfd5e582a9dd5725056a4c87e34069"
+  },
+  "r-yuri-volkov": {
+    "seconds": 0.6,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -14.707001935087884,
+    "attack_ms": 0.3401360544217687,
+    "tail_sample": 0,
+    "sha256": "62131caad663b8152f5713a34f16d606c9136dfc36303d96d7eb6a0a26f6335a"
+  },
+  "r-irina-karpova": {
+    "seconds": 0.45,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -14.722238132934764,
+    "attack_ms": 0.4988662131519275,
+    "tail_sample": 0,
+    "sha256": "7418886f8fff0163915756af86dc611af48595820d6cbe5025da9dcc939c003c"
+  },
+  "r-mikhail-orlov": {
+    "seconds": 0.75,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -14.809334869970803,
+    "attack_ms": 0.3854875283446712,
+    "tail_sample": 0,
+    "sha256": "b8925abc8ada774e4d13324e83f41cc8935582961080909e8e49859d561d003c"
+  },
+  "r-elena-morozova": {
+    "seconds": 0.75,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -17.748872553984878,
+    "attack_ms": 0.5668934240362812,
+    "tail_sample": 0,
+    "sha256": "98de46c8fe8c6be01f704614a4d4eab365c90622abff501168cd3da1a1ba3f45"
+  },
+  "r-zoya-miranova": {
+    "seconds": 0.7,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -18.814995625649683,
+    "attack_ms": 0.5668934240362812,
+    "tail_sample": 0,
+    "sha256": "e4b8b50d9df50b869f2b3eea2872b8fda5a11fe143e22bf455f84dcb94be224f"
+  },
+  "a-flood-survivor-stone-line-laborer": {
+    "seconds": 0.6,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -17.097186133902362,
+    "attack_ms": 0.36281179138321995,
+    "tail_sample": 0,
+    "sha256": "889d5e3f0395af00d9309b887381e8043d59f0937454f9fe58660c15266bc871"
+  },
+  "a-flood-survivor-ahesu": {
+    "seconds": 0.85,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -15.660555175927149,
+    "attack_ms": 0.40816326530612246,
+    "tail_sample": 0,
+    "sha256": "693597aa1419381f611d57510885f29c3fb8cbce90a7e72285691f3ef39f30f3"
+  },
+  "a-flood-survivor-naia": {
+    "seconds": 0.7,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -16.53228075685486,
+    "attack_ms": 0.29478458049886624,
+    "tail_sample": 0,
+    "sha256": "8474fe327fcdb154370da875734ec35e7fef914cb39944743707758cf6acd2a2"
+  },
+  "a-flood-survivor-meret-anu": {
+    "seconds": 0.75,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -15.530662243487107,
+    "attack_ms": 0.4308390022675737,
+    "tail_sample": 0,
+    "sha256": "e1185bf8141716a3811b31efdbfdda568d6465aa75d57d8a9a9b39be9232a5d4"
+  },
+  "a-flood-survivor-sahu-ren": {
+    "seconds": 0.8,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -12.416633905277195,
+    "attack_ms": 0.45351473922902497,
+    "tail_sample": 0,
+    "sha256": "60fa6a56166f2aeff7f3de415cbb4cb63eb704bfe7b0135ed217d4a352439dda"
+  },
+  "a-flood-survivor-iset-nara": {
+    "seconds": 0.65,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -13.726380317808623,
+    "attack_ms": 0.31746031746031744,
+    "tail_sample": 0,
+    "sha256": "7d179f949293558b5d2e2522310838be331addd3fb5a907950f4d7b55a58b061"
+  },
+  "a-flood-survivor-thalassa-nekh": {
+    "seconds": 0.9,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -16.553357261299013,
+    "attack_ms": 0.29478458049886624,
+    "tail_sample": 0,
+    "sha256": "bc7e3bb1780265191074b69443e56d6d01cb3a12f4e65b33ddfe5f1b428ad3d5"
+  }
+}

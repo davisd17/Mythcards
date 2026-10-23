@@ -1,0 +1,128 @@
+{
+  "r-reactor-worker": {
+    "seconds": 0.55,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -19.697485084902674,
+    "attack_ms": 0.5215419501133787,
+    "tail_sample": 0,
+    "sha256": "de4eaf9e3d792094e05690806ef94a97e17eb67069190e366051e36a3304b7a4",
+    "revision": 2
+  },
+  "r-vera-7": {
+    "seconds": 0.65,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -16.101938278029486,
+    "attack_ms": 0.24943310657596374,
+    "tail_sample": 0,
+    "sha256": "256f65e5bf9ae7a2180ad98b123ce6cfcb79457553b66ffcc062c06ff8e6e24c",
+    "revision": 2
+  },
+  "r-yuri-volkov": {
+    "seconds": 0.6,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -17.058511043194585,
+    "attack_ms": 0.3401360544217687,
+    "tail_sample": 0,
+    "sha256": "f889041d2d2feb1d18f4acd5203f065de4849c5ea9c3d284c6db26ae3daccc47",
+    "revision": 2
+  },
+  "r-irina-karpova": {
+    "seconds": 0.45,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -13.81534859321297,
+    "attack_ms": 0.4988662131519275,
+    "tail_sample": 0,
+    "sha256": "6dbf56e32562d4f4695147e8093b209a20913107a23c3fc00691b1d44cb174f6",
+    "revision": 2
+  },
+  "r-mikhail-orlov": {
+    "seconds": 0.75,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -13.268419320616827,
+    "attack_ms": 0.3854875283446712,
+    "tail_sample": 0,
+    "sha256": "f2bf5cda4407e16cba9a89ca2e181cd351a2ecbdba9194f38660eca59d510a15",
+    "revision": 2
+  },
+  "r-elena-morozova": {
+    "seconds": 0.75,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -15.65984384427334,
+    "attack_ms": 0.45351473922902497,
+    "tail_sample": 0,
+    "sha256": "aa7def60d6838b4289c62372cbfe667b345e27331aa8be608992b63f47293ce4",
+    "revision": 2
+  },
+  "r-zoya-miranova": {
+    "seconds": 0.7,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -16.417331874420938,
+    "attack_ms": 1.2698412698412698,
+    "tail_sample": 0,
+    "sha256": "a2836f976614f8ac517cb06052f5143c94a0b6439472afe03f87de08e2515b51",
+    "revision": 2
+  },
+  "a-flood-survivor-stone-line-laborer": {
+    "seconds": 0.6,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -18.476340644853583,
+    "attack_ms": 0.36281179138321995,
+    "tail_sample": 0,
+    "sha256": "cb7f8fe628fc0c6ebb391c3a7241e9d82dc5d012a2caf2c8ba32e15fd2e939ba",
+    "revision": 2
+  },
+  "a-flood-survivor-ahesu": {
+    "seconds": 0.85,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -15.714566745285072,
+    "attack_ms": 0.40816326530612246,
+    "tail_sample": 0,
+    "sha256": "1cb87abcab9b80cca15937652320e4929f90d3e80c3dfb4e0c686c6127e359e8",
+    "revision": 2
+  },
+  "a-flood-survivor-naia": {
+    "seconds": 0.7,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -17.462891931574568,
+    "attack_ms": 0.27210884353741494,
+    "tail_sample": 0,
+    "sha256": "ed26e2c73c8ca6315fd039a087a655320053ee1e82b6d14df4cdd60ad90dcfa2",
+    "revision": 2
+  },
+  "a-flood-survivor-meret-anu": {
+    "seconds": 0.75,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -14.589840671779823,
+    "attack_ms": 0.4308390022675737,
+    "tail_sample": 0,
+    "sha256": "228c07d70de5cbd204711f27298d2f5f68be791c7d2b0c65c5daa6fb13b061d2",
+    "revision": 2
+  },
+  "a-flood-survivor-sahu-ren": {
+    "seconds": 0.8,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -13.756731773951302,
+    "attack_ms": 0.4308390022675737,
+    "tail_sample": 0,
+    "sha256": "47e27158103496d36cb9543ced46c7308ce10d4cb6c1db588915fba336f7ca7e",
+    "revision": 2
+  },
+  "a-flood-survivor-iset-nara": {
+    "seconds": 0.65,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -14.189072783359876,
+    "attack_ms": 0.31746031746031744,
+    "tail_sample": 0,
+    "sha256": "8fef5a59b0b818a278e0b7c7903769f14cfede244cb29d615a1dfc5dee8ac7bb",
+    "revision": 2
+  },
+  "a-flood-survivor-thalassa-nekh": {
+    "seconds": 0.9,
+    "peak_dbfs": -2.047699762446137,
+    "rms_dbfs": -16.99151114989129,
+    "attack_ms": 0.29478458049886624,
+    "tail_sample": 0,
+    "sha256": "d1494ee28b1f63a9aac9a289bfd8110cbaae1897a1f036518c4bc79c0d123aca",
+    "revision": 2
+  }
+}
