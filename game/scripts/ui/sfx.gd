@@ -73,7 +73,7 @@ func apply_settings() -> void:
 		_cancel_claim()
 
 
-func _on_ember_claimed(character_id: String) -> void:
+func _on_ember_claimed(character_id: String, _gained := 1) -> void:
 	var state := GameState.match_state
 	if state == null:
 		return

@@ -41,7 +41,7 @@ func test_claim_waits_for_attack_impact_plus_landing_and_does_not_double_play() 
 	var sfx: Sfx = add_child_autofree(Sfx.new())
 	sfx.impact_for = func(_id): return .25
 	EventBus.action_requested.emit("attack", WORKER, {})
-	EventBus.spirit_ember_picked_up.emit(WORKER)
+	EventBus.spirit_ember_picked_up.emit(WORKER, 1)
 	EventBus.action_resolved.emit("attack", WORKER, {"success": true})
 	assert_eq(sfx.played, [] as Array[String])
 	await wait_seconds(.55)
@@ -54,12 +54,12 @@ func test_claim_waits_for_attack_impact_plus_landing_and_does_not_double_play() 
 
 func test_new_claim_cancels_older_pending_and_interrupts_current_audio() -> void:
 	var sfx: Sfx = add_child_autofree(Sfx.new())
-	EventBus.spirit_ember_picked_up.emit(WORKER)
-	EventBus.spirit_ember_picked_up.emit(VERA)
+	EventBus.spirit_ember_picked_up.emit(WORKER, 1)
+	EventBus.spirit_ember_picked_up.emit(VERA, 1)
 	await wait_seconds(.60)
 	assert_eq(sfx.played, ["claim:r-vera-7"] as Array[String])
 	assert_true(sfx._claim_player.playing)
-	EventBus.spirit_ember_picked_up.emit(WORKER)
+	EventBus.spirit_ember_picked_up.emit(WORKER, 1)
 	assert_false(sfx._claim_player.playing, "Interrupt the old sting immediately")
 	await wait_seconds(.60)
 	assert_eq(sfx.played.back(), "claim:r-reactor-worker")
@@ -68,7 +68,7 @@ func test_new_claim_cancels_older_pending_and_interrupts_current_audio() -> void
 
 func test_sound_off_cancels_pending_and_active_claims() -> void:
 	var sfx: Sfx = add_child_autofree(Sfx.new())
-	EventBus.spirit_ember_picked_up.emit(WORKER)
+	EventBus.spirit_ember_picked_up.emit(WORKER, 1)
 	Settings.sound = false
 	sfx.apply_settings()
 	await wait_seconds(.60)
@@ -85,7 +85,7 @@ func test_sound_off_cancels_pending_and_active_claims() -> void:
 func test_reset_cancels_old_match_claims_but_final_defeat_can_still_be_heard() -> void:
 	var sfx: Sfx = add_child_autofree(Sfx.new())
 	var old_state := Fixture.state()
-	EventBus.spirit_ember_picked_up.emit(WORKER)
+	EventBus.spirit_ember_picked_up.emit(WORKER, 1)
 	var serial := sfx._claim_serial
 	GameState.reset()
 	sfx._play_claim(serial, old_state, "r-reactor-worker")

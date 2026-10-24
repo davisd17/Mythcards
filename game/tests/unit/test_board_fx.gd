@@ -85,7 +85,7 @@ func test_level_up_shields_and_embers_get_their_own_flourish() -> void:
 	EventBus.character_leveled_up.emit(id, 2)
 	EventBus.status_added.emit(id, "shield", 1, "")
 	EventBus.status_added.emit(id, "marked", 1, "")
-	EventBus.spirit_ember_picked_up.emit(id)
+	EventBus.spirit_ember_picked_up.emit(id, 1)
 	var kinds := fx.effects.map(func(e): return e.kind)
 	assert_eq(kinds, ["level", "ring", "burst"], "a mark gets no ring")
 	assert_eq(fx.effects[0].text, "LEVEL 2")
@@ -109,3 +109,52 @@ func test_effects_do_not_touch_the_model() -> void:
 	EventBus.character_leveled_up.emit(c.instance_id, 2)
 	_run_out()
 	assert_eq([c.position, c.current_hp, c.defeated, c.level], before)
+
+
+# --- Ember claim (docs/art-specs/ember-claim/SPEC.md 2-3) ---------------------------------
+
+func test_a_claim_lands_after_the_wisp_and_plays_its_poses() -> void:
+	var yuri := "p1_r-yuri-volkov"
+	var naia := Fixture.character("p2_a-flood-survivor-naia")
+	EventBus.character_defeated.emit(naia.instance_id, yuri, "direct")
+	EventBus.spirit_ember_picked_up.emit(yuri, 1)
+	assert_almost_eq(float(fx.claim_elapsed(yuri)), -BoardFx.CLAIM_LANDING, 0.001, "the wisp flies first")
+	assert_eq(fx.claims[yuri].from, naia.position, "from the fallen tile")
+	assert_almost_eq(fx.claim_remaining(), BoardFx.CLAIM_LANDING + BoardFx.CLAIM_POSES, 0.001)
+	fx.advance(BoardFx.CLAIM_LANDING + BoardFx.CLAIM_POSES)
+	assert_eq(fx.claim_remaining(), 0.0, "the poses are done; the line still shows")
+	assert_true(fx.claims.has(yuri))
+	fx.advance(BoardFx.CLAIM_LINE + BoardFx.LINE_FADE)
+	assert_false(fx.claims.has(yuri), "the line is gone by 1.9 s")
+	assert_null(fx.claim_elapsed(yuri))
+
+
+func test_a_mounted_pair_merges_into_one_big_claim() -> void:
+	var yuri := "p1_r-yuri-volkov"
+	EventBus.spirit_ember_picked_up.emit(yuri, 1)
+	EventBus.spirit_ember_picked_up.emit(yuri, 1)
+	assert_eq(fx.claims[yuri].gained, 2)
+	var bursts := fx.effects.filter(func(e): return e.text.begins_with("+"))
+	assert_eq(bursts.size(), 1, "one burst")
+	assert_eq(bursts[0].text, "+2 Embers")
+	assert_true(bursts[0].big)
+
+
+func test_a_newer_claim_cuts_the_one_playing() -> void:
+	EventBus.spirit_ember_picked_up.emit("p1_r-yuri-volkov", 1)
+	fx.advance(0.3)
+	EventBus.spirit_ember_picked_up.emit("p2_a-flood-survivor-naia", 3)
+	assert_eq(fx.claims.keys(), ["p2_a-flood-survivor-naia"])
+
+
+func test_level_3_starts_on_the_settle_pose() -> void:
+	var yuri := "p1_r-yuri-volkov"
+	EventBus.spirit_ember_picked_up.emit(yuri, 1)
+	EventBus.character_leveled_up.emit(yuri, 3)
+	assert_almost_eq(fx.levels[yuri], fx.claims[yuri].start + BoardFx.CLAIM_SETTLE, 0.001)
+
+
+func test_no_claim_without_a_pickup() -> void:
+	var naia := Fixture.character("p2_a-flood-survivor-naia")
+	EventBus.character_defeated.emit(naia.instance_id, "", "leak")
+	assert_true(fx.claims.is_empty(), "a Leak defeat gains no Ember")

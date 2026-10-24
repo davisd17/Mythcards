@@ -60,7 +60,7 @@ func _on_character_defeated(character_id: String, defeated_by_id: String, _cause
 	if attacker == null or attacker == fallen or (fallen != null and attacker.player_id == fallen.player_id):
 		return
 	attacker.spirit_ember_count += 1 + carried
-	EventBus.spirit_ember_picked_up.emit(attacker.instance_id)
+	EventBus.spirit_ember_picked_up.emit(attacker.instance_id, 1 + carried)
 	if attacker.level == 2 and not attacker.defeated:
 		_level_up(attacker, 3)
 	_check_delivery(attacker)   # standing on the center already: banks at once

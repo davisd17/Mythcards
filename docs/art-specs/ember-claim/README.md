@@ -1,6 +1,6 @@
 # Ember Claim Production Queue
 
-Status: all 14 default-outfit art packages produced and approved as of 2026-10-23. All 14 sound candidates are rendered and wired; listening review and visual/text integration remain pending. VERA-7's proposed more celebratory revision remains a separate follow-up. Thalassa's full Seraph transformation art is a separate review package under `docs/art-specs/form-change/`.
+Status: all 14 default-outfit art packages produced and approved as of 2026-10-23. All 14 sound candidates are rendered and wired. As of 2026-10-24 the claim poses, wisp, speech lines (with a Character lines toggle), big-claim burst, Level 3 ordering and victory-screen wait are wired too, and a web-build Playwright test sees a real claim play; designer review in the web and Windows builds remains. The Ember is drawn at a fixed chest-height point, not yet at each character's annotated receiving socket. VERA-7's proposed more celebratory revision remains a separate follow-up. Thalassa's full Seraph transformation art is a separate review package under `docs/art-specs/form-change/`.
 
 - [Contributor spec](SPEC.md): triggers, timing, files, and draft text.
 - [Character briefs](CHARACTER_BRIEFS.md): Gather/Hold/Settle, receiving space,
@@ -39,9 +39,9 @@ only after normal/big claims are seen in exported web and Windows builds, sound
 on/off, with no rule/input delays. Include mirrored placement, mounted ownership,
 Level 3, hazards without an Ember, interruption, and the match-ending case.
 
-Current code still emits `spirit_ember_picked_up(character_id)` without the gained
-count. The SFX layer now plays per-character stings; normal/big claims share
-one sound. Visual packages and line selection remain pending. See
+`spirit_ember_picked_up(character_id, gained)` carries the gained count (2+ is a big
+claim). The SFX layer plays per-character stings; normal/big claims share
+one sound. Poses, lines and the big-claim burst play on the board. See
 [AUDIO_STATUS.md](AUDIO_STATUS.md) for the exact scope and review limits.
 
 Recommended pilot: Reactor Worker, to establish prop-safe receiving sockets and

@@ -31,7 +31,7 @@ signal character_charmed(character_id: String, from_player_id: String, to_player
 signal character_defeated(character_id: String, defeated_by_id: String, cause: String)  # cause: "direct" | "mount_propagation"
 
 signal character_leveled_up(character_id: String, new_level: int)
-signal spirit_ember_picked_up(character_id: String)
+signal spirit_ember_picked_up(character_id: String, gained: int)
 signal spirit_ember_delivered(character_id: String)
 
 signal relic_drawn(player_id: String, card_id: String)

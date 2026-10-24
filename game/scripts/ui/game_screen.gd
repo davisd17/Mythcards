@@ -242,7 +242,8 @@ func ui_snapshot() -> Dictionary:
 	var board := Rect2(_board.get_global_transform() * corner.position,
 			corner.size * BoardModel.BOARD_SIZE)
 	return {"buttons": buttons, "tiles": tiles, "summary": summary, "prompt": _prompt.text, "popup": _popup.visible,
-			"setup": controller.in_setup(), "board": board, "mode": _mode}
+			"setup": controller.in_setup(), "board": board, "mode": _mode, "claims": _board.fx.claims.keys(),
+			"game_over": _game_over.visible}
 
 
 # Whether a control's center is inside every scrolling list that holds it.
@@ -537,6 +538,11 @@ func _refresh() -> void:
 	_queue_layout()   # the table row may have appeared or gone
 	var state := GameState.match_state
 	_game_over.visible = state != null and state.phase == "ended" and controller.setup == null
+	# A match-ending defeat plays its Ember claim first, then the victory screen (claim spec 2).
+	var claim_left := _board.fx.claim_remaining()
+	if _game_over.visible and claim_left > 0.0:
+		_game_over.visible = false
+		get_tree().create_timer(claim_left).timeout.connect(_refresh)
 	if _game_over.visible:
 		var how: String = {"hero_capture": "Hero capture", "army_defeat": "Army defeat",
 				"ember_delivery": "delivering 4 Spirit Embers"}.get(state.win_condition, state.win_condition)
@@ -897,6 +903,7 @@ func _build_menu() -> void:
 	box.add_child(_setting_toggle("Music", "music"))
 	box.add_child(_setting_toggle("Motion", "motion"))
 	box.add_child(_setting_toggle("Vibration", "haptics"))
+	box.add_child(_setting_toggle("Character lines", "lines"))
 	outer.add_child(UiStyle.command("Close", _toggle_menu))
 	add_child(_menu)
 

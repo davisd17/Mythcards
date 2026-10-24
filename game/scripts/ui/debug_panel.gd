@@ -23,7 +23,7 @@ func _ready() -> void:
 	EventBus.object_attacked.connect(func(a, pos, kind, dmg, gone): _record("object_attacked", [a, pos, kind, dmg, gone]))
 	EventBus.character_defeated.connect(func(id, by, cause): _record("character_defeated", [id, by, cause]))
 	EventBus.character_leveled_up.connect(func(id, lvl): _record("character_leveled_up", [id, lvl]))
-	EventBus.spirit_ember_picked_up.connect(func(id): _record("spirit_ember_picked_up", [id]))
+	EventBus.spirit_ember_picked_up.connect(func(id, gained): _record("spirit_ember_picked_up", [id, gained]))
 	EventBus.spirit_ember_delivered.connect(func(id): _record("spirit_ember_delivered", [id]))
 	EventBus.relic_drawn.connect(func(p, card): _record("relic_drawn", [p, card]))
 	EventBus.relic_slot_changed.connect(func(p, card): _record("relic_slot_changed", [p, card]))

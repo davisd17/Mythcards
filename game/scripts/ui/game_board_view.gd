@@ -335,6 +335,8 @@ func _draw() -> void:
 		_draw_ghost(g)
 	for e in fx.effects:
 		_draw_effect(font, e)
+	for id in fx.claims:
+		_draw_claim(font, id, fx.claims[id])
 	if zoom > 1.0:
 		var chip := reset_zoom_rect()
 		draw_rect(chip, Color(0.03, 0.035, 0.035, 0.85))
@@ -704,8 +706,10 @@ func _draw_character(font: Font, c: CharacterInstance, selected: bool) -> void:
 	# Phase 5: breathe, hop, wind up, recoil... posed about the feet. Only the figure moves;
 	# the base, the HP pill, and the badges stay level and readable.
 	var feet := feet_point(rect, selected)
-	_begin_pose(feet, FigurePose.pose(c, fx, spent, selected, Settings.motion), rect.size.x,
-			FigurePose.attack_mirrored(c, fx))
+	var pose := FigurePose.pose(c, fx, spent, selected, Settings.motion)
+	if not _claim_framed(c):
+		FigurePose.claim_stretch(pose, fx.claim_elapsed(c.instance_id))
+	_begin_pose(feet, pose, rect.size.x, FigurePose.attack_mirrored(c, fx))
 	if figure != null:
 		var modulate := Color(0.62, 0.62, 0.66, 0.9) if spent else Color.WHITE
 		modulate = modulate.lerp(Color(1.0, 0.32, 0.28), 0.75 * fx.hit_strength(c.instance_id))
@@ -749,17 +753,80 @@ func _begin_pose(feet: Vector2, pose: Dictionary, px: float, mirrored := false) 
 
 
 # The images that make up a figure this frame, bottom to top: the default figure, or a
-# crossfade of hand-drawn attack frames while its art attack plays (Phase 6).
+# crossfade of hand-drawn attack frames while its art attack plays (Phase 6), or of its
+# Ember-claim poses while it claims.
 func _figure_layers(c: CharacterInstance, figure: Texture2D) -> Array:
 	var l: Dictionary = fx.lunges.get(c.instance_id, {})
-	if not l.get("framed", false):
+	var frames: Array
+	var elapsed: float
+	if l.get("framed", false):
+		frames = FigureCatalog.attack_frames(c.data.id, outfit_id_for(c))
+		elapsed = fx.now - l.start
+	elif _claim_framed(c):
+		frames = FigureCatalog.claim_frames(c.data.id, outfit_id_for(c))
+		elapsed = fx.claim_elapsed(c.instance_id)
+	else:
 		return [{"texture": figure, "alpha": 1.0}]
-	var frames := FigureCatalog.attack_frames(c.data.id, outfit_id_for(c))
 	var seconds := frames.map(func(f): return f.seconds)
 	var result := []
-	for layer in FigurePose.frame_layers(seconds, fx.now - l.start):
+	for layer in FigurePose.frame_layers(seconds, elapsed):
 		result.append({"texture": figure if layer.frame < 0 else frames[layer.frame].texture, "alpha": layer.alpha})
 	return result
+
+
+# Whether `c` is in its claim poses and has claim art to show them. A mounted rider uses
+# the stretch instead, since its standing poses would hide the Mount (claim spec 2).
+func _claim_framed(c: CharacterInstance) -> bool:
+	var elapsed = fx.claim_elapsed(c.instance_id)
+	return elapsed != null and elapsed >= 0.0 and elapsed < BoardFx.CLAIM_POSES and c.mounted_with_id == "" \
+			and not FigureCatalog.claim_frames(c.data.id, outfit_id_for(c)).is_empty()
+
+
+# The Ember claim over the board (claim spec 3): the wisp's flight from the fallen tile,
+# its glow on the claimer through the poses, then the speech line.
+func _draw_claim(font: Font, id: String, claim: Dictionary) -> void:
+	var c: CharacterInstance = controller.find(id) if controller != null else null
+	if c == null or c.data == null or not c.is_placed():
+		return
+	var u: float = fx.now - claim.start   # 0 = the wisp lands
+	if u < -BoardFx.WISP:
+		return
+	var rect := tile_rect(c.position)
+	var px := rect.size.x
+	var socket := feet_point(rect, false) - Vector2(0.0, FIGURE_HEIGHT * px * 0.55)
+	if u < 0.0:
+		var k := BoardFx.ease_out(1.0 + u / BoardFx.WISP)
+		var from := tile_rect(claim.from).get_center()
+		_draw_wisp(from.lerp(socket, k) - Vector2(0.0, px * 0.45 * sin(PI * k)), px, 1.0)
+		return
+	if u < BoardFx.CLAIM_POSES:
+		_draw_wisp(socket, px, 1.0 - u / BoardFx.CLAIM_POSES)
+	var line := EmberLines.line_for(c.data.id, claim.gained >= 2) if Settings.lines else ""
+	if line != "":
+		var alpha := clampf((BoardFx.CLAIM_LINE + BoardFx.LINE_FADE - u) / BoardFx.LINE_FADE, 0.0, 1.0)
+		_draw_claim_line(font, line, rect, alpha)
+
+
+func _draw_wisp(at: Vector2, px: float, alpha: float) -> void:
+	draw_circle(at, px * 0.13, Color(BoardFx.EMBER_COLOR, 0.25 * alpha))
+	draw_circle(at, px * 0.075, Color(BoardFx.EMBER_COLOR, 0.6 * alpha))
+	draw_circle(at, px * 0.035, Color(1.0, 0.93, 0.75, alpha))
+
+
+# The speech line in a small dark bubble above the claimer, kept inside the board.
+func _draw_claim_line(font: Font, line: String, tile: Rect2, alpha: float) -> void:
+	var fs := int(maxf(14.0, tile.size.x * 0.26))
+	var text_size := font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, fs)
+	var pad := Vector2(fs * 0.5, fs * 0.3)
+	var head := feet_point(tile, false).y - FIGURE_HEIGHT * tile.size.x
+	var box := Rect2(Vector2(tile.get_center().x - text_size.x * 0.5 - pad.x, head - text_size.y - pad.y * 2.0),
+			text_size + pad * 2.0)
+	box.position.x = clampf(box.position.x, 2.0, maxf(2.0, size.x - box.size.x - 2.0))
+	box.position.y = maxf(2.0, box.position.y)
+	draw_rect(box, Color(0.03, 0.035, 0.035, 0.85 * alpha))
+	draw_rect(box, Color(BoardFx.EMBER_COLOR, alpha), false, 2.0)
+	var baseline := box.position + Vector2(pad.x, pad.y + font.get_ascent(fs))
+	draw_string(font, baseline, line, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(1.0, 0.93, 0.8, alpha))
 
 
 # For BoardFx: the attack art timing of a figure, by instance id ({} = procedural).

@@ -25,7 +25,7 @@ func _ready() -> void:
 	EventBus.object_attacked.connect(_on_object_attacked)
 	EventBus.character_defeated.connect(_on_defeated)
 	EventBus.character_leveled_up.connect(func(id, level): _detail("%s reaches Level %d (full HP)" % [_name(id), level]))
-	EventBus.spirit_ember_picked_up.connect(func(id): _detail("%s takes a Spirit Ember" % _name(id)))
+	EventBus.spirit_ember_picked_up.connect(func(id, gained): _detail("%s takes %s" % [_name(id), "a Spirit Ember" if gained == 1 else "%d Spirit Embers" % gained]))
 	EventBus.spirit_ember_delivered.connect(func(id): _detail("%s delivers a Spirit Ember to the center" % _name(id)))
 	EventBus.memory_gained.connect(func(id): _detail("%s gains Memory" % _name(id)))
 	EventBus.leak_triggered.connect(func(id, _pos): _detail("%s triggers a Leak" % _name(id)))

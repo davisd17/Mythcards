@@ -18,6 +18,13 @@ const RING := 0.40           # shield, cast, and Leak rings
 const DEFEAT := 0.50         # a defeated figure sinking and fading
 const LEVEL_UP := 0.85
 const EMBER := 0.60
+# Ember claim (docs/art-specs/ember-claim/SPEC.md 3), timed from the impact frame.
+const CLAIM_LANDING := 0.50  # the wisp lands on the claimer: sting, line, and poses start
+const WISP := 0.35           # the wisp's flight, ending at the landing
+const CLAIM_POSES := 0.60    # gather 120, hold 360, settle 120 ms
+const CLAIM_SETTLE := 0.48   # the settle pose, where a Level 3 flourish starts
+const CLAIM_LINE := 1.20     # the speech line holds, then fades
+const LINE_FADE := 0.20
 
 const DAMAGE := Color("#ff7a6e")
 const BLOCKED := Color("#9fe0f5")
@@ -39,6 +46,10 @@ var levels := {}      # instance id -> start
 var ready := {}       # {player: "p1"/"p2", start}: the side whose turn just started
 var ghosts: Array = []    # {character, pos: Vector2i, start: float, away: -1/1 (topple direction)}
 var effects: Array = []   # {kind, pos: Vector2i, start, duration, text, color}
+# Ember claims: claimer instance id -> {start (the landing), from: Vector2i (the fallen
+# tile), gained: int}. One plays at a time; 2+ Embers gained at once is a big claim.
+var claims := {}
+var _fallen := {}         # claimer id -> the tile its victim fell on, this action
 # Phase 6: (instance id) -> FigureCatalog.attack_timing for that figure, or {} for the
 # procedural wind-up. Set by GameBoardView, which knows each figure's outfit.
 var attack_art: Callable = Callable()
@@ -85,13 +96,17 @@ func advance(delta: float) -> void:
 				pair[0].erase(id)
 	if not ready.is_empty() and now - ready.start >= READY + READY_STAGGER * BoardModel.BOARD_SIZE:
 		ready = {}
+	for id in claims.keys():
+		if now - claims[id].start >= CLAIM_LINE + LINE_FADE:
+			claims.erase(id)
 	ghosts = ghosts.filter(func(g): return now - g.start < DEFEAT)
 	effects = effects.filter(func(e): return now - e.start < e.duration)
 
 
 func active() -> bool:
 	return not (slides.is_empty() and lunges.is_empty() and hits.is_empty() and recoils.is_empty()
-			and casts.is_empty() and manifestations.is_empty() and levels.is_empty() and ready.is_empty() and ghosts.is_empty() and effects.is_empty())
+			and casts.is_empty() and manifestations.is_empty() and levels.is_empty() and ready.is_empty() and ghosts.is_empty() and effects.is_empty()
+			and claims.is_empty())
 
 
 func clear() -> void:
@@ -106,6 +121,8 @@ func clear() -> void:
 	ready = {}
 	ghosts.clear()
 	effects.clear()
+	claims.clear()
+	_fallen.clear()
 
 
 # 0..1 progress of something that started at `start` and lasts `duration`.
@@ -164,14 +181,15 @@ func _find(id: String) -> CharacterInstance:
 	return GameState.match_state.find_character(id) if GameState.match_state != null else null
 
 
-func _add(kind: String, pos: Vector2i, duration: float, text := "", color := Color.WHITE) -> void:
-	effects.append({"kind": kind, "pos": pos, "start": _t0(), "duration": duration, "text": text, "color": color})
+func _add(kind: String, pos: Vector2i, duration: float, text := "", color := Color.WHITE, start := -1.0) -> void:
+	effects.append({"kind": kind, "pos": pos, "start": _t0() if start < 0.0 else start, "duration": duration,
+			"text": text, "color": color})
 
 
-func _at(id: String, kind: String, duration: float, text := "", color := Color.WHITE) -> void:
+func _at(id: String, kind: String, duration: float, text := "", color := Color.WHITE, start := -1.0) -> void:
 	var c := _find(id)
 	if c != null and c.is_placed():
-		_add(kind, c.position, duration, text, color)
+		_add(kind, c.position, duration, text, color, start)
 
 
 func _on_moved(id: String, from: Vector2i, to: Vector2i) -> void:
@@ -223,14 +241,52 @@ func _on_defeated(id: String, by: String, cause: String) -> void:
 		var away := _away_from(by, c.position)
 		ghosts.append({"character": c, "pos": c.position, "start": _t0(), "away": away if away != 0 else 1})
 		_add("burst", c.position, DEFEAT, "", DAMAGE)
+	# The claim's wisp rises from the fallen tile. The pickup may arrive before or after this.
+	if c != null and c.is_placed():
+		_fallen[by] = c.position
+		if claims.has(by):
+			claims[by].from = c.position
 
 
 func _on_leak(_id: String, pos: Vector2i) -> void:
 	_add("ring", pos, RING, "", LEAK)
 
 
-func _on_ember_picked_up(id: String) -> void:
-	_at(id, "burst", EMBER, "+Ember", EMBER_COLOR)
+# The claim moment (claim spec 2-3): the wisp flies from the fallen tile, and on landing
+# the claimer plays its claim poses and speaks its line. A mounted pair falls in one blow,
+# so its two pickups merge into one big claim. A newer claim cuts the one still playing.
+func _on_ember_picked_up(id: String, gained: int) -> void:
+	var c := _find(id)
+	if c == null or not c.is_placed():
+		return
+	var start := _t0() + CLAIM_LANDING
+	var claim: Dictionary = claims.get(id, {})
+	if is_equal_approx(float(claim.get("start", -1.0)), start):
+		claim.gained += gained
+	else:
+		claims.clear()
+		_add("burst", c.position, EMBER, "", EMBER_COLOR, start)
+		claim = {"start": start, "from": _fallen.get(id, c.position), "gained": gained, "burst": effects[-1]}
+		claims[id] = claim
+	# A big claim gets a larger, longer Ember burst.
+	var big: bool = claim.gained >= 2
+	claim.burst.text = "+%d Embers" % claim.gained if big else "+Ember"
+	claim.burst.duration = EMBER * (1.5 if big else 1.0)
+	claim.burst["big"] = big
+
+
+# Seconds into `id`'s claim, from the wisp landing (negative while the wisp flies), or
+# null when it has no claim.
+func claim_elapsed(id: String):
+	return now - claims[id].start if claims.has(id) else null
+
+
+# Seconds until every claim's poses finish (0 when none plays): the victory screen waits.
+func claim_remaining() -> float:
+	var result := 0.0
+	for id in claims:
+		result = maxf(result, claims[id].start + CLAIM_POSES - now)
+	return result
 
 
 func _on_ember_delivered(id: String) -> void:
@@ -238,8 +294,10 @@ func _on_ember_delivered(id: String) -> void:
 
 
 func _on_leveled(id: String, level: int) -> void:
-	levels[id] = _t0()
-	_at(id, "level", LEVEL_UP, "LEVEL %d" % level, LEVEL)
+	# A claim that reaches Level 3 plays first; the flourish starts on the settle pose.
+	var start: float = claims[id].start + CLAIM_SETTLE if claims.has(id) else _t0()
+	levels[id] = start
+	_at(id, "level", LEVEL_UP, "LEVEL %d" % level, LEVEL, start)
 
 
 func _on_requested(action_type: String, actor_id: String, payload: Dictionary) -> void:
@@ -249,6 +307,7 @@ func _on_requested(action_type: String, actor_id: String, payload: Dictionary) -
 
 func _on_action(action_type: String, actor_id: String, result: Dictionary) -> void:
 	_delay = 0.0
+	_fallen.clear()
 	if action_type == "ability" and result.get("success", false) and _manifestation_request == actor_id \
 			and SeraphManifestation.is_active(_find(actor_id)):
 		manifestations[actor_id] = now

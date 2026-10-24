@@ -109,7 +109,7 @@ func test_c3_defeat_grants_the_attacker_an_ember() -> void:
 	_defeated(GUARD, SNIPER)
 	assert_eq(_c(SNIPER).spirit_ember_count, 1)
 	assert_signal_emit_count(EventBus, "spirit_ember_picked_up", 1)
-	assert_signal_emitted_with_parameters(EventBus, "spirit_ember_picked_up", [SNIPER])
+	assert_signal_emitted_with_parameters(EventBus, "spirit_ember_picked_up", [SNIPER, 1])
 
 
 func test_c4_mounted_pair_kill_grants_two_embers() -> void:
@@ -123,6 +123,7 @@ func test_embers_stack_onto_whoever_defeats_the_carrier() -> void:
 	_c(GUARD).spirit_ember_count = 2          # undelivered
 	_defeated(GUARD, SNIPER)
 	assert_eq(_c(SNIPER).spirit_ember_count, 3, "its own 1 plus the 2 it carried")
+	assert_signal_emitted_with_parameters(EventBus, "spirit_ember_picked_up", [SNIPER, 3])
 	assert_eq(_c(GUARD).spirit_ember_count, 0)
 
 

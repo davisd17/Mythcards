@@ -124,6 +124,13 @@ static func level_curve(u: float) -> float:
 	return cos(v * PI) * (1.0 - v) if v < 1.0 else 0.0
 
 
+# A claim with no claim art (or a mounted rider): the level-up stretch over the claim poses'
+# time. `elapsed` is BoardFx.claim_elapsed (null when the figure isn't claiming).
+static func claim_stretch(p: Dictionary, elapsed) -> void:
+	if elapsed != null and elapsed >= 0.0 and elapsed < BoardFx.CLAIM_POSES:
+		p.scale_y += LEVEL_STRETCH * level_curve(elapsed / BoardFx.CLAIM_POSES)
+
+
 # The defeat ghost tips away from whoever defeated it as it sinks.
 static func topple(g: Dictionary, fx: BoardFx) -> float:
 	return float(g.get("away", 1)) * TOPPLE * BoardFx.ease_out(fx.progress(g.start, BoardFx.DEFEAT))

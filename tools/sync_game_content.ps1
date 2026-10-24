@@ -21,6 +21,9 @@ Copy-Item (Join-Path $repo 'data\ai\*.json') $aiDst
 # Game terms for tap-to-define and the glossary (data/glossary.json).
 Copy-Item (Join-Path $repo 'data\glossary.json') (Join-Path $repo 'game\data\glossary.json')
 
+# Ember claim speech lines (data/ember_lines.json, docs/art-specs/ember-claim/SPEC.md 7).
+Copy-Item (Join-Path $repo 'data\ember_lines.json') (Join-Path $repo 'game\data\ember_lines.json')
+
 $count = (Get-ChildItem $dst -Recurse -Filter *.json).Count
 Write-Host "Synced $count card data files into game/data/cards"
 

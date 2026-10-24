@@ -54,8 +54,18 @@ static func texture_for(character_id: String, outfit_id: String) -> Texture2D:
 # wind-up. Frames share the default figure's canvas and foot anchor (y 756), so they are
 # drawn with the default figure's transform, never fitted one by one.
 static func attack_frames(character_id: String, outfit_id: String) -> Array:
+	return _frames(character_id, outfit_id, "attack")
+
+
+# The outfit's three Ember-claim poses (gather, hold, settle), in the same form and on the
+# same canvas as attack_frames, or [] for the procedural stretch (claim spec 4A, 7).
+static func claim_frames(character_id: String, outfit_id: String) -> Array:
+	return _frames(character_id, outfit_id, "claim")
+
+
+static func _frames(character_id: String, outfit_id: String, key: String) -> Array:
 	var result := []
-	var frames = _entry(character_id, outfit_id).get("attack", [])
+	var frames = _entry(character_id, outfit_id).get(key, [])
 	if not frames is Array:
 		return result
 	for f in frames:
@@ -75,8 +85,9 @@ static func preload_attack_frames() -> void:
 	_ensure_loaded()
 	for character_id in _catalog:
 		for entry in outfits(character_id):
-			if entry is Dictionary and entry.has("attack"):
+			if entry is Dictionary:
 				attack_frames(character_id, str(entry.get("id", "")))
+				claim_frames(character_id, str(entry.get("id", "")))
 
 
 # {length, impact} in seconds for an outfit's attack art, or {} when it has none. The
