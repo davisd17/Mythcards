@@ -1,8 +1,7 @@
 extends AbilityHandler
 # Iset-Nara, Architect of the Hidden Vault (Flood Survivors Specialist) — LLD-closed-city-flood-roster.md 4.
-# L1 Hidden Geometry (AP): an adjacent placed object (any owner, Leaks included) moves up
-#    to 2 tiles in a straight line to an empty tile, stopping at characters and objects.
-#    Payload: {"target": object pos, "to": pos}.
+# L1 Hidden Geometry (AP): an adjacent placed object (any owner, Leaks included) moves to
+#    any empty tile on the board (designer change, 2026-10-24). Payload: {"target": object pos, "to": pos}.
 # L2 Vault Surveyor: +1 RANGE; the object may be within 2 (line of sight).
 # L3 The Hidden Vault Opens: +1 HP. Standalone ability "a-flood-survivor-iset-nara_l3",
 #    once per match (AP): place the Hidden Vault (3 HP, blocks movement and line of sight)
@@ -10,7 +9,6 @@ extends AbilityHandler
 #    gain Shield (AbilitySystem._vault_shields). Payload: {"target": pos}.
 
 const L3_ID := "a-flood-survivor-iset-nara_l3"
-const SHIFT := 2
 const SURVEY_REACH := 2
 
 
@@ -50,7 +48,7 @@ func validate(sys, instance: CharacterInstance, ability_id: String, payload: Dic
 	if not get_legal_targets(sys, instance, ability_id).has(payload.get("target")):
 		return "illegal ability target"
 	if ability_id != L3_ID and not _destinations(sys, payload.target).has(payload.get("to")):
-		return "choose an empty tile up to 2 away in a straight line"
+		return "choose an empty tile"
 	return ""
 
 
@@ -82,16 +80,13 @@ func execute(sys, instance: CharacterInstance, ability_id: String, payload: Dict
 	return {"success": true}
 
 
-# Empty tiles up to 2 away from `from` along one line, stopping at anything in the way.
-func _destinations(sys, from: Vector2i) -> Array:
+# Every empty tile on the board.
+func _destinations(sys, _from: Vector2i) -> Array:
 	var result := []
-	for dir in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
-		var pos := from
-		for _step in SHIFT:
-			pos += dir
-			if not sys.is_empty_tile(pos):
-				break
-			result.append(pos)
+	for y in BoardModel.BOARD_SIZE:
+		for x in BoardModel.BOARD_SIZE:
+			if sys.is_empty_tile(Vector2i(x, y)):
+				result.append(Vector2i(x, y))
 	return result
 
 

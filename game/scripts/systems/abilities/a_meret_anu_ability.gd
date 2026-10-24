@@ -1,8 +1,9 @@
 extends AbilityHandler
 # Queen Meret-Anu, Keeper of the Buried Tide (Flood Survivors Leader) — LLD-closed-city-flood-roster.md 4.
-# L1 Memory Discipline (AP): any allied character, anywhere, gains 1 Memory (max 1). If
-#    Meret-Anu has no Memory, she gains 1 too. Payload: {"target": id}.
-# L2 Buried Tide Order: keeps the single-ally Memory Discipline target.
+# L1 Memory Discipline (AP): an ally within her RANGE in an orthogonal line gains 1 Memory
+#    (max 1). If Meret-Anu has no Memory, she gains 1 too. Payload: {"target": id}.
+# L2 Buried Tide Order: the one ally may be anywhere on the board (designer 2026-10-24; one
+#    target, not two, 2026-10-26).
 # L3 Tide-Sealed Archive: +1 HP. Standalone ability "a-flood-survivor-meret-anu_l3", once
 #    per match (AP): until the start of your next turn, a character on your team (her
 #    included) that had Memory when hit and would be defeated instead loses its Memory and
@@ -32,6 +33,8 @@ func can_use(sys, instance: CharacterInstance, ability_id: String) -> bool:
 func get_legal_targets(sys, instance: CharacterInstance, ability_id: String) -> Array:
 	if ability_id == L3_ID:
 		return []
+	if instance.level < 2:
+		return sys.characters_in_reach(instance, instance.position, sys.ability_reach(instance, instance.data.range), true)
 	var result := []
 	for ally in sys.allies_of(instance):
 		result.append(ally.instance_id)

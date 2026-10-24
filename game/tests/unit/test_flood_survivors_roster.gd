@@ -220,7 +220,11 @@ func test_last_memory_targets_unmarked_enemies_anywhere_without_line_of_sight() 
 
 func test_memory_discipline() -> void:
 	var meret := Fixture.put(MERET, Vector2i(3, 6))
-	var naia := Fixture.put(NAIA, Vector2i(0, 0))   # any ally, anywhere
+	var naia := Fixture.put(NAIA, Vector2i(3, 3))   # in line, within her RANGE 3
+	Fixture.put(SAHU, Vector2i(0, 0))
+	var legal := sys.get_legal_ability_targets(meret, meret.data.id)
+	assert_true(legal.has(NAIA))
+	assert_false(legal.has(SAHU), "L1: orthogonal and in range, not anywhere")
 	assert_true(_ability(MERET, {"target": NAIA}).success)
 	assert_eq(sys.memory_count(naia), 1)
 	assert_eq(sys.memory_count(meret), 1, "she gains one too")
@@ -240,6 +244,13 @@ func test_memory_discipline_keeps_one_ally_at_level_two() -> void:
 	assert_eq(sys.memory_count(naia), 1)
 	assert_eq(sys.memory_count(meret), 1, "self gain is unchanged")
 	assert_eq(sys.memory_count(iset), 0)
+
+
+func test_buried_tide_order_reaches_anywhere() -> void:
+	_level(MERET, 2)
+	var meret := Fixture.put(MERET, Vector2i(3, 6))
+	Fixture.put(NAIA, Vector2i(0, 0))
+	assert_true(sys.get_legal_ability_targets(meret, meret.data.id).has(NAIA), "L2: anywhere")
 
 
 func test_tide_sealed_archive() -> void:
@@ -262,8 +273,8 @@ func test_tide_sealed_archive() -> void:
 func test_hidden_geometry_moves_any_object() -> void:
 	Fixture.put(ISET, Vector2i(3, 3))
 	sys.place_leak(Vector2i(3, 4))
-	assert_true(_ability(ISET, {"target": Vector2i(3, 4), "to": Vector2i(3, 6)}).success)
-	assert_true(sys.has_leak(Vector2i(3, 6)))
+	assert_true(_ability(ISET, {"target": Vector2i(3, 4), "to": Vector2i(0, 0)}).success, "anywhere on the board")
+	assert_true(sys.has_leak(Vector2i(0, 0)))
 	assert_false(sys.has_leak(Vector2i(3, 4)))
 
 

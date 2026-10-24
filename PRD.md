@@ -204,6 +204,8 @@ Card text lives in `data/cards/review_drafts/closed_city_characters.json` and `f
 
 Closed City balance pass (decided 2026-10-19; playtests found Closed City still weak): VERA-7's Protected Passenger gives its rider +2 maximum HP (was +1). Irina Karpova's Level 2 is +1 HP, and Access Granted may target any ally on the board, ignoring range and line of sight (replacing two targets and Leak immunity). Zoya Miranova's Level 3 charms instead of pulling twice: once per match, Voice Under Static pulls, then permanently moves the target to her side; a Hero can't be charmed. Major Yuri Volkov's Containment Shot Marks a target next to any placed object, not only a Leak.
 
+Flood Survivors card changes (decided 2026-10-24): Iset-Nara's Hidden Geometry moves the chosen placed object to any empty tile on the board (was up to 2 tiles in a straight line). Queen Meret-Anu's Memory Discipline at Level 1 targets an ally within her RANGE in an orthogonal line, with line of sight; reaching any ally anywhere on the board now starts at Level 2 (Buried Tide Order, still 2 allies).
+
 Russian-inspired starting roster:
 
 | Type | Character | Initial Gameplay Idea |
