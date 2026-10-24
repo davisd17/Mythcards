@@ -45,6 +45,7 @@ var _chips := HBoxContainer.new()    # the table: both relics and active events 
 var _embers := Label.new()           # passive: "P1 Embers 0/4" over "P2 Embers 0/4"
 var _table_h := TABLE_MIN
 var _board := GameBoardView.new()
+var _environment := BattlefieldBackdrop.new()
 var _prompt := Label.new()
 var _options := ActionGrid.new()     # a pending choice's answers, as two-line choice rows
 var _summary := CardSummary.new()
@@ -81,10 +82,11 @@ func _ready() -> void:
 	theme = UiStyle.theme()
 	Settings.load_saved()
 	add_child(_sfx)
-	var background := ColorRect.new()
-	background.color = UiStyle.BG
-	background.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(background)
+	_environment.board = _board
+	_environment.details = _details
+	add_child(_environment)
+	_board.resized.connect(_environment.queue_redraw)
+	_details.resized.connect(_environment.queue_redraw)
 
 	_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
@@ -284,6 +286,8 @@ func _layout() -> void:
 			window.content_scale_factor = factor
 			return   # the resize this causes lays out again
 	var side := mode == UiStyle.WIDE or mode == UiStyle.SHORT
+	_environment.side_by_side = side
+	_environment.queue_redraw()
 	if mode != _mode:
 		_mode = mode
 		_arrange(side)
