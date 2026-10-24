@@ -1,0 +1,99 @@
+{
+  "character": "a-flood-survivor-meret-anu",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.49161636485580146,
+  "foot_anchor": [
+    253.5,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "gather",
+      "file": "claim-1-gather.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        512.5,
+        1506
+      ],
+      "offset": [
+        2,
+        16
+      ],
+      "bounds": [
+        52,
+        24,
+        456,
+        757
+      ],
+      "source_scale": 0.49161636485580146,
+      "body_landmarks": {
+        "crown_y": 16,
+        "sole_y": 1506,
+        "foot_center_x": 512.5
+      }
+    },
+    {
+      "pose": "hold",
+      "file": "claim-2-hold.png",
+      "ms": 360,
+      "impact": false,
+      "source_anchor": [
+        513.5,
+        1502
+      ],
+      "offset": [
+        0,
+        16
+      ],
+      "bounds": [
+        46,
+        24,
+        461,
+        757
+      ],
+      "source_scale": 0.4929388029589778,
+      "body_landmarks": {
+        "crown_y": 16,
+        "sole_y": 1502,
+        "foot_center_x": 513.5
+      }
+    },
+    {
+      "pose": "settle",
+      "file": "claim-3-settle.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        517.0,
+        1504
+      ],
+      "offset": [
+        -2,
+        14
+      ],
+      "bounds": [
+        25,
+        23,
+        481,
+        757
+      ],
+      "source_scale": 0.49327052489905787,
+      "body_landmarks": {
+        "crown_y": 19,
+        "sole_y": 1504,
+        "foot_center_x": 517
+      }
+    }
+  ],
+  "body_height": 733,
+  "normalization_axis": "y",
+  "idle_landmarks": {
+    "crown_y": 20,
+    "sole_y": 752
+  },
+  "scale_policy": "anatomical-source-normalization"
+}

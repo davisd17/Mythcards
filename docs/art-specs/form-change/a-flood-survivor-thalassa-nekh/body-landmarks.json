@@ -1,0 +1,8 @@
+{
+  "axis": "y",
+  "target_anchor_x": 251,
+  "idle": {"crown_y": 73, "sole_y": 748},
+  "awaken": {"crown_y": 121, "sole_y": 1441, "foot_center_x": 517},
+  "manifest": {"crown_y": 55, "sole_y": 1469, "foot_center_x": 513.5},
+  "seraph": {"crown_y": 137, "sole_y": 1507, "foot_center_x": 520}
+}

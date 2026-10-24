@@ -1,0 +1,8 @@
+{
+  "axis": "x",
+  "target_anchor_x": 267,
+  "idle": {"left_x": 48, "right_x": 487},
+  "gather": {"left_x": 95, "right_x": 1005, "foot_center_x": 550.5},
+  "hold": {"left_x": 86, "right_x": 1019, "foot_center_x": 553},
+  "settle": {"left_x": 90, "right_x": 1020, "foot_center_x": 555.5}
+}

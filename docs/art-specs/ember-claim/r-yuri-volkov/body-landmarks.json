@@ -1,0 +1,8 @@
+{
+  "axis": "y",
+  "target_anchor_x": 245.5,
+  "idle": {"crown_y": 104, "sole_y": 750},
+  "gather": {"crown_y": 164, "sole_y": 1431, "foot_center_x": 490},
+  "hold": {"crown_y": 14, "sole_y": 1479, "foot_center_x": 501},
+  "settle": {"crown_y": 147, "sole_y": 1432, "foot_center_x": 496.5}
+}

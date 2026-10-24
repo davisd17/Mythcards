@@ -1,0 +1,99 @@
+{
+  "character": "r-zoya-miranova",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.4943988050784167,
+  "foot_anchor": [
+    284.0,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "gather",
+      "file": "claim-1-gather.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        562.0,
+        1501
+      ],
+      "offset": [
+        6,
+        14
+      ],
+      "bounds": [
+        59,
+        91,
+        481,
+        757
+      ],
+      "source_scale": 0.4943988050784167,
+      "body_landmarks": {
+        "crown_y": 163,
+        "sole_y": 1501,
+        "foot_center_x": 562
+      }
+    },
+    {
+      "pose": "hold",
+      "file": "claim-2-hold.png",
+      "ms": 360,
+      "impact": false,
+      "source_anchor": [
+        559.0,
+        1487
+      ],
+      "offset": [
+        24,
+        63
+      ],
+      "bounds": [
+        61,
+        91,
+        483,
+        757
+      ],
+      "source_scale": 0.46586910626319494,
+      "body_landmarks": {
+        "crown_y": 67,
+        "sole_y": 1487,
+        "foot_center_x": 559
+      }
+    },
+    {
+      "pose": "settle",
+      "file": "claim-3-settle.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        549.5,
+        1486
+      ],
+      "offset": [
+        32,
+        75
+      ],
+      "bounds": [
+        63,
+        91,
+        487,
+        757
+      ],
+      "source_scale": 0.4581314878892734,
+      "body_landmarks": {
+        "crown_y": 42,
+        "sole_y": 1486,
+        "foot_center_x": 549.5
+      }
+    }
+  ],
+  "body_height": 662,
+  "normalization_axis": "y",
+  "idle_landmarks": {
+    "crown_y": 86,
+    "sole_y": 747
+  },
+  "scale_policy": "anatomical-source-normalization"
+}

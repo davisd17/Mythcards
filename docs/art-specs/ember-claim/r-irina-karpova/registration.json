@@ -1,0 +1,99 @@
+{
+  "character": "r-irina-karpova",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.5,
+  "foot_anchor": [
+    307.0,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "gather",
+      "file": "claim-1-gather.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        615.0,
+        1483
+      ],
+      "offset": [
+        0,
+        15
+      ],
+      "bounds": [
+        49,
+        51,
+        469,
+        757
+      ],
+      "source_scale": 0.5,
+      "body_landmarks": {
+        "crown_y": 72,
+        "sole_y": 1483,
+        "foot_center_x": 615
+      }
+    },
+    {
+      "pose": "hold",
+      "file": "claim-2-hold.png",
+      "ms": 360,
+      "impact": false,
+      "source_anchor": [
+        626.0,
+        1455
+      ],
+      "offset": [
+        1,
+        44
+      ],
+      "bounds": [
+        42,
+        51,
+        474,
+        757
+      ],
+      "source_scale": 0.4895977808599168,
+      "body_landmarks": {
+        "crown_y": 14,
+        "sole_y": 1455,
+        "foot_center_x": 626
+      }
+    },
+    {
+      "pose": "settle",
+      "file": "claim-3-settle.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        626.0,
+        1457
+      ],
+      "offset": [
+        1,
+        43
+      ],
+      "bounds": [
+        41,
+        51,
+        475,
+        757
+      ],
+      "source_scale": 0.4895977808599168,
+      "body_landmarks": {
+        "crown_y": 16,
+        "sole_y": 1457,
+        "foot_center_x": 626
+      }
+    }
+  ],
+  "body_height": 706,
+  "normalization_axis": "y",
+  "idle_landmarks": {
+    "crown_y": 41,
+    "sole_y": 746
+  },
+  "scale_policy": "anatomical-source-normalization"
+}

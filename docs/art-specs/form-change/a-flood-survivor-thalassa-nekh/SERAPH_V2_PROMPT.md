@@ -1,0 +1,8 @@
+# Seraph Entity V2
+
+Built-in image generation, requested transparent background. Source retained as
+`seraph-entity-source-v2.png`; runtime normalized with `prepare_board_figures.normalize_figure`.
+
+## Exact Prompt
+
+Use case: background-extraction / precise-object-edit. Input is approved MythCards manifestation concept. Create ONLY the Drowned Seraph entity as a production game overlay on a genuinely transparent alpha background. Remove the human woman COMPLETELY, remove ALL her clothing, hands, feet, hair and jewelry, and remove the entire atmospheric background. Reconstruct the spectral entity's torso where she occluded it. Preserve the Seraph's exact distinct design: elongated solemn alien face with white glowing eyes, extremely tall pointed cathedral crown with delicate gold orbital linework, upward sweeping curved fin-like projections, broad translucent watery shoulders, long spectral torso and gently tapering watery lower body. It is the single enormous blue-green spirit behind the human in the reference, NOT the human. Its own two arms hang calmly at its sides and dissolve into water wisps; no attack pose or weapons. Show the complete crown, face, shoulders and tapered lower wisps within portrait frame with generous padding all sides. Bright cyan/teal edges and readable pale face, restrained gold filigree, ghostly translucent inner surfaces, realistic illustrated dark fantasy matching reference. Strong silhouette readable as a small Godot board overlay. No scenery, no black rectangle, no gradient background, no floor, no oval pedestal, no human vessel, no text, no border. Actual transparent pixels outside spectral silhouette, preserve partial alpha in wisps. One entity only.

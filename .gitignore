@@ -1,2 +1,12 @@
 # Godot export output (tools/export_web.ps1)
 /build/
+
+# Local caches, deployment metadata and review logs.
+__pycache__/
+*.py[cod]
+/cloudflare-analytics-setup.png
+/sites/*.tar.gz
+/sites/mythcards/.openai/
+/sites/mythcards/qa/
+/sites/mythcards/
+/docs/art-specs/form-change/**/qa/*.log

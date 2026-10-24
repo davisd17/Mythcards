@@ -128,6 +128,7 @@ func _ready() -> void:
 	fx.connect_signals()
 	fx.attack_art = attack_art_for
 	FigureCatalog.preload_attack_frames()
+	SeraphManifestation.texture()
 
 
 # The center's slow breathing pulse at a bounded redraw rate; every frame while an action
@@ -695,12 +696,25 @@ func _draw_character(font: Font, c: CharacterInstance, selected: bool) -> void:
 		# frames share its canvas and foot anchor and are never fitted one by one.
 		var fr := figure_rect(c, rect, figure, selected)
 		var local := Rect2(fr.position - feet, fr.size)
+		_draw_seraph(c, local, feet.y - 4.0)
 		for layer in _figure_layers(c, figure):
 			draw_texture_rect(layer.texture, local, false, Color(modulate, modulate.a * layer.alpha))
 	else:
 		_draw_portrait_token(c, Rect2(rect.position - feet, rect.size), spent)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	_draw_labels(font, c, rect)
+
+
+func _draw_seraph(c: CharacterInstance, human: Rect2, available_height: float, fade := 1.0) -> void:
+	var alpha := SeraphManifestation.opacity(c, fx, Settings.motion) * fade
+	if alpha <= 0.0:
+		return
+	var texture := SeraphManifestation.texture()
+	if texture != null:
+		var side := -1.0 if tile_rect(c.position).get_center().x > size.x * 0.5 else 1.0
+		if FigurePose.attack_mirrored(c, fx):
+			side *= -1.0
+		draw_texture_rect(texture, SeraphManifestation.local_rect(human, available_height, side), false, Color(1.0, 1.0, 1.0, alpha))
 
 
 # Where a figure's feet rest on its tile: the pivot for every pose.
@@ -759,6 +773,7 @@ func _draw_ghost(g: Dictionary) -> void:
 	# It sinks into the stone and, Phase 5, tips over away from whoever defeated it.
 	var sunk := feet + Vector2(0.0, rect.size.y * 0.22 * BoardFx.ease_out(t))
 	draw_set_transform(sunk, deg_to_rad(FigurePose.topple(g, fx)), Vector2.ONE)
+	_draw_seraph(c, Rect2(r.position - feet, r.size), feet.y - 4.0, 1.0 - t)
 	draw_texture_rect(figure, Rect2(r.position - feet, r.size), false, Color(tint, 1.0 - t))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 

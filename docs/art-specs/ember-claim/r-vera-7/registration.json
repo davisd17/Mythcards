@@ -1,0 +1,99 @@
+{
+  "character": "r-vera-7",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.4829857299670692,
+  "foot_anchor": [
+    267.0,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "gather",
+      "file": "claim-1-gather.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        550.5,
+        1487
+      ],
+      "offset": [
+        1,
+        38
+      ],
+      "bounds": [
+        47,
+        322,
+        488,
+        757
+      ],
+      "source_scale": 0.4829857299670692,
+      "body_landmarks": {
+        "left_x": 95,
+        "right_x": 1005,
+        "foot_center_x": 550.5
+      }
+    },
+    {
+      "pose": "hold",
+      "file": "claim-2-hold.png",
+      "ms": 360,
+      "impact": false,
+      "source_anchor": [
+        553.0,
+        1437
+      ],
+      "offset": [
+        6,
+        79
+      ],
+      "bounds": [
+        46,
+        326,
+        486,
+        757
+      ],
+      "source_scale": 0.47109207708779444,
+      "body_landmarks": {
+        "left_x": 86,
+        "right_x": 1019,
+        "foot_center_x": 553
+      }
+    },
+    {
+      "pose": "settle",
+      "file": "claim-3-settle.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        555.5,
+        1336
+      ],
+      "offset": [
+        4,
+        125
+      ],
+      "bounds": [
+        27,
+        326,
+        487,
+        757
+      ],
+      "source_scale": 0.47261009667024706,
+      "body_landmarks": {
+        "left_x": 90,
+        "right_x": 1020,
+        "foot_center_x": 555.5
+      }
+    }
+  ],
+  "body_width": 440,
+  "normalization_axis": "x",
+  "idle_landmarks": {
+    "left_x": 48,
+    "right_x": 487
+  },
+  "scale_policy": "anatomical-source-normalization"
+}

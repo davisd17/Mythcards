@@ -1,0 +1,99 @@
+{
+  "character": "a-flood-survivor-stone-line-laborer",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.5003403675970047,
+  "foot_anchor": [
+    258.5,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "gather",
+      "file": "claim-1-gather.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        517.0,
+        1510
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "bounds": [
+        27,
+        21,
+        480,
+        757
+      ],
+      "source_scale": 0.5003403675970047,
+      "body_landmarks": {
+        "crown_y": 42,
+        "sole_y": 1510,
+        "foot_center_x": 517
+      }
+    },
+    {
+      "pose": "hold",
+      "file": "claim-2-hold.png",
+      "ms": 360,
+      "impact": false,
+      "source_anchor": [
+        518.0,
+        1482
+      ],
+      "offset": [
+        -1,
+        13
+      ],
+      "bounds": [
+        25,
+        21,
+        479,
+        757
+      ],
+      "source_scale": 0.5013642564802183,
+      "body_landmarks": {
+        "crown_y": 17,
+        "sole_y": 1482,
+        "foot_center_x": 518
+      }
+    },
+    {
+      "pose": "settle",
+      "file": "claim-3-settle.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        521.0,
+        1484
+      ],
+      "offset": [
+        -2,
+        13
+      ],
+      "bounds": [
+        24,
+        21,
+        406,
+        757
+      ],
+      "source_scale": 0.5006811989100818,
+      "body_landmarks": {
+        "crown_y": 17,
+        "sole_y": 1484,
+        "foot_center_x": 521
+      }
+    }
+  ],
+  "body_height": 735,
+  "normalization_axis": "y",
+  "idle_landmarks": {
+    "crown_y": 20,
+    "sole_y": 754
+  },
+  "scale_policy": "anatomical-source-normalization"
+}

@@ -1,0 +1,99 @@
+{
+  "character": "r-reactor-worker",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.5030885380919699,
+  "foot_anchor": [
+    335.0,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "gather",
+      "file": "claim-1-gather.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        653.0,
+        1500
+      ],
+      "offset": [
+        6,
+        1
+      ],
+      "bounds": [
+        138,
+        22,
+        479,
+        757
+      ],
+      "source_scale": 0.5030885380919699,
+      "body_landmarks": {
+        "crown_y": 44,
+        "sole_y": 1500,
+        "foot_center_x": 653
+      }
+    },
+    {
+      "pose": "hold",
+      "file": "claim-2-hold.png",
+      "ms": 360,
+      "impact": false,
+      "source_anchor": [
+        655.0,
+        1502
+      ],
+      "offset": [
+        5,
+        1
+      ],
+      "bounds": [
+        138,
+        23,
+        481,
+        757
+      ],
+      "source_scale": 0.5034340659340659,
+      "body_landmarks": {
+        "crown_y": 47,
+        "sole_y": 1502,
+        "foot_center_x": 655
+      }
+    },
+    {
+      "pose": "settle",
+      "file": "claim-3-settle.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        655.0,
+        1502
+      ],
+      "offset": [
+        6,
+        2
+      ],
+      "bounds": [
+        139,
+        22,
+        481,
+        757
+      ],
+      "source_scale": 0.5017111567419575,
+      "body_landmarks": {
+        "crown_y": 42,
+        "sole_y": 1502,
+        "foot_center_x": 655
+      }
+    }
+  ],
+  "body_height": 733,
+  "normalization_axis": "y",
+  "idle_landmarks": {
+    "crown_y": 21,
+    "sole_y": 753
+  },
+  "scale_policy": "anatomical-source-normalization"
+}

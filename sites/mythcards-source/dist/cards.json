@@ -1,0 +1,114 @@
+[
+  {
+    "title": "The Fool",
+    "number": "0",
+    "name": "Nikolai Yegorov / Reactor Worker",
+    "area": "Closed City",
+    "keywords": [
+      "Beginnings",
+      "Trust",
+      "Courage"
+    ],
+    "narrative": "Nikolai works beneath the Closed City, repairing machines whose true purpose no one will explain. When containment doors seal with workers still trapped below, he opens a forbidden service route, saving them while giving the breach another path into the city.",
+    "reading": "Take the first necessary step, even if the entire road is not visible. Trust your purpose, but remain honest about the consequences you cannot yet see.",
+    "image": "assets/00-the-fool.webp"
+  },
+  {
+    "title": "The Magician",
+    "number": "I",
+    "name": "Dr. Mikhail Orlov",
+    "area": "Closed City",
+    "keywords": [
+      "Will",
+      "Skill",
+      "Manifestation"
+    ],
+    "narrative": "Mikhail combines reactor data, orbital signals, and Elena's dream research to explain the impossible. Their unresolved intimacy is strained by rivalry and betrayal, yet he still trusts her mind more than anyone else's. When the systems synchronize, he collapses and becomes the unconscious center of the convergence.",
+    "reading": "Use the tools already within reach, but do not let mastery become an excuse to ignore the human cost.",
+    "image": "assets/01-the-magician.webp"
+  },
+  {
+    "title": "The High Priestess",
+    "number": "II",
+    "name": "Dr. Elena Morozova",
+    "area": "Closed City",
+    "keywords": [
+      "Intuition",
+      "Mystery",
+      "Inner Knowledge"
+    ],
+    "narrative": "Elena discovers that separate test subjects are dreaming the same symbols and secretly routes their data into the signal archive. Mikhail challenges her conclusions, while Major Yuri Volkov hides a love for her that will eventually matter more to him than his orders. After Elena disappears, Yuri hears her voice inside the breach and cannot accept that it may no longer belong entirely to her.",
+    "reading": "Listen before acting, especially when loyalty and desire make the truth difficult to hear. What remains hidden may be protecting you, controlling you, or waiting for you to recognize it.",
+    "image": "assets/02-the-high-priestess.webp"
+  },
+  {
+    "title": "The Empress",
+    "number": "III",
+    "name": "Irina Vasilievna Karpova",
+    "area": "Closed City",
+    "keywords": [
+      "Abundance",
+      "Influence",
+      "Creation"
+    ],
+    "narrative": "Irina Karpova built her fortune by recognizing dangerous ideas before anyone else understood their value. She shields Elena's research from officials who would bury it, then surrounds it with locks, favors, and people loyal only to her. Colonel Semyonov commands the Closed City, but Irina has invested in whatever comes after it.",
+    "reading": "Nurture what holds genuine promise, but read the terms before accepting shelter. The hand feeding your dream may already consider it theirs.",
+    "image": "assets/03-the-empress.webp"
+  },
+  {
+    "title": "The Chariot",
+    "number": "VII",
+    "name": "Buran Breaks The Boundary",
+    "area": "Far North",
+    "keywords": [
+      "Willpower",
+      "Momentum",
+      "Victory"
+    ],
+    "narrative": "When the aurora descends and the village boundary begins to split, Buran refuses every command except Vera's. She climbs into his harness, knots red ribbons through her hair, and drives the great white tiger toward the breach. They do not flee the entities gathering inside the light. They charge through before those shapes can become real.",
+    "reading": "Choose your direction and commit to it.",
+    "image": "assets/07-the-chariot.webp"
+  },
+  {
+    "title": "The Hermit",
+    "number": "IX",
+    "name": "Meteor Lantern",
+    "area": "Far North",
+    "keywords": [
+      "Wisdom",
+      "Solitude",
+      "Guidance"
+    ],
+    "narrative": "The village's first path lantern was built around a shard of black meteor glass. Its flame reveals more than snow and stone: it shows whether a boundary remains intact, whether a trail is safe, and whether the aurora is lying. When the sky begins speaking with familiar voices, villagers trust the lantern instead.",
+    "reading": "Be still and follow your inner light.",
+    "image": "assets/09-the-hermit.webp"
+  },
+  {
+    "title": "The Star",
+    "number": "XVII",
+    "name": "Nadia Belaya",
+    "area": "Far North",
+    "keywords": [
+      "Hope",
+      "Healing",
+      "Renewal"
+    ],
+    "narrative": "Nadia Belaya finds Pavel dying beneath an aurora where no survivor should have been able to reach. She heals him with medicine, breath, and northern rites, then leaves before gratitude can become dependence. Nadia never tells him that Aksinya's distant vision guided her to the snow, or that the relic against his chest seemed to call her by name.",
+    "reading": "Accept the hope being offered without making its source perfect.",
+    "image": "assets/17-the-star.webp"
+  },
+  {
+    "title": "The Moon",
+    "number": "XVIII",
+    "name": "Subject 3: Zoya",
+    "area": "Closed City",
+    "keywords": [
+      "Intuition",
+      "Mystery",
+      "Desire"
+    ],
+    "narrative": "Zoya Miranova entered the Closed City as a remote-viewing subject, but the program treated her body as a receiver and her dreams as state property. After the incident, several voices speak through her, and she can no longer tell whether her attraction to Orlov is entirely her own. His sleeping mind is the one place where her fractured selves can gather.",
+    "reading": "Trust your instincts, but question what fear and desire are showing you.",
+    "image": "assets/18-the-moon.webp"
+  }
+]

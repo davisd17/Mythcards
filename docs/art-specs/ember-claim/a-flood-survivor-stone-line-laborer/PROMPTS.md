@@ -1,0 +1,16 @@
+# Stone-Line Laborer Claim Prompts
+
+Built-in ImageGen, transparent background. Gather targets default; hold targets
+gather plus default identity reference; settle targets hold plus default.
+
+## gather
+
+Edit this exact Stone-Line Laborer/Menka game sprite into GATHER pose for a hopeful shared-victory claim. Preserve exact adult muscular dark curly-haired man, bronze/brown skin, worn cream/teal cloth wraps, rope harness over shoulder, necklaces, tool belt and bare feet. RIGHT hand VIEWER-LEFT securely retains the SAME short bronze working pick/hammer low at side. Free LEFT hand VIEWER-RIGHT bends inward palm-up near waist to receive empty air, fingers naturally open. He glances toward palm with beginning of a warm relieved smile, shoulders starting to open. Emotional lines: The others still need a road. / This time, everyone gets through. Practical communal hope, not swagger or solemn grief. Preserve exact original stance, knees, both bare foot positions and contacts, body/head proportions, tool/rope ownership. Exactly two hands, no extra tool or stone or physical trophy. Leave EMPTY space above palm for engine-rendered Ember, no painted orb/glow/spirit/particles/text. Same realistic illustrated full-body game sprite on true transparent portrait 2:3 canvas; generous margin around tool, head and toes; no background or ground shadow.
+
+## hold
+
+Edit FIRST Stone-Line Laborer sprite into HOLD beat of a hopeful shared victory; second reference original identity only. Preserve first exact man, dark curls, bronze skin, cream/teal wraps, rope coil/harness, belt equipment, body/head proportions, legs/knees and both bare foot positions. RIGHT hand VIEWER-LEFT securely holds SAME pick/hammer low unchanged. LEFT hand VIEWER-RIGHT turns palm flat and slightly inward near lower ribs, elbow bent, as if confirming a foundation then offering a path. Open shoulders, lift chin toward forward-right, broad warm resolved smile, proud but generous: This time, everyone gets through. Clear joyful relief, no grief or aggressive boast. Keep empty receiving space above flat palm, no stone/new object/orb/spirit/glow/particles/text. Exactly two hands five fingers each, no tool swap, no step. Same realistic detailed illustrated full-body game sprite on TRUE transparent portrait 2:3 canvas with ample margins around head/tool/palm/toes. No background, haze or ground shadow.
+
+## settle
+
+Edit FIRST Stone-Line Laborer sprite into SETTLE following hopeful shared celebration; second image original idle. Lower free LEFT hand viewer-right toward original relaxed side position, fingers gently open. Keep RIGHT hand viewer-left holding exact same working pick/hammer securely low. His gaze returns forward-right, warm satisfied smile softens but remains, shoulders settled confidently. Preserve first exact man identity, curls, rope harness/coil, cream/teal wraps, tool belt, anatomy/body/head proportions, both legs/knees and all bare toe/foot contact positions. No step or change in stance, no new prop/stone/extra hand. Exactly two arms/two hands. Full figure with entire tool and toes inside generous transparent margins, same realistic detailed illustrated game sprite on TRUE transparent portrait 2:3 canvas. No glow/spirit/orb/particles/text, background, haze or ground shadow.

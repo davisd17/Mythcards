@@ -1,4 +1,4 @@
-"""Register six generated source poses with one shared scale and foot baseline."""
+"""Register attack, claim or transformation poses with a shared foot baseline."""
 
 import argparse
 import io
@@ -31,11 +31,19 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("character")
     parser.add_argument("manifest", type=Path)
+    parser.add_argument("--kind", choices=("attack", "claim", "transform"), default="attack")
     parser.add_argument("--body-landmarks", type=Path,
                         help="Reviewed anatomical landmarks for body-size normalization (not effect bounds)")
     parser.add_argument("--idle-source", type=Path,
                         help="Authorized cleaned idle source to resize/register to the existing idle canvas")
     args = parser.parse_args()
+    poses, holds, review_folder = {
+        "attack": (POSES, HOLDS, "attack-art"),
+        "claim": (["gather", "hold", "settle"], [120, 360, 120], "ember-claim"),
+        "transform": (["awaken", "manifest", "seraph"], [150, 200, 250], "form-change"),
+    }[args.kind]
+    if args.kind != "attack" and args.idle_source:
+        raise ValueError("Non-attack packaging must not replace the idle artwork")
     output = (ROOT / "game/assets/figures" / args.character).resolve()
     if output.parent != (ROOT / "game/assets/figures").resolve():
         raise ValueError("Invalid character id")
@@ -54,11 +62,11 @@ def main():
         if bound[0] < 24 or bound[2] > 488 or bound[1] < 18 or bound[3] != 757:
             raise ValueError(f"Unsafe cleaned idle: {bound}")
         idle.save(output / "default.png", optimize=True)
-    review = ROOT / "docs/art-specs/attack-art" / args.character
+    review = ROOT / "docs/art-specs" / review_folder / args.character
     (review / "sources").mkdir(parents=True, exist_ok=True)
     sources = json.loads(args.manifest.read_text(encoding="utf-8"))
     originals, anchors, bounds = [], [], []
-    for name in POSES:
+    for name in poses:
         path = ROOT / sources[name]
         image = clean_alpha(Image.open(path))
         bound = image.getchannel("A").getbbox()
@@ -78,7 +86,7 @@ def main():
     scale = min((idle_bound[3] - idle_bound[1]) / statistics.median(b[3] - b[1] for b in bounds),
         min(min(230 / max(1, ax - b[0]), 230 / max(1, b[2] - ax), 736 / max(1, ay - b[1]))
             for (ax, ay), b in zip(anchors, bounds)))
-    pose_scales = [scale] * len(POSES)
+    pose_scales = [scale] * len(poses)
     landmarks = None
     target_anchor_x = 256
     if args.body_landmarks:
@@ -91,16 +99,16 @@ def main():
         target_height = landmarks["idle"][high] - landmarks["idle"][low] + 1
         if target_height <= 0:
             raise ValueError("Idle body landmarks must describe a positive height")
-        spans = [landmarks[name][high] - landmarks[name][low] + 1 for name in POSES]
+        spans = [landmarks[name][high] - landmarks[name][low] + 1 for name in poses]
         if any(span <= 0 for span in spans):
             raise ValueError("Pose body landmarks must describe positive heights")
         # Normalize anatomical source units first; effects never determine body size.
         scale = target_height / spans[0]
         pose_scales = [target_height / span for span in spans]
         anchors = [(float(landmarks[name].get("foot_center_x", ax)), ay)
-                   for name, (ax, ay) in zip(POSES, anchors)]
+                   for name, (ax, ay) in zip(poses, anchors)]
     frames, registrations = [], []
-    for name, image, (ax, ay), ms, source_scale in zip(POSES, originals, anchors, HOLDS, pose_scales):
+    for name, image, (ax, ay), ms, source_scale in zip(poses, originals, anchors, holds, pose_scales):
         scaled = clean_alpha(image.resize((round(image.width * source_scale), round(image.height * source_scale)), Image.Resampling.LANCZOS))
         offset = (round(target_anchor_x - ax * source_scale), 757 - scaled.getchannel("A").getbbox()[3])
         frame = Image.new("RGBA", (512, 768))
@@ -109,7 +117,7 @@ def main():
         if visible[0] < 24 or visible[2] > 488 or visible[1] < 18 or visible[3] != 757:
             raise ValueError(f"Unsafe pose {name}: {visible}")
         index = len(frames)
-        filename = f"attack-{index + 1}-{name}.png"
+        filename = f"{args.kind}-{index + 1}-{name}.png"
         frame.save(output / filename, optimize=True)
         frames.append(frame)
         registrations.append({"pose": name, "file": filename, "ms": ms, "impact": name == "fire",
@@ -121,40 +129,40 @@ def main():
         **({"body_width" if axis == "x" else "body_height": target_height,
             "normalization_axis": axis, "idle_landmarks": landmarks["idle"],
             "scale_policy": "anatomical-source-normalization"} if landmarks else {})}, indent=2) + "\n", encoding="utf-8", newline="\n")
-    root = ET.Element("image", {"w": "512", "h": "768", "name": args.character + " attack"})
+    root = ET.Element("image", {"w": "512", "h": "768", "name": args.character + " " + args.kind})
     stack = ET.SubElement(root, "stack")
-    with zipfile.ZipFile(review / f"{args.character}-attack.ora", "w") as archive:
+    with zipfile.ZipFile(review / f"{args.character}-{args.kind}.ora", "w") as archive:
         archive.writestr("mimetype", "image/openraster", compress_type=zipfile.ZIP_STORED)
         for index, frame in enumerate(frames):
-            path = f"data/{POSES[index]}.png"
-            ET.SubElement(stack, "layer", {"name": POSES[index], "src": path, "x": "0", "y": "0",
+            path = f"data/{poses[index]}.png"
+            ET.SubElement(stack, "layer", {"name": poses[index], "src": path, "x": "0", "y": "0",
                 "opacity": "1.0", "composite-op": "svg:src-over", "visibility": "visible" if index == 0 else "hidden"})
             archive.writestr(path, png(frame))
         archive.writestr("stack.xml", ET.tostring(root, encoding="utf-8", xml_declaration=True))
         archive.writestr("mergedimage.png", png(frames[0]))
         archive.writestr("Thumbnails/thumbnail.png", png(frames[0].resize((171, 256))))
-    proof = Image.new("RGB", (1200, 350), "#25332f")
+    proof = Image.new("RGB", (200 * len(poses), 350), "#25332f")
     draw = ImageDraw.Draw(proof)
     preview = []
     for index, frame in enumerate(frames):
         small = frame.resize((200, 300), Image.Resampling.LANCZOS)
         proof.paste(small, (index * 200, 25), small)
-        draw.text((index * 200 + 8, 8), f"{index + 1} {POSES[index]} / {HOLDS[index]} ms", fill="white")
+        draw.text((index * 200 + 8, 8), f"{index + 1} {poses[index]} / {holds[index]} ms", fill="white")
         still = Image.new("RGBA", (256, 384), "#25332f")
         still.alpha_composite(frame.resize((256, 384), Image.Resampling.LANCZOS))
         preview.append(still.convert("RGB"))
     proof.save(review / "contact-sheet.png")
     animated, times = [], []
     for index, frame in enumerate(preview):
-        fade = 20 if POSES[index] == "fire" else 30
+        fade = 20 if poses[index] == "fire" else 30
         animated.append(frame)
-        times.append(HOLDS[index] - fade)
+        times.append(holds[index] - fade)
         for step in range(1, fade // 10 + 1):
-            animated.append(Image.blend(frame, preview[(index + 1) % 6], step / (fade // 10)))
+            animated.append(Image.blend(frame, preview[(index + 1) % len(poses)], step / (fade // 10)))
             times.append(10)
-    animated[0].save(review / "attack-preview.gif", save_all=True, append_images=animated[1:],
+    animated[0].save(review / f"{args.kind}-preview.gif", save_all=True, append_images=animated[1:],
                      duration=times, loop=0, disposal=2)
-    print(json.dumps({"character": args.character, "shared_scale": scale, "poses": 6, "duration_ms": sum(HOLDS)}))
+    print(json.dumps({"character": args.character, "shared_scale": scale, "poses": len(poses), "duration_ms": sum(holds)}))
 
 
 if __name__ == "__main__":

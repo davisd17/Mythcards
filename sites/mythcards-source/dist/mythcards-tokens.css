@@ -1,0 +1,35 @@
+/* Shared MythCards web foundations. See STYLE_GUIDE.md for component contracts. */
+:root {
+  --mc-ink: #171b19;
+  --mc-paper: #eceee9;
+  --mc-muted: #adb5ad;
+  --mc-text-on-light: #4c5850;
+  --mc-line: #424b44;
+  --mc-line-on-light: #b9c0b8;
+  --mc-mint: #b9d2be;
+  --mc-oxblood: #873b43;
+  --mc-announcement: #41272e;
+  --mc-font-display: Georgia, 'Times New Roman', serif;
+  --mc-font-body: Arial, Helvetica, sans-serif;
+  --mc-type-body: 1rem;
+  --mc-type-secondary: 0.875rem;
+  --mc-type-meta: 0.75rem;
+  --mc-space-1: 4px;
+  --mc-space-2: 8px;
+  --mc-space-3: 12px;
+  --mc-space-4: 16px;
+  --mc-space-6: 24px;
+  --mc-space-8: 32px;
+  --mc-space-10: 40px;
+  --mc-space-12: 48px;
+  --mc-space-16: 64px;
+  --mc-space-22: 88px;
+  --mc-content-max: 1320px;
+  --mc-control-height: 48px;
+  --mc-icon-size: 44px;
+  --mc-control-padding-x: 20px;
+  --mc-radius: 0px;
+  --mc-focus-width: 2px;
+  --mc-motion-fast: 150ms;
+  --mc-motion-normal: 250ms;
+}

@@ -1,0 +1,16 @@
+# Naia Claim Prompts
+
+Built-in ImageGen, transparency requested. Gather targets default; hold targets
+gather plus default identity reference; settle targets hold plus default.
+
+## gather
+
+Edit this exact Naia full-body game sprite into GATHER beat of protective victory. Preserve exact adult dark-skinned braided woman identity, turquoise forehead jewel, dark bronze/gold armor and cream cloth, all armor details, body/head size. LEFT arm VIEWER-RIGHT holds SAME oval shield, draws it slightly inward toward ribs and chest, leaving EMPTY receiving space above its inner upper rim. RIGHT hand VIEWER-LEFT securely retains SAME long curved blade LOW in original down guard, entire weapon visible. Small head bow toward shield and beginning of relieved warm smile, not mourning: No one will use you now. Preserve exact planted wide stance, both armored boot contacts, knees and leg lengths. Exactly two arms/two hands both occupied, no extra hand/sarcophagus/new prop. No step, attack, conjured object, orb, spirit, new glow/particles/text. Full-body realistic detailed illustrated game sprite on TRUE transparent portrait 2:3 canvas with generous margins around whole blade/shield/head/boots, no background or ground shadow. Do not enlarge shield or shorten blade to fit.
+
+## hold
+
+Edit FIRST Naia sprite into HOLD of protective joyful claim; second reference original identity only. Preserve first exact mature dark-skinned braided woman identity, turquoise jewel, bronze/gold armor, cream cloth, head/body proportions, knees/legs and both planted boots. LEFT arm VIEWER-RIGHT keeps SAME shield securely gripped, angles it a little protectively around EMPTY receiving space above its inner upper edge. RIGHT hand VIEWER-LEFT holds SAME full-length curved blade LOW unchanged, no attack. Lift chin toward forward-right, shoulders open slightly, a warm resolved victorious smile: May you all serve life! Clear uplift and relief, not mourning or aggressive swagger. Exactly two arms/two hands both occupied; no new prop/sarcophagus/free hand, no painted orb/spirit/glow/particles/text. Full figure including entire blade and shield within generous margins on true transparent 2:3 portrait canvas, realistic illustrated game sprite, no background/haze/ground shadow. No stepping or leg repositioning.
+
+## settle
+
+Edit FIRST Naia sprite into SETTLE after protective celebration, second reference original idle. Lower/reopen LEFT-arm shield VIEWER-RIGHT toward original low guard angle; keep same shield securely held. RIGHT hand VIEWER-LEFT retains SAME long curved blade low and down, no weapon change. Chin returns toward forward watch with a small satisfied confident smile. Preserve first exact identity, braids, turquoise jewel, bronze/gold armor, cream cloth, head/body size, knees/legs and both planted armored boot contact positions. No step or leg movement, exactly two arms/two hands both occupied, no new prop/sarcophagus. Full figure INCLUDING entire blade tip and all cloth/shield with generous transparent margin on all sides, realistic illustrated game art, TRUE transparent portrait 2:3. No orb/spirit/glow/particles/text/background/haze/ground shadow. Keep blade length and body proportions unchanged.

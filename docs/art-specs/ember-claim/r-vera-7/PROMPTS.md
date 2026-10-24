@@ -1,0 +1,15 @@
+# VERA-7 Claim Prompts
+
+Built-in ImageGen. Gather uses default as edit target; hold/settle use preceding pose plus default identity reference. Transparent background requested for each.
+
+## gather
+
+Edit this exact VERA-7 wheeled robot game sprite into GATHER beat of a restrained spirit-sample collection gesture. Preserve EXACT machine identity and construction: battered brass/steel chassis, large green round front instrument lens, red lamp, tall single camera mast, two articulated mechanical sampling arms, wheel count and wheelbase, side equipment. Change ONLY viewer-left sampling arm: bend elbow inward so its open two-finger claw approaches a clear EMPTY receiving space just to viewer-left of the green front lens. Slight downward camera-head tilt toward that claw, like curious scientific attention. Viewer-right arm parked unchanged. Entire chassis and all tires remain rigid, planted in identical perspective, no rolling or bouncing. No new hatch, no human hands, no new parts. No Ember, orb, wisp, particles, new glow or text; existing green instrument illumination stays. Full machine entirely visible with safe margins on transparent portrait 2:3 canvas, retaining substantial empty space above the squat rover, same realistic illustrated finish. Preserve robot's width, height, lens size and wheel proportions relative to one another.
+
+## hold
+
+Edit first reference VERA-7 robot into HOLD beat immediately after collecting an invisible spirit sample. Second reference establishes original identity. Change ONLY viewer-left claw articulation and camera head: bring the two claw tips slightly closer, retaining a clear small EMPTY gap between them in front-left of main lens; make the camera head tilt down another few degrees in a precise acknowledgement. Leave chassis, neck length, front lens, wheels, wheelbase, viewer-right arm, equipment, size and framing EXACTLY as first image. Do not invent a container or hatch, no rolling, no chassis bounce. No orb or glow or particles in the claw; existing green instrument lighting remains unchanged. Full wheeled robot transparent portrait 2:3 sprite, all parts visible with margin, same realistic illustrated brass/steel surfaces. Exactly two original robot arms, no added appendages. Keep silhouette and proportions consistent.
+
+## settle
+
+Edit first reference VERA-7 into SETTLE pose after its sample check. Second reference shows original parked pose. Change ONLY viewer-left arm and camera-head joint: extend the viewer-left forearm downward/outward toward its original parked pose, opening its mechanical pincer again; raise camera head toward forward lookout. Keep same mast length and base attachment. Preserve FIRST reference exact rigid chassis, all wheels and their contact positions, lens diameter, seat/equipment, viewer-right parked arm, scale and framing. No driving, jumping, chassis rotation, morphing or new hatch. Same battered brass/steel illustrated realistic robot on transparent 2:3 portrait canvas, full robot visible. No spirit, orb, particles, new glow or text; existing green lens illumination only. Two robot arms only. Maintain same proportions and wheelbase.

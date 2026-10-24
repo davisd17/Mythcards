@@ -1,0 +1,17 @@
+# Mikhail Orlov Claim Prompts
+
+Built-in ImageGen with transparent background. Gather targets default; hold
+targets gather plus default identity reference; settle targets hold plus default.
+Dialogue drives proud vindication rather than the earlier worried-reading sketch.
+
+## gather
+
+Edit this exact Dr Mikhail Orlov game sprite into GATHER pose for a confident celebratory claim. Preserve exact mature dark-haired male identity, weathered face, off-white worn lab coat, black turtleneck, dark trousers, ID badge, heavy boots and brass glass diagnostic instrument held securely in RIGHT hand on VIEWER-LEFT. LEFT hand VIEWER-RIGHT rotates palm upward and draws a little inward at upper-chest height to receive an invisible sample, elbow bent. He looks at his palm with a pleased confident half-smile, as a scientist proven right: perfectly calculated. Preserve exact leg anatomy, stance, both boot contact positions, coat hem, head/body size and proportions. Exactly two arms/two hands, no instrument swap or new props. REMOVE the existing orange magical palm sigil and its glow entirely: palm and empty receiving space are unlit, no orb, spirit, particles or new effects; instrument's existing greenish glass remains. No fading/transparency on body despite dialogue; opaque character. Same realistic detailed illustrated game sprite, full body including boots inside transparent 2:3 portrait canvas with ample margins, no background or cast shadow or text.
+
+## hold
+
+Edit FIRST Orlov sprite into HOLD beat of triumphant scientific vindication; second reference original identity only. Keep first exact person, hairstyle, lab coat, turtleneck, ID badge, right hand viewer-left securely holding SAME brass glass instrument, all legs/boots and foot contacts, body and head proportions, coat hem and framing. ONLY left receiving arm viewer-right rises: palm-up at shoulder/eye height, elbow comfortably open, presenting empty air with confident flourish. Chin lifts and smile broadens into a self-satisfied exhilarated grin, eyebrows raised slightly: perfectly calculated / I'm so powerful i'm fading. Proud and energized, not frightened or solemn. Keep body completely solid, no actual fading. Exactly two arms/hands and five fingers per hand, no new props. No painted palm sigil, light orb, spirit, particles, effects or text; receiving space completely EMPTY, existing green instrument glass retained. Same full-body realistic illustrated sprite on TRUE transparent 2:3 portrait canvas, no background, haze or ground shadow. Entire hands, coat and boots safely inside margins. Do not move legs.
+
+## settle
+
+Edit FIRST Orlov sprite into SETTLE after victorious scientific flourish. Second reference original idle identity. Lower LEFT palm viewer-right toward the original shoulder-height casting position, elbow slightly bent, hand open and relaxed, keeping palm EMPTY without orange sigil. Bring chin back toward forward-right, retaining pleased confident smile. RIGHT hand viewer-left continues holding exact same brass diagnostic instrument securely at same height. Preserve exact first image face identity, clothing, lab coat hem, turtleneck, badge, torso/head proportions, legs, knees and both planted boot positions. No step, no body rotation or size change, exactly two hands/arms, no new props. Entire full-body and all fingers/boots safely inside transparent 2:3 portrait canvas. Same realistic illustrated game art. No spirit, glow, orb, sigil, particles, body fading, text, background, haze or cast shadow. Character remains fully solid.

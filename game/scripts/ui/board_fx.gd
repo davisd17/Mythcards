@@ -33,6 +33,8 @@ var lunges := {}      # instance id -> {toward: Vector2i, start, duration, frame
 var hits := {}        # instance id -> start
 var recoils := {}     # instance id -> {away: -1/0/1 (screen x away from the attacker), blocked: bool, start}
 var casts := {}       # instance id -> start
+var manifestations := {} # successful Seraph activations; persistent form lives in model
+var _manifestation_request := ""
 var levels := {}      # instance id -> start
 var ready := {}       # {player: "p1"/"p2", start}: the side whose turn just started
 var ghosts: Array = []    # {character, pos: Vector2i, start: float, away: -1/1 (topple direction)}
@@ -77,7 +79,7 @@ func advance(delta: float) -> void:
 	for id in recoils.keys():
 		if now - recoils[id].start >= RECOIL:
 			recoils.erase(id)
-	for pair in [[casts, CAST_TIME], [levels, LEVEL_POSE]]:
+	for pair in [[casts, CAST_TIME], [levels, LEVEL_POSE], [manifestations, SeraphManifestation.REVEAL_TIME]]:
 		for id in pair[0].keys():
 			if now - pair[0][id] >= pair[1]:
 				pair[0].erase(id)
@@ -89,7 +91,7 @@ func advance(delta: float) -> void:
 
 func active() -> bool:
 	return not (slides.is_empty() and lunges.is_empty() and hits.is_empty() and recoils.is_empty()
-			and casts.is_empty() and levels.is_empty() and ready.is_empty() and ghosts.is_empty() and effects.is_empty())
+			and casts.is_empty() and manifestations.is_empty() and levels.is_empty() and ready.is_empty() and ghosts.is_empty() and effects.is_empty())
 
 
 func clear() -> void:
@@ -98,6 +100,8 @@ func clear() -> void:
 	hits.clear()
 	recoils.clear()
 	casts.clear()
+	manifestations.clear()
+	_manifestation_request = ""
 	levels.clear()
 	ready = {}
 	ghosts.clear()
@@ -238,12 +242,17 @@ func _on_leveled(id: String, level: int) -> void:
 	_at(id, "level", LEVEL_UP, "LEVEL %d" % level, LEVEL)
 
 
-func _on_requested(action_type: String, actor_id: String, _payload: Dictionary) -> void:
+func _on_requested(action_type: String, actor_id: String, payload: Dictionary) -> void:
 	_delay = float(_art(actor_id).get("impact", 0.0)) if action_type == "attack" else 0.0
+	_manifestation_request = actor_id if action_type == "ability" and str(payload.get("ability_id", "")) == SeraphManifestation.ABILITY_ID else ""
 
 
 func _on_action(action_type: String, actor_id: String, result: Dictionary) -> void:
 	_delay = 0.0
+	if action_type == "ability" and result.get("success", false) and _manifestation_request == actor_id \
+			and SeraphManifestation.is_active(_find(actor_id)):
+		manifestations[actor_id] = now
+	_manifestation_request = ""
 	if action_type == "ability" and result.get("success", false):
 		casts[actor_id] = now
 		_at(actor_id, "ring", RING, "", CAST)

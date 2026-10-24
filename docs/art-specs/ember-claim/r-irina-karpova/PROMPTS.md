@@ -1,0 +1,17 @@
+# Irina Karpova Claim Prompts
+
+Built-in ImageGen with transparency requested. Gather uses default as target;
+hold uses gather plus default identity reference; settle uses hold plus default.
+Approved dialogue from data/ember_lines.json drives the pleased, smug performance.
+
+## gather
+
+Edit this exact Irina Karpova game sprite into GATHER pose for a smug celebratory spirit claim. Preserve exact mature woman identity, curled pinned brunette hair, black brocade long coat with crimson lining and gold trim, burgundy blouse, trousers, jewelry, heeled boots. Her RIGHT hand on VIEWER-LEFT retains the existing ring of brass keys, same height and fingers securely holding it. Her LEFT hand on VIEWER-RIGHT comes out of its trouser pocket, elbow bent, rising palm-up near waist/ribs with thumb and index starting an elegant EMPTY pinch. Exactly TWO arms TWO hands, no pistol, no new prop. She looks toward that empty pinch with a knowing, pleased half-smile, raised eyebrow, enjoying an acquisition. Emotional line is Your loss. My opportunity. This is visible smug pleasure, not mourning or a solemn rite. Preserve exact planted boot positions, leg lengths, torso/head size and coat silhouette, no step or skirt flare. Entire figure with keys and boots inside transparent 2:3 portrait canvas with ample margin. Ignore any stray fragment at far-right edge of reference; isolate only the woman and her keys. No spirit, orb, glow, particles, text, ground shadow or background. Same realistic illustrated game art.
+
+## hold
+
+Edit FIRST Irina sprite into HOLD beat of smug celebration, second reference original identity only. Keep first sprite exact face identity, clothes, hairstyle, key ring held in RIGHT hand viewer-left, all lower body and boot contact positions, head/body size, coat hem and framing. Change ONLY LEFT arm viewer-right: lift the empty thumb-index pinch toward shoulder/cheek height, elbow out a little, as if admiring an exquisite acquisition. Leave a small clear EMPTY gap between thumb and index. Her eyes glance toward the pinch; give a visibly delighted knowing smirk and slightly arched brow, chin raised. Emotional tone: Your loss. My opportunity. / A nice collection even for me. Self-satisfied pleasure, no solemn grief. Exactly TWO hands, key-hand retains same keys, other hand EMPTY, no pistol or new prop. No actual spirit, orb, glow or particles, no text/background/shadow. Transparent 2:3 portrait full-body realistic illustrated sprite; ample margin around all fingers, keys, boots and coat. Do not change legs or feet.
+
+## settle
+
+Edit FIRST Irina sprite into SETTLE beat after smug celebration. Second reference shows her original idle. Lower LEFT hand viewer-right toward trouser pocket, fingers relaxing from appraising pinch; hand pauses just outside pocket, ready to return. Keep RIGHT hand viewer-left securely holding exact same ring of brass keys at original height. She turns gaze back ahead, retaining satisfied knowing smile and lifted chin: clearly pleased with herself. Preserve first sprite exact identity, pinned curls, jewelry, long black/crimson gold-trimmed coat, legs, knees, boot contact positions, head/body proportions and coat hem. No step or leg movement, no third hand, no pistol, no new prop. Full body with all boots/keys/fingers safely inside transparent 2:3 portrait canvas. Same realistic illustrated sprite finish, no text, spirit, glow, orb, particles, background or shadow.

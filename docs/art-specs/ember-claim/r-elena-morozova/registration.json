@@ -1,0 +1,99 @@
+{
+  "character": "r-elena-morozova",
+  "canvas": [
+    512,
+    768
+  ],
+  "shared_scale": 0.4312455003599712,
+  "foot_anchor": [
+    352.5,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "gather",
+      "file": "claim-1-gather.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        688.0,
+        1460
+      ],
+      "offset": [
+        56,
+        127
+      ],
+      "bounds": [
+        185,
+        158,
+        466,
+        757
+      ],
+      "source_scale": 0.4312455003599712,
+      "body_landmarks": {
+        "crown_y": 72,
+        "sole_y": 1460,
+        "foot_center_x": 688
+      }
+    },
+    {
+      "pose": "hold",
+      "file": "claim-2-hold.png",
+      "ms": 360,
+      "impact": false,
+      "source_anchor": [
+        598.0,
+        1466
+      ],
+      "offset": [
+        104,
+        148
+      ],
+      "bounds": [
+        188,
+        158,
+        470,
+        757
+      ],
+      "source_scale": 0.41481994459833793,
+      "body_landmarks": {
+        "crown_y": 23,
+        "sole_y": 1466,
+        "foot_center_x": 598
+      }
+    },
+    {
+      "pose": "settle",
+      "file": "claim-3-settle.png",
+      "ms": 120,
+      "impact": false,
+      "source_anchor": [
+        599.0,
+        1467
+      ],
+      "offset": [
+        104,
+        148
+      ],
+      "bounds": [
+        173,
+        158,
+        470,
+        757
+      ],
+      "source_scale": 0.41481994459833793,
+      "body_landmarks": {
+        "crown_y": 24,
+        "sole_y": 1467,
+        "foot_center_x": 599
+      }
+    }
+  ],
+  "body_height": 599,
+  "normalization_axis": "y",
+  "idle_landmarks": {
+    "crown_y": 149,
+    "sole_y": 747
+  },
+  "scale_policy": "anatomical-source-normalization"
+}
