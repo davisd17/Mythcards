@@ -225,6 +225,9 @@ func test_memory_discipline() -> void:
 	var legal := sys.get_legal_ability_targets(meret, meret.data.id)
 	assert_true(legal.has(NAIA))
 	assert_false(legal.has(SAHU), "L1: orthogonal and in range, not anywhere")
+	Fixture.put(WORKER, Vector2i(3, 5))   # an enemy between them
+	assert_true(sys.get_legal_ability_targets(meret, meret.data.id).has(NAIA),
+			"Leaders ignore line of sight (2026-10-26)")
 	assert_true(_ability(MERET, {"target": NAIA}).success)
 	assert_eq(sys.memory_count(naia), 1)
 	assert_eq(sys.memory_count(meret), 1, "she gains one too")

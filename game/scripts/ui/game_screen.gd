@@ -77,6 +77,9 @@ var _seen_match: MatchState = null
 var _game_over := Control.new()
 var _game_over_label := Label.new()
 var _capture_confirm := Control.new()   # "End turn and lose?" when your Hero can't move
+var _capture_label := Label.new()
+var _capture_lose: Button
+var _trap_warned_turn := -1   # the turn the "your Hero can't move" warning already popped up in
 var _terms := TermPopup.new()        # definitions: tapped card terms, long-pressed pieces, glossary
 var _how_to := HowToPlay.new()       # the beginner walkthrough, from New match or Menu
 var _online := OnlineMenu.new()      # Play a friend online: create, join, your matches
@@ -168,6 +171,11 @@ func _ready() -> void:
 	_side_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_side_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	# Its buttons pass touches on, so a thumb drag over the setup tray or a long action list
+	# scrolls it (playtest 2026-10-26: the tray wouldn't scroll on a phone).
+	_side.child_entered_tree.connect(func(n: Node):
+		if n is Control:
+			(n as Control).mouse_filter = Control.MOUSE_FILTER_PASS)
 	_side_scroll.add_child(_side)
 	# Every node starts in the stacked layout; _layout() rearranges them for the window.
 	_arrange(false)
@@ -246,9 +254,13 @@ func ui_snapshot() -> Dictionary:
 	var corner := _board.tile_rect(Vector2i(0, BoardModel.BOARD_SIZE - 1))
 	var board := Rect2(_board.get_global_transform() * corner.position,
 			corner.size * BoardModel.BOARD_SIZE)
+	var online := {}
+	if _net != null:
+		online = {"code": _net.code, "seat": _net.seat, "applied": _net.applied, "desynced": _net.desynced,
+				"offline": _net.offline, "outbox": _net.outbox.size()}
 	return {"buttons": buttons, "tiles": tiles, "summary": summary, "prompt": _prompt.text, "popup": _popup.visible,
-			"setup": controller.in_setup(), "board": board, "mode": _mode, "claims": _board.fx.claims.keys(),
-			"game_over": _game_over.visible}
+			"setup": controller.in_setup(), "board": board, "mode": _mode, "online": online,
+			"online_menu": _online.visible, "claims": _board.fx.claims.keys(), "game_over": _game_over.visible}
 
 
 # Whether a control's center is inside every scrolling list that holds it.
@@ -520,6 +532,8 @@ func _on_turn_started(player_id: String) -> void:
 		text = ("Your turn · " if player_id == _net.seat else "Their turn · ") + text
 	elif not controller.ai_players.is_empty():
 		text = "Your turn · " + text
+	if state.turn_number == 1:
+		text = "Won the coin flip · " + text   # the first banner announces it (BR-018A)
 	for old in find_children("TurnBanner", "", false, false):
 		old.queue_free()
 	var banner := HudFx.turn_banner(self, text, _bright(player_id))
@@ -547,6 +561,7 @@ func _refresh() -> void:
 		_log_view.refresh()
 	_apply_log()
 	_queue_layout()   # the table row may have appeared or gone
+	_check_trapped_hero()
 	var state := GameState.match_state
 	_game_over.visible = state != null and state.phase == "ended" and controller.setup == null
 	# A match-ending defeat plays its Ember claim first, then the victory screen (claim spec 2).
@@ -941,7 +956,7 @@ func _on_primary() -> void:
 	if controller.in_setup():
 		controller.confirm_placement()
 	elif controller.hero_trapped(GameState.match_state.active_player_id) and not controller.is_waiting():
-		_capture_confirm.visible = true   # ending the turn now loses: ask first
+		_show_capture_dialog(true)   # ending the turn now loses: ask first
 		return
 	else:
 		controller.end_turn()
@@ -976,8 +991,7 @@ func _build_capture_confirm() -> void:
 	panel.add_theme_stylebox_override("panel", UiStyle.panel())
 	var inner := VBoxContainer.new()
 	inner.add_theme_constant_override("separation", UiStyle.GAP)
-	var label := Label.new()
-	label.text = "Your Hero can't move. Ending the turn now loses the match by Hero capture."
+	var label := _capture_label
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.custom_minimum_size.x = 480
 	label.add_theme_color_override("font_color", WARNING)
@@ -985,16 +999,40 @@ func _build_capture_confirm() -> void:
 	var keep := UiStyle.primary(UiStyle.command("Keep playing", func(): _capture_confirm.visible = false, "command:primary"))
 	keep.set_meta("dialog_command", true)
 	inner.add_child(keep)
-	var lose := UiStyle.command("End turn and lose", func():
+	_capture_lose = UiStyle.command("End turn and lose", func():
 		_capture_confirm.visible = false
 		controller.end_turn()
 		_refresh())
-	lose.set_meta("dialog_command", true)
-	inner.add_child(lose)
+	_capture_lose.set_meta("dialog_command", true)
+	inner.add_child(_capture_lose)
 	panel.add_child(inner)
 	center.add_child(panel)
 	_capture_confirm.add_child(center)
 	add_child(_capture_confirm)
+
+
+# at_end: the end-turn confirm. Otherwise the warning as soon as your Hero is stuck (the
+# start of your turn, or the move that boxed it in), while there's still AP to free it
+# (playtest 2026-10-26: the end-turn warning came too late to act on).
+func _show_capture_dialog(at_end: bool) -> void:
+	_capture_label.text = "Your Hero can't move. Ending the turn now loses the match by Hero capture." if at_end \
+			else "Your Hero can't move. Free it this turn (move a blocker away, or clear its path), or you lose by Hero capture when you end the turn."
+	_capture_lose.visible = at_end
+	_capture_confirm.visible = true
+
+
+func _check_trapped_hero() -> void:
+	var state := GameState.match_state
+	if state == null or controller.in_setup() or not GameState.is_match_active() or controller.is_ai_turn() \
+			or controller.is_waiting() or (_net != null and _net.replaying):
+		return
+	if not controller.hero_trapped(state.active_player_id):
+		_trap_warned_turn = -1   # freed: boxing it in again later this turn warns again
+		return
+	if _trap_warned_turn == state.turn_number or _popup.visible or _capture_confirm.visible:
+		return   # a drawn card shows first; closing it refreshes and lands here
+	_trap_warned_turn = state.turn_number
+	_show_capture_dialog(false)
 
 
 # --- Action log ----------------------------------------------------------------------------
@@ -1112,6 +1150,11 @@ func _notice(text: String, card_id: String = "", note: String = "") -> void:
 	_notice_button.text = text
 	_notice_card = card_id
 	_notice_note = note
+	# Below the command row, never over it: on a phone the fixed spot covered End turn, so
+	# a tap meant to end the turn opened the AI's card instead (coin flip work, 2026-10-27).
+	var below := _commands.get_global_rect().end.y - get_global_position().y + UiStyle.GAP
+	_notice_button.offset_top = maxf(120.0, below)
+	_notice_button.offset_bottom = _notice_button.offset_top
 	_notice_button.visible = true
 	_notice_timer.start()
 

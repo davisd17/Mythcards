@@ -1,8 +1,9 @@
 class_name CardSummary
 extends PanelContainer
 # The strip under the board (playtest 2026-10-06: the full card didn't fit there). Shows
-# the inspected character's portrait, name and level, live stats and statuses, and only
-# its abilities up to its current level. It clips rather than overflows; tapping it emits `pressed`,
+# the inspected character's portrait, name and level, live stats and statuses, and its
+# Level 1 ability. Upgrades live on the full card only (playtest 2026-10-26: appending them
+# cut the text off on a phone). It clips rather than overflows; tapping it emits `pressed`,
 # and the game screen opens the full card in its scrollable overlay.
 
 signal pressed
@@ -12,6 +13,7 @@ var _placeholder := ColorRect.new()
 var _icon := TypeIcon.new()
 var _title := Label.new()
 var _body := RichTextLabel.new()
+var _hint := Label.new()
 
 
 func _ready() -> void:
@@ -90,13 +92,12 @@ func _ready() -> void:
 	fade.offset_top = -34
 	fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	body_box.add_child(fade)
-	var hint := Label.new()
-	hint.text = "Tap for the full card"
-	hint.add_theme_font_size_override("font_size", 24)
-	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hint.add_theme_color_override("font_color", Color("#9fe0f5"))
-	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	text.add_child(hint)
+	_hint.text = "Tap for the full card"
+	_hint.add_theme_font_size_override("font_size", 24)
+	_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_hint.add_theme_color_override("font_color", Color("#9fe0f5"))
+	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text.add_child(_hint)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -124,13 +125,11 @@ func show_character(data: CharacterData, instance: CharacterInstance = null) -> 
 		lines.append("[color=#e06666]DEFEATED[/color]")
 	if instance != null:
 		lines.append(CardView.status_text(instance))
-	# The upgrades build on the Level 1 ability, so show it plus every upgrade reached.
-	var texts := [data.l1, data.l2, data.l3]
-	for i in level:
-		lines.append("[b]L%d[/b] %s" % [i + 1, texts[i]])
+	lines.append("[b]L1[/b] %s" % data.l1)
 	_body.text = "\n".join(lines)
+	_hint.text = "Tap for the full card" if level < 2 else "Tap for the full card: Level %d upgrades" % level
 
 
 # The text shown, for tests.
 func text() -> String:
-	return _title.text + "\n" + _body.get_parsed_text()
+	return _title.text + "\n" + _body.get_parsed_text() + "\n" + _hint.text

@@ -204,7 +204,11 @@ Card text lives in `data/cards/review_drafts/closed_city_characters.json` and `f
 
 Closed City balance pass (decided 2026-10-19; playtests found Closed City still weak): VERA-7's Protected Passenger gives its rider +2 maximum HP (was +1). Irina Karpova's Level 2 is +1 HP, and Access Granted may target any ally on the board, ignoring range and line of sight (replacing two targets and Leak immunity). Zoya Miranova's Level 3 charms instead of pulling twice: once per match, Voice Under Static pulls, then permanently moves the target to her side; a Hero can't be charmed. Major Yuri Volkov's Containment Shot Marks a target next to any placed object, not only a Leak.
 
-Flood Survivors card changes (decided 2026-10-24): Iset-Nara's Hidden Geometry moves the chosen placed object to any empty tile on the board (was up to 2 tiles in a straight line). Queen Meret-Anu's Memory Discipline at Level 1 targets an ally within her RANGE in an orthogonal line, with line of sight; reaching any ally anywhere on the board now starts at Level 2 (Buried Tide Order, still 2 allies).
+Flood Survivors card changes (decided 2026-10-24): Iset-Nara's Hidden Geometry moves the chosen placed object to any empty tile on the board (was up to 2 tiles in a straight line). Queen Meret-Anu's Memory Discipline at Level 1 targets an ally within her RANGE in an orthogonal line; reaching any ally anywhere on the board now starts at Level 2 (Buried Tide Order). Level 2 keeps a single target; the old second ally is gone (2026-10-26).
+
+Leader line of sight (decided 2026-10-26): the two Leaders ignore line of sight for their abilities. Irina Karpova's Access Granted and Queen Meret-Anu's Memory Discipline at Level 1 keep their range and orthogonal line but can target past characters and placed objects. This is a card-printed exception to the default line-of-sight rule (Section 8).
+
+Flood Survivors special changes (decided 2026-10-26): Sahu-Ren's Level 2 Forbidden Testimony spends 1 Memory to heal an injured adjacent ally by 1 HP (was: Mark an enemy). His Level 3 Last Memory Released deals its damage to any enemy anywhere on the board; Marked is no longer required. Thalassa-Nekh loses Black-Water Communion: at Level 1 a character that deals HP damage to her becomes Marked; Level 2 is +1 RANGE and +1 MOVE.
 
 Russian-inspired starting roster:
 
@@ -497,7 +501,7 @@ Possible resource systems:
 
 Prototype recommendation (decided):
 - The active player has a turn-level AP pool of 4 AP. The single exception is the match's first turn, which gives 2 AP — only to the player who takes it (decided 2026-09-25). Pool AP may be spent on any combination of the player's characters' actions.
-- Who goes first is fixed for now; a coin flip is planned (decided 2026-09-25). Nothing else in the rules depends on which player it is, since the reduced pool is tied to "the first turn of the match," not to a player.
+- Who goes first is decided by a coin flip at the start of each match (decided 2026-09-25, built 2026-10-27). The board art and match music follow the Leader of the side that goes first. Nothing else in the rules depends on which player it is, since the reduced pool is tied to "the first turn of the match," not to a player.
 - Independently, each character has its own AP stat — usually 1, meaning that character can act at most once per turn regardless of the pool. Some characters or effects grant a higher character AP, letting that single character take multiple actions in one turn if the pool allows it.
 - Movement, attacking, and activating an ability each cost 1 pool AP, gated by the acting character having remaining character AP of its own.
 - Because the pool caps total actions per turn well below the squad size, not every character acts every turn — a deliberate tactical constraint, not an oversight.

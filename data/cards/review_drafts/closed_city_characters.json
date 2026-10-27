@@ -90,7 +90,9 @@
       "line_he_eventually_crosses": "He opens sealed service routes during containment, letting the breach spread but saving trapped people.",
       "catch_phrase": "Machines tell the truth before men do."
     },
-    "asset_candidates": [],
+    "asset_candidates": [
+      "assets/characters/nikolai-yegorov-the-fool-character-card-art.png"
+    ],
     "review_notes": [
       "Not added to the playable 14-card prototype deck yet.",
       "Card title remains archetypal because this is a Common; Nikolai Yegorov is the named story representative.",
@@ -245,7 +247,7 @@
     "type": "Leader",
     "unique": true,
     "stats": [4, 1, 2, 3],
-    "l1": "AP Ability: Access Granted chooses an allied character within 3. That ally gains +1 ATK this turn.",
+    "l1": "AP Ability: Access Granted chooses an allied character within 3, ignoring line of sight. That ally gains +1 ATK this turn.",
     "l2": "Private Favors: +1 HP. Access Granted may target any allied character on the board, ignoring range and line of sight.",
     "l3": "The Price of Access: +1 HP. Once per game, when Irina delivers a Spirit Ember, she may defeat one enemy character anywhere on the board. This costs no additional AP.",
     "role": "Closed City leader and patron of the sealed city. Turns access, permissions, and favors into controlled movement through dangerous infrastructure.",

@@ -13,6 +13,7 @@ const SetupFlowScript := preload("res://scripts/scenes/setup_flow.gd")
 
 var setup: Node = null            # SetupFlow while players deploy; null once the match starts
 var placing_player := "p1"
+var seed_next := -1   # TestBridge: the seed a click-started match uses (-1: random)
 var placing_id := ""              # tray character picked for placement
 var selected_id := ""             # the active player's character being commanded
 var inspect_id := ""              # whichever character's card is shown
@@ -123,9 +124,12 @@ func confirm_placement(deck_seed: int = -1) -> void:
 func _start_from_setup(deck_seed: int) -> void:
 	var flow_node := setup
 	setup = null
-	flow_node.start_match(deck_seed)
+	# One seed drives the deck and the coin flip, so an online room agrees on both.
+	var match_seed := deck_seed if deck_seed >= 0 else (seed_next if seed_next >= 0 else randi())
+	flow_node.start_match(match_seed, flow_node.coin_flip(match_seed))
 	flow_node.free()
-	message = "Player 1's turn. Tap one of your characters."
+	var first := GameState.match_state.get_player(GameState.match_state.first_player_id)
+	message = "Coin flip: %s goes first." % str(ContentDB.get_team(first.team_id).get("name", first.culture))
 	_start_pending_choice()
 
 

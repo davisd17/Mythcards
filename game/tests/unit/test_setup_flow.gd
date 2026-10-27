@@ -216,3 +216,14 @@ func test_effective_move_floors_at_0_and_range_at_1() -> void:
 	c.status_effects.append(StatusEffect.new("temp_range", -10))
 	assert_eq(c.get_effective_move(), 0)
 	assert_eq(c.get_effective_range("ability"), 1)
+
+
+# BR-018A (designer 2026-10-27): a coin flip picks who goes first. It comes from the match
+# seed, so an online room (one shared seed) and its replays always agree.
+func test_coin_flip_is_seeded_and_lands_both_ways() -> void:
+	var seen := {}
+	for seed_value in 20:
+		var first: String = SetupFlowScript.coin_flip(seed_value)
+		assert_eq(SetupFlowScript.coin_flip(seed_value), first, "same seed, same flip")
+		seen[first] = true
+	assert_eq(seen.keys().size(), 2, "both players win some flips")

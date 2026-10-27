@@ -210,14 +210,14 @@ func test_access_granted() -> void:
 	assert_eq(naia.current_hp, 1)
 
 
-func test_access_granted_level_1_needs_reach_and_line_of_sight() -> void:
+func test_access_granted_level_1_needs_reach_but_not_line_of_sight() -> void:
 	Fixture.put(KARPOVA, Vector2i(3, 0))
 	Fixture.put(YURI, Vector2i(6, 6))
 	Fixture.put(WORKER, Vector2i(3, 1))
 	Fixture.put(ZOYA, Vector2i(3, 2))
 	var targets := sys.get_legal_ability_targets(_c(KARPOVA), "r-irina-karpova")
 	assert_false(targets.has(YURI), "out of reach")
-	assert_false(targets.has(ZOYA), "behind the Worker")
+	assert_true(targets.has(ZOYA), "behind the Worker: Leaders ignore line of sight (2026-10-26)")
 
 
 func test_private_favors() -> void:

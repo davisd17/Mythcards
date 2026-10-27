@@ -431,18 +431,20 @@ func ability_reach(instance: CharacterInstance, printed: int) -> int:
 
 
 # Tiles `instance` can target from `origin` in an orthogonal line within `reach`, with
-# line of sight (BR-011 applies to ranged ability targeting too).
-func tiles_in_reach(instance: CharacterInstance, origin: Vector2i, reach: int) -> Array[Vector2i]:
+# line of sight (BR-011 applies to ranged ability targeting too) unless `ignore_los` (a card
+# that says so: Irina's and Meret-Anu's leader abilities, designer 2026-10-26).
+func tiles_in_reach(instance: CharacterInstance, origin: Vector2i, reach: int, ignore_los := false) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for pos in board.get_tiles_in_range(origin, reach):
-		if board.has_line_of_sight(origin, pos, get_line_of_sight_exceptions(instance, pos)):
+		if ignore_los or board.has_line_of_sight(origin, pos, get_line_of_sight_exceptions(instance, pos)):
 			result.append(pos)
 	return result
 
 
-func characters_in_reach(instance: CharacterInstance, origin: Vector2i, reach: int, want_allies: bool) -> Array[String]:
+func characters_in_reach(instance: CharacterInstance, origin: Vector2i, reach: int, want_allies: bool,
+		ignore_los := false) -> Array[String]:
 	var result: Array[String] = []
-	for pos in tiles_in_reach(instance, origin, reach):
+	for pos in tiles_in_reach(instance, origin, reach, ignore_los):
 		var c := occupant(pos)
 		if c != null and (c.player_id == instance.player_id) == want_allies:
 			result.append(c.instance_id)

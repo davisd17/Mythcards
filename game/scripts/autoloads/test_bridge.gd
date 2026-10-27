@@ -4,6 +4,7 @@ extends Node
 #   window.mythcards_get_state()             -> JSON string (serialize_state)
 #   window.mythcards_dispatch_action(json)   -> JSON string (dispatch_action)
 #   window.mythcards_new_match(seed)         -> JSON string (restart with a fixed deck seed)
+#   window.mythcards_seed_next(seed)         -> JSON string (the seed a click-started match uses)
 #   window.mythcards_ui()                    -> JSON string (ui_layout: where to click)
 # Live only in a Web export carrying the "mythcards_testbridge" custom feature tag, so the
 # hooks never ship in a normal build (HLD-R-008). serialize_state/dispatch_action are pure
@@ -73,6 +74,7 @@ func serialize_state() -> Dictionary:
 		"phase": state.phase,
 		"turn_number": state.turn_number,
 		"active_player_id": state.active_player_id,
+		"first_player_id": state.first_player_id,
 		"decision_player_id": RelicEventDeck.decision_player(),
 		"winner_id": state.winner_id,
 		"win_condition": state.win_condition,
@@ -106,6 +108,16 @@ func new_match(deck_seed: int) -> Dictionary:
 	if scene == null or not scene.has_method("start_new_match"):
 		return {"success": false, "reason": "the current scene can't start a match"}
 	scene.start_new_match(deck_seed)
+	return {"success": true, "deck_seed": deck_seed}
+
+
+# Fixes the deck and coin-flip seed of the next match started by clicks, so a click-driven
+# test meets the same cards and the same first player every run.
+func seed_next(deck_seed: int) -> Dictionary:
+	var scene := get_tree().current_scene
+	if scene == null or not "controller" in scene:
+		return {"success": false, "reason": "the current scene has no game controller"}
+	scene.controller.seed_next = deck_seed
 	return {"success": true, "deck_seed": deck_seed}
 
 
@@ -145,6 +157,7 @@ func _register_js_callbacks() -> void:
 	_expose("__mythcards_dispatch_action", func(args): return JSON.stringify(dispatch_action(str(args[0]))))
 	_expose("__mythcards_new_match", func(args): return JSON.stringify(new_match(int(args[0]))))
 	_expose("__mythcards_ui", func(_args): return JSON.stringify(ui_layout()))
+	_expose("__mythcards_seed_next", func(args): return JSON.stringify(seed_next(int(args[0]))))
 	# The Godot callbacks store their answer in window.__mythcards_result; these wrappers
 	# return it, so JS gets a value whether or not a callback's own return reaches JS.
 	JavaScriptBridge.eval("""
@@ -152,6 +165,7 @@ func _register_js_callbacks() -> void:
 		window.mythcards_dispatch_action = function (json) { window.__mythcards_dispatch_action(json); return window.__mythcards_result; };
 		window.mythcards_new_match = function (seed) { window.__mythcards_new_match(seed); return window.__mythcards_result; };
 		window.mythcards_ui = function () { window.__mythcards_ui(); return window.__mythcards_result; };
+		window.mythcards_seed_next = function (seed) { window.__mythcards_seed_next(seed); return window.__mythcards_result; };
 		window.mythcards_ready = true;
 	""", true)
 

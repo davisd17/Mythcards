@@ -70,6 +70,8 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   await page.waitForFunction(() => (window as any).mythcards_ready === true, null, { timeout: 90_000 });
   await page.waitForTimeout(500);
   await page.screenshot({ path: 'test-results/screen-0-new-match.png' });
+  // A fixed seed: the same cards and coin flip every run (Player 2 goes first).
+  await page.evaluate((seed) => (window as any).mythcards_seed_next(seed), Number(process.env.HOTSEAT_SEED ?? 2));
   await clickButton(page, 'Hotseat: play both sides');
   expect((await ui(page)).setup).toBe(true);
   await page.screenshot({ path: 'test-results/screen-1-setup.png' });
@@ -89,9 +91,28 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   await answerChoices(page);
   s = await state(page);
   expect(s.pending_choice?.pick ?? null).toBeFalsy();
+  // A coin flip picks who goes first (BR-018A). If Player 2 won it, pass that turn so the
+  // script below starts on Player 1's turn (then a full 4 AP, not the 2-AP first turn).
+  expect(s.active_player_id).toBe(s.first_player_id);
+  const p1First = s.first_player_id === 'p1';
+  if (!p1First) {
+    await clickButton(page, 'End turn');
+    await answerChoices(page);
+    s = await state(page);
+    expect(s.active_player_id).toBe('p1');
+  }
 
-  // Select the Reactor Worker and move it straight up 2 tiles.
-  const gymnast = character(s, 'p1_r-reactor-worker');
+  // Select a back-row character with a clear path and move it straight up 2 tiles. (A
+  // drawn card can send one off the board or drop an object in the way, and with the coin
+  // flip two cards may come out first.)
+  const blocked = (x: number, y: number) =>
+    s.players.p1.characters.concat(s.players.p2.characters).some((c: any) => c.position.x === x && c.position.y === y)
+    || s.objects.some((o: any) => o.position.x === x && o.position.y === y);
+  const mover = ['p1_r-reactor-worker', 'p1_r-yuri-volkov', 'p1_r-elena-morozova', 'p1_r-zoya-miranova']
+    .map((id) => character(s, id))
+    .find((c: any) => c.position.y === 0 && !blocked(c.position.x, 1) && !blocked(c.position.x, 2))!;
+  expect(mover, 'a character with a clear path').toBeTruthy();
+  const gymnast = mover;
   await clickTile(page, gymnast.position.x, gymnast.position.y);
   await page.screenshot({ path: 'test-results/screen-3-selected.png' });
 
@@ -105,8 +126,8 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   expect((await ui(page)).popup).toBe(false);
   await clickTile(page, gymnast.position.x, gymnast.position.y + 2);
   s = await state(page);
-  expect(character(s, 'p1_r-reactor-worker').position).toEqual({ x: gymnast.position.x, y: gymnast.position.y + 2 });
-  expect(s.players.p1.pool_ap_remaining).toBe(1);
+  expect(character(s, mover.instance_id).position).toEqual({ x: gymnast.position.x, y: gymnast.position.y + 2 });
+  expect(s.players.p1.pool_ap_remaining).toBe(p1First ? 1 : 3);
 
   await clickButton(page, 'End turn');
   s = await state(page);
@@ -145,19 +166,38 @@ test('play Closed City against the AI with clicks', async ({ page }) => {
   await page.goto('/');
   await page.waitForFunction(() => (window as any).mythcards_ready === true, null, { timeout: 90_000 });
   await page.waitForTimeout(500);
+  // A fixed seed: the same cards and coin flip every run (the AI goes first).
+  await page.evaluate((seed) => (window as any).mythcards_seed_next(seed), Number(process.env.AI_SEED ?? 2));
   await clickButton(page, 'Play Closed City vs the AI');
   await clickButton(page, 'Auto-place the rest');
   await clickButton(page, 'Done placing');
   let s = await state(page);
   expect(s.phase).toBe('in_progress');
   expect(s.players.p2.characters.every((c: any) => c.position.y === 6)).toBe(true);   // the AI deployed
-  await answerChoices(page);
-  await clickButton(page, 'End turn');
   // The AI plays its turn on a timer, one visible step at a time, then hands back.
-  await page.waitForFunction(() => {
+  const handBack = (turn: number) => page.waitForFunction((t) => {
     const st = JSON.parse((window as any).mythcards_get_state());
-    return st.active_player_id === 'p1' && st.turn_number >= 3;
-  }, null, { timeout: 60_000 });
+    return st.active_player_id === 'p1' && st.turn_number >= t;
+  }, turn, { timeout: 60_000 });
+  // A coin flip picks who goes first (BR-018A): if the AI won it, it plays turn 1 first.
+  const p1First = s.first_player_id === 'p1';
+  if (!p1First) {
+    await handBack(2);
+    await page.waitForTimeout(500);   // the card we draw pops up just after the hand-back
+    while ((await ui(page)).popup) await clickButton(page, 'Continue');
+  }
+  await answerChoices(page);
+  // The AI's turn can box our Hero in; the warning pops up at once (playtest 2026-10-26).
+  const trapped = (await ui(page)).buttons.some((b) => b.text === 'Keep playing');
+  if (trapped) await clickButton(page, 'Keep playing');
+  await clickButton(page, 'End turn');
+  if (trapped) {
+    // Ending the turn now loses, and the game asks first.
+    await clickButton(page, 'End turn and lose');
+    expect((await state(page)).win_condition).toBe('hero_capture');
+    return;
+  }
+  await handBack(p1First ? 3 : 4);
   await page.screenshot({ path: 'test-results/screen-7-after-ai-turn.png' });
   while ((await ui(page)).popup) await clickButton(page, 'Continue');   // cards the AI drew, then ours
   await clickButton(page, 'Log');

@@ -6,7 +6,7 @@ var players: Array[PlayerState] = []   # index 0 = "p1", index 1 = "p2"
 var board: BoardModel = null           # the BoardModel itself, not a copied tile array
 var turn_number: int = 0               # +1 per individual turn (p1 = 1, p2 = 2, p1 = 3, ...)
 var active_player_id: String = ""
-var first_player_id: String = ""       # "p1" today; a coin flip will set it later (BR-018A)
+var first_player_id: String = ""       # the coin flip's winner (BR-018A, SetupFlow.coin_flip)
 var next_instance_serial: int = 1      # for ids of characters created after setup
 var shared_deck: Array[String] = []    # remaining relic/event draw order; owned by RelicEventDeck
 var deck_seed: int = 0

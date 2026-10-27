@@ -1,6 +1,7 @@
 extends AbilityHandler
 # Irina Vasilievna Karpova (Closed City Leader) — LLD-closed-city-flood-roster.md 4.
-# L1 Access Granted (AP): an ally within 3 gains +1 ATK this turn (every attack this turn).
+# L1 Access Granted (AP): an ally within 3 in an orthogonal line gains +1 ATK this turn (every
+#    attack this turn). Ignores line of sight (designer 2026-10-26).
 #    Payload: {"target": id}.
 # L2 Private Favors: +1 HP; Access Granted may target any ally on the board, ignoring range
 #    and line of sight (balance pass 2026-10-19, replacing 2 targets and Leak immunity).
@@ -26,7 +27,7 @@ func can_use(_sys, _instance: CharacterInstance, _ability_id: String) -> bool:
 
 func get_legal_targets(sys, instance: CharacterInstance, _ability_id: String) -> Array:
 	if instance.level < 2:
-		return sys.characters_in_reach(instance, instance.position, sys.ability_reach(instance, REACH), true)
+		return sys.characters_in_reach(instance, instance.position, sys.ability_reach(instance, REACH), true, true)
 	# Anywhere: every ally on the board, one per tile (a ridden Mount is its rider's tile).
 	var result := []
 	for ally in sys.allies_of(instance):

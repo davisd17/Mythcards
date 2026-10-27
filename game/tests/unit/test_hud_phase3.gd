@@ -35,6 +35,7 @@ func test_a_turn_change_shows_one_banner_that_ignores_taps_and_goes_away() -> vo
 	assert_eq(banners.size(), 1)
 	assert_eq(banners[0].mouse_filter, Control.MOUSE_FILTER_IGNORE)
 	assert_string_contains(banners[0].get_child(0).text, "Turn 1")
+	assert_string_contains(banners[0].get_child(0).text, "Won the coin flip", "the first banner announces the flip")
 	assert_lt(banners[0].get_index(), screen._popup.get_index(), "a drawn card's popup stays on top")
 	await wait_seconds(HudFx.BANNER_IN + HudFx.BANNER_HOLD + HudFx.BANNER_OUT + 0.2)
 	assert_eq(_named("TurnBanner").size(), 0)

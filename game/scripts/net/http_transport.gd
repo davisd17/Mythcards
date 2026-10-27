@@ -21,6 +21,12 @@ static func server_url() -> String:
 	for arg in OS.get_cmdline_args() + OS.get_cmdline_user_args():
 		if arg.begins_with("--server="):
 			return arg.trim_prefix("--server=")
+	# The browser tests point the test web build at `wrangler dev` with ?server=<url>. Only
+	# that build reads it, so an invite link can't send players to another server.
+	if OS.has_feature("web") and OS.has_feature(TestBridge.FEATURE_TAG):
+		var url := str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('server') || ''", true))
+		if url != "":
+			return url
 	return str(ProjectSettings.get_setting(URL_SETTING, ""))
 
 

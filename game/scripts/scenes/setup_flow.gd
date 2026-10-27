@@ -92,9 +92,10 @@ func is_player_ready(player_id: String) -> bool:
 	return player != null and player.characters.all(func(c: CharacterInstance) -> bool: return c.is_placed())
 
 
-func start_match(deck_seed: int = -1) -> void:
+func start_match(deck_seed: int = -1, first_player_id: String = "p1") -> void:
 	# The UI only offers "start match" once both players are ready. A deck_seed >= 0 fixes
-	# the relic/event shuffle (replays, tests); -1 picks one at random.
+	# the relic/event shuffle (replays, tests); -1 picks one at random. The game passes
+	# coin_flip(seed) as first_player_id; engine tests keep Player 1 first.
 	for id in GameEnums.PLAYER_IDS:
 		if not is_player_ready(id):
 			push_error("SetupFlow.start_match: player %s has not placed all characters" % id)
@@ -103,7 +104,7 @@ func start_match(deck_seed: int = -1) -> void:
 	state.players = [get_player("p1"), get_player("p2")]
 	state.board = board
 	state.phase = "setup"
-	state.first_player_id = "p1"   # a coin flip replaces this later (BR-018A)
+	state.first_player_id = first_player_id
 	GameState.start_match(state)
 	RelicEventDeck.build_deck(state.players[0].culture, state.players[1].culture,
 			deck_seed if deck_seed >= 0 else randi())
@@ -123,6 +124,15 @@ func _build_squad(player_id: String, cards: Array[CharacterData]) -> Array[Chara
 		c.character_ap_remaining = 1
 		squad.append(c)
 	return squad
+
+
+# Who goes first (BR-018A, designer 2026-10-27): a coin flip, derived from the match seed
+# so both devices in an online match (one shared room seed) and every replay of it land
+# the same way. The starter's Leader also picks the board art and music.
+static func coin_flip(seed_value: int) -> String:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("coin flip %d" % seed_value)
+	return GameEnums.PLAYER_IDS[rng.randi() % 2]
 
 
 static func _side_of(player_id: String) -> int:

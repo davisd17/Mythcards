@@ -70,6 +70,11 @@ func test_deploying_starts_the_match_and_shows_the_drawn_card() -> void:
 func test_character_art_loads_for_both_playable_cultures() -> void:
 	assert_not_null(CardView.art_for("r-seer"), "run tools/sync_game_content.ps1 if this fails")
 	assert_not_null(CardView.art_for("a-harmonic"), "run tools/sync_game_content.ps1 if this fails")
+	# Every character the playtest matchup fields has card art (the Reactor Worker had none
+	# until playtest 2026-10-26: map it in data/cards/card_art.json).
+	for team_id in ["closed-city", "flood-survivors"]:
+		for data in ContentDB.get_team_characters(team_id):
+			assert_not_null(CardView.art_for(data.id), "%s has no card art" % data.id)
 
 
 func test_a_seeded_match_plays_through_the_whole_deck_by_taps() -> void:
@@ -111,6 +116,14 @@ func test_summary_strip_and_full_card_overlay() -> void:
 	assert_string_contains(screen._summary.text(), "Zoya Miranova  L1")
 	assert_string_contains(screen._summary.text(), "Voice Under Static")
 	assert_false(screen._summary.text().contains("Subject Three"), "upgrades not reached stay on the full card")
+	# Playtest 2026-10-26: upgrade text cut the strip off on a phone; a leveled character's
+	# strip points to the full card instead.
+	var zoya := GameState.match_state.find_character("p1_r-zoya-miranova")
+	zoya.level = 2
+	screen._refresh()
+	assert_false(screen._summary.text().contains(zoya.data.l2), "upgrades stay on the full card")
+	assert_string_contains(screen._summary.text(), "Level 2 upgrades")
+	zoya.level = 1
 	screen._summary.pressed.emit()
 	assert_true(screen._popup.visible)
 	assert_eq(screen._popup_button.text, "Close")
@@ -342,6 +355,8 @@ func test_ai_draws_do_not_stop_play() -> void:
 	assert_false(screen._popup.visible, "no blocking popup for the AI's draw")
 	assert_true(screen._notice_button.visible)
 	assert_string_contains(screen._notice_button.text, "drew Seventeen Seconds")
+	assert_gt(screen._notice_button.offset_top, screen._commands.get_global_rect().end.y - screen.get_global_position().y,
+			"below the command row, so it never covers End turn")
 	screen._notice_button.pressed.emit()
 	assert_true(screen._popup.visible, "tapping the notice shows the card")
 
@@ -402,6 +417,12 @@ func test_a_trapped_hero_warns_and_end_turn_asks_first() -> void:
 	assert_true(gc.hero_trapped("p1"))
 	screen._refresh()
 	assert_string_contains(screen._prompt.text, "your Hero can't move")
+	# Playtest 2026-10-26: warn as soon as it's stuck, while there's AP to free it.
+	assert_true(screen._capture_confirm.visible, "warns before the end of the turn")
+	assert_false(screen._capture_lose.visible, "only the end-turn confirm offers to lose")
+	screen._capture_confirm.visible = false
+	screen._refresh()
+	assert_false(screen._capture_confirm.visible, "once per turn, not on every refresh")
 	screen._on_primary()
 	assert_true(screen._capture_confirm.visible, "asks before losing")
 	assert_eq(GameState.match_state.active_player_id, "p1", "the turn hasn't ended")
@@ -410,3 +431,42 @@ func test_a_trapped_hero_warns_and_end_turn_asks_first() -> void:
 			b.pressed.emit()
 	assert_eq(GameState.match_state.phase, "ended")
 	assert_eq(GameState.match_state.win_condition, "hero_capture")
+
+
+# BR-018A (designer 2026-10-27): the game flips for who goes first, and the board art and
+# music follow that side's Leader.
+func test_coin_flip_picks_the_starter_and_its_leader_sets_the_scene() -> void:
+	const SetupFlowScript := preload("res://scripts/scenes/setup_flow.gd")
+	_deploy_both()
+	var state := GameState.match_state
+	assert_eq(state.first_player_id, SetupFlowScript.coin_flip(42))
+	assert_eq(state.active_player_id, state.first_player_id, "the winner takes the first turn")
+	assert_eq(state.get_player(state.first_player_id).pool_ap_max, 2, "and pays the 2-AP first turn")
+	var leader_area := ""
+	for c in state.get_player(state.first_player_id).characters:
+		if c.data.type == "Leader":
+			leader_area = c.data.sub_area
+	assert_eq(BattlefieldTheme.area_for(state), leader_area)
+	assert_eq(MusicManager.current_sub_area, leader_area)
+	assert_string_contains(screen.controller.message, "Coin flip:")
+
+
+func test_an_ai_that_wins_the_coin_flip_plays_first_and_hands_back() -> void:
+	const SetupFlowScript := preload("res://scripts/scenes/setup_flow.gd")
+	var seed_value := 0
+	while SetupFlowScript.coin_flip(seed_value) != "p2":
+		seed_value += 1
+	screen._start("p2")                             # you play Closed City; the AI wins the flip
+	var gc: GameController = screen.controller
+	gc.auto_place()
+	gc.confirm_placement(seed_value)
+	var state := GameState.match_state
+	assert_eq(state.active_player_id, "p2")
+	assert_true(gc.is_ai_turn())
+	var ticks := 0
+	while gc.is_ai_turn() and ticks < 40:
+		screen._on_ai_tick()
+		ticks += 1
+	assert_eq(state.active_player_id, "p1", "the AI ended its first turn")
+	assert_eq(state.turn_number, 2)
+	assert_eq(state.get_player("p1").pool_ap_max, 4, "the second player gets a full pool")

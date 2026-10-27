@@ -136,7 +136,7 @@
     "type": "Leader",
     "unique": true,
     "stats": [4, 1, 2, 3],
-    "l1": "AP Ability: Memory Discipline chooses an allied character within RANGE in an orthogonal line. Give that ally 1 Memory marker. If Meret-Anu does not already have Memory, she also gains 1 Memory marker.",
+    "l1": "AP Ability: Memory Discipline chooses an allied character within RANGE in an orthogonal line, ignoring line of sight. Give that ally 1 Memory marker. If Meret-Anu does not already have Memory, she also gains 1 Memory marker.",
     "l2": "Buried Tide Order: Memory Discipline may target 1 allied character anywhere on the board. If Meret-Anu does not already have Memory, she also gains 1 Memory marker.",
     "l3": "Tide-Sealed Archive: +1 HP. Once per match, allies with Memory markers cannot be defeated until the start of your next turn; if one would be defeated, remove its Memory and leave it at 1 HP.",
     "role": "Hidden survivor queen who controls bloodlines, archives, ley routes, and the disciplined memory of Atlantis after the Flood.",
