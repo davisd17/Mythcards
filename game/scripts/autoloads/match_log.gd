@@ -10,7 +10,10 @@ extends Node
 const MAX_ENTRIES := 2000
 const DIRECTIONS := {Vector2i(0, 1): "up", Vector2i(0, -1): "down", Vector2i(1, 0): "right", Vector2i(-1, 0): "left"}
 
-# {turn, player, text, lines: Array[String], failed: bool}
+# {turn, player, text, lines: Array[String], failed: bool, parts: Array, brief: Array[Array]}
+# text and lines are the full record; parts (the action) and brief (its key results) are the
+# compact form the in-game log draws: tokens of {t: "text", s}, {t: "char", id, type, player,
+# name}, {t: "card", id, name, kind} and {t: "player", id}.
 var entries: Array[Dictionary] = []
 var _match: MatchState = null
 var _open: Dictionary = {}   # the action being resolved, or {}
@@ -24,16 +27,22 @@ func _ready() -> void:
 	EventBus.status_added.connect(_on_status)
 	EventBus.object_attacked.connect(_on_object_attacked)
 	EventBus.character_defeated.connect(_on_defeated)
-	EventBus.character_leveled_up.connect(func(id, level): _detail("%s reaches Level %d (full HP)" % [_name(id), level]))
-	EventBus.spirit_ember_picked_up.connect(func(id, gained): _detail("%s takes %s" % [_name(id), "a Spirit Ember" if gained == 1 else "%d Spirit Embers" % gained]))
-	EventBus.spirit_ember_delivered.connect(func(id): _detail("%s delivers a Spirit Ember to the center" % _name(id)))
-	EventBus.memory_gained.connect(func(id): _detail("%s gains Memory" % _name(id)))
-	EventBus.leak_triggered.connect(func(id, _pos): _detail("%s triggers a Leak" % _name(id)))
+	EventBus.character_leveled_up.connect(func(id, level): _detail("%s reaches Level %d (full HP)" % [_name(id), level],
+			[_tok_char(id), _tok("Level %d" % level)]))
+	EventBus.spirit_ember_picked_up.connect(func(id, gained): _detail("%s takes %s" % [_name(id), "a Spirit Ember" if gained == 1 else "%d Spirit Embers" % gained],
+			[_tok_char(id), _tok("takes an Ember" if gained == 1 else "takes %d Embers" % gained)]))
+	EventBus.spirit_ember_delivered.connect(func(id): _detail("%s delivers a Spirit Ember to the center" % _name(id),
+			[_tok_char(id), _tok("delivers an Ember")]))
+	EventBus.memory_gained.connect(func(id): _detail("%s gains Memory" % _name(id), [_tok_char(id), _tok("Memory")]))
+	EventBus.leak_triggered.connect(func(id, _pos): _detail("%s triggers a Leak" % _name(id), [_tok_char(id), _tok("hits a Leak")]))
 	EventBus.relic_drawn.connect(_on_drawn)
-	EventBus.relic_slot_changed.connect(func(player, card): _detail("%s's relic is now %s" % [_player(player), _card(card)]) if card != "" else null)
+	EventBus.relic_slot_changed.connect(func(player, card): _detail("%s's relic is now %s" % [_player(player), _card(card)],
+			[_tok("Relic"), _tok_card(card)]) if card != "" else null)
 	EventBus.character_repositioned.connect(_on_repositioned)
-	EventBus.character_charmed.connect(func(id, _from, to): _detail("%s is charmed and joins %s" % [_name(id), _player(to)]))
-	EventBus.match_ended.connect(func(winner, how): _entry("%s wins by %s" % [_player(winner), how.replace("_", " ")]))
+	EventBus.character_charmed.connect(func(id, _from, to): _detail("%s is charmed and joins %s" % [_name(id), _player(to)],
+			[_tok_char(id), _tok("charmed")]))
+	EventBus.match_ended.connect(func(winner, how): _entry("%s wins by %s" % [_player(winner), how.replace("_", " ")],
+			[_tok_player(winner), _tok("wins by %s" % how.replace("_", " "))]))
 
 
 func clear() -> void:
@@ -82,7 +91,7 @@ func _begin_turn(player_id: String) -> void:
 
 func _on_action_requested(action_type: String, actor_id: String, payload: Dictionary) -> void:
 	_sync_match()
-	_open = _new_entry(_describe(action_type, actor_id, payload))
+	_open = _new_entry(_describe(action_type, actor_id, payload), _brief(action_type, actor_id, payload))
 
 
 func _on_action_resolved(_action_type: String, _actor_id: String, result: Dictionary) -> void:
@@ -91,6 +100,7 @@ func _on_action_resolved(_action_type: String, _actor_id: String, result: Dictio
 	if not result.get("success", false):
 		_open.text += " (failed: %s)" % result.get("reason", "?")
 		_open.failed = true
+		_open.parts.append(_tok("failed"))
 	_push(_open)
 	_open = {}
 
@@ -98,7 +108,7 @@ func _on_action_resolved(_action_type: String, _actor_id: String, result: Dictio
 func _on_damage(attacker_id: String, target_id: String, amount: int, lines: Array) -> void:
 	var who := "%s takes %d" % [_name(target_id), amount] if attacker_id == target_id \
 			else "%s deals %d to %s" % [_name(attacker_id), amount, _name(target_id)]
-	_detail("%s: %s" % [who, ", ".join(lines)])
+	_detail("%s: %s" % [who, ", ".join(lines)], [_tok_char(target_id), _tok("-%d" % amount)])
 
 
 func _on_status(target_id: String, status_type: String, value: int, source_id: String) -> void:
@@ -107,20 +117,21 @@ func _on_status(target_id: String, status_type: String, value: int, source_id: S
 	var label: String = GameBoardView.STATUS.get(status_type, ["", status_type.capitalize()])[1]
 	var amount := " %d" % value if status_type == "shield" or (value != 0 and status_type.begins_with("temp_")) else ""
 	var by := " (from %s)" % _name(source_id) if source_id != "" and source_id != target_id else ""
-	_detail("%s gains %s%s%s" % [_name(target_id), label, amount, by])
+	_detail("%s gains %s%s%s" % [_name(target_id), label, amount, by], [_tok_char(target_id), _tok(label + amount)])
 
 
 func _on_object_attacked(attacker_id: String, _pos: Vector2i, object_type: String, damage: int, destroyed: bool) -> void:
-	_detail("%s hits a %s for %d%s" % [_name(attacker_id), object_type, damage, " and destroys it" if destroyed else ""])
+	_detail("%s hits a %s for %d%s" % [_name(attacker_id), object_type, damage, " and destroys it" if destroyed else ""],
+			[_tok(object_type.capitalize()), _tok("destroyed" if destroyed else "-%d" % damage)])
 
 
 func _on_defeated(id: String, by_id: String, cause: String) -> void:
 	if cause == "mount_propagation":
-		_detail("%s falls with its rider" % _name(id))
+		_detail("%s falls with its rider" % _name(id), [_tok_char(id), _tok("defeated")])
 	elif by_id == id or by_id == "":
-		_detail("%s is defeated" % _name(id))
+		_detail("%s is defeated" % _name(id), [_tok_char(id), _tok("defeated")])
 	else:
-		_detail("%s is defeated by %s" % [_name(id), _name(by_id)])
+		_detail("%s is defeated by %s" % [_name(id), _name(by_id)], [_tok_char(id), _tok("defeated")])
 
 
 func _on_drawn(player_id: String, card_id: String) -> void:
@@ -129,13 +140,14 @@ func _on_drawn(player_id: String, card_id: String) -> void:
 		_begin_turn(player_id)
 	var card := ContentDB.get_relic_event(card_id)
 	var kind := card.kind.to_lower() if card != null else "card"
-	_detail("%s draws %s (%s): %s" % [_player(player_id), _card(card_id), kind, card.effect if card != null else ""])
+	_detail("%s draws %s (%s): %s" % [_player(player_id), _card(card_id), kind, card.effect if card != null else ""],
+			[_tok("Draws"), _tok_card(card_id)])
 
 
 func _on_repositioned(id: String, from: Vector2i, to: Vector2i, cause: String) -> void:
 	if from == to or cause == "mount" or cause == "dismount":
 		return
-	_detail("%s is moved %s (%s)" % [_name(id), _steps(from, to), cause.replace("_", " ")])
+	_detail("%s is moved %s (%s)" % [_name(id), _steps(from, to), cause.replace("_", " ")], [_tok_char(id), _tok("pushed %s" % _steps(from, to))])
 
 
 # --- Entries -------------------------------------------------------------------------------
@@ -178,24 +190,62 @@ func _describe(action_type: String, actor_id: String, payload: Dictionary) -> St
 	return "%s: %s" % [who, action_type]
 
 
-func _new_entry(text: String) -> Dictionary:
+# The compact form of _describe: the actor's symbol, then only the action.
+func _brief(action_type: String, actor_id: String, payload: Dictionary) -> Array:
+	var c := _find(actor_id)
+	match action_type:
+		"move":
+			return [_tok_char(actor_id), _tok("moves %s" % _steps(c.position, payload.get("to", c.position)) if c != null else "moves")]
+		"attack":
+			if payload.has("target_pos"):
+				return [_tok_char(actor_id), _tok("attacks an object")]
+			return [_tok_char(actor_id), _tok("attacks"), _tok_char(str(payload.get("target_id", "")))]
+		"ability":
+			var label := str(payload.get("ability_id", ""))
+			if c != null:
+				label = RulesEngine.systems().ability.ability_label(c, label)
+			var target = payload.get("target")
+			if target is Vector2i and c != null:
+				return [_tok_char(actor_id), _tok("%s, %s" % [label, _steps(c.position, target)])]
+			if _find(str(target)) != null and str(target) != actor_id:
+				return [_tok_char(actor_id), _tok(label), _tok_char(str(target))]
+			return [_tok_char(actor_id), _tok(label)]
+		"reactive_bonus":
+			var tag := str(payload.get("tag", ""))
+			return [_tok_char(actor_id), _tok("%s (free)" % (RulesEngine.systems().ability.bonus_label(c, tag) if c != null else tag))]
+		"mount":
+			return [_tok_char(actor_id), _tok("mounts"), _tok_char(str(payload.get("mount_id", "")))]
+		"dismount":
+			return [_tok_char(actor_id), _tok("dismounts")]
+		"end_turn":
+			return [_tok("Ends turn")]
+		"deck_choice":
+			return [_tok("Answers the card")]
+		"use_relic":
+			var p := _state().get_player(actor_id) if _state() != null else null
+			return [_tok("Uses"), _tok_card(p.active_relic_id)] if p != null and p.active_relic_id != "" else [_tok("Uses relic")]
+	return [_tok_char(actor_id), _tok(action_type)]
+
+
+func _new_entry(text: String, parts: Array = []) -> Dictionary:
 	var state := _state()
 	return {"turn": state.turn_number if state != null else 0, "player": state.active_player_id if state != null else "",
-			"text": text, "lines": [], "failed": false}
+			"text": text, "lines": [], "failed": false, "parts": parts, "brief": []}
 
 
-func _entry(text: String) -> void:
-	_push(_new_entry(text))
+func _entry(text: String, parts: Array = []) -> void:
+	_push(_new_entry(text, parts))
 
 
 # Attaches a detail to the action in progress, or to the latest entry between actions.
-func _detail(line: String) -> void:
-	if not _open.is_empty():
-		_open.lines.append(line)
-	elif not entries.is_empty():
-		entries[-1].lines.append(line)
-	else:
-		_entry(line)
+func _detail(line: String, parts: Array = []) -> void:
+	var target: Dictionary = _open if not _open.is_empty() else (entries[-1] if not entries.is_empty() else {})
+	if target.is_empty():
+		_entry(line, parts)
+		return
+	target.lines.append(line)
+	if not parts.is_empty():
+		target.brief.append(parts)
 
 
 func _push(entry: Dictionary) -> void:
@@ -232,6 +282,27 @@ func _player(player_id: String) -> String:
 	var p := _state().get_player(player_id) if _state() != null else null
 	var team := str(ContentDB.get_team(p.team_id).get("name", "")) if p != null else ""
 	return "%s (%s)" % [n, team] if team != "" else n
+
+
+static func _tok(s: String) -> Dictionary:
+	return {"t": "text", "s": s}
+
+
+# A character is drawn as its type symbol in its team's color, so its name stays in the record.
+func _tok_char(id: String) -> Dictionary:
+	var c := _find(id)
+	if c == null:
+		return _tok_player(id)
+	return {"t": "char", "id": id, "type": c.data.type, "player": c.player_id, "name": c.data.char_name}
+
+
+func _tok_player(player_id: String) -> Dictionary:
+	return {"t": "player", "id": player_id, "name": _player(player_id)}
+
+
+static func _tok_card(card_id: String) -> Dictionary:
+	var card := ContentDB.get_relic_event(card_id)
+	return {"t": "card", "id": card_id, "name": _card(card_id), "kind": card.kind.to_lower() if card != null else "card"}
 
 
 static func _card(card_id: String) -> String:

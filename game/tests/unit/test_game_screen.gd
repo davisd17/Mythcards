@@ -141,17 +141,157 @@ func test_a_revealed_card_is_shown_in_full() -> void:
 	assert_false(screen._popup.visible, "shown once, not again on every refresh")
 
 
-func test_log_overlay_shows_the_match_so_far() -> void:
+func _find_in(node: Node, meta: String) -> Array[Node]:
+	var out: Array[Node] = []
+	for c in node.find_children("*", "", true, false):
+		if c.has_meta(meta) and not c.is_queued_for_deletion():
+			out.append(c)
+	return out
+
+
+func test_the_log_takes_the_card_panels_place() -> void:
 	_deploy_both()
 	screen._popup_queue.clear()
 	screen._next_popup()
 	screen.controller.end_turn()
+	screen._refresh()
+	assert_true(screen._bottom.visible, "the card panel shows first")
 	screen._toggle_log()
-	assert_true(screen._log.visible)
-	assert_string_contains(screen._log_text.get_parsed_text(), "Player 1 (Closed City) ends the turn")
+	assert_true(screen._log_shown)
+	assert_true(screen._log_view.is_visible_in_tree(), "the log is inline, not an overlay")
+	assert_false(screen._bottom.visible, "it replaces the summary and actions")
+	assert_true(screen._board.is_visible_in_tree(), "the board stays in view")
+	assert_true(screen._details.is_ancestor_of(screen._log_view), "inside the details panel")
+	assert_eq((screen._log_button.get_child(0) as UiGlyph).glyph, "card", "the button now switches back to the card")
+	assert_gt(_find_in(screen._log_view, "log_turn").size(), 0, "one block per turn")
 	await wait_process_frames(2)
 	screen._toggle_log()
-	assert_false(screen._log.visible)
+	assert_false(screen._log_shown)
+	assert_true(screen._bottom.visible)
+	assert_false(screen._log_scroll.visible)
+
+
+func test_log_actions_use_type_symbols_and_link_cards() -> void:
+	_deploy_both()
+	screen._popup_queue.clear()
+	screen._next_popup()
+	var state := GameState.match_state
+	var mover: CharacterInstance = null
+	for c in state.get_player("p1").characters:
+		if c.is_placed() and not c.defeated and RulesEngine.get_legal_move_tiles(c.instance_id).size() > 0:
+			mover = c
+			break
+	if mover == null:
+		pending("no legal move in this deployment")
+		return
+	var to: Vector2i = RulesEngine.get_legal_move_tiles(mover.instance_id)[0]
+	RulesEngine.request_action("move", mover.instance_id, {"to": to})
+	MatchLog.entries[-1].brief.append([{"t": "text", "s": "Draws"}, MatchLog._tok_card("r-reactor-prayer")])
+	screen._toggle_log()
+	var badges: Array = screen._log_view.find_children("*", "Control", true, false).filter(
+			func(n): return n is ActionLogView.LogBadge and not n.is_queued_for_deletion())
+	assert_gt(badges.size(), 0, "the mover is its type symbol")
+	assert_eq(badges[0].type, mover.data.type)
+	assert_eq(badges[0].tooltip_text, "Show %s" % mover.data.char_name)
+	var links := _find_in(screen._log_view, "log_card").filter(func(n): return n.get_meta("log_card") == "r-reactor-prayer")
+	assert_eq(links.size(), 1)
+	(links[0] as Button).pressed.emit()
+	await wait_process_frames(2)
+	assert_true(screen._popup.visible, "the link opens the card")
+	assert_eq(screen._popup_card._title.text, "Reactor Prayer")
+
+
+func test_tapping_a_symbol_switches_the_panel_to_that_card() -> void:
+	_deploy_both()
+	screen._popup_queue.clear()
+	screen._next_popup()
+	var enemy: CharacterInstance = GameState.match_state.get_player("p2").characters[0]
+	MatchLog._entry("Player 1 (Closed City) tests the log",
+			[{"t": "text", "s": "sees"}, MatchLog._tok_char(enemy.instance_id)])
+	screen._toggle_log()
+	var badge: Control = _find_in(screen._log_view, "log_char").filter(
+			func(n): return n.get_meta("log_char") == enemy.instance_id)[-1]
+	var entry: Control = _find_in(screen._log_view, "log_entry").filter(
+			func(n): return n.is_ancestor_of(badge))[0]
+	assert_gte(badge.custom_minimum_size.y, ActionLogView.BADGE, "a comfortable tap target")
+	for pressed in [true, false]:
+		var e := InputEventMouseButton.new()
+		e.button_index = MOUSE_BUTTON_LEFT
+		e.pressed = pressed
+		e.position = Vector2(8, 8)
+		badge.gui_input.emit(e)
+	assert_false(_find_in(entry, "log_full")[0].visible, "a symbol tap doesn't expand the action")
+	assert_false(screen._log_shown, "the panel switches back to the card")
+	assert_eq(screen.controller.inspect_id, enemy.instance_id)
+	assert_true(screen._summary.visible)
+	assert_true(screen._bottom.visible)
+	assert_eq((screen._log_button.get_child(0) as UiGlyph).glyph, "log")
+
+
+func test_tapping_an_action_shows_its_full_record() -> void:
+	_deploy_both()
+	screen._popup_queue.clear()
+	screen._next_popup()
+	MatchLog._entry("Player 1 (Closed City) tests the log", [{"t": "text", "s": "tests"}])
+	screen._toggle_log()
+	var entry: Control = _find_in(screen._log_view, "log_entry")[0]
+	var full: Label = _find_in(entry, "log_full")[0]
+	assert_false(full.visible)
+	for pressed in [true, false]:
+		var e := InputEventMouseButton.new()
+		e.button_index = MOUSE_BUTTON_LEFT
+		e.pressed = pressed
+		entry.gui_input.emit(e)
+	assert_true(full.visible)
+	assert_string_contains(full.text, "Player 1 (Closed City) tests the log")
+
+
+func test_the_log_opens_on_the_ais_turn_when_play_returns() -> void:
+	screen._start("p2")
+	_deploy_both()
+	screen._popup_queue.clear()
+	screen._next_popup()
+	assert_false(screen._log_shown)
+	screen.controller.end_turn()
+	screen._refresh()   # the AI's turn
+	while screen.controller.is_ai_turn():
+		screen.controller.ai_step()
+		screen._refresh()
+	assert_true(screen._log_shown, "the person's turn opens on what the AI did")
+	var focus: Control = screen._log_view.focus_row()
+	assert_not_null(focus)
+	assert_eq(focus.get_meta("log_turn"), GameState.match_state.turn_number - 1, "its last turn is highlighted")
+	# Left open and scrolled back, the log still jumps to the AI's next turn.
+	screen._detail_scroll.scroll_vertical = 0
+	screen._log_scroll.scroll_vertical = 0
+	screen.controller.end_turn()
+	screen._refresh()
+	while screen.controller.is_ai_turn():
+		screen.controller.ai_step()
+		screen._refresh()
+	await wait_process_frames(3)
+	focus = screen._log_view.focus_row()
+	assert_eq(focus.get_meta("log_turn"), GameState.match_state.turn_number - 1)
+	var view: Rect2 = screen._log_scroll.get_global_rect()
+	assert_between(focus.global_position.y, view.position.y - 2.0, view.end.y, "scrolled to the AI's turn")
+
+
+func test_the_log_works_side_by_side() -> void:
+	screen.px_override = 0.5625
+	screen.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	screen.size = Vector2(2276, 1280)
+	_deploy_both()
+	screen._popup_queue.clear()
+	screen._next_popup()
+	screen._layout()
+	assert_true(screen._detail_scroll.visible)
+	screen._toggle_log()
+	assert_eq(screen._log_view.get_parent(), screen._detail_list)
+	assert_true(screen._log_view.is_visible_in_tree())
+	assert_false(screen._side.visible)
+	assert_false(screen._log_scroll.visible)
+	screen._toggle_log()
+	assert_true(screen._side.visible)
 
 
 func test_new_match_offers_ai_hotseat_or_how_to_play() -> void:
