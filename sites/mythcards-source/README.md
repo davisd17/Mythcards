@@ -1,7 +1,8 @@
 # MythCards coming-soon website
 
 Universe-first site centered on the MythCards tactical game and its lore. The
-first tarot deck is promoted upfront under its approved marketing title
+first tarot deck is promoted above the navigation as the first upcoming release,
+under its approved marketing title
 **Dreams of the North**, with subtitle **A MythCards Tarot**. This does not rename canonical
 deck IDs, source art, or guidebook data. No purchases,
 preorders, email collection, accounts, or payment integration are present.
@@ -31,23 +32,32 @@ The eight tarot fronts were exported by the existing tarot tools to
 are included here so deployment does not depend on that drive. Gallery copy comes
 from approved entries in `data/cards/review_drafts/russian_tarot_guidebook.json`.
 Only public narrative and interpretation fields are included, not hidden threads.
-The gameplay image is an actual development prototype capture from
-`e2e/test-results/readability-1280.png`, not a finished-release image. Its web copy
-is committed in `dist/assets/gameplay.webp`. The page frames the complete board
-from source coordinates x402, y114, width476, height476 using CSS, removing empty
-outer margins without repainting, inventing or changing gameplay. This board-detail
-view is shared across desktop and phones. If the capture changes, remeasure the
-board framing rather than reusing those coordinates blindly. To regenerate assets, first
-produce that screenshot with the project's existing readability tests.
+The gameplay image is the user's Closed City development capture, preserved in
+`source-assets/gameplay-closed-city-user.png` (uploaded 2026-10-24). Its optimized
+web copy is `dist/assets/gameplay.webp`. It is shown uncropped, at no more than
+760 CSS pixels wide, without enlarging source pixels. No generated gameplay or
+old CSS zoom coordinates are used. It remains labeled a development prototype.
+
+The game introduction intentionally avoids board dimensions, roster counts,
+progression, ability rules and victory conditions at this early stage. Its
+three-profile switcher features canonical Thalassa-Nekh, Buran and
+Subject 3: Zoya profile pages from `assets/characters`. All artwork is contained,
+not cropped. Quotes are transcribed into HTML for readability. Tabs support
+arrow/Home/End navigation; original-scale profile dialogs support Escape and
+focus return. There is no automatic slideshow. Without JavaScript all three
+profiles are visible and their image links still work.
 
 `node prepare-assets.mjs [fronts-directory]` refreshes these copies from the
 canonical assets and guidebook. Requires Sharp; set `SHARP_MODULE` to its installed
 module path outside the bundled desktop runtime. Original art is not modified.
+Use `node prepare-assets.mjs --showcase-only` to update just the profiles and
+gameplay image without regenerating the approved tarot gallery.
 
 ## Launch checklist
 
 - Owner reviews imagery, public story copy, and release wording.
-- Connect `mythcards.io` and `www.mythcards.io` to the selected public host.
+- Connected `mythcards.io` and `www.mythcards.io` to the existing Sites host,
+  with user-approved public access and active HTTPS (verified 2026-10-25).
 - Web Analytics was enabled in Cloudflare with automatic setup. On the public
   custom domain, verify the beacon is injected and actual test visits appear.
   Do not mistake the Site dashboard tag for an analytics beacon token.

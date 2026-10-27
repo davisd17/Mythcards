@@ -183,8 +183,10 @@ Keep title, metadata, gallery labels, alt text, social copy and README consisten
 
 ## Publication And Agent Handoff
 
-Preserve the existing Sites project ID and owner-private audience. Public access,
-custom-domain changes and purchases need separate user authorization. Do not
+Preserve the existing Sites project ID and public audience. The user authorized
+public access and both mythcards.io and www.mythcards.io on 2026-10-25; both were
+verified active over HTTPS. Audience/domain changes and purchases need separate
+user authorization. Do not
 claim Cloudflare visits are tracked on a private preview; verify on the connected
 public custom domain. Never put credentials in source, files, URLs or logs.
 

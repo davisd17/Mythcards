@@ -21,9 +21,28 @@ func test_theme_matches_starting_leader_music_and_survives_turn_changes() -> voi
 
 
 func test_starting_flood_survivors_do_not_borrow_closed_city() -> void:
+	var view := GameBoardView.new()
+	add_child_autofree(view)
+	view.size = Vector2(700, 700)
+	view.controller = GameController.new()
+	var original_tiles := []
+	for y in 7:
+		for x in 7:
+			original_tiles.append(view.tile_rect(Vector2i(x, y)))
 	Fixture.state().first_player_id = "p2"
 	assert_eq(BattlefieldTheme.area_for(Fixture.state()), "Flood Survivors")
 	assert_false(BattlefieldTheme.is_closed_city())
+	assert_true(BattlefieldTheme.has_theme())
+	assert_eq(BattlefieldTheme.current_art().backdrop, BattlefieldTheme.SANCTUARY)
+	assert_eq(BattlefieldTheme.current_art().surface, BattlefieldTheme.TIDE_STONE)
+	for y in 7:
+		for x in 7:
+			var tile := view.tile_rect(Vector2i(x, y))
+			assert_eq(tile, original_tiles[y * 7 + x], "theme does not reflow the board")
+			assert_eq(view.tile_at(tile.get_center()), Vector2i(x, y))
+	TurnManager.end_turn("p1")
+	TurnManager.end_turn("p2")
+	assert_eq(BattlefieldTheme.current_art().surface, BattlefieldTheme.TIDE_STONE)
 
 
 func test_theme_follows_leader_not_player_number_or_team_metadata() -> void:
@@ -33,6 +52,8 @@ func test_theme_follows_leader_not_player_number_or_team_metadata() -> void:
 	state.players[1].characters = squad
 	state.first_player_id = "p2"
 	assert_true(BattlefieldTheme.is_closed_city())
+	state.first_player_id = "p1"
+	assert_eq(BattlefieldTheme.current_art().surface, BattlefieldTheme.TIDE_STONE)
 
 
 func test_missing_or_unknown_starter_is_neutral() -> void:
@@ -42,10 +63,11 @@ func test_missing_or_unknown_starter_is_neutral() -> void:
 	Fixture.state().first_player_id = "p1"
 	Fixture.state().players[0].characters = []
 	assert_eq(BattlefieldTheme.area_for(Fixture.state()), "")
+	assert_false(BattlefieldTheme.has_theme())
 
 
 func test_assets_load_and_cover_crop_stays_within_texture() -> void:
-	for path in [BattlefieldTheme.CHAMBER, BattlefieldTheme.SURFACE]:
+	for path in [BattlefieldTheme.CHAMBER, BattlefieldTheme.SURFACE, BattlefieldTheme.SANCTUARY, BattlefieldTheme.TIDE_STONE]:
 		var texture := BattlefieldTheme.texture(path)
 		assert_not_null(texture)
 		if texture == null:

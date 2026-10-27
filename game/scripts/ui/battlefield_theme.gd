@@ -4,8 +4,15 @@ extends RefCounted
 # it follows the starting side's Leader, never the currently active turn.
 
 const CLOSED_CITY := "Closed City"
+const FLOOD_SURVIVORS := "Flood Survivors"
 const CHAMBER := "res://assets/boards/closed-city/chamber-v1.png"
 const SURFACE := "res://assets/boards/closed-city/containment-deck-v1.png"
+const SANCTUARY := "res://assets/boards/flood-survivors/sanctuary-v1.png"
+const TIDE_STONE := "res://assets/boards/flood-survivors/tide-stone-v1.png"
+const THEMES := {
+	CLOSED_CITY: {"backdrop": CHAMBER, "surface": SURFACE, "tint": Color(0.73, 0.78, 0.76)},
+	FLOOD_SURVIVORS: {"backdrop": SANCTUARY, "surface": TIDE_STONE, "tint": Color(0.68, 0.74, 0.70)},
+}
 static var _textures: Dictionary = {}
 
 
@@ -25,6 +32,20 @@ static func is_closed_city() -> bool:
 	return area_for(GameState.match_state) == CLOSED_CITY
 
 
+static func current_art() -> Dictionary:
+	return THEMES.get(area_for(GameState.match_state), {})
+
+
+static func has_theme() -> bool:
+	return not current_art().is_empty()
+
+
+static func preload_art() -> void:
+	for art in THEMES.values():
+		texture(art.backdrop)
+		texture(art.surface)
+
+
 static func texture(path: String) -> Texture2D:
 	if not _textures.has(path):
 		_textures[path] = load(path) as Texture2D
@@ -39,9 +60,10 @@ static func cover(source: Vector2, target: Vector2) -> Rect2:
 
 static func draw_backdrop(canvas: CanvasItem, bounds: Rect2) -> void:
 	canvas.draw_rect(bounds, UiStyle.BG)
-	if not is_closed_city() or bounds.size.x <= 0 or bounds.size.y <= 0:
+	var art := current_art()
+	if art.is_empty() or bounds.size.x <= 0 or bounds.size.y <= 0:
 		return
-	var backdrop := texture(CHAMBER)
+	var backdrop := texture(art.backdrop)
 	if backdrop != null:
 		canvas.draw_texture_rect_region(backdrop, bounds, cover(backdrop.get_size(), bounds.size))
 		# A constant wash guarantees quiet text surfaces without blurring the setting.
@@ -49,7 +71,10 @@ static func draw_backdrop(canvas: CanvasItem, bounds: Rect2) -> void:
 
 
 static func draw_deck(canvas: CanvasItem, playable: Rect2) -> void:
-	var surface := texture(SURFACE)
+	var art := current_art()
+	if art.is_empty():
+		return
+	var surface := texture(art.surface)
 	if surface == null:
 		return
 	# Nine-slice the illustrated surround into the existing margin: the grid and hit
@@ -66,5 +91,5 @@ static func draw_deck(canvas: CanvasItem, playable: Rect2) -> void:
 		for x in 3:
 			var from := Rect2(Vector2(src_x[x], src_y[y]), Vector2(src_x[x + 1] - src_x[x], src_y[y + 1] - src_y[y]))
 			var to := Rect2(Vector2(dst_x[x], dst_y[y]), Vector2(dst_x[x + 1] - dst_x[x], dst_y[y + 1] - dst_y[y]))
-			var tint := Color(0.73, 0.78, 0.76) if x == 1 and y == 1 else Color.WHITE
+			var tint: Color = art.tint if x == 1 and y == 1 else Color.WHITE
 			canvas.draw_texture_rect_region(surface, to, from, tint)

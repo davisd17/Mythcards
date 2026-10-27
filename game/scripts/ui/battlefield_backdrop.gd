@@ -12,12 +12,12 @@ func _ready() -> void:
 	resized.connect(queue_redraw)
 	EventBus.match_started.connect(queue_redraw)
 	EventBus.match_reset.connect(queue_redraw)
-	BattlefieldTheme.texture(BattlefieldTheme.CHAMBER)
+	BattlefieldTheme.preload_art()
 
 
 func _draw() -> void:
 	BattlefieldTheme.draw_backdrop(self, Rect2(Vector2.ZERO, size))
-	if not BattlefieldTheme.is_closed_city() or board == null or not board.is_inside_tree():
+	if not BattlefieldTheme.has_theme() or board == null or not board.is_inside_tree():
 		return
 	var inverse := get_global_transform().affine_inverse()
 	var board_rect := inverse * board.get_global_rect()

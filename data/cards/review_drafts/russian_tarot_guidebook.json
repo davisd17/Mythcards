@@ -1307,31 +1307,120 @@
       "mythcards_name": "The Village Refuses The Signal",
       "card_type": "Event",
       "sub_area": "Far North",
-      "review_status": "draft_for_review",
+      "review_status": "approved",
       "affirmation": "I give myself time to know what I need.",
       "upright_keywords": ["Reflection", "Withdrawal", "Discernment"],
       "shadow_keywords": ["Apathy", "Avoidance", "Missed Opportunity"],
       "narrative_heading": "Event",
-      "narrative": "As unfamiliar voices emerge from the radios and the aurora brightens, the villagers close their shutters. Sets are switched off, charms turned inward, and children called away from windows. Pavel sees people refusing the very mysteries he needs to understand, but the older residents remember what happened the last time someone answered.",
+      "narrative": "The village radios begin speaking in the voices of people lost during the meteor winter of 1942. One woman recognizes her husband when he uses a private name she has not heard in forty years. Pavel asks why she would switch it off instead of listening. \"Because I want it to be him,\" she says, covering the receiver. \"That is why someone else must decide.\"",
       "flavor_heading": "Flavor",
       "flavor_text": "No one touched the dial. Everyone heard the invitation.",
       "relationships": [
         {
           "subject": "Pavel Sokolov and the northern villagers",
-          "dynamic": "Pavel's need to understand the convergence conflicts with the villagers' decision to refuse its invitation.",
+          "dynamic": "Pavel questions a widow's refusal to listen; she recognizes that her longing for her husband could compromise her judgment.",
           "visibility": "revealed"
         }
       ],
       "hidden_threads": [
         {
           "thread_id": "village_remembers_answering",
-          "clue": "Older villagers remember consequences of answering an earlier invitation, but do not yet reveal what happened.",
+          "clue": "The signal uses the voices of people lost in 1942 and private names, but whether the speakers are truly the dead remains unknown.",
           "connects_to": ["The Meteor Wakes Under Snow", "Meteor Lantern"],
           "disclosure": "hint_only"
         }
       ],
       "interpretation": "The village's refusal reflects the Four of Cups' pause before accepting what is offered. You may need distance from distractions to recognize what you actually want, or feel too disappointed or tired to notice a worthwhile connection. Give yourself time to reflect, then consider whether your withdrawal is restoring you or keeping you stuck. An offer deserves attention without requiring acceptance.",
       "when_drawn": "Pause and ask whether you need rest, a different opportunity, or a more open mind."
+    },
+    {
+      "tarot_number": "Five",
+      "tarot_name": "Five of Cups",
+      "mythcards_name": "Marya's Thaw Cup",
+      "card_type": "Relic",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I can grieve and still accept care.",
+      "upright_keywords": ["Grief", "Regret", "Perspective"],
+      "shadow_keywords": ["Despair", "Guilt", "Fixation"],
+      "narrative_heading": "Legend",
+      "narrative": "Marya Zima carries a battered metal cup through the Winter Front, using it to offer water, wash wounds, and warm spirits before another night of casualties. It grows warm in her hands when a patient can still be saved. After a failed rescue, that small warmth draws her toward someone still breathing, even while she struggles to release the hand of the person she lost.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "It never warmed for everyone. She kept carrying it.",
+      "relationships": [
+        {
+          "subject": "Marya Zima and her patients",
+          "dynamic": "The cup calls Marya toward lives she can still save while she grieves those she could not.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "Marya's cup reflects the Five of Cups' grief for what could not be saved. You may be mourning a loss, regretting a choice, or finding it difficult to see beyond disappointment. Give that sorrow its place without letting it erase the care and possibilities still available. Accepting something good does not diminish what you have lost.",
+      "when_drawn": "Honor what you have lost, and notice what can still support you."
+    },
+    {
+      "tarot_number": "Six",
+      "tarot_name": "Six of Cups",
+      "mythcards_name": "Deep North Circus Arrives",
+      "card_type": "Event",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I welcome the good I can carry forward.",
+      "upright_keywords": ["Nostalgia", "Kindness", "Familiar Comfort"],
+      "shadow_keywords": ["Idealization", "Stagnation", "Living in the Past"],
+      "narrative_heading": "Event",
+      "narrative": "The circus reaches the village with patched wagons, lanterns, and music the older residents remember from childhood. Children run to meet performers whose families have traveled this route for generations. Watching Mila step down into the snow, Pavel feels his first anticipation since leaving the Closed City, while an elder quietly notices that one familiar act has survived without changing at all.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The children heard new music. Their grandparents knew the words.",
+      "relationships": [
+        {
+          "subject": "Pavel Sokolov and Mila Vetrova",
+          "dynamic": "Seeing Mila arrive with the circus awakens Pavel's anticipation after the trauma of leaving the Closed City.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "unchanged_circus_act",
+          "clue": "An elder notices an act preserved unchanged across generations, hinting at the circus's inherited ritual purpose.",
+          "connects_to": ["The Circus Performs The Old Rite", "Mila Vetrova"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The circus's return reflects the Six of Cups' warmth of memory and familiar kindness. You may reconnect with an old friend, revisit something you once loved, or recognize a need for simpler pleasures. Let the past remind you of what nourishes you, while allowing people and circumstances to have changed. A good memory can enrich the present without becoming a place to hide.",
+      "when_drawn": "Bring a remembered kindness or simple pleasure into your life today."
+    },
+    {
+      "tarot_number": "Seven",
+      "tarot_name": "Seven of Cups",
+      "mythcards_name": "Bogatyr's Relic Case",
+      "card_type": "Relic",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I can choose what is right for me.",
+      "upright_keywords": ["Possibility", "Imagination", "Choice"],
+      "shadow_keywords": ["Illusion", "Indecision", "Escapism"],
+      "narrative_heading": "Legend",
+      "narrative": "Ilya Voronin carries the heavy case out of the enemy cache, its contents untouched by the smoke. Inside, seven vessels cradle seven Atlantean rings, each engraved with a different route or oath. Studying them offers glimpses of places beyond the frozen front, but nothing in the case explains what accepting one of those promises will require.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "Seven promises. Not one account of the cost.",
+      "relationships": [
+        {
+          "subject": "Ilya Voronin",
+          "dynamic": "Ilya recovers the case from the enemy cache, carrying its tempting and unexplained possibilities beyond the battlefield.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "seven_rings_unknown_cost",
+          "clue": "Each Atlantean ring offers a route or oath without disclosing the price of accepting it.",
+          "connects_to": ["Enemy Cache Unearthed", "Bogatyr Walks Through Smoke"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "The case's tempting possibilities reflect the Seven of Cups' abundance of choices and uncertain promises. You may be imagining several futures, struggling to commit, or drawn to an option because of how it makes you feel. Explore what appeals to you, then look for evidence of what each choice actually involves. A vivid possibility becomes useful when you can connect it to a realistic next step.",
+      "when_drawn": "Choose one possibility to investigate beyond its promise."
     }
   ]
 }

@@ -10,5 +10,6 @@ subtitle: A MythCards Tarot. Do not rename canonical lore/card identifiers.
 No purchases, preorders, signups or release promises without new approval.
 
 This directory is its own Git repository. Reuse .openai/hosting.json's Site ID,
-preserve private access, run npm test and JavaScript syntax checks, and report
+preserve the user-approved public access and mythcards.io/www.mythcards.io domains,
+run npm test and JavaScript syntax checks, and report
 browser QA separately. Never put Site credentials in files, commands or output.

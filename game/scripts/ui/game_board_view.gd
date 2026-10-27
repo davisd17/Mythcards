@@ -129,7 +129,7 @@ func _ready() -> void:
 	fx.attack_art = attack_art_for
 	FigureCatalog.preload_attack_frames()
 	SeraphManifestation.texture()
-	BattlefieldTheme.texture(BattlefieldTheme.SURFACE)
+	BattlefieldTheme.preload_art()
 
 
 # The center's slow breathing pulse at a bounded redraw rate; every frame while an action
@@ -269,7 +269,7 @@ func reset_zoom_rect() -> Rect2:
 
 func _draw() -> void:
 	# The screen's environment remains visible through the board's unused margins.
-	if not BattlefieldTheme.is_closed_city():
+	if not BattlefieldTheme.has_theme():
 		draw_rect(Rect2(Vector2.ZERO, size), BACKGROUND)
 	if controller == null or controller.board() == null:
 		return
@@ -359,7 +359,7 @@ static func pulse(t: float) -> float:
 
 
 func _draw_board_frame(board_rect: Rect2) -> void:
-	if BattlefieldTheme.is_closed_city():
+	if BattlefieldTheme.has_theme():
 		BattlefieldTheme.draw_deck(self, board_rect)
 		return
 	# A soft drop shadow, then a bronze band that separates the board from the page.
@@ -387,12 +387,13 @@ func _draw_board_frame(board_rect: Rect2) -> void:
 # Dark stone fused with frozen metal; deterministic specks and one seam per tile.
 func _draw_tile_material(pos: Vector2i, rect: Rect2) -> void:
 	var px := rect.size.x
-	if BattlefieldTheme.is_closed_city():
+	if BattlefieldTheme.has_theme():
 		draw_rect(rect, Color(0.035, 0.05, 0.045, 0.08 if (pos.x + pos.y) % 2 == 0 else 0.02))
 		draw_rect(rect.grow(-0.6), Color(0.025, 0.04, 0.035, 0.65), false, 1.5)
 		draw_line(rect.position + Vector2(2, 2), Vector2(rect.end.x - 2, rect.position.y + 2), Color(0.85, 0.91, 0.86, 0.18), 1.0)
-		for corner in [Vector2(0.07, 0.07), Vector2(0.93, 0.93)]:
-			draw_circle(rect.position + corner * px, maxf(0.6, px * 0.012), Color(0.06, 0.08, 0.07, 0.65))
+		if BattlefieldTheme.is_closed_city():
+			for corner in [Vector2(0.07, 0.07), Vector2(0.93, 0.93)]:
+				draw_circle(rect.position + corner * px, maxf(0.6, px * 0.012), Color(0.06, 0.08, 0.07, 0.65))
 		return
 	draw_rect(rect, STONE_A if (pos.x + 2 * pos.y) % 3 == 0 else STONE_B)
 	var noise := (pos.x * 92821 + pos.y * 68917 + 7) & 0x7fffffff
@@ -426,7 +427,7 @@ func _draw_territory(pos: Vector2i, rect: Rect2) -> void:
 	var near_edge := depth_p1 if bottom_side else depth_p2   # tiles from the owner's outer edge
 	var outer := Color(color, territory_alpha(near_edge))
 	var inner := Color(color, territory_alpha(near_edge + 1.0))
-	if BattlefieldTheme.is_closed_city():
+	if BattlefieldTheme.has_theme():
 		outer.a *= 0.50
 		inner.a *= 0.50
 	var top := inner if bottom_side else outer

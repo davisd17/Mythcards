@@ -37,6 +37,51 @@ for (const modal of [dialog, privacy]) modal.addEventListener('click', (event) =
 get('privacy-open').addEventListener('click', () => privacy.showModal());
 get('privacy-close').addEventListener('click', () => privacy.close());
 
+const characterTabs = [...document.querySelectorAll('.character-tabs [role="tab"]')];
+function selectCharacter(tab, focus = false) {
+  for (const item of characterTabs) {
+    const active = item === tab;
+    item.setAttribute('aria-selected', String(active));
+    item.tabIndex = active ? 0 : -1;
+    get(item.getAttribute('aria-controls')).hidden = !active;
+  }
+  if (focus) tab.focus();
+}
+for (const [index, tab] of characterTabs.entries()) {
+  tab.addEventListener('click', () => selectCharacter(tab));
+  tab.addEventListener('keydown', event => {
+    let next = index;
+    if (event.key === 'ArrowRight') next = (index + 1) % characterTabs.length;
+    else if (event.key === 'ArrowLeft') next = (index + characterTabs.length - 1) % characterTabs.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = characterTabs.length - 1;
+    else return;
+    event.preventDefault();
+    selectCharacter(characterTabs[next], true);
+  });
+}
+
+const profileDialog = get('profile-dialog');
+let profileReturnFocus;
+for (const link of document.querySelectorAll('.profile-art-open')) {
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    profileReturnFocus = link;
+    const source = link.querySelector('img');
+    get('profile-dialog-image').src = source.src;
+    get('profile-dialog-image').alt = source.alt;
+    get('profile-dialog-title').textContent = link.closest('.character-panel').querySelector('h4').textContent;
+    profileDialog.showModal();
+    get('profile-close').focus();
+  });
+}
+get('profile-close').addEventListener('click', () => profileDialog.close());
+profileDialog.addEventListener('close', () => profileReturnFocus?.focus());
+profileDialog.addEventListener('click', event => {
+  const bounds = profileDialog.getBoundingClientRect();
+  if (event.target === profileDialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) profileDialog.close();
+});
+
 try {
   const response = await fetch('cards.json');
   if (!response.ok) throw new Error(`Cards: ${response.status}`);

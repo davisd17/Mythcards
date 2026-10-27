@@ -11,6 +11,30 @@
 @media(max-width:640px){.hero{height:calc(100svh - 225px);min-height:580px;max-height:750px}.hero-copy{padding-top:40px}h1{font-size:54px;line-height:1.1;margin:28px 0 20px}.hero-copy .eyebrow{font-size:9px}.hero-tagline{font-size:27px;line-height:1.25}.hero-description{font-size:13px;line-height:1.8;margin-top:20px}.hero-description br{display:none}.hero-description{max-width:270px}.hero-actions{gap:20px;margin-top:25px}.hero-actions .button{padding-inline:13px;gap:15px;font-size:11px}.hero-actions .text-link{font-size:10px;gap:8px}.announcement-inner{padding-block:18px;gap:14px;flex-wrap:wrap;min-height:120px}.announcement-inner>img{width:30px;height:52px}.announcement-title{font-size:25px}.announcement-inner>.text-link{font-size:10px;margin-left:44px;padding-block:1px}.announcement-inner>div{flex-basis:calc(100% - 44px)}.announcement-title>span{display:inline;font-size:9px;margin-left:8px}.gameplay-figure picture{display:block;max-width:405px;margin:auto}.gameplay-figure figcaption{flex-direction:column;gap:5px;font-size:9px}.game-pillars{grid-template-columns:1fr;gap:24px;margin-top:30px}.game-pillars h3{font-size:27px}.game-foot{align-items:start;flex-direction:column;gap:10px}.game-foot .text-link{font-size:11px}.factions{margin-top:45px;padding-top:30px}.factions-heading h3{font-size:28px}.faction-grid{grid-template-columns:1fr;gap:35px}.faction-grid h3{font-size:30px}.deck-subtitle{font-size:19px}.deck-introduction{flex-direction:column;gap:16px;padding-top:20px}.deck-introduction>.release-status{margin-top:0}}
 @media(max-width:360px){.header{gap:10px}.header .wordmark{font-size:19px}nav{gap:12px;font-size:9px}h1{font-size:48px}.announcement-title>span{display:block;margin-left:0}.hero-actions{gap:16px}}
 .hero-actions>.text-link{text-shadow:0 1px 3px #07160c,0 0 8px #07160c}
-/* Frame the complete board from the unchanged 1280 x 720 prototype capture. */
-.gameplay-figure .gameplay-board-detail{display:block;position:relative;width:100%;max-width:720px;aspect-ratio:1;margin-inline:auto;overflow:hidden;background:#0b100e}
-.gameplay-figure .gameplay-board-detail img{position:absolute;width:268.9076%;max-width:none;height:auto;left:-84.4538%;top:-23.9496%}
+/* Preserve the uploaded board capture without cropping or enlarging its pixels. */
+.gameplay-figure{margin-top:48px}
+.gameplay-figure .gameplay-board-detail{display:block;width:100%;max-width:760px;aspect-ratio:1029/964;margin-inline:auto;background:#0b100e}
+.gameplay-figure .gameplay-board-detail img{position:static;width:100%;max-width:100%;height:auto;object-fit:contain}
+.character-showcase{border-top:1px solid var(--mc-line-on-light);padding-top:24px}
+.character-showcase>h3{font-size:28px;margin:0 0 24px}
+.character-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--mc-line-on-light);margin-bottom:24px}
+.character-tabs button{min-width:0;height:88px;padding:8px;background:transparent;border-bottom:3px solid transparent;font-size:16px;line-height:1.4;transition:color .15s,border-color .15s}
+.character-tabs button[aria-selected="true"]{color:var(--red);border-bottom-color:var(--red)}
+.character-tabs button:hover{background:#171b1908}
+.character-tabs button:focus-visible{outline:2px solid var(--red);outline-offset:-5px}
+.profile-art-open:focus-visible{outline:3px solid var(--red)}
+.character-panel[hidden]{display:none}
+.profile-art-open{display:block;position:relative;width:100%;max-width:1100px;margin-inline:auto;aspect-ratio:3/2;background:#0d1210}
+.profile-art-open>img{height:100%;width:100%;object-fit:contain}
+.profile-art-open>span{position:absolute;right:12px;bottom:12px;width:44px;height:44px;display:grid;place-items:center;background:var(--ink);color:var(--paper);border:1px solid var(--line);font-size:24px}
+.character-caption{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:24px;min-height:150px;padding:24px 0;border-bottom:1px solid var(--line)}
+.character-caption .eyebrow{color:var(--red);font-size:12px}
+.character-caption h4{font:32px/1.15 Georgia,serif;margin:8px 0;overflow-wrap:break-word}
+.character-epithet{font-size:16px;color:var(--mc-text-on-light)}
+.character-caption blockquote{font:italic 24px/1.5 Georgia,serif;margin:20px 0 0}
+#profile-dialog{width:min(1500px,96vw);max-width:1500px;padding:20px}
+.profile-dialog-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+.profile-dialog-header h2{font-size:28px;overflow-wrap:break-word}
+.profile-dialog-header .icon-button{flex:0 0 44px;width:44px;height:44px;position:static}
+#profile-dialog-image{width:100%;height:auto;max-height:calc(90svh - 100px);object-fit:contain}
+@media(max-width:640px){.character-showcase>h3{font-size:26px}.character-tabs{margin-bottom:16px}.character-caption{grid-template-columns:1fr;gap:12px;min-height:224px;padding:20px 0}.character-caption h4{font-size:28px}.character-caption blockquote{font-size:21px;margin:0}.character-epithet{font-size:16px}.profile-art-open>span{right:8px;bottom:8px}.profile-dialog-header h2{font-size:22px}#profile-dialog{padding:16px}}

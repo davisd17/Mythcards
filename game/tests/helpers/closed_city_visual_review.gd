@@ -4,9 +4,13 @@ extends Node
 const GameScreen := preload("res://scripts/ui/game_screen.gd")
 var screen: Control
 var output := "res://../docs/art-specs/board-themes/closed-city/qa"
+var area_slug := "closed-city"
 
 
 func _ready() -> void:
+	if "--flood-survivors" in OS.get_cmdline_user_args():
+		area_slug = "flood-survivors"
+		output = "res://../docs/art-specs/board-themes/flood-survivors/qa"
 	get_window().size = Vector2i(1440, 960)
 	screen = GameScreen.new()
 	get_tree().root.add_child.call_deferred(screen)
@@ -15,6 +19,10 @@ func _ready() -> void:
 	screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	screen.start_new_match(42)
 	GameState.match_state.shared_deck.clear()
+	if area_slug == "flood-survivors":
+		GameState.match_state.first_player_id = "p2"
+		GameState.start_match(GameState.match_state)
+		TurnManager.start_turn("p2")
 	screen._popup.visible = false
 	screen._chooser.visible = false
 	screen._popup_queue.clear()
@@ -22,14 +30,18 @@ func _ready() -> void:
 		banner.queue_free()
 	Settings.motion = false
 	screen.controller.selected_id = "p1_r-mikhail-orlov"
+	if area_slug == "flood-survivors":
+		screen.controller.selected_id = "p2_a-flood-survivor-sahu-ren"
 	screen.controller.inspect_id = screen.controller.selected_id
+	if area_slug == "flood-survivors":
+		screen.controller.message = ""
 	screen._refresh()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
-	await _capture("closed-city-desktop")
+	await _capture(area_slug + "-desktop")
 	get_window().size = Vector2i(390, 844)
-	await _capture("closed-city-mobile")
+	await _capture(area_slug + "-mobile")
 	get_window().size = Vector2i(844, 390)
-	await _capture("closed-city-landscape")
+	await _capture(area_slug + "-landscape")
 	screen.queue_free()
 	GameState.reset()
 	await get_tree().process_frame
@@ -48,4 +60,4 @@ func _capture(label: String) -> void:
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()
 	assert(image.save_png(output.path_join(label + ".png")) == OK)
-	print("Closed City visual review: ", label, " size=", screen.size, " mode=", screen._mode)
+	print("Battlefield visual review: ", label, " size=", screen.size, " mode=", screen._mode)
