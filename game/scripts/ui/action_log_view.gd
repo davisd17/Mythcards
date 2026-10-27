@@ -6,6 +6,7 @@ extends VBoxContainer
 # opponent just did) is highlighted. Tap an action for its full record.
 
 signal card_pressed(card_id: String)
+signal character_pressed(instance_id: String)
 
 const MAX_TURNS := 30
 const BADGE := 56.0
@@ -178,14 +179,27 @@ func _flow(parts: Array, result: bool) -> Control:
 	return flow
 
 
+# Tapping a symbol shows that character's card; the hit area is padded past the drawn disc.
 func _badge(p: Dictionary, small: bool) -> Control:
 	var b := LogBadge.new()
 	b.type = str(p.get("type", ""))
 	b.team = color_for.call(str(p.get("player", "")))
-	b.custom_minimum_size = Vector2.ONE * (BADGE * 0.8 if small else BADGE)
+	b.disc = BADGE * 0.8 if small else BADGE
+	b.custom_minimum_size = Vector2.ONE * (b.disc + 16.0)
 	b.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	b.tooltip_text = str(p.get("name", ""))
-	b.mouse_filter = Control.MOUSE_FILTER_PASS
+	b.tooltip_text = "Show %s" % str(p.get("name", ""))
+	b.mouse_filter = Control.MOUSE_FILTER_STOP
+	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	var id := str(p.get("id", ""))
+	b.set_meta("log_char", id)
+	var press := {"at": Vector2.ZERO}
+	b.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				press.at = event.position
+			elif event.position.distance_to(press.at) < 24.0:
+				b.accept_event()
+				character_pressed.emit(id))
 	return b
 
 
@@ -233,9 +247,10 @@ class LogBadge:
 	extends Control
 	var type := ""
 	var team := Color.WHITE
+	var disc := 56.0
 
 	func _draw() -> void:
-		var r := minf(size.x, size.y) * 0.5
+		var r := minf(disc, minf(size.x, size.y)) * 0.5
 		var c := size * 0.5
 		draw_circle(c, r, Color(0.03, 0.035, 0.035, 0.92))
 		draw_arc(c, r * 0.9, 0.0, TAU, 40, team, maxf(2.0, r * 0.18), true)

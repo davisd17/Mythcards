@@ -849,6 +849,7 @@ func _build_log() -> void:
 	_log_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_log_view.color_for = _bright
 	_log_view.card_pressed.connect(func(id): _show_card(id, "Played this match."))
+	_log_view.character_pressed.connect(_show_log_character)
 
 
 # The log and the card panel (the summary and the actions) share one place; the Log button
@@ -901,6 +902,15 @@ func _on_tile_tapped(pos: Vector2i) -> void:
 	controller.tap_tile(pos)
 	if _log_shown and (controller.selected_id != "" or controller.inspect_id != ""):
 		_log_shown = false
+	_refresh()
+
+
+# A symbol in the log: the panel switches back to that character's card.
+func _show_log_character(instance_id: String) -> void:
+	if controller.find(instance_id) == null:
+		return
+	controller.inspect_id = instance_id
+	_log_shown = false
 	_refresh()
 
 

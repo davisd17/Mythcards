@@ -192,13 +192,40 @@ func test_log_actions_use_type_symbols_and_link_cards() -> void:
 			func(n): return n is ActionLogView.LogBadge and not n.is_queued_for_deletion())
 	assert_gt(badges.size(), 0, "the mover is its type symbol")
 	assert_eq(badges[0].type, mover.data.type)
-	assert_eq(badges[0].tooltip_text, mover.data.char_name)
+	assert_eq(badges[0].tooltip_text, "Show %s" % mover.data.char_name)
 	var links := _find_in(screen._log_view, "log_card").filter(func(n): return n.get_meta("log_card") == "r-reactor-prayer")
 	assert_eq(links.size(), 1)
 	(links[0] as Button).pressed.emit()
 	await wait_process_frames(2)
 	assert_true(screen._popup.visible, "the link opens the card")
 	assert_eq(screen._popup_card._title.text, "Reactor Prayer")
+
+
+func test_tapping_a_symbol_switches_the_panel_to_that_card() -> void:
+	_deploy_both()
+	screen._popup_queue.clear()
+	screen._next_popup()
+	var enemy: CharacterInstance = GameState.match_state.get_player("p2").characters[0]
+	MatchLog._entry("Player 1 (Closed City) tests the log",
+			[{"t": "text", "s": "sees"}, MatchLog._tok_char(enemy.instance_id)])
+	screen._toggle_log()
+	var badge: Control = _find_in(screen._log_view, "log_char").filter(
+			func(n): return n.get_meta("log_char") == enemy.instance_id)[-1]
+	var entry: Control = _find_in(screen._log_view, "log_entry").filter(
+			func(n): return n.is_ancestor_of(badge))[0]
+	assert_gte(badge.custom_minimum_size.y, ActionLogView.BADGE, "a comfortable tap target")
+	for pressed in [true, false]:
+		var e := InputEventMouseButton.new()
+		e.button_index = MOUSE_BUTTON_LEFT
+		e.pressed = pressed
+		e.position = Vector2(8, 8)
+		badge.gui_input.emit(e)
+	assert_false(_find_in(entry, "log_full")[0].visible, "a symbol tap doesn't expand the action")
+	assert_false(screen._log_shown, "the panel switches back to the card")
+	assert_eq(screen.controller.inspect_id, enemy.instance_id)
+	assert_true(screen._summary.visible)
+	assert_true(screen._bottom.visible)
+	assert_eq((screen._log_button.get_child(0) as UiGlyph).glyph, "log")
 
 
 func test_tapping_an_action_shows_its_full_record() -> void:
