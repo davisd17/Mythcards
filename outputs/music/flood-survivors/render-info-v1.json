@@ -1,0 +1,17 @@
+{
+  "title": "Stone Remembers",
+  "version": 1,
+  "bpm_quarter": 69,
+  "bars": 32,
+  "meter": "6/8",
+  "seconds": 83.47825,
+  "frames": 2671304,
+  "sample_rate": 32000,
+  "channels": 2,
+  "bit_depth": 16,
+  "peak_dbfs": -7.108601570633674,
+  "rms_dbfs": -19.99998864052767,
+  "clipped_samples": 0,
+  "endpoint_step": 0,
+  "note_events": 470
+}

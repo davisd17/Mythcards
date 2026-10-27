@@ -54,11 +54,56 @@ func test_unscored_starting_leader_does_not_use_opponents_theme() -> void:
 	autofree(Fixture.start_teams_match())
 	var state := GameState.match_state
 	state.first_player_id = "p2"
+	_replace_leader(state, "p2", "test-unscored-leader", "First Mind")
 	GameState.start_match(state)
-	assert_eq(MusicManager.current_sub_area, "Flood Survivors")
+	assert_eq(MusicManager.current_sub_area, "First Mind")
 	var player := MusicManager.get_node("MatchMusic") as AudioStreamPlayer
 	assert_false(player.playing)
 	assert_null(player.stream)
+
+
+func _replace_leader(state: MatchState, player_id: String, id: String, area: String) -> void:
+	for character in state.get_player(player_id).characters:
+		if character.data.type == "Leader":
+			var data := CharacterData.new()
+			data.id = id
+			data.type = "Leader"
+			data.sub_area = area
+			character.data = data
+			return
+
+
+func test_flood_survivors_start_with_the_queens_theme_and_keep_it_across_turns() -> void:
+	autofree(Fixture.start_teams_match())
+	var state := GameState.match_state
+	state.first_player_id = "p2"
+	GameState.start_match(state)
+	var player := MusicManager.get_node("MatchMusic") as AudioStreamPlayer
+	assert_eq(MusicManager.current_leader_id, "a-flood-survivor-meret-anu")
+	assert_eq(MusicManager.current_sub_area, "Flood Survivors")
+	assert_eq(MusicManager.current_theme_path, MusicManager.LEADER_THEMES["a-flood-survivor-meret-anu"])
+	assert_true(player.playing)
+	var stream := player.stream as AudioStreamWAV
+	assert_not_null(stream)
+	if stream == null:
+		return
+	assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD)
+	assert_eq(stream.loop_end, 2671304)
+	assert_almost_eq(stream.get_length(), 83.47825, .001)
+	TurnManager.start_turn("p2")
+	TurnManager.end_turn("p2")
+	assert_same(player.stream, stream)
+	assert_eq(MusicManager.current_leader_id, "a-flood-survivor-meret-anu")
+
+
+func test_flood_survivor_area_base_is_available_without_a_specific_leader_theme() -> void:
+	autofree(Fixture.start_teams_match())
+	var state := GameState.match_state
+	state.first_player_id = "p2"
+	_replace_leader(state, "p2", "test-survivor-leader", "Flood Survivors")
+	GameState.start_match(state)
+	assert_eq(MusicManager.current_theme_path, MusicManager.THEMES["Flood Survivors"])
+	assert_true((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).playing)
 
 
 func test_player_two_can_select_closed_city_by_leader_not_team() -> void:

@@ -4,9 +4,11 @@ extends Node
 # an unscored sub-area must not inherit another area's musical identity.
 const THEMES := {
 	"Closed City": "res://assets/music/closed-city-v2.wav",
+	"Flood Survivors": "res://assets/music/flood-survivors-stone-remembers-v1.wav",
 }
 const LEADER_THEMES := {
 	"r-irina-karpova": "res://assets/music/irina-private-favors-a-v2.wav",
+	"a-flood-survivor-meret-anu": "res://assets/music/meret-anu-pearl-current-a-v2.wav",
 }
 const MENU_THEME := "res://assets/music/the-threshold-menu-v1.wav"
 const MUSIC_BUS := "Music"

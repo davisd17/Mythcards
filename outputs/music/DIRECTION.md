@@ -23,3 +23,19 @@ and exit points. Irina's second loop, After Hours, is now composed as a separate
 listening draft. Automatic A/B transitions are future work, outside current playback.
 
 The Threshold remains the approved shared menu and team-selection ambience.
+
+October 26, 2026: Flood Survivors gains the area draft Stone Remembers and Queen
+Meret-Anu gains the separate leader draft A Drowned Crown. Their shared tide
+motif, harp/reed chip palette, tuned-stone percussion and rounded bass connect
+them. The area's compound sway and Dorian color express communal survival;
+the Queen's steadier pulse and richer minor harmony express disciplined royal
+authority. Both retain the lo-fi foundation without a continuous hiss layer.
+These are first listening drafts; the Queen's future jam/breakdown B is uncomposed.
+
+October 26 feedback: Stone Remembers is accepted. Meret-Anu's first ceremonial
+song was rejected. Compose leader themes as music the character would choose
+to listen to, with personality in the groove. Meret-Anu's replacement draft,
+Pearl Current v2, is a relaxed aquatic lo-fi beat with warm electric-piano chords,
+liquid chip plucks and rounded bass. It uses no ceremonial horn/reed lead or
+constant noise wash. Pearl Current v2 was selected for GitHub on October 26, 2026.
+Her Loop B remains future work. Preserve the accepted area track.
