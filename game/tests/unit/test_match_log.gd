@@ -51,6 +51,23 @@ func test_an_attack_names_every_bonus_and_reduction() -> void:
 	assert_string_contains(line, "-1 Naia of the Black Sarcophagus's own ability")
 
 
+func test_entries_carry_a_compact_form_with_type_symbols() -> void:
+	Fixture.put(YURI, Vector2i(3, 2))
+	Fixture.put(NAIA, Vector2i(3, 3))
+	_act("attack", YURI, {"target_id": NAIA})
+	var parts: Array = _last().parts
+	assert_eq(parts.size(), 3)
+	assert_eq(parts[0].t, "char")
+	assert_eq(parts[0].player, "p1")
+	assert_eq(parts[0].type, Fixture.state().find_character(YURI).data.type)
+	assert_eq(parts[1].s, "attacks")
+	assert_eq(parts[2].id, NAIA)
+	assert_eq(_last().brief[0][0].id, NAIA)
+	assert_eq(_last().brief[0][1].s, "-2")
+	_act("move", YURI, {"to": Vector2i(2, 2)})
+	assert_eq(_last().parts[1].s, "moves 1 left")
+
+
 func test_moves_failures_and_leaks_are_logged() -> void:
 	Fixture.put(WORKER, Vector2i(3, 0))
 	_act("move", WORKER, {"to": Vector2i(6, 6)})

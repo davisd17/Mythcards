@@ -67,9 +67,13 @@ var _notice_timer := Timer.new()
 var _notice_card := ""
 var _ai_timer := Timer.new()         # plays the AI's turn one visible step at a time
 const AI_STEP_SECONDS := 0.6
-var _log := Control.new()            # the action log overlay (MatchLog)
-var _log_text := RichTextLabel.new()
-var _log_scroll := ScrollContainer.new()
+var _log_view := ActionLogView.new()   # the action log (MatchLog), in the card panel's place
+var _log_scroll := ScrollContainer.new()  # stacked: the log's own scroll; side by side it rides the column
+var _log_shown := false
+var _log_button: Button
+var _seen_turn := -1                 # the last turn _refresh saw, to show the log after the AI's turn
+var _seen_player := ""
+var _seen_match: MatchState = null
 var _game_over := Control.new()
 var _game_over_label := Label.new()
 var _capture_confirm := Control.new()   # "End turn and lose?" when your Hero can't move
@@ -112,7 +116,8 @@ func _ready() -> void:
 	_primary = UiStyle.primary(UiStyle.command("End turn", _on_primary, "command:primary"))
 	_primary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_commands.add_child(_primary)
-	_commands.add_child(UiStyle.icon_button("log", "Log", _toggle_log))
+	_log_button = UiStyle.icon_button("log", "Log", _toggle_log)
+	_commands.add_child(_log_button)
 	_commands.add_child(UiStyle.icon_button("menu", "Menu", _toggle_menu))
 	_turn_bar.custom_minimum_size = Vector2(0, 3)
 	_turn_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -131,7 +136,7 @@ func _ready() -> void:
 	_board.controller = controller
 	# Phase 6: an art attack's hit sounds wait for its impact frame, as its visuals do.
 	_sfx.impact_for = func(id: String) -> float: return float(_board.attack_art_for(id).get("impact", 0.0))
-	_board.tile_tapped.connect(func(pos): controller.tap_tile(pos); _refresh())
+	_board.tile_tapped.connect(_on_tile_tapped)
 	_board.tile_long_pressed.connect(_explain_tile)
 
 	_prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -252,7 +257,7 @@ func _start(ai_side: String) -> void:
 	_popup_queue.clear()
 	_popup.visible = false
 	_menu.visible = false
-	_log.visible = false
+	_log_shown = false
 	_chooser.visible = false
 	controller.begin_setup("", "", ai_side)
 	MusicManager.play_menu()
@@ -335,7 +340,7 @@ func _arrange(side: bool) -> void:
 	_body.vertical = not side
 	if side:
 		_put(_details, [_header, _commands, _turn_bar, _detail_scroll, _bottom])
-		_put(_detail_list, [_chips, _prompt_box, _summary, _side])
+		_put(_detail_list, [_chips, _prompt_box, _summary, _side, _log_view])
 		_put(_root, [_body])
 		_bottom.visible = false
 		_detail_scroll.visible = true
@@ -347,7 +352,8 @@ func _arrange(side: bool) -> void:
 		_put(_root, [_header, _commands, _turn_bar, _chips, _body])
 		_put(_bottom, [_summary, _side_scroll])
 		_put(_side_scroll, [_side])
-		_put(_details, [_prompt_box, _bottom, _detail_scroll])
+		_put(_log_scroll, [_log_view])
+		_put(_details, [_prompt_box, _bottom, _log_scroll, _detail_scroll])
 		_bottom.visible = true
 		_detail_scroll.visible = false
 		_board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -355,6 +361,7 @@ func _arrange(side: bool) -> void:
 		_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_put(_body, [_board, _details])
+	_apply_log()
 
 
 func _set_table_height(h: float) -> void:
@@ -408,6 +415,10 @@ func _refresh() -> void:
 	_refresh_prompt()
 	_refresh_side()
 	_refresh_card()
+	_watch_turns()
+	if _log_shown:
+		_log_view.refresh()
+	_apply_log()
 	_queue_layout()   # the table row may have appeared or gone
 	var state := GameState.match_state
 	_game_over.visible = state != null and state.phase == "ended" and controller.setup == null
@@ -834,43 +845,77 @@ func _build_capture_confirm() -> void:
 # --- Action log ----------------------------------------------------------------------------
 
 func _build_log() -> void:
-	_log.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_log.visible = false
-	var dim := ColorRect.new()
-	dim.color = Color(0.03, 0.04, 0.04, 0.96)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_log.add_child(dim)
-	var box := VBoxContainer.new()
-	box.set_anchors_preset(Control.PRESET_FULL_RECT)
-	box.add_theme_constant_override("separation", UiStyle.GAP)
-	var top_gap := Control.new()
-	top_gap.custom_minimum_size = Vector2(0, UiStyle.SECTION_GAP)
-	box.add_child(top_gap)
-	box.add_child(_margin(UiStyle.heading("Action log"), UiStyle.PAGE_INSET))
 	_log_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_log_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_log_text.bbcode_enabled = true
-	_log_text.fit_content = true
-	_log_text.scroll_active = false
-	_log_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_log_text.add_theme_font_size_override("normal_font_size", 28)
-	_log_text.add_theme_font_size_override("bold_font_size", 28)
-	_log_scroll.add_child(_log_text)
-	box.add_child(_margin(_log_scroll, UiStyle.PAGE_INSET))
-	box.add_child(_dialog_command(UiStyle.command("Close", _toggle_log)))
-	var gap := Control.new()
-	gap.custom_minimum_size = Vector2(0, UiStyle.SECTION_GAP)
-	box.add_child(gap)
-	_log.add_child(box)
-	add_child(_log)
+	_log_view.color_for = _bright
+	_log_view.card_pressed.connect(func(id): _show_card(id, "Played this match."))
 
 
+# The log and the card panel (the summary and the actions) share one place; the Log button
+# switches between them. Side by side, the log takes the column under the table and prompt.
 func _toggle_log() -> void:
-	_log.visible = not _log.visible
-	if _log.visible:
-		_log_text.text = MatchLog.as_text(true) if not MatchLog.entries.is_empty() else "Nothing has happened yet."
-		await get_tree().process_frame
-		_log_scroll.scroll_vertical = int(_log_scroll.get_v_scroll_bar().max_value)   # newest at the bottom
+	_set_log_shown(not _log_shown)
+
+
+func _set_log_shown(shown: bool) -> void:
+	_log_shown = shown
+	if shown:
+		_log_view.refresh()
+	_apply_log()
+	if shown:
+		_scroll_log.call_deferred()
+
+
+func _apply_log() -> void:
+	var side := _log_view.get_parent() == _detail_list
+	_bottom.visible = not side and not _log_shown
+	_log_scroll.visible = not side and _log_shown
+	_log_view.visible = _log_shown
+	_side.visible = not (side and _log_shown)
+	if side:
+		var id := controller.inspect_id if controller.inspect_id != "" else controller.selected_id
+		_summary.visible = not _log_shown and controller.find(id) != null
+	if _log_button != null:
+		var glyph := _log_button.get_child(0) as UiGlyph
+		glyph.glyph = "card" if _log_shown else "log"
+		glyph.queue_redraw()
+		_log_button.tooltip_text = "Card" if _log_shown else "Log"
+
+
+# Brings the last finished turn (what the opponent just did) to the top, or the newest
+# action if there is none.
+func _scroll_log() -> void:
+	await get_tree().process_frame
+	var scroll := _log_scroll if _log_scroll.visible else _detail_scroll
+	var target := _log_view.focus_row()
+	if target != null and target.is_inside_tree():
+		scroll.scroll_vertical += int(target.global_position.y - scroll.global_position.y)
+	else:
+		scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+
+
+# Tapping the board means playing again: a character to command brings its card back.
+func _on_tile_tapped(pos: Vector2i) -> void:
+	controller.tap_tile(pos)
+	if _log_shown and (controller.selected_id != "" or controller.inspect_id != ""):
+		_log_shown = false
+	_refresh()
+
+
+# When the turn passes from the computer to a person, the log opens on what it just did.
+func _watch_turns() -> void:
+	var state := GameState.match_state
+	if state != _seen_match:
+		_seen_match = state
+		_seen_turn = -1
+		_seen_player = ""
+	if state == null or controller.in_setup() or not GameState.is_match_active() or state.turn_number == _seen_turn:
+		return
+	var before := _seen_player
+	_seen_turn = state.turn_number
+	_seen_player = state.active_player_id
+	if before != "" and controller.is_ai(before) and not controller.is_ai(_seen_player) and not _log_shown:
+		_set_log_shown(true)
 
 
 func _build_notice() -> void:
