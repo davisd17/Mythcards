@@ -234,6 +234,19 @@ func test_the_log_opens_on_the_ais_turn_when_play_returns() -> void:
 	var focus: Control = screen._log_view.focus_row()
 	assert_not_null(focus)
 	assert_eq(focus.get_meta("log_turn"), GameState.match_state.turn_number - 1, "its last turn is highlighted")
+	# Left open and scrolled back, the log still jumps to the AI's next turn.
+	screen._detail_scroll.scroll_vertical = 0
+	screen._log_scroll.scroll_vertical = 0
+	screen.controller.end_turn()
+	screen._refresh()
+	while screen.controller.is_ai_turn():
+		screen.controller.ai_step()
+		screen._refresh()
+	await wait_process_frames(3)
+	focus = screen._log_view.focus_row()
+	assert_eq(focus.get_meta("log_turn"), GameState.match_state.turn_number - 1)
+	var view: Rect2 = screen._log_scroll.get_global_rect()
+	assert_between(focus.global_position.y, view.position.y - 2.0, view.end.y, "scrolled to the AI's turn")
 
 
 func test_the_log_works_side_by_side() -> void:

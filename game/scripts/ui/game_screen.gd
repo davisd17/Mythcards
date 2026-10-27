@@ -885,11 +885,13 @@ func _apply_log() -> void:
 # Brings the last finished turn (what the opponent just did) to the top, or the newest
 # action if there is none.
 func _scroll_log() -> void:
-	await get_tree().process_frame
+	for i in 2:   # the rebuilt blocks are placed by the deferred container sort
+		await get_tree().process_frame
 	var scroll := _log_scroll if _log_scroll.visible else _detail_scroll
 	var target := _log_view.focus_row()
 	if target != null and target.is_inside_tree():
-		scroll.scroll_vertical += int(target.global_position.y - scroll.global_position.y)
+		var content := scroll.get_child(0) as Control
+		scroll.scroll_vertical = int(target.global_position.y - content.global_position.y)
 	else:
 		scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
 
@@ -914,8 +916,8 @@ func _watch_turns() -> void:
 	var before := _seen_player
 	_seen_turn = state.turn_number
 	_seen_player = state.active_player_id
-	if before != "" and controller.is_ai(before) and not controller.is_ai(_seen_player) and not _log_shown:
-		_set_log_shown(true)
+	if before != "" and controller.is_ai(before) and not controller.is_ai(_seen_player):
+		_set_log_shown(true)   # already open: still brings the AI's turn into view
 
 
 func _build_notice() -> void:
