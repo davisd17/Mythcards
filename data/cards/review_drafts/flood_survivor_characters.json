@@ -137,7 +137,7 @@
     "unique": true,
     "stats": [4, 1, 2, 3],
     "l1": "AP Ability: Memory Discipline chooses any allied character. Give that ally 1 Memory marker. If Meret-Anu does not already have Memory, she also gains 1 Memory marker.",
-    "l2": "Buried Tide Order: Memory Discipline may target 2 allied characters. If Meret-Anu does not already have Memory, she also gains 1 Memory marker.",
+    "l2": "Buried Tide Order: Memory Discipline targets 1 allied character. If Meret-Anu does not already have Memory, she also gains 1 Memory marker.",
     "l3": "Tide-Sealed Archive: +1 HP. Once per match, allies with Memory markers cannot be defeated until the start of your next turn; if one would be defeated, remove its Memory and leave it at 1 HP.",
     "role": "Hidden survivor queen who controls bloodlines, archives, ley routes, and the disciplined memory of Atlantis after the Flood.",
     "narrative": {
@@ -182,8 +182,8 @@
     "unique": true,
     "stats": [5, 1, 2, 3],
     "l1": "Passive: Living Archive gains 1 Memory marker, max 3, the first time each turn an ally within 2 tiles takes damage.",
-    "l2": "Forbidden Testimony: +1 RANGE. Once per turn, Sahu-Ren may remove 1 Memory marker to make an enemy within 3 tiles Marked.",
-    "l3": "Last Memory Released: +1 HP. Once per match, remove up to 3 Memory markers from Sahu-Ren. For each marker removed, deal 1 damage to a Marked enemy within 3 tiles.",
+    "l2": "Forbidden Testimony: +1 RANGE. Once per turn, Sahu-Ren may remove 1 Memory marker to heal an adjacent allied character by 1 HP.",
+    "l3": "Last Memory Released: +1 HP. Once per match, remove up to 3 Memory markers from Sahu-Ren. For each marker removed, deal 1 damage to any enemy anywhere on the board.",
     "role": "Living archive and sacred witness who remembers the forbidden truths the Flood Survivors edited, entombed, or disciplined.",
     "narrative": {
       "public_role": "Sacred witness and living archive.",
@@ -260,8 +260,8 @@
     "type": "Mystic",
     "unique": true,
     "stats": [4, 1, 2, 2],
-    "l1": "AP Ability: Black-Water Communion chooses an ally within 3 tiles. Give that ally 1 Memory marker.",
-    "l2": "Drowned Judgment: +1 RANGE. When an ally within Thalassa-Nekh's RANGE removes a Memory marker to prevent damage, mark the attacker.",
+    "l1": "Passive: When a character deals damage to Thalassa-Nekh, it becomes Marked if it is not already Marked.",
+    "l2": "Drowned Judgment: +1 RANGE, +1 MOVE.",
     "l3": "The Drowned Seraph Takes Form: +1 HP. Once per match, Thalassa-Nekh becomes Seraph Form. Seraph Form gives her +2 ATK and +1 RANGE.",
     "role": "Drowned oracle and vessel of a powerful angelic or spiritual entity taken on during a water-burial rite.",
     "narrative": {
@@ -277,14 +277,14 @@
         "The water took a child and returned a witness."
       ]
     },
-    "mechanical_identity": "Drowned oracle effects, spiritual possession, Memory marker movement, judgment, black-water protection, sacrifice refusal, and transformative Seraph form.",
+    "mechanical_identity": "Drowned oracle effects, spiritual possession, marking characters that damage her, judgment, sacrifice refusal, and transformative Seraph form.",
     "asset_candidates": {
       "character_card_art": "assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-character-card-art.png",
       "profile_page_horizontal": "assets/characters/thalassa-nekh-vessel-of-the-drowned-seraph-profile-page-horizontal.png"
     },
     "review_notes": [
       "The Drowned Seraph should feel angelic/spiritual but older and stranger than a generic feathered angel.",
-      "Level plan removes repeated self-damage, lets Thalassa-Nekh use Memory markers, and makes Level 3 a visible once-per-match Seraph transformation."
+      "Level 1 passively marks characters that damage her without stacking Marks; Level 2 adds RANGE and MOVE; Level 3 remains a visible once-per-match Seraph transformation."
     ]
   }
 ]

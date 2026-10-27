@@ -95,7 +95,8 @@ func _ai_match(seed_value: int, max_turns: int) -> Dictionary:
 	var state := GameState.match_state
 	var guard := 0   # a broken AI fails the test instead of hanging the run
 	while state.phase == "in_progress" and state.turn_number <= max_turns and guard < max_turns * 2:
-		actions += players[state.active_player_id].take_turn().size()
+		# Relic protection can interrupt a turn with a decision for the other player.
+		actions += players[RelicEventDeck.decision_player()].take_turn().size()
 		guard += 1
 	return {"phase": state.phase, "winner": state.winner_id, "how": state.win_condition, "turns": state.turn_number,
 			"actions": actions}

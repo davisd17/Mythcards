@@ -1,8 +1,8 @@
 extends AbilityHandler
 # Queen Meret-Anu, Keeper of the Buried Tide (Flood Survivors Leader) — LLD-closed-city-flood-roster.md 4.
 # L1 Memory Discipline (AP): any allied character, anywhere, gains 1 Memory (max 1). If
-#    Meret-Anu has no Memory, she gains 1 too. Payload: {"target": id} (L2 adds "target_2").
-# L2 Buried Tide Order: up to 2 allies.
+#    Meret-Anu has no Memory, she gains 1 too. Payload: {"target": id}.
+# L2 Buried Tide Order: keeps the single-ally Memory Discipline target.
 # L3 Tide-Sealed Archive: +1 HP. Standalone ability "a-flood-survivor-meret-anu_l3", once
 #    per match (AP): until the start of your next turn, a character on your team (her
 #    included) that had Memory when hit and would be defeated instead loses its Memory and
@@ -42,8 +42,8 @@ func validate(sys, instance: CharacterInstance, ability_id: String, payload: Dic
 	if ability_id == L3_ID:
 		return ""
 	var ids := _ids(payload)
-	if ids.is_empty() or ids.size() > (2 if instance.level >= 2 else 1):
-		return "choose an ally" if instance.level < 2 else "choose 1 or 2 allies"
+	if ids.size() != 1:
+		return "choose 1 ally"
 	var legal := get_legal_targets(sys, instance, ability_id)
 	for id in ids:
 		if not legal.has(id) or ids.count(id) > 1:
@@ -57,9 +57,7 @@ func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Di
 	var legal := get_legal_targets(sys, instance, ability_id)
 	if not payload.has("target"):
 		return target_step("target", "Memory Discipline: which ally gains Memory?", legal)
-	if instance.level < 2 or payload.has("target_2"):
-		return {}
-	return second_step("target_2", "And a second ally?", legal, payload.target)
+	return {}
 
 
 func execute(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> Dictionary:

@@ -113,15 +113,15 @@ test('deploy, move, and end the turn with clicks only', async ({ page }) => {
   expect(s.active_player_id).toBe('p2');
   await page.screenshot({ path: 'test-results/screen-4-p2-turn.png' });
 
-  // Player 2 uses an ability by clicks: Thalassa-Nekh gives Iset-Nara a Memory marker.
+  // Player 2 uses an ability by clicks: Meret-Anu gives Iset-Nara a Memory marker.
   await answerChoices(page);
   s = await state(page);
-  const harmonic = character(s, 'p2_a-flood-survivor-thalassa-nekh');
+  const queen = character(s, 'p2_a-flood-survivor-meret-anu');
   const architect = character(s, 'p2_a-flood-survivor-iset-nara');
-  await clickTile(page, harmonic.position.x, harmonic.position.y);
+  await clickTile(page, queen.position.x, queen.position.y);
   await expect(page.getByRole('button', { name: /^Outfit:/ })).toHaveCount(0);
   await page.screenshot({ path: 'test-results/screen-5-full-roster.png' });
-  await clickButton(page, 'Black-Water Communion');
+  await clickButton(page, 'Memory Discipline');
   expect((await ui(page)).prompt).toContain('which ally gains Memory?');
   await page.screenshot({ path: 'test-results/screen-6-ability-prompt.png' });
   await clickTile(page, architect.position.x, architect.position.y);

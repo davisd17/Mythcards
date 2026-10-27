@@ -2,17 +2,16 @@ extends AbilityHandler
 # Sahu-Ren, Last Memory-Keeper (Flood Survivors Hero) — LLD-closed-city-flood-roster.md 4.
 # L1 Living Archive: the first time each turn an ally within 2 takes damage, he gains 1
 #    Memory (he may hold up to 3). His Memory also blocks damage to him as usual.
-# L2 Forbidden Testimony: +1 RANGE. Once per turn, free: spend 1 Memory to Mark an enemy
-#    within 3 (the "forbidden_testimony" bonus, {"target_id": id}).
+# L2 Forbidden Testimony: +1 RANGE. Once per turn, free: spend 1 Memory to heal an
+#    adjacent ally by 1 HP (the "forbidden_testimony" bonus, {"target_id": id}).
 # L3 Last Memory Released: +1 HP. Standalone ability "a-flood-survivor-sahu-ren_l3", once
-#    per match (AP): spend up to 3 Memory; for each, 1 damage to a Marked enemy within 3
+#    per match (AP): spend up to 3 Memory; for each, 1 damage to any enemy anywhere
 #    (targets chosen up front; the same enemy may be chosen again).
 #    Payload: {"target": id, "target_2": optional id, "target_3": optional id}.
 
 const L3_ID := "a-flood-survivor-sahu-ren_l3"
 const MEMORY_MAX := 3
 const ARCHIVE_REACH := 2
-const REACH := 3
 const TAG := "forbidden_testimony"
 const KEYS := ["target", "target_2", "target_3"]
 
@@ -39,19 +38,19 @@ func can_use(sys, instance: CharacterInstance, _ability_id: String) -> bool:
 
 
 func get_legal_targets(sys, instance: CharacterInstance, _ability_id: String) -> Array:
-	return _enemies(sys, instance).filter(func(id): return sys.find(id).has_status("marked"))
+	return _enemies(sys, instance)
 
 
 func validate(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary) -> String:
 	var ids := _ids(payload)
 	if ids.is_empty():
-		return "choose a Marked enemy"
+		return "choose an enemy"
 	if ids.size() > sys.memory_count(instance):
 		return "not enough Memory"
 	var legal := get_legal_targets(sys, instance, ability_id)
 	for id in ids:
 		if not legal.has(id):
-			return "choose Marked enemies within 3"
+			return "choose enemies anywhere on the board"
 	return ""
 
 
@@ -65,7 +64,7 @@ func next_step(sys, instance: CharacterInstance, ability_id: String, payload: Di
 			continue
 		if i >= sys.memory_count(instance) or legal.is_empty():
 			return {}
-		return target_step(KEYS[i], "Last Memory Released: 1 damage to which Marked enemy? (%d chosen)" % chosen.size(),
+		return target_step(KEYS[i], "Last Memory Released: 1 damage to which enemy? (%d chosen)" % chosen.size(),
 				legal, i > 0)
 	return {}
 
@@ -98,7 +97,7 @@ func on_character_damaged(sys, instance: CharacterInstance, damaged: CharacterIn
 
 func offered_bonuses(sys, instance: CharacterInstance) -> Array[String]:
 	if instance.level < 2 or sys.memory_count(instance) == 0 or sys.used_this_turn(instance, "testimony_used") \
-			or _enemies(sys, instance).is_empty():
+			or _healable_allies(sys, instance).is_empty():
 		return []
 	return [TAG]
 
@@ -110,23 +109,29 @@ func bonus_label(tag: String) -> String:
 func bonus_step(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
 	if tag != TAG or payload.has("target_id"):
 		return {}
-	return target_step("target_id", "Forbidden Testimony: spend 1 Memory to Mark which enemy?", _enemies(sys, instance))
+	return target_step("target_id", "Forbidden Testimony: spend 1 Memory to heal which adjacent ally by 1 HP?", _healable_allies(sys, instance))
 
 
 func execute_reactive_bonus(sys, instance: CharacterInstance, tag: String, payload: Dictionary) -> Dictionary:
 	if tag != TAG:
 		return super(sys, instance, tag, payload)
 	var id := str(payload.get("target_id", ""))
-	if not _enemies(sys, instance).has(id):
-		return {"success": false, "reason": "needs an enemy within 3"}
+	if not _healable_allies(sys, instance).has(id):
+		return {"success": false, "reason": "needs an injured adjacent ally"}
 	instance.ability_uses_this_turn["testimony_used"] = true
 	sys.take_memory(instance, 1)
-	sys.add_status(sys.find(id), "marked", 1, "until_used", instance)
+	sys.heal(sys.find(id), 1)
 	return {"success": true}
 
 
 func _enemies(sys, instance: CharacterInstance) -> Array:
-	return sys.characters_in_reach(instance, instance.position, sys.ability_reach(instance, REACH), false)
+	return sys.enemies_of(instance).map(func(c): return c.instance_id)
+
+
+func _healable_allies(sys, instance: CharacterInstance) -> Array:
+	return sys.allies_of(instance).filter(func(c):
+		return sys.is_adjacent(instance.position, c.position) and c.current_hp < sys.get_effective_max_hp(c)
+	).map(func(c): return c.instance_id)
 
 
 static func _ids(payload: Dictionary) -> Array:
@@ -139,7 +144,8 @@ static func _ids(payload: Dictionary) -> Array:
 
 func ai_value(sys, instance: CharacterInstance, ability_id: String, payload: Dictionary, ai) -> float:
 	if ability_id == "bonus:" + TAG:
-		return 0.6
+		var ally: CharacterInstance = sys.find(str(payload.get("target_id", "")))
+		return 0.6 + 0.2 * ai.danger(ally, ally.position) if ally != null else 0.0
 	var v := 0.0
 	for id in _ids(payload):
 		var enemy: CharacterInstance = sys.find(id)

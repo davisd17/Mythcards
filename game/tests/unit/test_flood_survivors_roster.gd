@@ -158,21 +158,62 @@ func test_living_archive() -> void:
 	assert_eq(sys.memory_count(sahu), 3)
 
 
-func test_forbidden_testimony_and_last_memory() -> void:
-	var sahu := _level(SAHU, 3)
+func test_forbidden_testimony_heals_one_adjacent_ally_once_per_turn() -> void:
+	var sahu := _level(SAHU, 2)
 	Fixture.put(SAHU, Vector2i(3, 3))
-	var yuri := Fixture.put(YURI, Vector2i(3, 0))
-	for i in 3:
-		sahu.ability_uses_this_match.erase("archive_turn")
-		sys.give_memory(sahu)
+	var naia := Fixture.put(NAIA, Vector2i(3, 4))
+	naia.current_hp = 2
+	sys.give_memory(sahu)
+	sys.give_memory(sahu)
+	var pool := Fixture.state().get_player("p2").pool_ap_remaining
 	assert_true(RulesEngine.get_offered_bonus_tags(SAHU).has("forbidden_testimony"))
-	assert_true(_act("reactive_bonus", SAHU, {"tag": "forbidden_testimony", "target_id": YURI}).success)
-	assert_true(yuri.has_status("marked"))
-	assert_eq(sys.memory_count(sahu), 2)
+	assert_true(_act("reactive_bonus", SAHU, {"tag": "forbidden_testimony", "target_id": NAIA}).success)
+	assert_eq(naia.current_hp, 3)
+	assert_eq(sys.memory_count(sahu), 1)
+	assert_eq(Fixture.state().get_player("p2").pool_ap_remaining, pool, "healing does not cost AP")
+	assert_false(_act("reactive_bonus", SAHU, {"tag": "forbidden_testimony", "target_id": NAIA}).success)
+	_pass_to_p2()
+	assert_true(_act("reactive_bonus", SAHU, {"tag": "forbidden_testimony", "target_id": NAIA}).success)
+	assert_eq(naia.current_hp, 4)
+	assert_eq(sys.memory_count(sahu), 0)
+	assert_eq(sahu.get_effective_range("attack"), 4)
+
+
+func test_forbidden_testimony_rejects_invalid_healing_targets_without_spending_memory() -> void:
+	var sahu := _level(SAHU, 2)
+	Fixture.put(SAHU, Vector2i(3, 3))
+	var naia := Fixture.put(NAIA, Vector2i(3, 4))
+	var iset := Fixture.put(ISET, Vector2i(4, 4))
+	Fixture.put(YURI, Vector2i(4, 3))
+	naia.current_hp = 2
+	iset.current_hp = 1
+	sahu.current_hp = 3
+	sys.give_memory(sahu)
+	for id in [SAHU, ISET, YURI]:
+		assert_false(_act("reactive_bonus", SAHU, {"tag": "forbidden_testimony", "target_id": id}).success)
+	assert_eq(sys.memory_count(sahu), 1)
+	assert_true(_act("reactive_bonus", SAHU, {"tag": "forbidden_testimony", "target_id": NAIA}).success)
+	_pass_to_p2()
+	sys.give_memory(sahu)
+	naia.current_hp = sys.get_effective_max_hp(naia)
+	assert_false(RulesEngine.get_offered_bonus_tags(SAHU).has("forbidden_testimony"), "no injured adjacent ally")
+
+
+func test_last_memory_targets_unmarked_enemies_anywhere_without_line_of_sight() -> void:
+	var sahu := _level(SAHU, 3)
+	Fixture.put(SAHU, Vector2i(0, 6))
+	var yuri := Fixture.put(YURI, Vector2i(6, 0))
+	Fixture.board().place_object(Vector2i(3, 3), "stone", "p1")
+	sys.give_memory(sahu)
+	sys.give_memory(sahu)
+	assert_true(sys.get_legal_ability_targets(sahu, "a-flood-survivor-sahu-ren_l3").has(YURI))
 	var result := _ability(SAHU, {"target": YURI, "target_2": YURI}, "a-flood-survivor-sahu-ren_l3")
 	assert_true(result.success, str(result))
-	assert_eq(yuri.current_hp, 1, "2 damage, +1 from the Mark")
+	assert_eq(yuri.current_hp, 2, "2 damage without a Mark")
 	assert_eq(sys.memory_count(sahu), 0)
+	sys.give_memory(sahu)
+	_pass_to_p2()
+	assert_false(_ability(SAHU, {"target": YURI}, "a-flood-survivor-sahu-ren_l3").success, "once per match")
 
 
 # --- Queen Meret-Anu ------------------------------------------------------------------------
@@ -184,6 +225,21 @@ func test_memory_discipline() -> void:
 	assert_eq(sys.memory_count(naia), 1)
 	assert_eq(sys.memory_count(meret), 1, "she gains one too")
 	assert_eq(_hit(naia, 2).damage, 1, "Memory blocks 1")
+
+
+func test_memory_discipline_keeps_one_ally_at_level_two() -> void:
+	var meret := _level(MERET, 2)
+	Fixture.put(MERET, Vector2i(3, 6))
+	var naia := Fixture.put(NAIA, Vector2i(0, 0))
+	var iset := Fixture.put(ISET, Vector2i(6, 0))
+	assert_false(_ability(MERET, {"target": NAIA, "target_2": ISET}).success)
+	assert_eq(sys.memory_count(naia), 0)
+	assert_eq(sys.memory_count(iset), 0)
+	assert_true(sys.ability_step(meret, meret.data.id, {"target": NAIA}).is_empty())
+	assert_true(_ability(MERET, {"target": NAIA}).success)
+	assert_eq(sys.memory_count(naia), 1)
+	assert_eq(sys.memory_count(meret), 1, "self gain is unchanged")
+	assert_eq(sys.memory_count(iset), 0)
 
 
 func test_tide_sealed_archive() -> void:
@@ -227,16 +283,34 @@ func test_vault_surveyor_and_hidden_vault() -> void:
 
 # --- Thalassa-Nekh -------------------------------------------------------------------------------
 
-func test_black_water_communion_and_drowned_judgment() -> void:
-	_level(THALASSA, 2)
-	Fixture.put(THALASSA, Vector2i(3, 6))
+func test_nekh_marks_a_damaging_character_without_stacking() -> void:
+	var nekh := Fixture.put(THALASSA, Vector2i(3, 6))
+	var yuri := Fixture.put(YURI, Vector2i(3, 5))
+	assert_eq(_hit(nekh, 1).damage, 1)
+	assert_eq(yuri.sum_status("marked"), 1, "works at level 1")
+	assert_eq(_hit(nekh, 1).damage, 1)
+	assert_eq(yuri.sum_status("marked"), 1, "does not add another Mark")
+	assert_false(_ability(THALASSA, {"target": NAIA}).success, "old Memory AP ability is gone")
+
+
+func test_nekh_does_not_mark_fully_prevented_damage_or_hazards() -> void:
+	var nekh := Fixture.put(THALASSA, Vector2i(3, 6))
+	var yuri := Fixture.put(YURI, Vector2i(3, 5))
+	sys.give_memory(nekh)
+	assert_eq(_hit(nekh, 1).damage, 0)
+	assert_false(yuri.has_status("marked"))
+	sys.combat().apply_hazard_damage(nekh, 1)
+	assert_false(nekh.has_status("marked"), "board damage is not a character damaging her")
 	var naia := Fixture.put(NAIA, Vector2i(3, 4))
-	assert_true(_ability(THALASSA, {"target": NAIA}).success)
-	assert_eq(sys.memory_count(naia), 1)
-	_act("end_turn", "p2")
-	var zoya := Fixture.put(ZOYA, Vector2i(3, 1))
-	assert_true(_act("attack", ZOYA, {"target_id": NAIA}).success)
-	assert_true(zoya.has_status("marked"), "the attacker that made Naia spend Memory")
+	sys.give_memory(naia)
+	_hit(naia, 1)
+	assert_false(yuri.has_status("marked"), "no longer reacts to an ally spending Memory")
+
+
+func test_nekh_level_two_gains_range_and_move() -> void:
+	var nekh := _level(THALASSA, 2)
+	assert_eq(nekh.get_effective_range("attack"), 3)
+	assert_eq(nekh.get_effective_move(), 3)
 
 
 func test_seraph_form() -> void:
