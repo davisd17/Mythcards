@@ -1,0 +1,11 @@
+# Ahesu Scale Study V2
+
+Status: user approved the larger proportions; applied to both mounted rider sets.
+
+User feedback: Ahesu should be larger relative to the riders. Built-in ImageGen created this more substantial serpent/rider proportion study using mounted Sahu ready and unmounted Ahesu as references. The user confirmed "yes that looks right". Sahu's ready uses this exact approved source; Meret-Anu and both six-pose sets follow it. New production prompts are in `AHESU_V2_PROMPTS.md`. Previous smaller masters are retained in each pair's `sources-v1/` folder.
+
+Preview: `ahesu-scale-study-v2.png`.
+
+## Exact Prompt
+
+Use case: identity-preserve. Revise the mounted Sahu-Ren / Ahesu game sprite in image1 ONLY to correct relative size. Image2 is Ahesu's established creature design. Make AHESU a MASSIVE ancient serpent, approximately 1.6 times its current linear size relative to Sahu-Ren. The human rider must look distinctly small upon this enormous creature, not like a man riding a pony. This is relative anatomy correction, not enlargement of the whole composition. Keep human natural anatomical proportions, identical face, cyan tattoos, navy/ivory robes, gold jewelry and sandals, same tablet in left hand and empty casting hand with faint cyan light. He remains physically seated ASTRIDE the broad back just behind the raised neck, knees bent and feet against upper flanks. Enlarge serpent head and neck diameter and voluminous supporting coils in proportion: head length about the rider's entire torso length, massive thick neck, coil width about FOUR rider shoulder-widths. Rider seated above and behind neck, his face/tablet remain clearly readable, head and eyes face right. Preserve Ahesu angular blue-bronze stone scales, cyan geometric inlay, gold bands, calm ancient expression, no redesign into dragon, no legs or wings. Composition must be wider and more substantial: use square canvas with generous8% transparent margins, full coiled creature and rider uncropped, foreground serpenthead screenright, rider upperleft/center. Same realistic painterly production style. Exactly one rider with two arms/two hands, one serpent. Actual transparent RGBA background; NO ground, scene, floor shadow, typography or frame.

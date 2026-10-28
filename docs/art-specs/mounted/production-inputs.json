@@ -1,0 +1,60 @@
+{
+  "orlov-vera": {
+    "rider": "r-mikhail-orlov",
+    "mount": "r-vera-7",
+    "outfit": "default",
+    "sources": {
+      "ready": "docs/art-specs/mounted/orlov-vera/sources/ready.png",
+      "raise": "docs/art-specs/mounted/orlov-vera/sources/raise.png",
+      "brace": "docs/art-specs/mounted/orlov-vera/sources/brace.png",
+      "fire": "docs/art-specs/mounted/orlov-vera/sources/fire.png",
+      "recoil": "docs/art-specs/mounted/orlov-vera/sources/recoil.png",
+      "recover": "docs/art-specs/mounted/orlov-vera/sources/recover.png"
+    }
+  },
+  "irina-vera": {
+    "rider": "r-irina-karpova",
+    "mount": "r-vera-7",
+    "outfit": "default",
+    "source_normalization": {
+      "ready": 0.94,
+      "recover": 0.94
+    },
+    "sources": {
+      "ready": "docs/art-specs/mounted/irina-vera/sources/ready.png",
+      "raise": "docs/art-specs/mounted/irina-vera/sources/raise.png",
+      "brace": "docs/art-specs/mounted/irina-vera/sources/brace.png",
+      "fire": "docs/art-specs/mounted/irina-vera/sources/fire.png",
+      "recoil": "docs/art-specs/mounted/irina-vera/sources/recoil.png",
+      "recover": "docs/art-specs/mounted/irina-vera/sources/recover.png"
+    }
+  },
+  "sahu-ahesu": {
+    "rider": "a-flood-survivor-sahu-ren",
+    "mount": "a-flood-survivor-ahesu",
+    "outfit": "default",
+    "sources": {
+      "ready": "docs/art-specs/mounted/sahu-ahesu/sources/ready.png",
+      "raise": "docs/art-specs/mounted/sahu-ahesu/sources/raise.png",
+      "brace": "docs/art-specs/mounted/sahu-ahesu/sources/brace.png",
+      "fire": "docs/art-specs/mounted/sahu-ahesu/sources/fire.png",
+      "recoil": "docs/art-specs/mounted/sahu-ahesu/sources/recoil.png",
+      "recover": "docs/art-specs/mounted/sahu-ahesu/sources/recover.png"
+    },
+    "revision": "giant-ahesu-v2"
+  },
+  "meret-ahesu": {
+    "rider": "a-flood-survivor-meret-anu",
+    "mount": "a-flood-survivor-ahesu",
+    "outfit": "default",
+    "sources": {
+      "ready": "docs/art-specs/mounted/meret-ahesu/sources/ready.png",
+      "raise": "docs/art-specs/mounted/meret-ahesu/sources/raise.png",
+      "brace": "docs/art-specs/mounted/meret-ahesu/sources/brace.png",
+      "fire": "docs/art-specs/mounted/meret-ahesu/sources/fire.png",
+      "recoil": "docs/art-specs/mounted/meret-ahesu/sources/recoil.png",
+      "recover": "docs/art-specs/mounted/meret-ahesu/sources/recover.png"
+    },
+    "revision": "giant-ahesu-v2"
+  }
+}

@@ -57,6 +57,7 @@ var attack_art: Callable = Callable()
 # starts at the impact frame instead of at once. Presentation only: the rules have
 # already resolved; this only waits for the muzzle flash.
 var _delay := 0.0
+var _mounted_before: Dictionary = {}
 
 
 func connect_signals() -> void:
@@ -209,7 +210,8 @@ func _on_attack(attacker_id: String, target_id: String, _damage: int, _defeated:
 	if target != null and target.is_placed():
 		var art := _art(attacker_id)
 		lunges[attacker_id] = {"toward": target.position, "start": now,
-				"duration": art.get("length", LUNGE), "framed": not art.is_empty()}
+				"duration": art.get("length", LUNGE), "framed": not art.is_empty(),
+				"mounted_key": art.get("mounted_key", "")}
 
 
 func _on_damage(attacker_id: String, target_id: String, amount: int, _lines: Array) -> void:
@@ -224,7 +226,11 @@ func _on_damage(attacker_id: String, target_id: String, amount: int, _lines: Arr
 		_add("number", target.position, NUMBER, "Blocked", BLOCKED)
 
 
-func _on_object_attacked(_attacker_id: String, pos: Vector2i, _type: String, damage: int, destroyed: bool) -> void:
+func _on_object_attacked(attacker_id: String, pos: Vector2i, _type: String, damage: int, destroyed: bool) -> void:
+	var art := _art(attacker_id)
+	if art.get("mounted_key", "") != "":
+		lunges[attacker_id] = {"toward": pos, "start": now, "duration": art.length,
+			"framed": true, "mounted_key": art.mounted_key}
 	_add("number", pos, NUMBER, "Destroyed" if destroyed else "-%d" % damage, DAMAGE)
 	_add("burst", pos, RING, "", DAMAGE)
 
@@ -239,7 +245,8 @@ func _on_defeated(id: String, by: String, cause: String) -> void:
 	# A Mount falling with its rider is hidden under the rider's figure; one ghost is enough.
 	if c != null and c.is_placed() and cause != "mount_propagation":
 		var away := _away_from(by, c.position)
-		ghosts.append({"character": c, "pos": c.position, "start": _t0(), "away": away if away != 0 else 1})
+		ghosts.append({"character": c, "pos": c.position, "start": _t0(), "away": away if away != 0 else 1,
+			"mounted_key": _mounted_before.get(id, "")})
 		_add("burst", c.position, DEFEAT, "", DAMAGE)
 	# The claim's wisp rises from the fallen tile. The pickup may arrive before or after this.
 	if c != null and c.is_placed():
@@ -301,6 +308,14 @@ func _on_leveled(id: String, level: int) -> void:
 
 
 func _on_requested(action_type: String, actor_id: String, payload: Dictionary) -> void:
+	# Defeat clears the rider's links before emitting its event; preserve its visual form.
+	_mounted_before.clear()
+	if GameState.match_state != null:
+		for player in GameState.match_state.players:
+			for c in player.characters:
+				var key := str(_art(c.instance_id).get("mounted_key", "")) if attack_art.is_valid() else MountedFigureCatalog.key_for(c)
+				if key != "":
+					_mounted_before[c.instance_id] = key
 	_delay = float(_art(actor_id).get("impact", 0.0)) if action_type == "attack" else 0.0
 	_manifestation_request = actor_id if action_type == "ability" and str(payload.get("ability_id", "")) == SeraphManifestation.ABILITY_ID else ""
 

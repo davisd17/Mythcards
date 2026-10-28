@@ -10,6 +10,13 @@ Approved dialogue is sourced from `data/ember_lines.json` and preserved verbatim
 Art and sound require their own approvals. Make and review one character package
 at a time; line approval does not imply audio or in-game approval.
 
+Mounted-claim decision (2026-10-27): use the riding character's approved normal
+or big-claim text, retaining the mounted composite and existing rider sting.
+No mounted claim art or celebration sequence is required. Never replace the pair
+with the rider's on-foot claim sprites or play the mount's separate claim.
+Existing Ember feedback remains. This rule is integrated with the latest claim
+text playback; mounted pairs also skip the on-foot procedural claim stretch.
+
 | Order | Character ID | Signature beat | Brief | Art / Audio / Lines / In-game |
 | --- | --- | --- | --- | --- |
 | 1 | `r-reactor-worker` | Photo over heart | Drafted | Approved / Review candidate / Approved / Audio wired |

@@ -128,6 +128,7 @@ func _ready() -> void:
 	fx.connect_signals()
 	fx.attack_art = attack_art_for
 	FigureCatalog.preload_attack_frames()
+	MountedFigureCatalog.preload_art()
 	SeraphManifestation.texture()
 	BattlefieldTheme.preload_art()
 
@@ -701,13 +702,14 @@ func _draw_character(font: Font, c: CharacterInstance, selected: bool) -> void:
 	rect.position += screen_offset(fx.offset_tiles(c), rect.size.x)
 	var spent: bool = GameState.match_state != null and c.player_id == GameState.match_state.active_player_id \
 			and c.character_ap_remaining <= 0 and _mount_ap(c) <= 0
-	var figure := FigureCatalog.texture_for(c.data.id, outfit_id_for(c))
+	var mounted_key := MountedFigureCatalog.key_for(c, outfit_id_for(c))
+	var figure := MountedFigureCatalog.texture_for(mounted_key) if mounted_key != "" else FigureCatalog.texture_for(c.data.id, outfit_id_for(c))
 	_draw_piece_base(c, rect, selected)
 	# Phase 5: breathe, hop, wind up, recoil... posed about the feet. Only the figure moves;
 	# the base, the HP pill, and the badges stay level and readable.
 	var feet := feet_point(rect, selected)
 	var pose := FigurePose.pose(c, fx, spent, selected, Settings.motion)
-	if not _claim_framed(c):
+	if c.mounted_with_id == "" and not _claim_framed(c):
 		FigurePose.claim_stretch(pose, fx.claim_elapsed(c.instance_id))
 	_begin_pose(feet, pose, rect.size.x, FigurePose.attack_mirrored(c, fx))
 	if figure != null:
@@ -760,7 +762,10 @@ func _figure_layers(c: CharacterInstance, figure: Texture2D) -> Array:
 	var frames: Array
 	var elapsed: float
 	if l.get("framed", false):
-		frames = FigureCatalog.attack_frames(c.data.id, outfit_id_for(c))
+		var key := MountedFigureCatalog.key_for(c, outfit_id_for(c))
+		if l.get("mounted_key", "") != key:
+			return [{"texture": figure, "alpha": 1.0}]
+		frames = MountedFigureCatalog.attack_frames(key) if key != "" else FigureCatalog.attack_frames(c.data.id, outfit_id_for(c))
 		elapsed = fx.now - l.start
 	elif _claim_framed(c):
 		frames = FigureCatalog.claim_frames(c.data.id, outfit_id_for(c))
@@ -774,8 +779,7 @@ func _figure_layers(c: CharacterInstance, figure: Texture2D) -> Array:
 	return result
 
 
-# Whether `c` is in its claim poses and has claim art to show them. A mounted rider uses
-# the stretch instead, since its standing poses would hide the Mount (claim spec 2).
+# Mounted claims retain the composite and rider text, without standing poses or stretch.
 func _claim_framed(c: CharacterInstance) -> bool:
 	var elapsed = fx.claim_elapsed(c.instance_id)
 	return elapsed != null and elapsed >= 0.0 and elapsed < BoardFx.CLAIM_POSES and c.mounted_with_id == "" \
@@ -834,6 +838,9 @@ func attack_art_for(instance_id: String) -> Dictionary:
 	var c: CharacterInstance = controller.find(instance_id) if controller != null else null
 	if c == null or c.data == null:
 		return {}
+	var key := MountedFigureCatalog.key_for(c, outfit_id_for(c))
+	if key != "":
+		return MountedFigureCatalog.attack_timing(key)
 	return FigureCatalog.attack_timing(c.data.id, outfit_id_for(c))
 
 
@@ -847,10 +854,11 @@ func _draw_ghost(g: Dictionary) -> void:
 	var c: CharacterInstance = g.character
 	var t := fx.progress(g.start, BoardFx.DEFEAT)
 	var rect := tile_rect(g.pos)
-	var figure := FigureCatalog.texture_for(c.data.id, outfit_id_for(c))
+	var mounted_key := str(g.get("mounted_key", ""))
+	var figure := MountedFigureCatalog.texture_for(mounted_key) if mounted_key != "" else FigureCatalog.texture_for(c.data.id, outfit_id_for(c))
 	if figure == null:
 		return
-	var r := figure_rect(c, rect, figure, false)
+	var r := figure_rect(c, rect, figure, false, mounted_key != "")
 	var feet := feet_point(rect, false)
 	# Before an art attack's impact the defeated figure still stands, untinted (Phase 6).
 	var tint := Color.WHITE.lerp(Color(1.0, 0.45, 0.4), minf(1.0, t * 4.0)) if fx.started(g.start) else Color.WHITE
@@ -905,11 +913,14 @@ func _float_text(font: Font, s: String, center: Vector2, px: float, t: float, co
 # canvas-sized figure looked ~40% too small. A standing figure's visible body is
 # FIGURE_HEIGHT tiles tall with its lowest pixel on FEET_LINE, centered on the tile;
 # Mounts are fitted by width (at most 0.94 tile).
-func figure_rect(c: CharacterInstance, tile: Rect2, texture: Texture2D, selected: bool) -> Rect2:
+func figure_rect(c: CharacterInstance, tile: Rect2, texture: Texture2D, selected: bool, mounted_ghost := false) -> Rect2:
 	var px := tile.size.x
 	var sil := _silhouette(texture)
 	var s: float
-	if c.data.type == "Mount":
+	if mounted_ghost or MountedFigureCatalog.key_for(c, outfit_id_for(c)) != "":
+		# A pair is taller than its unmounted mount, but remains inside one tile's width.
+		s = minf(0.98 * px / maxf(1.0, sil.size.x), 1.28 * px / maxf(1.0, sil.size.y))
+	elif c.data.type == "Mount":
 		s = minf(MOUNT_MAX_SILHOUETTE * px / maxf(1.0, sil.size.x), MOUNT_MAX_HEIGHT * px / maxf(1.0, sil.size.y))
 	else:
 		s = minf(FIGURE_HEIGHT * px / maxf(1.0, sil.size.y), FIGURE_MAX_WIDTH * px / maxf(1.0, sil.size.x))

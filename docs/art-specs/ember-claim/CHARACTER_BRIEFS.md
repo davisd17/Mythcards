@@ -9,6 +9,11 @@ Roster IDs come from `data/cards/teams.json`, not older culture-only squads.
 
 ## Shared Production Contract
 
+- Mounted exception, approved 2026-10-27: use the rider's normal/big-claim text
+  and existing sting without new character animation. Keep the mounted composite;
+  these three-pose briefs apply only when the character is not riding. Do not
+  animate or give a second line/sting to the carrying mount.
+
 - Three poses per default outfit: Gather 120 ms, Hold 360 ms, Settle 120 ms.
   This is a character-specific payoff, not another attack. It can be exuberant,
   smug, relieved, protective, eerie or solemn; do not make everyone restrained.

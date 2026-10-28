@@ -1,0 +1,121 @@
+{
+  "shared_scale": 0.45142296368989204,
+  "canvas": [
+    512,
+    768
+  ],
+  "contact_anchor": [
+    256,
+    756
+  ],
+  "frames": [
+    {
+      "pose": "ready",
+      "source_anchor": [
+        513.0,
+        1445
+      ],
+      "offset": [
+        24,
+        104
+      ],
+      "bounds": [
+        26,
+        258,
+        484,
+        757
+      ],
+      "source_normalization": 1.0
+    },
+    {
+      "pose": "raise",
+      "source_anchor": [
+        513.5,
+        1446
+      ],
+      "offset": [
+        24,
+        104
+      ],
+      "bounds": [
+        26,
+        258,
+        485,
+        757
+      ],
+      "source_normalization": 1.0
+    },
+    {
+      "pose": "brace",
+      "source_anchor": [
+        514.5,
+        1414
+      ],
+      "offset": [
+        24,
+        118
+      ],
+      "bounds": [
+        26,
+        252,
+        486,
+        757
+      ],
+      "source_normalization": 1.0
+    },
+    {
+      "pose": "fire",
+      "source_anchor": [
+        514.5,
+        1381
+      ],
+      "offset": [
+        24,
+        133
+      ],
+      "bounds": [
+        26,
+        261,
+        486,
+        757
+      ],
+      "source_normalization": 1.0
+    },
+    {
+      "pose": "recoil",
+      "source_anchor": [
+        514.0,
+        1399
+      ],
+      "offset": [
+        24,
+        125
+      ],
+      "bounds": [
+        27,
+        258,
+        485,
+        757
+      ],
+      "source_normalization": 1.0
+    },
+    {
+      "pose": "recover",
+      "source_anchor": [
+        515.0,
+        1444
+      ],
+      "offset": [
+        24,
+        105
+      ],
+      "bounds": [
+        26,
+        259,
+        486,
+        757
+      ],
+      "source_normalization": 1.0
+    }
+  ]
+}

@@ -25,12 +25,29 @@ Every character is built as its own package, so contributors can take one charac
 | A character defeats an enemy (attack or ability) and gains 1 Ember | Claim animation, sting, **claim line** |
 | The claimer gains 2 or more Embers at once (it defeated a carrier or a mounted pair) | The same animation and sting, with the **big-claim line** and a larger Ember burst |
 | The claim also takes the character to Level 3 | The claim plays first, and the existing Level 3 flourish starts on the settle pose |
-| The claimer is a mounted pair | The rider claims. The Mount doesn't animate. |
+| The claimer is a mounted pair | Use the rider's claim/big-claim text and existing rider sting. Keep the mounted artwork; no claim pose swap or separate rider/Mount celebration animation. |
 | A Leak or hazard defeat (no Ember is gained) | No claim moment. The existing defeat plays. |
 | The defeat ends the match | The claim plays, then the victory screen |
 | A second claim starts before the first finishes (fast AI turns) | The first is cut and the second plays |
 
 It plays for both players, including the AI. Like every other board effect, it never blocks input and never delays or changes the rules: the rules have already resolved before it starts.
+
+### Mounted Claim Exception (Designer Decision, 2026-10-27)
+
+Mounted claims do not need new character artwork or an alternate animation.
+Use the riding character's approved lines from `data/ember_lines.json`, selecting
+normal or big by the Embers gained in that claim, not the total already carried.
+The mounted composite stays in its existing pose/attack-to-idle playback; do not
+interrupt it with an on-foot Gather/Hold/Settle sequence, scale change, dismount,
+or the mount's own celebration. The existing rider sting and generic Ember
+feedback may remain. Neither the mount's line nor its sting plays in addition.
+This applies to all mounted combinations, not just the four current art sets.
+On-foot claim art remains valid and is not removed by this exception.
+
+When wiring text, retain the normal line visibility setting, attack-impact timing,
+and interruption/reset safeguards. Test rider ownership, normal and big claims,
+and unchanged mounted texture/scale. The latest claim-text integration now
+supplies these rider lines; mounted characters skip both claim poses and stretch.
 
 ## 3. Timing
 
@@ -58,6 +75,7 @@ The total board motion is about 1.1 s, and the line is gone by 1.9 s.
 
 - These are the **same registration rules as the attack art**: a 512×768 transparent PNG on the same canvas as `default.png`, lowest pixel at y = 756 ± 4, and nothing within the 24 px side and 18 px top margins.
 - Default outfit only. The pose must read at about 0.95 tile on a phone, so it needs a strong silhouette change from idle. Keep fine detail out.
+- These character-pose deliverables are for on-foot claims. Mounted claims use the text-only character treatment above; do not commission mounted claim poses.
 - **The Ember isn't painted in.** The game draws the wisp and glow, so leave a clear area where the Ember will sit and mark it in the delivery notes (pixel x,y on the hold pose).
 - Show a Spirit Ember as spirit or light. Never show it as a body part, trophy or gore (PRD-OQ-009).
 - Deliver the same way as attack art: master sources, prompts, a layered `.ora`, a contact sheet and a review GIF in `docs/art-specs/ember-claim/<character-id>/`. Runtime PNGs go in `game/assets/figures/<character-id>/`.
@@ -108,7 +126,7 @@ The lines below are **designer-approved wording**. Preserve capitalization and p
 
 - **Trigger:** `EventBus.spirit_ember_picked_up(character_id)`. It needs a `gained: int` parameter to tell a claim from a big claim (`leveling_system.gd` knows `1 + carried`).
 - **Data:** claim frames go in a `"claim"` list on each outfit in `wardrobe.json`, beside `"attack"`, because art belongs to the outfit. Lines go in a new `data/ember_lines.json` (`{character_id: {claim, big}}`), synced by `sync_game_content.ps1`. The sting loads from `game/assets/sfx/<id>/claim.wav`. This is the first shipped SFX file, because `sfx.gd` synthesizes everything today.
-- **Fallbacks, per piece:** with no frames, use a procedural stretch. With no sting, play the existing synth `"ember"` sound. With no line, show no line. Any subset can ship.
+- **Fallbacks, per piece:** with no frames, use a procedural stretch for on-foot claims only. Mounted claims intentionally keep their mounted art with no claim-specific stretch or pose swap. With no sting, play the existing synth `"ember"` sound. With no line, show no line. Any subset can ship.
 - **Timing:** the claim waits for the attack's impact frame, the same as the existing Ember burst (`impact_for`).
 - **Settings:** the sting follows Sound. Add a **Character lines** on/off toggle. Add a 40 ms `claim` haptic.
 - **Tests:** extend `test_attack_art_contract.gd` to claim frames (3 poses, the same canvas and registration). Add unit tests for the Section 2 table: Leak means no claim, a mounted pair means a big claim, and Level 3 goes after the claim.

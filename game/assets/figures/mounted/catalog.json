@@ -1,0 +1,138 @@
+{
+  "orlov-vera": {
+    "rider": "r-mikhail-orlov",
+    "mount": "r-vera-7",
+    "outfit": "default",
+    "revision": "mounted-v1",
+    "texture": "res://assets/figures/mounted/orlov-vera/default.png",
+    "attack": [
+      {
+        "texture": "res://assets/figures/mounted/orlov-vera/attack-1-ready.png",
+        "ms": 100
+      },
+      {
+        "texture": "res://assets/figures/mounted/orlov-vera/attack-2-raise.png",
+        "ms": 100
+      },
+      {
+        "texture": "res://assets/figures/mounted/orlov-vera/attack-3-brace.png",
+        "ms": 130
+      },
+      {
+        "texture": "res://assets/figures/mounted/orlov-vera/attack-4-fire.png",
+        "ms": 60,
+        "impact": true
+      },
+      {
+        "texture": "res://assets/figures/mounted/orlov-vera/attack-5-recoil.png",
+        "ms": 90
+      },
+      {
+        "texture": "res://assets/figures/mounted/orlov-vera/attack-6-recover.png",
+        "ms": 120
+      }
+    ]
+  },
+  "irina-vera": {
+    "rider": "r-irina-karpova",
+    "mount": "r-vera-7",
+    "outfit": "default",
+    "revision": "mounted-v1",
+    "texture": "res://assets/figures/mounted/irina-vera/default.png",
+    "attack": [
+      {
+        "texture": "res://assets/figures/mounted/irina-vera/attack-1-ready.png",
+        "ms": 100
+      },
+      {
+        "texture": "res://assets/figures/mounted/irina-vera/attack-2-raise.png",
+        "ms": 100
+      },
+      {
+        "texture": "res://assets/figures/mounted/irina-vera/attack-3-brace.png",
+        "ms": 130
+      },
+      {
+        "texture": "res://assets/figures/mounted/irina-vera/attack-4-fire.png",
+        "ms": 60,
+        "impact": true
+      },
+      {
+        "texture": "res://assets/figures/mounted/irina-vera/attack-5-recoil.png",
+        "ms": 90
+      },
+      {
+        "texture": "res://assets/figures/mounted/irina-vera/attack-6-recover.png",
+        "ms": 120
+      }
+    ]
+  },
+  "sahu-ahesu": {
+    "rider": "a-flood-survivor-sahu-ren",
+    "mount": "a-flood-survivor-ahesu",
+    "outfit": "default",
+    "revision": "giant-ahesu-v2",
+    "texture": "res://assets/figures/mounted/sahu-ahesu/default.png",
+    "attack": [
+      {
+        "texture": "res://assets/figures/mounted/sahu-ahesu/attack-1-ready.png",
+        "ms": 100
+      },
+      {
+        "texture": "res://assets/figures/mounted/sahu-ahesu/attack-2-raise.png",
+        "ms": 100
+      },
+      {
+        "texture": "res://assets/figures/mounted/sahu-ahesu/attack-3-brace.png",
+        "ms": 130
+      },
+      {
+        "texture": "res://assets/figures/mounted/sahu-ahesu/attack-4-fire.png",
+        "ms": 60,
+        "impact": true
+      },
+      {
+        "texture": "res://assets/figures/mounted/sahu-ahesu/attack-5-recoil.png",
+        "ms": 90
+      },
+      {
+        "texture": "res://assets/figures/mounted/sahu-ahesu/attack-6-recover.png",
+        "ms": 120
+      }
+    ]
+  },
+  "meret-ahesu": {
+    "rider": "a-flood-survivor-meret-anu",
+    "mount": "a-flood-survivor-ahesu",
+    "outfit": "default",
+    "revision": "giant-ahesu-v2",
+    "texture": "res://assets/figures/mounted/meret-ahesu/default.png",
+    "attack": [
+      {
+        "texture": "res://assets/figures/mounted/meret-ahesu/attack-1-ready.png",
+        "ms": 100
+      },
+      {
+        "texture": "res://assets/figures/mounted/meret-ahesu/attack-2-raise.png",
+        "ms": 100
+      },
+      {
+        "texture": "res://assets/figures/mounted/meret-ahesu/attack-3-brace.png",
+        "ms": 130
+      },
+      {
+        "texture": "res://assets/figures/mounted/meret-ahesu/attack-4-fire.png",
+        "ms": 60,
+        "impact": true
+      },
+      {
+        "texture": "res://assets/figures/mounted/meret-ahesu/attack-5-recoil.png",
+        "ms": 90
+      },
+      {
+        "texture": "res://assets/figures/mounted/meret-ahesu/attack-6-recover.png",
+        "ms": 120
+      }
+    ]
+  }
+}
