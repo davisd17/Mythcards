@@ -1421,6 +1421,236 @@
       ],
       "interpretation": "The case's tempting possibilities reflect the Seven of Cups' abundance of choices and uncertain promises. You may be imagining several futures, struggling to commit, or drawn to an option because of how it makes you feel. Explore what appeals to you, then look for evidence of what each choice actually involves. A vivid possibility becomes useful when you can connect it to a realistic next step.",
       "when_drawn": "Choose one possibility to investigate beyond its promise."
+    },
+    {
+      "tarot_number": "Eight",
+      "tarot_name": "Eight of Cups",
+      "mythcards_name": "The Rings Leave The Cabin",
+      "card_type": "Event",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I can leave what no longer serves me.",
+      "upright_keywords": ["Departure", "Searching", "Letting Go"],
+      "shadow_keywords": ["Avoidance", "Aimlessness", "Fear of Leaving"],
+      "narrative_heading": "Event",
+      "narrative": "Before the position falls, a small party pulls a sled away from the ritual cabin, carrying the iron rings and the cups from their last shared vodka. No account records what interrupted that gathering, or why those who left would never agree on who first suggested taking the rings. Forty years later, the Deep North Circus performs with the same iron, preserving movements the soldiers could not have learned during a single night.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "They left the place. They carried the unfinished part.",
+      "relationships": [],
+      "hidden_threads": [
+        {
+          "thread_id": "rings_carry_an_unfinished_rite",
+          "clue": "Conflicting accounts conceal what happened during the cabin gathering and how its movements reached the Deep North Circus with the iron rings.",
+          "connects_to": ["The Cabin Rite", "Circus Convergence Rings", "The Circus Performs The Old Rite"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Carrying the rings away from the cabin reflects the Eight of Cups' choice to leave while deciding what to take with you. You may be ready to move beyond a relationship, role, or goal that no longer fulfills you. Leaving does not erase its value: lessons, meaningful bonds, and hard-earned strengths can support your next chapter. Choose carefully what you carry forward, and recognize which unresolved patterns might keep you tied to what you are leaving.",
+      "when_drawn": "Decide what to leave behind, what to carry forward, and why."
+    },
+    {
+      "tarot_number": "Nine",
+      "tarot_name": "Nine of Cups",
+      "mythcards_name": "Karpova's Velvet Decanter",
+      "card_type": "Relic",
+      "sub_area": "Closed City",
+      "review_status": "approved",
+      "affirmation": "I allow myself to enjoy what I have.",
+      "upright_keywords": ["Satisfaction", "Pleasure", "Fulfillment"],
+      "shadow_keywords": ["Excess", "Complacency", "Emptiness"],
+      "narrative_heading": "Legend",
+      "narrative": "In her private Closed City suite, Irina Karpova keeps a crystal decanter nestled in burgundy velvet. Beyond her windows, reactor lights burn over a city whose residents cannot freely leave; inside, she pours rare liquor beside research papers and the Black Key. The comforts she gathers are proof that she has risen above dependence, though she still watches who accepts a second glass.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "She preferred her guests satisfied. They asked for less.",
+      "relationships": [
+        {
+          "subject": "Irina Karpova and her guests",
+          "dynamic": "Karpova enjoys her private comforts while watching how hospitality affects the people whose company she invites.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "Karpova's private comforts reflect the Nine of Cups' pleasure in having what you wanted. You may be reaching a personal goal, enjoying a wish fulfilled, or discovering that life already offers something worth savoring. Let yourself appreciate it without immediately chasing the next reward. Also notice whether your pleasures leave you content or merely distract you from an unmet need.",
+      "when_drawn": "Enjoy what is good, and ask what satisfaction feels like beyond having more."
+    },
+    {
+      "tarot_number": "Ten",
+      "tarot_name": "Ten of Cups",
+      "mythcards_name": "Nadia Finds The Survivor",
+      "card_type": "Event",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I am worthy of love and belonging.",
+      "upright_keywords": ["Harmony", "Belonging", "Shared Happiness"],
+      "shadow_keywords": ["Disconnection", "Unmet Expectations", "Strained Bonds"],
+      "narrative_heading": "Event",
+      "narrative": "Nadia finds Pavel half-buried in snow, impossibly far from the Closed City he escaped. As she restores his breathing, the Sky-Hide Mirror against his chest shows him standing beside a woman in an embrace beneath the northern sky. He has not yet met her. Whether the mirror reveals a future awaiting him or a longing it knows how to awaken remains uncertain.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "He had escaped one world. Someone made room for him in another.",
+      "relationships": [
+        {
+          "subject": "Nadia Belaya and Pavel Sokolov",
+          "dynamic": "Nadia's rescue gives Pavel his first experience of care after escaping the Closed City.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "mirror_shows_northern_embrace",
+          "clue": "The mirror shows Pavel embracing a woman he has not yet met beneath the northern sky; the vision may be a future or a desire shaped by the relic.",
+          "connects_to": ["Sky-Hide Mirror", "Tent Lights In The Whiteout", "Pavel Sokolov"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Nadia's rescue begins Pavel's path toward the belonging promised by the Ten of Cups. You may be finding emotional security, strengthening family bonds, or recognizing a chosen family among people who care for you. Notice the relationships where you can be yourself and contribute to one another's happiness. Fulfillment grows through everyday care, without requiring everyone or everything to be perfect.",
+      "when_drawn": "Appreciate the people who make you feel at home, and nurture those connections."
+    },
+    {
+      "tarot_number": "Page",
+      "tarot_name": "Page of Cups",
+      "mythcards_name": "Meteor Contact To The North",
+      "card_type": "Event",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I am open to unexpected inspiration.",
+      "upright_keywords": ["Intuition", "Curiosity", "Emotional Discovery"],
+      "shadow_keywords": ["Insecurity", "Fantasy", "Dismissed Feelings"],
+      "narrative_heading": "Event",
+      "narrative": "In 1942, a meteor strikes far north of the frozen battlefield. At Marya's aid station, compass needles swing and the radio erupts in interference, but she notices something quieter: liquid rises from her battered cup, freezing into a delicate spiral. Within it, she sees a flash of the northern impact, though no report has yet reached the front.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "The first message arrived in something she held every day.",
+      "relationships": [],
+      "hidden_threads": [
+        {
+          "thread_id": "meteor_omen_reaches_marya",
+          "clue": "Marya's cup receives a vision of the distant meteor impact before any report reaches the Winter Front.",
+          "connects_to": ["Marya's Thaw Cup", "The Meteor Wakes Under Snow", "Marya Zima"],
+          "disclosure": "revealed"
+        }
+      ],
+      "interpretation": "The unexpected vision in Marya's cup reflects the Page of Cups' invitation to notice a new feeling or possibility. You may receive a tender message, feel a creative impulse, or discover an attraction you did not anticipate. Approach it with curiosity rather than demanding an immediate explanation. Let your feelings offer information while giving yourself time to understand them.",
+      "when_drawn": "Give an unexpected feeling or idea a little room to develop."
+    },
+    {
+      "tarot_number": "Knight",
+      "tarot_name": "Knight of Cups",
+      "mythcards_name": "Belorog - Aurora Reindeer",
+      "card_type": "Character",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I can act on what matters to my heart.",
+      "upright_keywords": ["Compassion", "Romance", "Heartfelt Action"],
+      "shadow_keywords": ["Idealization", "Moodiness", "Empty Promises"],
+      "narrative_heading": "Backstory",
+      "narrative": "Belorog appears along frozen rivers and old burial paths, carrying travelers who have become stranded between worlds. The pale reindeer accepts some riders and passes others without stopping, watching them with an almost human understanding. Nadia may have followed its tracks to Pavel, suggesting that someone had already chosen to help him before she reached the snow.",
+      "flavor_heading": "Witness",
+      "flavor_text": "Do not pull the reins. Listen.",
+      "relationships": [
+        {
+          "subject": "Nadia Belaya and Pavel Sokolov",
+          "dynamic": "Belorog's tracks may have guided Nadia to Pavel, suggesting its intervention preceded his rescue.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "belorog_chooses_the_stranded",
+          "clue": "Belorog selects travelers to carry between worlds and may have begun helping Pavel before any human found him.",
+          "connects_to": ["Nadia Finds The Survivor", "Aal Luuk Mas Root"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Belorog's response to those in need reflects the Knight of Cups' movement from feeling into action. You may be ready to express affection, offer an apology, pursue a creative calling, or accept an invitation that speaks to you. Let sincerity guide you, while noticing whether actions support the beautiful words or possibilities being offered. Follow your heart with enough care to honor your promises.",
+      "when_drawn": "Express what you feel through one thoughtful action."
+    },
+    {
+      "tarot_number": "Queen",
+      "tarot_name": "Queen of Cups",
+      "mythcards_name": "Aksinya Morozova - Frost Seer",
+      "card_type": "Character",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I can care deeply and honor my own needs.",
+      "upright_keywords": ["Compassion", "Intuition", "Emotional Wisdom"],
+      "shadow_keywords": ["Overwhelm", "Self-Neglect", "Unclear Boundaries"],
+      "narrative_heading": "Backstory",
+      "narrative": "Aksinya Morozova was a young woman when the meteor fell, surviving a winter of missing hours and dreams spoken in other people's voices. Now she watches the northern crossings through meltwater and frost, quietly guiding events rather than revealing everything she sees. When Nadia reaches Pavel in the snow, the rescue appears in Aksinya's bowl, surrounded by frost marks suggesting she helped bring them together.",
+      "flavor_heading": "Quote",
+      "flavor_text": "Cold tells the truth slowly.",
+      "relationships": [
+        {
+          "subject": "Nadia Belaya and Pavel Sokolov",
+          "dynamic": "Aksinya quietly influences the timing and protection of Nadia's rescue of Pavel, watching the encounter in her bowl.",
+          "visibility": "hinted"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "aksinya_guides_the_rescue",
+          "clue": "Frost marks around the rescue vision suggest Aksinya's intervention before Nadia found Pavel.",
+          "connects_to": ["Nadia Finds The Survivor", "Nadia Belaya", "The Meteor Wakes Under Snow"],
+          "disclosure": "hint_only"
+        }
+      ],
+      "interpretation": "Aksinya's attentive compassion reflects the Queen of Cups' emotional wisdom. You may be sensing more than someone has said, supporting a person in distress, or needing space to understand your own feelings. Listen with kindness, and check your impressions rather than assuming you know another person's needs. Care can be generous while still allowing privacy, boundaries, and rest.",
+      "when_drawn": "Listen to what you feel, and offer care without taking responsibility for everything."
+    },
+    {
+      "tarot_number": "King",
+      "tarot_name": "King of Cups",
+      "mythcards_name": "The Twin Waters Flask",
+      "card_type": "Relic",
+      "sub_area": "Winter Front",
+      "review_status": "approved",
+      "affirmation": "I can feel deeply and respond calmly.",
+      "upright_keywords": ["Composure", "Compassion", "Emotional Balance"],
+      "shadow_keywords": ["Suppression", "Manipulation", "Instability"],
+      "narrative_heading": "Legend",
+      "narrative": "Marya Zima's field flask holds two waters that remain liquid through the killing winter. Dead water closes wounds and restores the body's broken form; living water returns warmth, breath, and strength. She must use them in that order: calling someone back before their wounds are closed can deepen the suffering she meant to end.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "First make the body whole. Then ask it to return.",
+      "relationships": [
+        {
+          "subject": "Marya Zima",
+          "dynamic": "Marya balances the two waters in careful sequence, containing her urgency so healing does not cause further suffering.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [],
+      "interpretation": "Marya's careful use of the two waters reflects the King of Cups' balance between strong feeling and considered action. You may be facing an emotional decision, supporting someone through difficulty, or trying to remain steady during conflict. Acknowledge what you feel, then choose a response that serves the situation. Calm does not require hiding emotion; it gives you room to express it with care.",
+      "when_drawn": "Give your feelings space, then respond with patience and purpose."
+    },
+    {
+      "tarot_number": "Ace",
+      "tarot_name": "Ace of Swords",
+      "mythcards_name": "Meteor-Glass Spear",
+      "card_type": "Relic",
+      "sub_area": "Far North",
+      "review_status": "approved",
+      "affirmation": "I can face the truth and act on it.",
+      "upright_keywords": ["Clarity", "Truth", "Breakthrough"],
+      "shadow_keywords": ["Confusion", "Harshness", "Misjudgment"],
+      "narrative_heading": "Legend",
+      "narrative": "Vera's spear was made from black glass recovered at the meteor site, bound to its shaft with iron wire and protective knots. When the aurora takes a familiar shape to draw someone beyond the village boundary, its reflection in the blade betrays the disguise. Vera can break the apparition's hold, but she cannot make someone stop wanting what it offered.",
+      "flavor_heading": "Flavor",
+      "flavor_text": "She could cut the light. The promise was harder to break.",
+      "relationships": [
+        {
+          "subject": "Vera Kargina and the northern villagers",
+          "dynamic": "Vera can free villagers from an apparition's hold but cannot erase their longing for its promise.",
+          "visibility": "revealed"
+        }
+      ],
+      "hidden_threads": [
+        {
+          "thread_id": "meteor_glass_reveals_aurora_disguises",
+          "clue": "The spear's meteor-glass blade exposes deceptive aurora shapes, though the desires they exploit remain.",
+          "connects_to": ["The Village Refuses The Signal", "Vera Kargina", "The Meteor Wakes Under Snow"],
+          "disclosure": "revealed"
+        }
+      ],
+      "interpretation": "The spear reveals a disguise without removing its appeal, echoing the Ace of Swords' sometimes uncomfortable clarity. You may be seeing a situation more honestly while still wishing it were different. Separate what you know from what you hope, ask the question you have avoided, and let the answer inform your next step. Understanding the truth is a beginning; choosing how to respond gives it purpose.",
+      "when_drawn": "What do you already know that you are ready to act on?"
     }
   ]
 }
