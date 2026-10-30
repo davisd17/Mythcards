@@ -39,3 +39,16 @@ Pearl Current v2, is a relaxed aquatic lo-fi beat with warm electric-piano chord
 liquid chip plucks and rounded bass. It uses no ceremonial horn/reed lead or
 constant noise wash. Pearl Current v2 was selected for GitHub on October 26, 2026.
 Her Loop B remains future work. Preserve the accepted area track.
+
+October 29 direction supersedes the Queen's lounge approach: Atlantis in general
+should foreground layered hand/skin drumming and wordless choir; Flood Survivors
+should also sound aquatic. Keep 8–16-bit and lo-fi as the common thread, with
+distinct rhythms, instrumentation and motifs between cultures and leaders.
+Use water-like tones, movement and echoes without repeating the same fuzzy wash.
+Do not make Atlantean leaders into another version of Irina's electric-piano song.
+Meret-Anu's new draft is Tidekeepers v3, composed as A → B → A, with a separate
+instrumental development/breakdown in B. The game selects its full continuous
+A/B/A render; the standalone A/B sections are also provided. The accepted Stone
+Remembers area recording is preserved; future area revisions should follow this
+drum/choir/aquatic direction. Drew approved Tidekeepers v3 on October 29, 2026
+as the new song for Meret-Anu-led matches.

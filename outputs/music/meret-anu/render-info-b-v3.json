@@ -1,0 +1,23 @@
+{
+  "title": "Meret-Anu \u2014 Tidekeepers: B",
+  "version": 3,
+  "bpm_quarter": 69,
+  "bars": 24,
+  "meter": "4/4",
+  "seconds": 83.47825,
+  "frames": 2671304,
+  "sample_rate": 32000,
+  "channels": 2,
+  "bit_depth": 16,
+  "peak_dbfs": -2.6947429611311726,
+  "rms_dbfs": -18.786039811089825,
+  "clipped_samples": 0,
+  "endpoint_step": 0,
+  "note_events": 498,
+  "form": "B",
+  "section_rms_dbfs": {
+    "whole": -18.786305991058093,
+    "B_breakdown": -24.050928528026645
+  },
+  "voice_source": "Original synthesized wordless vowel-formant choir; no human samples or lyrics"
+}

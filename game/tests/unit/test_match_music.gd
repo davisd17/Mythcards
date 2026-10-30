@@ -82,14 +82,15 @@ func test_flood_survivors_start_with_the_queens_theme_and_keep_it_across_turns()
 	assert_eq(MusicManager.current_leader_id, "a-flood-survivor-meret-anu")
 	assert_eq(MusicManager.current_sub_area, "Flood Survivors")
 	assert_eq(MusicManager.current_theme_path, MusicManager.LEADER_THEMES["a-flood-survivor-meret-anu"])
+	assert_true(MusicManager.current_theme_path.ends_with("tidekeepers-aba-v3.wav"))
 	assert_true(player.playing)
 	var stream := player.stream as AudioStreamWAV
 	assert_not_null(stream)
 	if stream == null:
 		return
 	assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD)
-	assert_eq(stream.loop_end, 2671304)
-	assert_almost_eq(stream.get_length(), 83.47825, .001)
+	assert_eq(stream.loop_end, 8013913, "Loop the complete A/B/A song, not only A")
+	assert_almost_eq(stream.get_length(), 250.43478, .001)
 	TurnManager.start_turn("p2")
 	TurnManager.end_turn("p2")
 	assert_same(player.stream, stream)

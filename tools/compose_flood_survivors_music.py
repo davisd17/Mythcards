@@ -208,7 +208,8 @@ class Score:
                'peak_dbfs':20*np.log10(peak),'rms_dbfs':20*np.log10(np.sqrt(energy/(self.n*2))),
                'clipped_samples':clipped,'endpoint_step':int(np.max(np.abs(self.mix[0]-self.mix[-1]))*32767),
                'note_events':len(self.events)}
-        (self.folder/('render-info-v%d.json'%version)).write_text(json.dumps(stats,indent=2)+'\n',encoding='utf-8',newline='\n')
+        report_name=getattr(self,'report_name','render-info-v%d.json'%version)
+        (self.folder/report_name).write_text(json.dumps(stats,indent=2)+'\n',encoding='utf-8',newline='\n')
         self.midi()
         self.mix.flush(); room.flush(); self.mix._mmap.close(); room._mmap.close()
         del self.mix,room

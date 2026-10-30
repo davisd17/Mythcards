@@ -1,6 +1,56 @@
-# Queen Meret-Anu — Pearl Current
+# Queen Meret-Anu — Tidekeepers
 
-## Current revision: Pearl Current, version 2
+## Current revision: Tidekeepers, version 3 — A → B → A
+
+Approved by Drew on October 29, 2026 for Meret-Anu-led matches. Pearl Current was rejected as too similar to
+Irina. Atlantis now has a distinct identity: layered hand drumming and wordless
+choir within the shared 8–16-bit/lo-fi aesthetic. Flood Survivors adds aquatic
+movement. The Queen still chooses this music for herself; luxury comes from
+space, rich choral color and confident rhythm, not another electric-piano lounge.
+
+The new song uses interlocking low skin drums, open hand drums, slaps, wood and
+shell clicks; a synthesized wordless vowel-formant choir; liquid pitched drops;
+slow underwater-like tonal swells; and rounded bass. No electric piano, brushed
+backbeat, recorded voices, intelligible words or continuous noise wash. The
+percussion is an original fictional Atlantean palette, not a claim of authentic
+music from a particular real-world people. Lo-fi finish keeps the chip character.
+
+The new G–Bb–D / C–A signature sits over G minor / F / C minor / D. Both sections
+are 24 bars of 4/4 at 69 BPM, about 83.48 seconds each. They use a common pulse,
+key, palette and return cadence. The hand-drum patterns interlock in thirds
+against the four-beat bass pulse, instead of repeating Irina's swung groove.
+
+| Full-song time | Section | Arrangement |
+| --- | --- | --- |
+| 0:00–1:23 | A | Choir hook and hand-drum groove; water replies, a quiet passage, hook return. |
+| 1:23–2:47 | B | Water-tone variations, choir call-and-response, a breakdown at about 2:05–2:19, then a rebuild. |
+| 2:47–4:10 | A return | Main refrain and groove return with the same musical arrangement. |
+
+- `meret-anu-tidekeepers-aba-v3.wav`: the complete continuously rendered song,
+  250.43478 seconds, selected for match playback. It repeats the full A/B/A cycle.
+- `meret-anu-tidekeepers-a-v3.wav` and `meret-anu-tidekeepers-b-v3.wav`: separate
+  section loops, 83.47825 seconds each, for review or later adaptive playback.
+- Matching MIDI files: six parts plus tempo/meter. General MIDI choir/perc
+  patches approximate the original synthesis; the WAVs are the intended sound.
+- `render-info-a-v3.json`, `render-info-b-v3.json`, `render-info-aba-v3.json`:
+  render measurements, section dynamics, and voice provenance.
+- Rebuild all: `python tools/compose_meret_tidekeepers_v3.py`; choose one with
+  `--form a`, `--form b` or `--form aba`. Requires numpy and the shared renderer
+  `tools/compose_flood_survivors_music.py`.
+
+The complete song is synthesized continuously, not made by cutting together
+self-looping masters. Release and echo tails carry across A/B/A on the same
+sample clock. The two internal boundaries are rounded from beat positions;
+the full file has 8,013,913 frames at 32 kHz. The separate section WAVs each
+round to 2,671,304 frames. The one-frame total difference is expected rounding.
+The game plays one full-song stream; no dynamic section scheduler was added.
+
+All earlier Queen recordings and the accepted Flood Survivors area theme are
+preserved. Tidekeepers v3 is the selected match song. Broader Atlantean area variants
+should follow the new drum/choir direction; this task does not overwrite the
+previously accepted area recording.
+
+## Previous revision: Pearl Current, version 2 — superseded
 
 The user rejected the ceremonial first version and asked for music the Queen
 would enjoy listening to, with a lo-fi aquatic beat. The new listening draft is
