@@ -5,13 +5,17 @@ extends RefCounted
 
 const CLOSED_CITY := "Closed City"
 const FLOOD_SURVIVORS := "Flood Survivors"
+const FAR_NORTH := "Far North"
 const CHAMBER := "res://assets/boards/closed-city/chamber-v1.png"
 const SURFACE := "res://assets/boards/closed-city/containment-deck-v1.png"
 const SANCTUARY := "res://assets/boards/flood-survivors/sanctuary-v1.png"
 const TIDE_STONE := "res://assets/boards/flood-survivors/tide-stone-v1.png"
+const BOUNDARY_VILLAGE := "res://assets/boards/far-north/boundary-village-v1.png"
+const FROSTBOUND_STONE := "res://assets/boards/far-north/frostbound-stone-v1.png"
 const THEMES := {
 	CLOSED_CITY: {"backdrop": CHAMBER, "surface": SURFACE, "tint": Color(0.73, 0.78, 0.76)},
 	FLOOD_SURVIVORS: {"backdrop": SANCTUARY, "surface": TIDE_STONE, "tint": Color(0.68, 0.74, 0.70)},
+	FAR_NORTH: {"backdrop": BOUNDARY_VILLAGE, "surface": FROSTBOUND_STONE, "tint": Color(0.74, 0.77, 0.80)},
 }
 static var _textures: Dictionary = {}
 

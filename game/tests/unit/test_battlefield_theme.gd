@@ -67,7 +67,8 @@ func test_missing_or_unknown_starter_is_neutral() -> void:
 
 
 func test_assets_load_and_cover_crop_stays_within_texture() -> void:
-	for path in [BattlefieldTheme.CHAMBER, BattlefieldTheme.SURFACE, BattlefieldTheme.SANCTUARY, BattlefieldTheme.TIDE_STONE]:
+	for path in [BattlefieldTheme.CHAMBER, BattlefieldTheme.SURFACE, BattlefieldTheme.SANCTUARY, BattlefieldTheme.TIDE_STONE,
+			BattlefieldTheme.BOUNDARY_VILLAGE, BattlefieldTheme.FROSTBOUND_STONE]:
 		var texture := BattlefieldTheme.texture(path)
 		assert_not_null(texture)
 		if texture == null:
@@ -86,3 +87,48 @@ func test_backdrop_cannot_intercept_game_input() -> void:
 	var backdrop := BattlefieldBackdrop.new()
 	add_child_autofree(backdrop)
 	assert_eq(backdrop.mouse_filter, Control.MOUSE_FILTER_IGNORE)
+
+
+func _far_north_leader(player_id: String) -> void:
+	for c in Fixture.state().get_player(player_id).characters:
+		if c.data.type == "Leader":
+			c.data = ContentDB._build_character(c.data.raw.duplicate(true), "far-north theme fixture")
+			c.data.sub_area = BattlefieldTheme.FAR_NORTH
+			c.data.char_name = "Vera Kargina (theme fixture)"
+
+
+func test_far_north_starter_uses_village_and_frostbound_surface_for_whole_match() -> void:
+	_far_north_leader("p1")
+	assert_true(BattlefieldTheme.has_theme())
+	assert_false(BattlefieldTheme.is_closed_city())
+	assert_eq(BattlefieldTheme.current_art().backdrop, BattlefieldTheme.BOUNDARY_VILLAGE)
+	assert_eq(BattlefieldTheme.current_art().surface, BattlefieldTheme.FROSTBOUND_STONE)
+	TurnManager.end_turn("p1")
+	assert_eq(BattlefieldTheme.current_art().surface, BattlefieldTheme.FROSTBOUND_STONE)
+	TurnManager.end_turn("p2")
+	assert_eq(BattlefieldTheme.area_for(Fixture.state()), BattlefieldTheme.FAR_NORTH)
+	assert_eq(ContentDB.get_character("r-irina-karpova").sub_area, "Closed City", "shared card data unchanged")
+
+
+func test_far_north_does_not_override_the_other_starting_leader() -> void:
+	_far_north_leader("p2")
+	assert_true(BattlefieldTheme.is_closed_city())
+	Fixture.state().first_player_id = "p2"
+	assert_eq(BattlefieldTheme.current_art().backdrop, BattlefieldTheme.BOUNDARY_VILLAGE)
+
+
+func test_far_north_does_not_change_grid_or_input_targets() -> void:
+	var view := GameBoardView.new()
+	add_child_autofree(view)
+	view.size = Vector2(700, 700)
+	view.controller = GameController.new()
+	var before := []
+	for y in 7:
+		for x in 7:
+			before.append(view.tile_rect(Vector2i(x, y)))
+	_far_north_leader("p1")
+	for y in 7:
+		for x in 7:
+			var rect := view.tile_rect(Vector2i(x, y))
+			assert_eq(rect, before[y * 7 + x])
+			assert_eq(view.tile_at(rect.get_center()), Vector2i(x, y))

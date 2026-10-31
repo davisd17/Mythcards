@@ -11,6 +11,9 @@ func _ready() -> void:
 	if "--flood-survivors" in OS.get_cmdline_user_args():
 		area_slug = "flood-survivors"
 		output = "res://../docs/art-specs/board-themes/flood-survivors/qa"
+	elif "--far-north" in OS.get_cmdline_user_args():
+		area_slug = "far-north"
+		output = "res://../docs/art-specs/board-themes/far-north/qa"
 	get_window().size = Vector2i(1440, 960)
 	screen = GameScreen.new()
 	get_tree().root.add_child.call_deferred(screen)
@@ -19,6 +22,15 @@ func _ready() -> void:
 	screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	screen.start_new_match(42)
 	GameState.match_state.shared_deck.clear()
+	if area_slug == "far-north":
+		# Art preview only: Vera has no playable ID yet. Never edit ContentDB's shared resource.
+		var state := GameState.match_state
+		state.first_player_id = "p1"
+		for c in state.get_player("p1").characters:
+			if c.data.type == "Leader":
+				c.data = ContentDB._build_character(c.data.raw.duplicate(true), "far-north visual fixture")
+				c.data.sub_area = BattlefieldTheme.FAR_NORTH
+		TurnManager.start_turn("p1")
 	if area_slug == "flood-survivors":
 		GameState.match_state.first_player_id = "p2"
 		GameState.start_match(GameState.match_state)
@@ -33,7 +45,7 @@ func _ready() -> void:
 	if area_slug == "flood-survivors":
 		screen.controller.selected_id = "p2_a-flood-survivor-sahu-ren"
 	screen.controller.inspect_id = screen.controller.selected_id
-	if area_slug == "flood-survivors":
+	if area_slug in ["flood-survivors", "far-north"]:
 		screen.controller.message = ""
 	screen._refresh()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
@@ -56,6 +68,8 @@ func _capture(label: String) -> void:
 	await get_tree().create_timer(0.5).timeout
 	screen._layout()
 	await get_tree().create_timer(0.5).timeout
+	if area_slug == "far-north":
+		screen._turn_label.text = "Far North - Art Preview"
 	screen._board.queue_redraw()
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()
