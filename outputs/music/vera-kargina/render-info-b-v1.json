@@ -1,0 +1,24 @@
+{
+  "title": "Vera Kargina \u2014 The Snow Keeps Tracks: B",
+  "version": 1,
+  "bpm_quarter": 72,
+  "bars": 24,
+  "meter": "4/4",
+  "seconds": 80.0,
+  "frames": 2560000,
+  "sample_rate": 32000,
+  "channels": 2,
+  "bit_depth": 16,
+  "peak_dbfs": -3.4436778101186443,
+  "rms_dbfs": -18.78604028745681,
+  "clipped_samples": 0,
+  "endpoint_step": 0,
+  "note_events": 389,
+  "form": "B",
+  "section_rms_dbfs": {
+    "whole": -18.786308621694275,
+    "B_breakdown": -24.542946291096293
+  },
+  "character": "Vera Kargina / Meteor Spear, Far North",
+  "status": "Approved October 30, 2026; exact-name/Far North music fallback prepared; playable roster entry still pending"
+}

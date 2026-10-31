@@ -11,6 +11,13 @@ const LEADER_THEMES := {
 	# Pre-arranged A -> B -> A, including the jam/breakdown and return.
 	"a-flood-survivor-meret-anu": "res://assets/music/meret-anu-tidekeepers-aba-v3.wav",
 }
+# Story leaders without a playable card ID yet. Match exact name AND sub-area;
+# replace this fallback with an ID mapping when Vera's roster entry is authored.
+const LEADER_NAME_THEMES := {
+	"Far North": {
+		"Vera Kargina": "res://assets/music/vera-kargina-snow-keeps-tracks-aba-v1.wav",
+	},
+}
 const MENU_THEME := "res://assets/music/the-threshold-menu-v1.wav"
 const MUSIC_BUS := "Music"
 const MENU_DB := -7.0
@@ -55,12 +62,16 @@ func _on_match_started() -> void:
 	var starter := state.get_player(state.first_player_id)
 	if starter == null:
 		return
+	var leader_name := ""
 	for character in starter.characters:
 		if character.data != null and character.data.type == "Leader":
 			current_sub_area = character.data.sub_area
 			current_leader_id = character.data.id
+			leader_name = character.data.char_name
 			break
-	current_theme_path = LEADER_THEMES.get(current_leader_id, THEMES.get(current_sub_area, ""))
+	var named_themes: Dictionary = LEADER_NAME_THEMES.get(current_sub_area, {})
+	current_theme_path = LEADER_THEMES.get(current_leader_id,
+			named_themes.get(leader_name, THEMES.get(current_sub_area, "")))
 	if current_theme_path == "":
 		return
 	_player.stream = _loop_stream(current_theme_path)

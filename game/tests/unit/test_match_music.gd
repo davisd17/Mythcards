@@ -62,15 +62,62 @@ func test_unscored_starting_leader_does_not_use_opponents_theme() -> void:
 	assert_null(player.stream)
 
 
-func _replace_leader(state: MatchState, player_id: String, id: String, area: String) -> void:
+func _replace_leader(state: MatchState, player_id: String, id: String, area: String, character_name: String = "") -> void:
 	for character in state.get_player(player_id).characters:
 		if character.data.type == "Leader":
 			var data := CharacterData.new()
 			data.id = id
 			data.type = "Leader"
 			data.sub_area = area
+			data.char_name = character_name
 			character.data = data
 			return
+
+
+func test_vera_kargina_theme_is_ready_for_either_starting_seat_without_inventing_a_card_id() -> void:
+	for starter in ["p1", "p2"]:
+		autofree(Fixture.start_teams_match())
+		var state := GameState.match_state
+		_replace_leader(state, starter, "test-future-vera", "Far North", "Vera Kargina")
+		state.first_player_id = starter
+		GameState.start_match(state)
+		var player := MusicManager.get_node("MatchMusic") as AudioStreamPlayer
+		assert_eq(MusicManager.current_leader_id, "test-future-vera")
+		assert_eq(MusicManager.current_sub_area, "Far North")
+		assert_true(MusicManager.current_theme_path.ends_with("vera-kargina-snow-keeps-tracks-aba-v1.wav"))
+		assert_true(player.playing)
+		var stream := player.stream as AudioStreamWAV
+		assert_not_null(stream)
+		if stream == null:
+			continue
+		assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD)
+		assert_eq(stream.loop_end, 7680000)
+		assert_almost_eq(stream.get_length(), 240.0, .001)
+		TurnManager.start_turn(starter)
+		TurnManager.end_turn(starter)
+		assert_same(player.stream, stream)
+
+
+func test_opposing_vera_does_not_select_her_song_when_irina_starts() -> void:
+	autofree(Fixture.start_teams_match())
+	var state := GameState.match_state
+	_replace_leader(state, "p2", "test-future-vera", "Far North", "Vera Kargina")
+	state.first_player_id = "p1"
+	GameState.start_match(state)
+	assert_eq(MusicManager.current_theme_path, MusicManager.LEADER_THEMES["r-irina-karpova"])
+
+
+func test_vera_name_fallback_requires_far_north_and_does_not_match_the_rover() -> void:
+	autofree(Fixture.start_teams_match())
+	var state := GameState.match_state
+	state.first_player_id = "p1"
+	_replace_leader(state, "p1", "test-rover-name", "Far North", "VERA-7")
+	GameState.start_match(state)
+	assert_eq(MusicManager.current_theme_path, "")
+	assert_false((MusicManager.get_node("MatchMusic") as AudioStreamPlayer).playing)
+	_replace_leader(state, "p1", "test-namesake", "Closed City", "Vera Kargina")
+	GameState.start_match(state)
+	assert_eq(MusicManager.current_theme_path, MusicManager.THEMES["Closed City"])
 
 
 func test_flood_survivors_start_with_the_queens_theme_and_keep_it_across_turns() -> void:

@@ -52,3 +52,15 @@ A/B/A render; the standalone A/B sections are also provided. The accepted Stone
 Remembers area recording is preserved; future area revisions should follow this
 drum/choir/aquatic direction. Drew approved Tidekeepers v3 on October 29, 2026
 as the new song for Meret-Anu-led matches.
+
+October 30: Vera Kargina / Meteor Spear receives the first A/B/A draft The Snow
+Keeps Tracks. Far North should feel like winter roads, timber and stove warmth,
+old survival knowledge and watchful aurora, with Vera's earned, physical authority
+in the groove. Dark folk-like chip plucks, low bowed strings, muted reed, dry
+frame/wood pulse and sparse ice harmonics distinguish it from both Closed City
+industry and Atlantis's drum/choir/water sound. Keep the retro/lo-fi foundation
+without making every leader another lounge song. This draft is separate from
+VERA-7. Drew approved it on October 30 for matches where Vera leads the starting
+team. Until her playable roster ID exists, music selection uses the exact Leader
+name Vera Kargina plus Far North, rather than inventing a card or applying it to
+every Far North leader. The playable roster entry remains future work.
