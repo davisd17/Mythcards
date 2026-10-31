@@ -36,6 +36,28 @@ func _valid_culture(culture: String, prefix: String) -> Array:
 
 # --- Real committed data -----------------------------------------------------
 
+func test_far_north_review_set_stays_separate_from_the_playable_teams() -> void:
+	_load_real_data()
+	var cards: Array = db.draft_characters.values().filter(func(c): return c.raw.get("set") == "Far North Character Set")
+	assert_eq(cards.size(), 7)
+	for type in GameEnums.CHARACTER_TYPES:
+		assert_eq(cards.filter(func(c): return c.type == type).size(), 1, type)
+	for card in cards:
+		assert_null(db.get_character(card.id), "review does not silently enable a new team")
+		assert_eq(card.sub_area, "Far North")
+		assert_false(card.l1.is_empty() or card.l2.is_empty() or card.l3.is_empty())
+	assert_eq(db.get_draft_character("r-far-north-buran").atk, 1)
+	assert_eq(db.get_draft_character("r-far-north-vera-kargina").hp, 5)
+	assert_eq(db.get_draft_character("r-far-north-nadia-belaya").type, "Mystic")
+	var relics: Array = db.draft_relic_events.values().filter(func(r): return r.raw.get("set") == "Far North Playtest Relic Set")
+	assert_eq(relics.size(), 4, "fifth relic is not invented before review")
+	for relic in relics:
+		assert_null(db.get_relic_event(relic.id))
+		assert_eq(relic.duration, "Persistent")
+	assert_eq(db.get_matchup(), ["closed-city", "flood-survivors"] as Array[String])
+	assert_eq(db.validate(), [] as Array[String])
+
+
 func test_c1_loads_all_14_playable_characters() -> void:
 	_load_real_data()
 	assert_eq(db.characters.size(), 14)
